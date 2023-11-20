@@ -63,7 +63,7 @@ class ChatUIKitBottomSheetItem<T> {
   final ChatUIKitBottomSheetItemType type;
   final String label;
   final TextStyle? style;
-  final Future<T> Function()? onTap;
+  final Future<T?> Function()? onTap;
 }
 
 class ChatUIKitBottomSheet<T> extends StatelessWidget {

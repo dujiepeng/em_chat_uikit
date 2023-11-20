@@ -1,7 +1,7 @@
 import 'package:chat_uikit_theme/chat_uikit_theme.dart';
 import 'package:flutter/material.dart';
 
-Future<T> showChatUIKitDialog<T>({
+Future<T?> showChatUIKitDialog<T>({
   required BuildContext context,
   required List<ChatUIKitDialogItem<T>> items,
   String? content,
@@ -11,7 +11,7 @@ Future<T> showChatUIKitDialog<T>({
   bool barrierDismissible = true,
   ChatUIKitRectangleType borderType = ChatUIKitRectangleType.circular,
 }) async {
-  return await showDialog(
+  return showDialog(
     barrierColor: barrierColor,
     barrierDismissible: barrierDismissible,
     context: context,
@@ -68,7 +68,7 @@ class ChatUIKitDialogItem<T> {
   final ChatUIKitDialogItemType type;
   final String label;
   final TextStyle? style;
-  final Future<T> Function()? onTap;
+  final Future<T?> Function()? onTap;
 }
 
 class ChatUIKitDialog<T> extends StatelessWidget {
@@ -87,7 +87,7 @@ class ChatUIKitDialog<T> extends StatelessWidget {
   final TextStyle? titleStyle;
   final String? content;
   final TextStyle? contentStyle;
-  final List<ChatUIKitDialogItem> items;
+  final List<ChatUIKitDialogItem<T>> items;
   final ChatUIKitRectangleType borderType;
   final List<String>? hiddenList;
 
