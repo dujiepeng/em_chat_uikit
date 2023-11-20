@@ -1,4 +1,4 @@
-import 'package:em_chat_uikit/em_chat_uikit.dart';
+import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
@@ -61,35 +61,28 @@ class _MyAppState extends State<MyApp> {
   Future<void> showDialog(BuildContext context) async {
     List<ChatUIKitDialogItem> list = [];
     list.add(
-      ChatUIKitDialogItem(
-        label: 'title1',
-        type: ChatUIKitDialogItemType.destructive,
+      ChatUIKitDialogItem.cancel(
+        label: 'Cancel',
         onTap: () async {
-          Navigator.of(context).pop(true);
+          Navigator.of(context).pop(false);
         },
       ),
     );
     list.add(
-      ChatUIKitDialogItem(
-        label: 'title2',
-        type: ChatUIKitDialogItemType.cancel,
-        onTap: () async {
-          Navigator.of(context).pop();
-        },
-      ),
-    );
-    list.add(
-      ChatUIKitDialogItem(
-        label: 'title3',
-        type: ChatUIKitDialogItemType.confirm,
-        onTap: () async {
-          Navigator.of(context).pop('asb');
+      ChatUIKitDialogItem.inputsConfirm(
+        label: 'Confirm',
+        onInputsTap: (List<String> inputs) async {
+          Navigator.of(context).pop(inputs);
         },
       ),
     );
 
     dynamic ret = await showChatUIKitDialog(
+      title: 'title',
+      content: 'content',
       context: context,
+      borderType: ChatUIKitRectangleType.filletCorner,
+      hintsText: ['Username', 'Password'],
       items: list,
     );
 
@@ -125,7 +118,7 @@ class _MyAppState extends State<MyApp> {
         },
       ),
     );
-    dynamic ret = await showChatUIkitBottomSheet(
+    dynamic ret = await showChatUIKitBottomSheet(
       context: context,
       items: list,
     );

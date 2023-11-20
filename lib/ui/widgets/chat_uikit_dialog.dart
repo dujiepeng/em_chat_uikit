@@ -6,7 +6,8 @@ Future<T?> showChatUIKitDialog<T>({
   required List<ChatUIKitDialogItem<T>> items,
   String? content,
   String? title,
-  List<String>? hiddenList,
+  List<String>? hintsText,
+  TextStyle? hiddenStyle,
   Color barrierColor = Colors.black54,
   bool barrierDismissible = true,
   ChatUIKitRectangleType borderType = ChatUIKitRectangleType.circular,
@@ -19,7 +20,8 @@ Future<T?> showChatUIKitDialog<T>({
       return ChatUIKitDialog(
         title: title,
         content: content,
-        hiddenList: hiddenList,
+        inputs: hintsText,
+        hiddenStyle: hiddenStyle,
         items: items,
         borderType: borderType,
       );
@@ -44,41 +46,54 @@ class ChatUIKitDialogItem<T> {
     required this.label,
     this.style,
     this.onTap,
-  }) : type = ChatUIKitDialogItemType.cancel;
+  })  : type = ChatUIKitDialogItemType.cancel,
+        onInputsTap = null;
 
   ChatUIKitDialogItem.confirm({
     required this.label,
     this.style,
     this.onTap,
-  }) : type = ChatUIKitDialogItemType.confirm;
+  })  : type = ChatUIKitDialogItemType.confirm,
+        onInputsTap = null;
+
+  ChatUIKitDialogItem.inputsConfirm({
+    required this.label,
+    this.style,
+    this.onInputsTap,
+  })  : type = ChatUIKitDialogItemType.confirm,
+        onTap = null;
 
   ChatUIKitDialogItem.destructive({
     required this.label,
     this.style,
     this.onTap,
-  }) : type = ChatUIKitDialogItemType.destructive;
+  })  : type = ChatUIKitDialogItemType.destructive,
+        onInputsTap = null;
 
   ChatUIKitDialogItem({
     required this.type,
     required this.label,
     this.style,
     this.onTap,
+    this.onInputsTap,
   });
 
   final ChatUIKitDialogItemType type;
   final String label;
   final TextStyle? style;
   final Future<T?> Function()? onTap;
+  final Future<T?> Function(List<String> inputs)? onInputsTap;
 }
 
-class ChatUIKitDialog<T> extends StatelessWidget {
+class ChatUIKitDialog<T> extends StatefulWidget {
   const ChatUIKitDialog({
     required this.items,
     this.title,
     this.content,
     this.titleStyle,
     this.contentStyle,
-    this.hiddenList,
+    this.inputs,
+    this.hiddenStyle,
     this.borderType = ChatUIKitRectangleType.circular,
     super.key,
   });
@@ -89,7 +104,31 @@ class ChatUIKitDialog<T> extends StatelessWidget {
   final TextStyle? contentStyle;
   final List<ChatUIKitDialogItem<T>> items;
   final ChatUIKitRectangleType borderType;
-  final List<String>? hiddenList;
+  final List<String>? inputs;
+
+  final TextStyle? hiddenStyle;
+
+  @override
+  State<ChatUIKitDialog> createState() => _ChatUIKitDialogState();
+}
+
+class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
+  final List<TextEditingController> _controllers = [];
+  @override
+  void initState() {
+    super.initState();
+    widget.inputs?.forEach((element) {
+      _controllers.add(TextEditingController());
+    });
+  }
+
+  @override
+  void dispose() {
+    for (var element in _controllers) {
+      element.dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +137,7 @@ class ChatUIKitDialog<T> extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.circular(() {
-          switch (borderType) {
+          switch (widget.borderType) {
             case ChatUIKitRectangleType.circular:
               return 16.0;
             case ChatUIKitRectangleType.filletCorner:
@@ -124,13 +163,13 @@ class ChatUIKitDialog<T> extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (title?.isNotEmpty == true)
+          if (widget.title?.isNotEmpty == true)
             Padding(
               padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
               child: Text(
-                title!,
+                widget.title!,
                 textAlign: TextAlign.center,
-                style: this.titleStyle ??
+                style: widget.titleStyle ??
                     TextStyle(
                       fontWeight:
                           ChatUIKitTheme.of(context).font.titleLarge.fontWeight,
@@ -142,13 +181,13 @@ class ChatUIKitDialog<T> extends StatelessWidget {
                     ),
               ),
             ),
-          if (content?.isNotEmpty == true)
+          if (widget.content?.isNotEmpty == true)
             Container(
               padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
               child: Text(
-                content!,
+                widget.content!,
                 textAlign: TextAlign.center,
-                style: this.contentStyle ??
+                style: widget.contentStyle ??
                     TextStyle(
                       fontWeight: ChatUIKitTheme.of(context)
                           .font
@@ -162,23 +201,106 @@ class ChatUIKitDialog<T> extends StatelessWidget {
                     ),
               ),
             ),
+          if (widget.inputs?.isNotEmpty == true)
+            () {
+              List<Widget> list = [];
+              for (var i = 0; i < widget.inputs!.length; i++) {
+                list.add(
+                  Container(
+                    margin: const EdgeInsets.only(top: 12, left: 12, right: 12),
+                    decoration: BoxDecoration(
+                      borderRadius: () {
+                        if (widget.borderType ==
+                            ChatUIKitRectangleType.circular) {
+                          return BorderRadius.circular(24);
+                        } else if (widget.borderType ==
+                            ChatUIKitRectangleType.filletCorner) {
+                          return BorderRadius.circular(4);
+                        } else if (widget.borderType ==
+                            ChatUIKitRectangleType.rightAngle) {
+                          return BorderRadius.circular(0);
+                        }
+                      }(),
+                      color: () {
+                        return (ChatUIKitTheme.of(context).color.isDark
+                            ? ChatUIKitTheme.of(context).color.neutralColor2
+                            : ChatUIKitTheme.of(context).color.neutralColor95);
+                      }(),
+                    ),
+                    height: 48,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 14, right: 14),
+                      child: TextField(
+                        style: TextStyle(
+                            fontWeight: ChatUIKitTheme.of(context)
+                                .font
+                                .bodyLarge
+                                .fontWeight,
+                            fontSize: ChatUIKitTheme.of(context)
+                                .font
+                                .bodyLarge
+                                .fontSize,
+                            color: ChatUIKitTheme.of(context).color.isDark
+                                ? Colors.white
+                                : Colors.black),
+                        controller: _controllers[i],
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                              fontWeight: ChatUIKitTheme.of(context)
+                                  .font
+                                  .bodyLarge
+                                  .fontWeight,
+                              fontSize: ChatUIKitTheme.of(context)
+                                  .font
+                                  .bodyLarge
+                                  .fontSize,
+                              color: ChatUIKitTheme.of(context).color.isDark
+                                  ? ChatUIKitTheme.of(context)
+                                      .color
+                                      .neutralColor4
+                                  : ChatUIKitTheme.of(context)
+                                      .color
+                                      .neutralColor6),
+                          hintText: widget.inputs![i],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
+              return Column(
+                children: list,
+              );
+            }(),
           () {
-            if (items.isEmpty) return Container();
+            if (widget.items.isEmpty) return Container();
             List<Widget> widgets = [];
-            for (var item in items) {
+            for (var item in widget.items) {
               widgets.add(
                 InkWell(
-                  onTap: item.onTap,
+                  onTap: () {
+                    if (item.onInputsTap != null) {
+                      List<String> inputs = [];
+                      for (var controller in _controllers) {
+                        inputs.add(controller.text);
+                      }
+                      item.onInputsTap?.call(inputs);
+                    } else {
+                      item.onTap?.call();
+                    }
+                  },
                   child: Container(
                     height: 48,
                     decoration: BoxDecoration(
                       borderRadius: () {
-                        if (borderType == ChatUIKitRectangleType.circular) {
+                        if (widget.borderType ==
+                            ChatUIKitRectangleType.circular) {
                           return BorderRadius.circular(24);
-                        } else if (borderType ==
+                        } else if (widget.borderType ==
                             ChatUIKitRectangleType.filletCorner) {
                           return BorderRadius.circular(4);
-                        } else if (borderType ==
+                        } else if (widget.borderType ==
                             ChatUIKitRectangleType.rightAngle) {
                           return BorderRadius.circular(0);
                         }
@@ -266,7 +388,7 @@ class ChatUIKitDialog<T> extends StatelessWidget {
                 ),
               );
             }
-            if (items.length > 2) {
+            if (widget.items.length > 2) {
               return Padding(
                 padding: const EdgeInsets.fromLTRB(12, 20, 12, 8),
                 child: Column(

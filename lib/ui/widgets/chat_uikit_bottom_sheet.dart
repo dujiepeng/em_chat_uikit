@@ -1,7 +1,7 @@
-import 'package:em_chat_uikit/em_chat_uikit.dart';
+import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
-Future<T?> showChatUIkitBottomSheet<T>({
+Future<T?> showChatUIKitBottomSheet<T>({
   required BuildContext context,
   required List<ChatUIKitBottomSheetItem<T>> items,
   Color? backgroundColor,
