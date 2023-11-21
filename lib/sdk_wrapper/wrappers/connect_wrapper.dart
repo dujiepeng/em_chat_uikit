@@ -1,5 +1,5 @@
-import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/foundation.dart';
+import '../chat_sdk_wrapper.dart';
 
 mixin ConnectWrapper on ChatUIKitWrapperBase {
   @protected
@@ -9,93 +9,102 @@ mixin ConnectWrapper on ChatUIKitWrapperBase {
     Client.getInstance.addConnectionEventHandler(
       sdkEventKey,
       ConnectionEventHandler(
-        onConnected: _onConnected,
-        onDisconnected: _onDisconnected,
-        onUserDidLoginFromOtherDevice: _onUserDidLoginFromOtherDevice,
-        onUserDidRemoveFromServer: _onUserDidRemoveFromServer,
-        onUserDidForbidByServer: _onUserDidForbidByServer,
-        onUserDidChangePassword: _onUserDidChangePassword,
-        onUserDidLoginTooManyDevice: _onUserDidLoginTooManyDevice,
-        onUserKickedByOtherDevice: _onUserKickedByOtherDevice,
-        onUserAuthenticationFailed: _onUserAuthenticationFailed,
-        onTokenWillExpire: _onTokenWillExpire,
-        onTokenDidExpire: _onTokenDidExpire,
-        onAppActiveNumberReachLimit: _onAppActiveNumberReachLimit,
+        onConnected: onConnected,
+        onDisconnected: onDisconnected,
+        onUserDidLoginFromOtherDevice: onUserDidLoginFromOtherDevice,
+        onUserDidRemoveFromServer: onUserDidRemoveFromServer,
+        onUserDidForbidByServer: onUserDidForbidByServer,
+        onUserDidChangePassword: onUserDidChangePassword,
+        onUserDidLoginTooManyDevice: onUserDidLoginTooManyDevice,
+        onUserKickedByOtherDevice: onUserKickedByOtherDevice,
+        onUserAuthenticationFailed: onUserAuthenticationFailed,
+        onTokenWillExpire: onTokenWillExpire,
+        onTokenDidExpire: onTokenDidExpire,
+        onAppActiveNumberReachLimit: onAppActiveNumberReachLimit,
       ),
     );
   }
 
-  void _onConnected() {
+  @protected
+  void onConnected() {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as ConnectObserver).onConnected();
     }
   }
 
-  void _onDisconnected() {
+  @protected
+  void onDisconnected() {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as ConnectObserver).onDisconnected();
     }
   }
 
-  void _onUserDidLoginFromOtherDevice(String deviceName) {
+  void onUserDidLoginFromOtherDevice(String deviceName) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as ConnectObserver).onUserDidLoginFromOtherDevice(deviceName);
     }
   }
 
-  void _onUserDidRemoveFromServer() {
+  @protected
+  void onUserDidRemoveFromServer() {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as ConnectObserver).onUserDidRemoveFromServer();
     }
   }
 
-  void _onUserDidForbidByServer() {
+  @protected
+  void onUserDidForbidByServer() {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as ConnectObserver).onUserDidForbidByServer();
     }
   }
 
-  void _onUserDidChangePassword() {
+  @protected
+  void onUserDidChangePassword() {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as ConnectObserver).onUserDidChangePassword();
     }
   }
 
-  void _onUserDidLoginTooManyDevice() {
+  @protected
+  void onUserDidLoginTooManyDevice() {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as ConnectObserver).onUserDidLoginTooManyDevice();
     }
   }
 
-  void _onUserKickedByOtherDevice() {
+  @protected
+  void onUserKickedByOtherDevice() {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as ConnectObserver).onUserKickedByOtherDevice();
     }
   }
 
-  void _onUserAuthenticationFailed() {
+  @protected
+  void onUserAuthenticationFailed() {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as ConnectObserver).onUserAuthenticationFailed();
     }
   }
 
-  void _onTokenWillExpire() {
+  @protected
+  void onTokenWillExpire() {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as ConnectObserver).onTokenWillExpire();
     }
   }
 
-  void _onTokenDidExpire() {
+  @protected
+  void onTokenDidExpire() {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as ConnectObserver).onTokenDidExpire();
     }
   }
 
-  void _onAppActiveNumberReachLimit() {
+  @protected
+  void onAppActiveNumberReachLimit() {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as ConnectObserver).onAppActiveNumberReachLimit();
     }
   }
 }
-
-extension ConnectWrapperAction on ConnectWrapper {}

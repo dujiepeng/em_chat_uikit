@@ -1,5 +1,5 @@
-import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/foundation.dart';
+import '../chat_sdk_wrapper.dart';
 
 mixin GroupWrapper on ChatUIKitWrapperBase {
   @protected
@@ -9,80 +9,88 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
     Client.getInstance.groupManager.addEventHandler(
       sdkEventKey,
       GroupEventHandler(
-        onGroupDestroyed: _onGroupDestroyed,
-        onAdminAddedFromGroup: _onAdminAddedFromGroup,
-        onAdminRemovedFromGroup: _onAdminRemovedFromGroup,
-        onAllGroupMemberMuteStateChanged: _onAllGroupMemberMuteStateChanged,
-        onAllowListAddedFromGroup: _onAllowListAddedFromGroup,
-        onAllowListRemovedFromGroup: _onAllowListRemovedFromGroup,
-        onAnnouncementChangedFromGroup: _onAnnouncementChangedFromGroup,
-        onAutoAcceptInvitationFromGroup: _onAutoAcceptInvitationFromGroup,
-        onInvitationAcceptedFromGroup: _onInvitationAcceptedFromGroup,
-        onInvitationDeclinedFromGroup: _onInvitationDeclinedFromGroup,
-        onInvitationReceivedFromGroup: _onInvitationReceivedFromGroup,
-        onMemberExitedFromGroup: _onMemberExitedFromGroup,
-        onMemberJoinedFromGroup: _onMemberJoinedFromGroup,
-        onMuteListAddedFromGroup: _onMuteListAddedFromGroup,
-        onMuteListRemovedFromGroup: _onMuteListRemovedFromGroup,
-        onOwnerChangedFromGroup: _onOwnerChangedFromGroup,
-        onRequestToJoinAcceptedFromGroup: _onRequestToJoinAcceptedFromGroup,
-        onRequestToJoinDeclinedFromGroup: _onRequestToJoinDeclinedFromGroup,
-        onRequestToJoinReceivedFromGroup: _onRequestToJoinReceivedFromGroup,
-        onSharedFileAddedFromGroup: _onSharedFileAddedFromGroup,
-        onSpecificationDidUpdate: _onSpecificationDidUpdate,
-        onDisableChanged: _onDisableChanged,
-        onSharedFileDeletedFromGroup: _onSharedFileDeletedFromGroup,
-        onUserRemovedFromGroup: _onUserRemovedFromGroup,
-        onAttributesChangedOfGroupMember: _onAttributesChangedOfGroupMember,
+        onGroupDestroyed: onGroupDestroyed,
+        onAdminAddedFromGroup: onAdminAddedFromGroup,
+        onAdminRemovedFromGroup: onAdminRemovedFromGroup,
+        onAllGroupMemberMuteStateChanged: onAllGroupMemberMuteStateChanged,
+        onAllowListAddedFromGroup: onAllowListAddedFromGroup,
+        onAllowListRemovedFromGroup: onAllowListRemovedFromGroup,
+        onAnnouncementChangedFromGroup: onAnnouncementChangedFromGroup,
+        onAutoAcceptInvitationFromGroup: onAutoAcceptInvitationFromGroup,
+        onInvitationAcceptedFromGroup: onInvitationAcceptedFromGroup,
+        onInvitationDeclinedFromGroup: onInvitationDeclinedFromGroup,
+        onInvitationReceivedFromGroup: onInvitationReceivedFromGroup,
+        onMemberExitedFromGroup: onMemberExitedFromGroup,
+        onMemberJoinedFromGroup: onMemberJoinedFromGroup,
+        onMuteListAddedFromGroup: onMuteListAddedFromGroup,
+        onMuteListRemovedFromGroup: onMuteListRemovedFromGroup,
+        onOwnerChangedFromGroup: onOwnerChangedFromGroup,
+        onRequestToJoinAcceptedFromGroup: onRequestToJoinAcceptedFromGroup,
+        onRequestToJoinDeclinedFromGroup: onRequestToJoinDeclinedFromGroup,
+        onRequestToJoinReceivedFromGroup: onRequestToJoinReceivedFromGroup,
+        onSharedFileAddedFromGroup: onSharedFileAddedFromGroup,
+        onSpecificationDidUpdate: onSpecificationDidUpdate,
+        onDisableChanged: onDisableChanged,
+        onSharedFileDeletedFromGroup: onSharedFileDeletedFromGroup,
+        onUserRemovedFromGroup: onUserRemovedFromGroup,
+        onAttributesChangedOfGroupMember: onAttributesChangedOfGroupMember,
       ),
     );
   }
 
-  void _onGroupDestroyed(String groupId, String? groupName) {
+  @protected
+  void onGroupDestroyed(String groupId, String? groupName) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver).onGroupDestroyed(groupId, groupName);
     }
   }
 
-  void _onAdminAddedFromGroup(String groupId, String admin) {
+  @protected
+  void onAdminAddedFromGroup(String groupId, String admin) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver).onAdminAddedFromGroup(groupId, admin);
     }
   }
 
-  void _onAdminRemovedFromGroup(String groupId, String admin) {
+  @protected
+  void onAdminRemovedFromGroup(String groupId, String admin) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver).onAdminRemovedFromGroup(groupId, admin);
     }
   }
 
-  void _onAllGroupMemberMuteStateChanged(String groupId, bool isAllMuted) {
+  @protected
+  void onAllGroupMemberMuteStateChanged(String groupId, bool isAllMuted) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver)
           .onAllGroupMemberMuteStateChanged(groupId, isAllMuted);
     }
   }
 
-  void _onAllowListAddedFromGroup(String groupId, List<String> members) {
+  @protected
+  void onAllowListAddedFromGroup(String groupId, List<String> members) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver).onAllowListAddedFromGroup(groupId, members);
     }
   }
 
-  void _onAllowListRemovedFromGroup(String groupId, List<String> members) {
+  @protected
+  void onAllowListRemovedFromGroup(String groupId, List<String> members) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver).onAllowListRemovedFromGroup(groupId, members);
     }
   }
 
-  void _onAnnouncementChangedFromGroup(String groupId, String announcement) {
+  @protected
+  void onAnnouncementChangedFromGroup(String groupId, String announcement) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver)
           .onAnnouncementChangedFromGroup(groupId, announcement);
     }
   }
 
-  void _onAutoAcceptInvitationFromGroup(
+  @protected
+  void onAutoAcceptInvitationFromGroup(
       String groupId, String inviter, String? inviteMessage) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver)
@@ -90,7 +98,8 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
     }
   }
 
-  void _onInvitationAcceptedFromGroup(
+  @protected
+  void onInvitationAcceptedFromGroup(
       String groupId, String invitee, String? reason) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver)
@@ -98,7 +107,8 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
     }
   }
 
-  void _onInvitationDeclinedFromGroup(
+  @protected
+  void onInvitationDeclinedFromGroup(
       String groupId, String invitee, String? reason) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver)
@@ -106,7 +116,8 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
     }
   }
 
-  void _onInvitationReceivedFromGroup(
+  @protected
+  void onInvitationReceivedFromGroup(
       String groupId, String? groupName, String inviter, String? reason) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver)
@@ -114,19 +125,22 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
     }
   }
 
-  void _onMemberExitedFromGroup(String groupId, String member) {
+  @protected
+  void onMemberExitedFromGroup(String groupId, String member) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver).onMemberExitedFromGroup(groupId, member);
     }
   }
 
-  void _onMemberJoinedFromGroup(String groupId, String member) {
+  @protected
+  void onMemberJoinedFromGroup(String groupId, String member) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver).onMemberJoinedFromGroup(groupId, member);
     }
   }
 
-  void _onMuteListAddedFromGroup(
+  @protected
+  void onMuteListAddedFromGroup(
       String groupId, List<String> mutes, int? muteExpire) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver)
@@ -134,13 +148,15 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
     }
   }
 
-  void _onMuteListRemovedFromGroup(String groupId, List<String> mutes) {
+  @protected
+  void onMuteListRemovedFromGroup(String groupId, List<String> mutes) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver).onMuteListRemovedFromGroup(groupId, mutes);
     }
   }
 
-  void _onOwnerChangedFromGroup(
+  @protected
+  void onOwnerChangedFromGroup(
       String groupId, String newOwner, String oldOwner) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver)
@@ -148,7 +164,8 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
     }
   }
 
-  void _onRequestToJoinAcceptedFromGroup(
+  @protected
+  void onRequestToJoinAcceptedFromGroup(
       String groupId, String? groupName, String accepter) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver)
@@ -156,7 +173,8 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
     }
   }
 
-  void _onRequestToJoinDeclinedFromGroup(
+  @protected
+  void onRequestToJoinDeclinedFromGroup(
       String groupId, String? groupName, String decliner, String? reason) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver).onRequestToJoinDeclinedFromGroup(
@@ -164,7 +182,8 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
     }
   }
 
-  void _onRequestToJoinReceivedFromGroup(
+  @protected
+  void onRequestToJoinReceivedFromGroup(
       String groupId, String? groupName, String applicant, String? reason) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver).onRequestToJoinReceivedFromGroup(
@@ -172,38 +191,44 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
     }
   }
 
-  void _onSharedFileAddedFromGroup(String groupId, GroupSharedFile sharedFile) {
+  @protected
+  void onSharedFileAddedFromGroup(String groupId, GroupSharedFile sharedFile) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver)
           .onSharedFileAddedFromGroup(groupId, sharedFile);
     }
   }
 
-  void _onSpecificationDidUpdate(Group group) {
+  @protected
+  void onSpecificationDidUpdate(Group group) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver).onSpecificationDidUpdate(group);
     }
   }
 
-  void _onDisableChanged(String groupId, bool isDisable) {
+  @protected
+  void onDisableChanged(String groupId, bool isDisable) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver).onDisableChanged(groupId, isDisable);
     }
   }
 
-  void _onSharedFileDeletedFromGroup(String groupId, String fileId) {
+  @protected
+  void onSharedFileDeletedFromGroup(String groupId, String fileId) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver).onSharedFileDeletedFromGroup(groupId, fileId);
     }
   }
 
-  void _onUserRemovedFromGroup(String groupId, String? groupName) {
+  @protected
+  void onUserRemovedFromGroup(String groupId, String? groupName) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver).onUserRemovedFromGroup(groupId, groupName);
     }
   }
 
-  void _onAttributesChangedOfGroupMember(String groupId, String userId,
+  @protected
+  void onAttributesChangedOfGroupMember(String groupId, String userId,
       Map<String, String>? attributes, String? operatorId) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver).onAttributesChangedOfGroupMember(
@@ -211,5 +236,3 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
     }
   }
 }
-
-extension GroupWrapperAction on GroupWrapper {}

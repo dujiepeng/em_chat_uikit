@@ -8,12 +8,16 @@ PODS:
     - HyphenateChat (= 4.1.1)
   - integration_test (0.0.1):
     - Flutter
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
 
 DEPENDENCIES:
   - em_chat_uikit (from `.symlinks/plugins/em_chat_uikit/ios`)
   - Flutter (from `Flutter`)
   - im_flutter_sdk (from `.symlinks/plugins/im_flutter_sdk/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
 
 SPEC REPOS:
   trunk:
@@ -28,6 +32,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/im_flutter_sdk/ios"
   integration_test:
     :path: ".symlinks/plugins/integration_test/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
 SPEC CHECKSUMS:
   em_chat_uikit: 92556d018d33a4e763e25609e3f12fda03d6b347
@@ -35,6 +41,7 @@ SPEC CHECKSUMS:
   HyphenateChat: 95aa4abbad0e763f513acbe21ff9543f50b886cd
   im_flutter_sdk: 9242a0d080c2f4ade4a0247a21b034036320233e
   integration_test: 13825b8a9334a850581300559b8839134b124670
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
 
 PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
 

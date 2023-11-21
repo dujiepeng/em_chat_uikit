@@ -363,22 +363,22 @@ mixin GroupActions on GroupWrapper {
 
   Future<void> acceptGroupJoinApplication({
     required String groupId,
-    required String username,
+    required String userId,
   }) {
     return Client.getInstance.groupManager.acceptJoinApplication(
       groupId,
-      username,
+      userId,
     );
   }
 
   Future<void> declineGroupJoinApplication({
     required String groupId,
-    required String username,
+    required String userId,
     String? reason,
   }) {
     return Client.getInstance.groupManager.declineJoinApplication(
       groupId,
-      username,
+      userId,
       reason: reason,
     );
   }

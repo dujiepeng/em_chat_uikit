@@ -1,5 +1,5 @@
-import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/foundation.dart';
+import '../chat_sdk_wrapper.dart';
 
 mixin ChatWrapper on ChatUIKitWrapperBase {
   @protected

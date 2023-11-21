@@ -1,5 +1,5 @@
-import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/foundation.dart';
+import '../chat_sdk_wrapper.dart';
 
 mixin MultiWrapper on ChatUIKitWrapperBase {
   @protected
@@ -9,29 +9,32 @@ mixin MultiWrapper on ChatUIKitWrapperBase {
     Client.getInstance.addMultiDeviceEventHandler(
       sdkEventKey,
       MultiDeviceEventHandler(
-        onContactEvent: _onContactEvent,
-        onGroupEvent: _onGroupEvent,
-        onChatThreadEvent: _onChatThreadEvent,
-        onRemoteMessagesRemoved: _onRemoteMessagesRemoved,
-        onConversationEvent: _onConversationEvent,
+        onContactEvent: onContactEvent,
+        onGroupEvent: onGroupEvent,
+        onChatThreadEvent: onChatThreadEvent,
+        onRemoteMessagesRemoved: onRemoteMessagesRemoved,
+        onConversationEvent: onConversationEvent,
       ),
     );
   }
 
-  void _onContactEvent(MultiDevicesEvent event, String userId, String? ext) {
+  @protected
+  void onContactEvent(MultiDevicesEvent event, String userId, String? ext) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as MultiObserver).onContactEvent(event, userId, ext);
     }
   }
 
-  void _onGroupEvent(
+  @protected
+  void onGroupEvent(
       MultiDevicesEvent event, String groupId, List<String>? userIds) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as MultiObserver).onGroupEvent(event, groupId, userIds);
     }
   }
 
-  void _onChatThreadEvent(
+  @protected
+  void onChatThreadEvent(
       MultiDevicesEvent event, String chatThreadId, List<String> userIds) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as MultiObserver)
@@ -39,14 +42,16 @@ mixin MultiWrapper on ChatUIKitWrapperBase {
     }
   }
 
-  void _onRemoteMessagesRemoved(String conversationId, String deviceId) {
+  @protected
+  void onRemoteMessagesRemoved(String conversationId, String deviceId) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as MultiObserver)
           .onRemoteMessagesRemoved(conversationId, deviceId);
     }
   }
 
-  void _onConversationEvent(
+  @protected
+  void onConversationEvent(
       MultiDevicesEvent event, String conversationId, ConversationType type) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as MultiObserver)

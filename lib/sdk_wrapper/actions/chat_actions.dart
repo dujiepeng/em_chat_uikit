@@ -147,7 +147,7 @@ mixin ChatActions on ChatWrapper {
 
   Future<CursorResult<Message>> fetchHistoryMessages({
     required String conversationId,
-    required EMConversationType type,
+    required ConversationType type,
     FetchMessageOptions? options,
     String? cursor,
     int pageSize = 50,
@@ -166,7 +166,7 @@ mixin ChatActions on ChatWrapper {
     int timestamp = -1,
     int maxCount = 20,
     String? from,
-    EMSearchDirection direction = EMSearchDirection.Up,
+    SearchDirection direction = SearchDirection.Up,
   }) async {
     return Client.getInstance.chatManager.searchMsgFromDB(
       keywords,
