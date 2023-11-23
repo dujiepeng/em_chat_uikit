@@ -6,9 +6,13 @@ typedef ListViewBuilder = Widget Function(
   List<ChatUIKitListItemModel> list,
 );
 
-class AlphabeticalItem with ChatUIKitListItemModel {
+class AlphabeticalListItemModel with ChatUIKitListItemModel {
   final String alphabetical;
-  AlphabeticalItem(this.alphabetical);
+  AlphabeticalListItemModel(this.alphabetical);
+  @override
+  bool get enableLongPress => false;
+  @override
+  bool get enableTap => false;
 }
 
 class ChatUIKitAlphabeticalView extends StatefulWidget {

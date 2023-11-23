@@ -19,7 +19,7 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
           !ChatUIKitContext.instance.isConversationLoadFinished()) {
         items = await fetchConversations();
       }
-      List<ConversationInfo> tmp = await mappers(items);
+      List<ConversationItemModel> tmp = await mappers(items);
       list.clear();
       list.addAll(tmp);
       loadingType.value = ChatUIKitListViewType.normal;
@@ -90,11 +90,12 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
     return items;
   }
 
-  Future<List<ConversationInfo>> mappers(
+  Future<List<ConversationItemModel>> mappers(
       List<Conversation> conversations) async {
-    List<ConversationInfo> list = [];
+    List<ConversationItemModel> list = [];
     for (var item in conversations) {
-      ConversationInfo info = await ConversationInfo.fromConversation(item);
+      ConversationItemModel info =
+          await ConversationItemModel.fromConversation(item);
       list.add(info);
     }
     return list;

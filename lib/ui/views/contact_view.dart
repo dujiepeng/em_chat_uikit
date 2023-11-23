@@ -29,8 +29,8 @@ class ContactView extends StatefulWidget {
   final ChatUIKitListItemBuilder? listViewBeforeBuilder;
   final ChatUIKitListItemBuilder? listViewAfterBuilder;
   final ChatUIKitListItemBuilder? listViewItemBuilder;
-  final void Function(ContactInfo)? onItemTap;
-  final void Function(ContactInfo)? onItemLongPress;
+  final void Function(ContactItemModel)? onItemTap;
+  final void Function(ContactItemModel)? onItemLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   @override
@@ -92,7 +92,7 @@ class _ContactViewState extends State<ContactView> {
     debugPrint('onSearchTap');
   }
 
-  void tapContactInfo(ContactInfo info) {}
+  void tapContactInfo(ContactItemModel info) {}
 
-  void longContactInfo(ContactInfo info) {}
+  void longContactInfo(ContactItemModel info) {}
 }

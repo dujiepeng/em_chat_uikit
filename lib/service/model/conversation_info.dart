@@ -1,6 +1,8 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
-class ConversationInfo with ChatUIKitListItemModel, SearchKeywordModel {
+class ConversationItemModel
+    with ChatUIKitListItemModel
+    implements SearchKeywordProtocol {
   final String id;
   final String? avatarUrl;
   final String? name;
@@ -10,7 +12,7 @@ class ConversationInfo with ChatUIKitListItemModel, SearchKeywordModel {
   final bool pinned;
   final bool noDisturb;
 
-  ConversationInfo({
+  ConversationItemModel({
     required this.id,
     required this.type,
     this.avatarUrl,
@@ -24,13 +26,13 @@ class ConversationInfo with ChatUIKitListItemModel, SearchKeywordModel {
   @override
   String get searchKeyword => name ?? id;
 
-  static Future<ConversationInfo> fromConversation(
+  static Future<ConversationItemModel> fromConversation(
     Conversation conversation,
   ) async {
     int unreadCount = await conversation.unreadCount();
     Message? lastMessage = await conversation.latestMessage();
 
-    ConversationInfo info = ConversationInfo(
+    ConversationItemModel info = ConversationItemModel(
       id: conversation.id,
       type: conversation.type,
       unreadCount: unreadCount,

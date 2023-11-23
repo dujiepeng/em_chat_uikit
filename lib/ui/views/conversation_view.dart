@@ -29,8 +29,8 @@ class ConversationView extends StatefulWidget {
   final ChatUIKitListItemBuilder? listViewBeforeBuilder;
   final ChatUIKitListItemBuilder? listViewAfterBuilder;
   final ChatUIKitListItemBuilder? listViewItemBuilder;
-  final void Function(ConversationInfo)? onItemTap;
-  final void Function(ConversationInfo)? onItemLongPress;
+  final void Function(ConversationItemModel)? onItemTap;
+  final void Function(ConversationItemModel)? onItemLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   @override
@@ -81,11 +81,11 @@ class _ConversationViewState extends State<ConversationView> {
         searchHideText: widget.fakeSearchHideText,
         background: widget.listViewBackground,
         onTap: widget.onItemTap ??
-            (ConversationInfo model) {
+            (ConversationItemModel model) {
               pushToMessageInfoPage();
             },
         onLongPress: widget.onItemLongPress ??
-            (ConversationInfo model) {
+            (ConversationItemModel model) {
               showBottomSheet();
             },
         onSearchTap: widget.onSearchTap ?? onSearchTap,

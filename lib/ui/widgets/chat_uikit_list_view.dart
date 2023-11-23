@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 typedef ChatUIKitListItemBuilder = Widget Function(
     BuildContext context, ChatUIKitListItemModel model);
 
-mixin SearchKeywordModel on ChatUIKitListItemModel {
+abstract class SearchKeywordProtocol {
   String get searchKeyword => '';
 }
 
-mixin AlphabeticalModel implements ChatUIKitListItemModel {
+abstract class AlphabeticalProtocol {
   String get alphabetical => '#';
 }
 
-abstract mixin class ChatUIKitListItemModel {}
+abstract mixin class ChatUIKitListItemModel {
+  bool enableLongPress = true;
+  bool enableTap = true;
+}
 
 enum ChatUIKitListViewType { loading, empty, error, normal }
 

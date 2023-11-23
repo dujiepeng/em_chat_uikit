@@ -3,7 +3,7 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 typedef ChatUIKitConversationItemBuilder = Widget Function(
-    BuildContext context, ConversationInfo model);
+    BuildContext context, ConversationItemModel model);
 
 class ConversationListView extends StatefulWidget {
   const ConversationListView({
@@ -29,8 +29,8 @@ class ConversationListView extends StatefulWidget {
   final ChatUIKitListItemBuilder? beforeBuilder;
   final ChatUIKitListItemBuilder? afterBuilder;
   final ChatUIKitConversationItemBuilder? itemBuilder;
-  final void Function(ConversationInfo)? onTap;
-  final void Function(ConversationInfo)? onLongPress;
+  final void Function(ConversationItemModel)? onTap;
+  final void Function(ConversationItemModel)? onLongPress;
   final String? searchHideText;
   final Widget? background;
   final String? errorMessage;
@@ -43,8 +43,6 @@ class ConversationListView extends StatefulWidget {
 
 class _ConversationListViewState extends State<ConversationListView>
     with ChatObserver {
-  
-
   @override
   void initState() {
     super.initState();
@@ -84,7 +82,7 @@ class _ConversationListViewState extends State<ConversationListView>
           onSearchTap: widget.onSearchTap,
           searchHideText: widget.searchHideText,
           itemBuilder: (context, model) {
-            ConversationInfo info = model as ConversationInfo;
+            ConversationItemModel info = model as ConversationItemModel;
             Widget? item;
             if (widget.itemBuilder != null) {
               item = widget.itemBuilder!(context, info);

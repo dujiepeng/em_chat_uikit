@@ -13,7 +13,7 @@ class ContactListViewController with ChatUIKitListViewControllerBase {
       if (items.isEmpty && !ChatUIKitContext.instance.isContactLoadFinished()) {
         items = await fetchContacts();
       }
-      List<ContactInfo> tmp = mappers(items);
+      List<ContactItemModel> tmp = mappers(items);
       list.clear();
       list.addAll(tmp);
       loadingType.value = ChatUIKitListViewType.normal;
@@ -34,10 +34,10 @@ class ContactListViewController with ChatUIKitListViewControllerBase {
     return result;
   }
 
-  List<ContactInfo> mappers(List<String> contacts) {
-    List<ContactInfo> list = [];
+  List<ContactItemModel> mappers(List<String> contacts) {
+    List<ContactItemModel> list = [];
     for (var item in contacts) {
-      ContactInfo info = ContactInfo.fromContact(item);
+      ContactItemModel info = ContactItemModel.fromContact(item);
       list.add(info);
     }
     return list;
