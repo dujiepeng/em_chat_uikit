@@ -62,17 +62,20 @@ class ChatUIKitAlphabeticalView extends StatefulWidget {
     this.onTap,
     this.onTapCancel,
     this.highlight = true,
+    this.listViewHasSearchBar = true,
     super.key,
   });
 
   final String targets;
-  final ScrollController controller;
+
   final String special;
   final ListViewBuilder builder;
   final bool enableSorting;
   final double rightPadding;
+  final ScrollController controller;
   final void Function(BuildContext context, String alphabetical)? onTap;
   final VoidCallback? onTapCancel;
+  final bool listViewHasSearchBar;
   final bool highlight;
 
   final List<ChatUIKitListItemModel> list;
@@ -286,7 +289,7 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     targetList.removeWhere((element) => !map.containsKey(element));
 
     positionMap.clear();
-    double position = 0;
+    double position = widget.listViewHasSearchBar ? 44 : 0;
 
     // 计算index 位置 转为最终序列
     for (var item in targetList) {

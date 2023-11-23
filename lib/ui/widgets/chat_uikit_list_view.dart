@@ -34,6 +34,7 @@ class ChatUIKitListView extends StatefulWidget {
     this.refresh,
     this.onSearchTap,
     this.searchHideText,
+    this.enableSearchBar = true,
     this.background,
     this.errorMessage,
     this.reloadMessage,
@@ -50,6 +51,7 @@ class ChatUIKitListView extends StatefulWidget {
   final VoidCallback? refresh;
   final Widget? background;
   final VoidCallback? onSearchTap;
+  final bool enableSearchBar;
   final String? searchHideText;
   final List<ChatUIKitListItemModel> list;
   final List<ChatUIKitListItemModel>? beforeList;
@@ -77,7 +79,7 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
       return Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          widget.onSearchTap != null ? fakeSearchBar() : Container(),
+          widget.enableSearchBar ? fakeSearchBar() : Container(),
           Expanded(
             child: Center(
               child: SizedBox(

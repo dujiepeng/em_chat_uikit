@@ -67,6 +67,8 @@ class ContactListView extends StatefulWidget {
 class _ContactListViewState extends State<ContactListView> {
   ScrollController scrollController = ScrollController();
 
+  bool enableSearchBar = true;
+
   @override
   void initState() {
     super.initState();
@@ -85,10 +87,12 @@ class _ContactListViewState extends State<ContactListView> {
       valueListenable: widget.controller.loadingType,
       builder: (context, type, child) {
         return ChatUIKitAlphabeticalView(
+          listViewHasSearchBar: enableSearchBar,
           onTap: (context, alphabetical) {
             debugPrint(' $alphabetical');
           },
           // highlight: false,
+
           list: widget.controller.list,
           controller: scrollController,
           builder: (context, list) {
@@ -99,6 +103,7 @@ class _ContactListViewState extends State<ContactListView> {
               refresh: () {
                 widget.controller.fetchItemList();
               },
+              enableSearchBar: enableSearchBar,
               errorMessage: widget.errorMessage,
               reloadMessage: widget.reloadMessage,
               afterBuilder: widget.afterBuilder,

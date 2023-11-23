@@ -90,7 +90,7 @@ class _ContactViewState extends State<ContactView> {
         background: widget.listViewBackground,
         onTap: widget.onItemTap ?? tapContactInfo,
         onLongPress: widget.onItemLongPress ?? longContactInfo,
-        // onSearchTap: widget.onSearchTap ?? onSearchTap,
+        onSearchTap: widget.onSearchTap ?? onSearchTap,
         alphabeticalBuilder: widget.alphabeticalBuilder,
       ),
     );
