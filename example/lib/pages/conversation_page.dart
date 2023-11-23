@@ -19,7 +19,7 @@ class _ConversationPageState extends State<ConversationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ConversationView();
+    return const ConversationView();
   }
 
   void sendMessages() async {

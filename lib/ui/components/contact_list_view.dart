@@ -65,12 +65,15 @@ class _ContactListViewState extends State<ContactListView> {
       valueListenable: widget.controller.loadingType,
       builder: (context, type, child) {
         return ChatUIKitAlphabeticalView(
+          onTap: (context, alphabetical) {
+            debugPrint(' $alphabetical');
+          },
+          // highlight: false,
           list: widget.controller.list,
           controller: scrollController,
-          alphabeticalBuilder:
-              widget.alphabeticalBuilder ?? (context, target) => Text(target),
           builder: (context, list) {
             return ChatUIKitListView(
+              scrollController: scrollController,
               type: type,
               list: list,
               refresh: () {
@@ -86,7 +89,14 @@ class _ContactListViewState extends State<ContactListView> {
               onSearchTap: widget.onSearchTap,
               searchHideText: widget.searchHideText,
               itemBuilder: (context, model) {
-                if (model is AlphabeticalListItemModel) {}
+                if (model is AlphabeticalItemModel) {
+                  Widget? content = widget.alphabeticalBuilder
+                      ?.call(context, model.alphabetical);
+                  content ??= Text(model.alphabetical);
+                  content = Container(
+                      key: ValueKey(model.alphabetical), child: content);
+                  return content;
+                }
 
                 if (model is ContactItemModel) {
                   Widget? item;
@@ -100,10 +110,10 @@ class _ContactListViewState extends State<ContactListView> {
                     onLongPress: () {
                       widget.onLongPress?.call(model);
                     },
-                    child: const ListTile(
-                      title: Text('title'),
-                      subtitle: Text('model.subtitle'),
-                      trailing: Text('model.time'),
+                    child: ListTile(
+                      title: Text(model.id),
+                      subtitle: const Text('model.subtitle'),
+                      trailing: const Text('model.time'),
                       isThreeLine: true,
                       titleAlignment: ListTileTitleAlignment.titleHeight,
                     ),

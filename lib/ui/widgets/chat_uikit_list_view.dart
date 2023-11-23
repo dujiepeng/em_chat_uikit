@@ -15,6 +15,7 @@ abstract class AlphabeticalProtocol {
 abstract mixin class ChatUIKitListItemModel {
   bool enableLongPress = true;
   bool enableTap = true;
+  double height = 56;
 }
 
 enum ChatUIKitListViewType { loading, empty, error, normal }
@@ -179,12 +180,17 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return widget.beforeBuilder?.call(
-                context,
-                widget.beforeList![index],
+              ChatUIKitListItemModel? model = widget.beforeList?[index];
+              double height = model?.height ?? 0;
+              return SizedBox(
+                height: height,
+                child: widget.beforeBuilder?.call(
+                  context,
+                  widget.beforeList![index],
+                ),
               );
             },
-            childCount: widget.beforeList?.length,
+            childCount: widget.beforeList?.length ?? 0,
           ),
         ),
         SliverList(
@@ -201,12 +207,17 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return widget.afterBuilder?.call(
-                context,
-                widget.afterList![index],
+              ChatUIKitListItemModel? model = widget.afterList?[index];
+              double height = model?.height ?? 0;
+              return SizedBox(
+                height: height,
+                child: widget.afterBuilder?.call(
+                  context,
+                  widget.afterList![index],
+                ),
               );
             },
-            childCount: widget.afterList?.length,
+            childCount: widget.afterList?.length ?? 0,
           ),
         ),
       ],

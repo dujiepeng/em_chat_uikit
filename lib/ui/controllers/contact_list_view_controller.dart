@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:username/username.dart';
 
 class ContactListViewController with ChatUIKitListViewControllerBase {
   ContactListViewController();
@@ -8,7 +9,14 @@ class ContactListViewController with ChatUIKitListViewControllerBase {
   @override
   Future<void> fetchItemList() async {
     loadingType.value = ChatUIKitListViewType.loading;
-    List<String> items = await ChatUIKit.instance.getAllContacts();
+    // List<String> items = await ChatUIKit.instance.getAllContacts();
+    List<String> items = () {
+      List<String> list = [];
+      for (var i = 0; i < 100; i++) {
+        list.add(Username.en().fullname);
+      }
+      return list;
+    }();
     try {
       if (items.isEmpty && !ChatUIKitContext.instance.isContactLoadFinished()) {
         items = await fetchContacts();

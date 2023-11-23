@@ -18,6 +18,8 @@ dependencies:
 
   chat_uikit_theme: ^0.0.2
 
+  username: ^0.2.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -363,6 +363,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
+  username:
+    dependency: transitive
+    description:
+      name: username
+      sha256: a407d02cdfcc957917153620bae7348094d11222a555fced8cd8ab9a7eeea493
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.3"
   vector_math:
     dependency: transitive
     description:

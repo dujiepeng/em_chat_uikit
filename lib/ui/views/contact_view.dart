@@ -3,7 +3,7 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 class ContactView extends StatefulWidget {
-  ContactView({
+  const ContactView({
     this.listViewItemBuilder,
     this.listViewBeforeBuilder,
     this.listViewBeforeList,
@@ -15,13 +15,12 @@ class ContactView extends StatefulWidget {
     this.onItemTap,
     this.onItemLongPress,
     this.appBar,
-    ContactListViewController? controller,
+    this.controller,
+    this.alphabeticalBuilder,
     super.key,
-  }) {
-    this.controller = controller ?? ContactListViewController();
-  }
+  });
 
-  late final ContactListViewController controller;
+  final ContactListViewController? controller;
   final ChatUIKitAppBar? appBar;
   final VoidCallback? onSearchTap;
   final List<ChatUIKitListItemModel>? listViewBeforeList;
@@ -33,11 +32,21 @@ class ContactView extends StatefulWidget {
   final void Function(ContactItemModel)? onItemLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
+  final Widget Function(BuildContext context, String alphabetical)?
+      alphabeticalBuilder;
   @override
   State<ContactView> createState() => _ContactViewState();
 }
 
 class _ContactViewState extends State<ContactView> {
+  late final ContactListViewController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = widget.controller ?? ContactListViewController();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
@@ -71,7 +80,7 @@ class _ContactViewState extends State<ContactView> {
         ),
       ),
       body: ContactListView(
-        controller: widget.controller,
+        controller: controller,
         itemBuilder: widget.listViewItemBuilder,
         beforeBuilder: widget.listViewBeforeBuilder,
         beforeList: widget.listViewBeforeList,
@@ -82,6 +91,7 @@ class _ContactViewState extends State<ContactView> {
         onTap: widget.onItemTap ?? tapContactInfo,
         onLongPress: widget.onItemLongPress ?? longContactInfo,
         onSearchTap: widget.onSearchTap ?? onSearchTap,
+        alphabeticalBuilder: widget.alphabeticalBuilder,
       ),
     );
 

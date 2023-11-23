@@ -15,7 +15,7 @@ class ContactItemModel
 
   @override
   String get alphabetical {
-    return nickName?.substring(0, 1) ?? id.substring(0, 1);
+    return nickName ?? id;
   }
 
   @override

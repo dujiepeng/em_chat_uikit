@@ -3,7 +3,7 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 class ConversationView extends StatefulWidget {
-  ConversationView({
+  const ConversationView({
     this.listViewItemBuilder,
     this.listViewBeforeBuilder,
     this.listViewBeforeList,
@@ -15,13 +15,11 @@ class ConversationView extends StatefulWidget {
     this.onItemTap,
     this.onItemLongPress,
     this.appBar,
-    ConversationListViewController? controller,
+    this.controller,
     super.key,
-  }) {
-    this.controller = controller ?? ConversationListViewController();
-  }
+  });
 
-  late final ConversationListViewController controller;
+  final ConversationListViewController? controller;
   final ChatUIKitAppBar? appBar;
   final VoidCallback? onSearchTap;
   final List<ChatUIKitListItemModel>? listViewBeforeList;
@@ -38,6 +36,13 @@ class ConversationView extends StatefulWidget {
 }
 
 class _ConversationViewState extends State<ConversationView> {
+  late ConversationListViewController controller;
+  @override
+  void initState() {
+    super.initState();
+    controller = widget.controller ?? ConversationListViewController();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
@@ -72,7 +77,7 @@ class _ConversationViewState extends State<ConversationView> {
             ),
           ),
       body: ConversationListView(
-        controller: widget.controller,
+        controller: controller,
         itemBuilder: widget.listViewItemBuilder,
         beforeBuilder: widget.listViewBeforeBuilder,
         beforeList: widget.listViewBeforeList,
