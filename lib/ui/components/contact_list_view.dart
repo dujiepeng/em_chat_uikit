@@ -5,6 +5,26 @@ import 'package:flutter/material.dart';
 typedef ChatUIKitContactItemBuilder = Widget Function(
     BuildContext context, ContactItemModel model);
 
+class ContactListItem extends StatelessWidget {
+  const ContactListItem(this.model, {super.key});
+
+  final ContactItemModel model;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: model.height,
+      child: ListTile(
+        title: Text(model.id),
+        subtitle: const Text('model.subtitle'),
+        trailing: const Text('model.time'),
+        isThreeLine: true,
+        titleAlignment: ListTileTitleAlignment.titleHeight,
+      ),
+    );
+  }
+}
+
 class ContactListView extends StatefulWidget {
   const ContactListView({
     required this.controller,
@@ -92,9 +112,7 @@ class _ContactListViewState extends State<ContactListView> {
                 if (model is AlphabeticalItemModel) {
                   Widget? content = widget.alphabeticalBuilder
                       ?.call(context, model.alphabetical);
-                  content ??= Text(model.alphabetical);
-                  content = Container(
-                      key: ValueKey(model.alphabetical), child: content);
+                  content ??= ChatUIKitAlphabeticalItem(model: model);
                   return content;
                 }
 
@@ -110,13 +128,7 @@ class _ContactListViewState extends State<ContactListView> {
                     onLongPress: () {
                       widget.onLongPress?.call(model);
                     },
-                    child: ListTile(
-                      title: Text(model.id),
-                      subtitle: const Text('model.subtitle'),
-                      trailing: const Text('model.time'),
-                      isThreeLine: true,
-                      titleAlignment: ListTileTitleAlignment.titleHeight,
-                    ),
+                    child: ContactListItem(model),
                   );
 
                   return item;

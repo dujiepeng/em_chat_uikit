@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
@@ -8,15 +10,45 @@ typedef ListViewBuilder = Widget Function(
 
 class AlphabeticalItemModel with ChatUIKitListItemModel {
   final String alphabetical;
-  AlphabeticalItemModel(this.alphabetical);
-  @override
-  bool get enableLongPress => false;
-  @override
-  bool get enableTap => false;
+  AlphabeticalItemModel(this.alphabetical) {
+    height = 32;
+    enableLongPress = false;
+    enableTap = false;
+  }
 }
 
 const double letterHeight = 16;
 const double letterWidth = 16;
+
+class ChatUIKitAlphabeticalItem extends StatelessWidget {
+  const ChatUIKitAlphabeticalItem({
+    required this.model,
+    super.key,
+  });
+
+  final AlphabeticalItemModel model;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = ChatUIKitTheme.of(context);
+
+    return Container(
+      padding: const EdgeInsets.only(left: 16, bottom: 6, top: 6),
+      height: model.height,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(model.alphabetical,
+            style: TextStyle(
+              fontWeight: theme.font.titleSmall.fontWeight,
+              fontSize: theme.font.titleSmall.fontSize,
+              color: theme.color.isDark
+                  ? theme.color.neutralColor6
+                  : theme.color.neutralColor5,
+            )),
+      ),
+    );
+  }
+}
 
 class ChatUIKitAlphabeticalView extends StatefulWidget {
   const ChatUIKitAlphabeticalView({
@@ -54,6 +86,8 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
   List<String> targets = [];
   String? latestSelected;
   ValueNotifier<int> selectIndex = ValueNotifier(-1);
+
+  Map<String, double> positionMap = {};
 
   @override
   Widget build(BuildContext context) {
@@ -194,8 +228,10 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     if (latestSelected == str) {
       return;
     }
+
     widget.onTap?.call(context, str);
     latestSelected = str;
+    moveTo(str);
   }
 
   void cancelSelected() {
@@ -249,15 +285,38 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     // 清空不存在的target
     targetList.removeWhere((element) => !map.containsKey(element));
 
-    // 转为最终序列
+    positionMap.clear();
+    double position = 0;
+
+    // 计算index 位置 转为最终序列
     for (var item in targetList) {
-      ret.add(AlphabeticalItemModel(item.toUpperCase()));
-      targets.add(item);
+      positionMap[item] = position;
+      final letterModel = AlphabeticalItemModel(item.toUpperCase());
+      ret.add(letterModel);
+      position += letterModel.height;
       List<AlphabeticalProtocol> list = map[item]!;
       for (var element in list) {
-        ret.add(element as ChatUIKitListItemModel);
+        final model = element as ChatUIKitListItemModel;
+        ret.add(model);
+        position += model.height;
       }
+
+      targets.add(item);
     }
+
     return ret;
+  }
+
+  void moveTo(String alphabetical) {
+    if (!positionMap.containsKey(alphabetical)) {
+      return;
+    }
+    double position = positionMap[alphabetical]!;
+
+    widget.controller.animateTo(
+      min(position, widget.controller.position.maxScrollExtent),
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.linear,
+    );
   }
 }

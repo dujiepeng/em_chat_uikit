@@ -12,7 +12,7 @@ class ContactListViewController with ChatUIKitListViewControllerBase {
     // List<String> items = await ChatUIKit.instance.getAllContacts();
     List<String> items = () {
       List<String> list = [];
-      for (var i = 0; i < 100; i++) {
+      for (var i = 0; i < 1000; i++) {
         list.add(Username.en().fullname);
       }
       return list;

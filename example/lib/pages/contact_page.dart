@@ -16,14 +16,6 @@ class TestModel with ChatUIKitListItemModel {
 class _ContactPageState extends State<ContactPage> {
   @override
   Widget build(BuildContext context) {
-    return ContactView(
-      listViewBeforeBuilder: (context, model) {
-        return Container(
-          color: Colors.red,
-          child: Text((model as TestModel).name),
-        );
-      },
-      listViewBeforeList: [TestModel('aaa'), TestModel('bbb')],
-    );
+    return const ContactView();
   }
 }
