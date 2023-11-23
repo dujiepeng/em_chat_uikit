@@ -1,6 +1,10 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
 mixin ContactActions on ContactWrapper {
+  Future<List<String>> getAllContacts() {
+    return Client.getInstance.contactManager.getAllContactsFromServer();
+  }
+
   Future<void> sendContactRequest({required String userId, String? reason}) {
     return Client.getInstance.contactManager.addContact(userId, reason: reason);
   }

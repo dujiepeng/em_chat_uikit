@@ -1,6 +1,7 @@
 import 'package:chat_uikit_theme/chat_uikit_theme.dart';
 import 'package:flutter/material.dart';
 
+const double defaultLeftRightPadding = 14;
 Future<T?> showChatUIKitDialog<T>({
   required BuildContext context,
   required List<ChatUIKitDialogItem<T>> items,
@@ -8,6 +9,7 @@ Future<T?> showChatUIKitDialog<T>({
   String? title,
   List<String>? hintsText,
   TextStyle? hiddenStyle,
+  double? leftRightPadding,
   Color barrierColor = Colors.black54,
   bool barrierDismissible = true,
   ChatUIKitRectangleType borderType = ChatUIKitRectangleType.circular,
@@ -20,7 +22,8 @@ Future<T?> showChatUIKitDialog<T>({
       return ChatUIKitDialog(
         title: title,
         content: content,
-        inputs: hintsText,
+        hintsText: hintsText,
+        leftRightPadding: leftRightPadding ?? defaultLeftRightPadding,
         hiddenStyle: hiddenStyle,
         items: items,
         borderType: borderType,
@@ -92,8 +95,9 @@ class ChatUIKitDialog<T> extends StatefulWidget {
     this.content,
     this.titleStyle,
     this.contentStyle,
-    this.inputs,
+    this.hintsText,
     this.hiddenStyle,
+    this.leftRightPadding = defaultLeftRightPadding,
     this.borderType = ChatUIKitRectangleType.circular,
     super.key,
   });
@@ -104,7 +108,8 @@ class ChatUIKitDialog<T> extends StatefulWidget {
   final TextStyle? contentStyle;
   final List<ChatUIKitDialogItem<T>> items;
   final ChatUIKitRectangleType borderType;
-  final List<String>? inputs;
+  final List<String>? hintsText;
+  final double leftRightPadding;
 
   final TextStyle? hiddenStyle;
 
@@ -117,7 +122,7 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
   @override
   void initState() {
     super.initState();
-    widget.inputs?.forEach((element) {
+    widget.hintsText?.forEach((element) {
       _controllers.add(TextEditingController());
     });
   }
@@ -139,7 +144,7 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
         borderRadius: BorderRadius.circular(() {
           switch (widget.borderType) {
             case ChatUIKitRectangleType.circular:
-              return 16.0;
+              return 20.0;
             case ChatUIKitRectangleType.filletCorner:
               return 8.0;
             case ChatUIKitRectangleType.rightAngle:
@@ -165,7 +170,10 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
         children: [
           if (widget.title?.isNotEmpty == true)
             Padding(
-              padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
+              padding: EdgeInsets.only(
+                  top: 12,
+                  left: widget.leftRightPadding,
+                  right: widget.leftRightPadding),
               child: Text(
                 widget.title!,
                 textAlign: TextAlign.center,
@@ -183,7 +191,10 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
             ),
           if (widget.content?.isNotEmpty == true)
             Container(
-              padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
+              padding: EdgeInsets.only(
+                  top: 12,
+                  left: widget.leftRightPadding,
+                  right: widget.leftRightPadding),
               child: Text(
                 widget.content!,
                 textAlign: TextAlign.center,
@@ -201,13 +212,16 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                     ),
               ),
             ),
-          if (widget.inputs?.isNotEmpty == true)
+          if (widget.hintsText?.isNotEmpty == true)
             () {
               List<Widget> list = [];
-              for (var i = 0; i < widget.inputs!.length; i++) {
+              for (var i = 0; i < widget.hintsText!.length; i++) {
                 list.add(
                   Container(
-                    margin: const EdgeInsets.only(top: 12, left: 12, right: 12),
+                    margin: EdgeInsets.only(
+                        top: 12,
+                        left: widget.leftRightPadding,
+                        right: widget.leftRightPadding),
                     decoration: BoxDecoration(
                       borderRadius: () {
                         if (widget.borderType ==
@@ -262,7 +276,7 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                                   : ChatUIKitTheme.of(context)
                                       .color
                                       .neutralColor6),
-                          hintText: widget.inputs![i],
+                          hintText: widget.hintsText![i],
                         ),
                       ),
                     ),
@@ -390,7 +404,12 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
             }
             if (widget.items.length > 2) {
               return Padding(
-                padding: const EdgeInsets.fromLTRB(12, 20, 12, 8),
+                padding: EdgeInsets.fromLTRB(
+                  widget.leftRightPadding,
+                  10,
+                  widget.leftRightPadding,
+                  8,
+                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: () {

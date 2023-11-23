@@ -85,7 +85,7 @@ mixin ChatActions on ChatWrapper {
     return Client.getInstance.chatManager.loadAllConversations();
   }
 
-  Future<CursorResult<Conversation>> fetchConversation({
+  Future<CursorResult<Conversation>> fetchConversations({
     String? cursor,
     int pageSize = 20,
   }) async {

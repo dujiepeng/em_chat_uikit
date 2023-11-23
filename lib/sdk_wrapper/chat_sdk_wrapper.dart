@@ -1,5 +1,6 @@
 library chat_sdk_wrapper;
 
+import 'package:em_chat_uikit/sdk_wrapper/actions/contact_actions.dart';
 import 'package:flutter/material.dart';
 
 import 'actions/chat_actions.dart';
@@ -70,7 +71,7 @@ class ChatSDKWrapper extends ChatUIKitWrapperBase
         MessageWrapper,
         NotificationWrapper,
         ChatActions,
-        ChatActions,
+        ContactActions,
         GroupActions,
         NotificationActions {
   static ChatSDKWrapper? _instance;
@@ -101,5 +102,9 @@ class ChatSDKWrapper extends ChatUIKitWrapperBase
 
   bool isLogin() {
     return Client.getInstance.currentUserId != null;
+  }
+
+  String? currentUserId() {
+    return Client.getInstance.currentUserId;
   }
 }

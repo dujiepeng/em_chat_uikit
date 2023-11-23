@@ -28,9 +28,8 @@ mixin NotificationActions on NotificationWrapper {
   Future<void> setSilentMode({
     required String conversationId,
     required ConversationType type,
+    required ChatSilentModeParam param,
   }) async {
-    ChatSilentModeParam param =
-        ChatSilentModeParam.remindType(ChatPushRemindType.MENTION_ONLY);
     return Client.getInstance.pushManager.setConversationSilentMode(
       conversationId: conversationId,
       type: type,
@@ -55,9 +54,7 @@ mixin NotificationActions on NotificationWrapper {
         .fetchSilentModeForConversations(conversations);
   }
 
-  Future<void> setAllSilentMode({required bool enable}) async {
-    ChatSilentModeParam param = ChatSilentModeParam.remindType(
-        enable ? ChatPushRemindType.ALL : ChatPushRemindType.MENTION_ONLY);
+  Future<void> setAllSilentMode({required ChatSilentModeParam param}) async {
     return Client.getInstance.pushManager.setSilentModeForAll(param: param);
   }
 }

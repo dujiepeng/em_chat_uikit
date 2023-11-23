@@ -1,4 +1,6 @@
-import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit_example/pages/contact_page.dart';
+import 'package:em_chat_uikit_example/pages/conversation_page.dart';
+import 'package:em_chat_uikit_example/pages/my_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,22 +10,54 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> implements ProfileProvider {
-  @override
-  void initState() {
-    super.initState();
-  }
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
+  int _currentIndex = 0;
 
   @override
   void dispose() {
     super.dispose();
   }
 
+  List<Widget> _pages(BuildContext context) {
+    return [const ConversationPage(), const ContactPage(), const MyPage()];
+  }
+
   @override
   Widget build(BuildContext context) {
-    ChatUIKit.instance.setAllSilentMode(enable: true);
-    return Scaffold(
-      appBar: AppBar(),
+    super.build(context);
+
+    Widget content = Scaffold(
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _pages(context),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (value) {
+          setState(() {
+            _currentIndex = value;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            label: '会话',
+            icon: Icon(Icons.chat),
+          ),
+          BottomNavigationBarItem(
+            label: '联系人',
+            icon: Icon(Icons.person),
+          ),
+          BottomNavigationBarItem(
+            label: '我',
+            icon: Icon(Icons.person),
+          )
+        ],
+      ),
     );
+
+    return content;
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

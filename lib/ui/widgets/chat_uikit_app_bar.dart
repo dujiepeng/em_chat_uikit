@@ -1,0 +1,204 @@
+import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+class ChatUIKitAppBar extends StatefulWidget implements PreferredSizeWidget {
+  const ChatUIKitAppBar({
+    this.title,
+    this.titleWidget,
+    this.titleTextStyle,
+    this.subTitle,
+    this.subTitleTextStyle,
+    this.leading,
+    this.trailing,
+    this.autoBackButton = false,
+    this.onBackButtonPressed,
+    this.centerTitle = true,
+    this.systemOverlayStyle,
+    super.key,
+  });
+
+  final bool autoBackButton;
+  final VoidCallback? onBackButtonPressed;
+  final String? title;
+  final TextStyle? titleTextStyle;
+  final Widget? titleWidget;
+  final String? subTitle;
+  final TextStyle? subTitleTextStyle;
+  final Widget? leading;
+  final Widget? trailing;
+  final bool centerTitle;
+  final SystemUiOverlayStyle? systemOverlayStyle;
+
+  @override
+  State<ChatUIKitAppBar> createState() => _ChatUIKitAppBarState();
+
+  @override
+  Size get preferredSize {
+    return const Size.fromHeight(56);
+  }
+}
+
+class _ChatUIKitAppBarState extends State<ChatUIKitAppBar> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = ChatUIKitTheme.of(context);
+
+    Color backgroundColor = theme.color.isDark
+        ? theme.color.neutralColor1
+        : theme.color.neutralColor98;
+
+    Widget? title;
+    if (widget.title?.isNotEmpty == true) {
+      title = Text(
+        widget.title!,
+        style: widget.titleTextStyle ??
+            TextStyle(
+              fontSize: theme.font.titleMedium.fontSize,
+              fontWeight: theme.font.titleMedium.fontWeight,
+              color: theme.color.isDark
+                  ? theme.color.neutralColor98
+                  : theme.color.neutralColor1,
+            ),
+      );
+    }
+
+    if (widget.titleWidget != null) {
+      title = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          title ?? const SizedBox(),
+          widget.titleWidget!,
+        ],
+      );
+    }
+
+    Widget? subTitle;
+    if (widget.subTitle?.isNotEmpty == true) {
+      subTitle = Text(
+        widget.subTitle!,
+        style: widget.subTitleTextStyle ??
+            TextStyle(
+              fontSize: theme.font.bodyExtraSmall.fontSize,
+              fontWeight: theme.font.bodyExtraSmall.fontWeight,
+              color: theme.color.isDark
+                  ? theme.color.neutralColor6
+                  : theme.color.neutralColor5,
+            ),
+      );
+    }
+
+    Widget middle = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: widget.centerTitle
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
+      children: [
+        title ?? const SizedBox(),
+        subTitle ?? const SizedBox(),
+      ],
+    );
+
+    Widget? leading;
+    List<Widget> leadingWidgets = [];
+    if (widget.autoBackButton) {
+      leadingWidgets.add(
+        InkWell(
+          onTap: () {
+            if (widget.onBackButtonPressed != null) {
+              widget.onBackButtonPressed!();
+            } else {
+              Navigator.maybePop(context);
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: Icon(
+              Icons.arrow_back_ios,
+              size: 16,
+              color: theme.color.isDark
+                  ? theme.color.neutralColor95
+                  : theme.color.neutralColor3,
+            ),
+          ),
+        ),
+      );
+    }
+    if (widget.leading != null) {
+      leadingWidgets.add(widget.leading!);
+    }
+
+    if (leadingWidgets.isNotEmpty) {
+      leading = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: leadingWidgets,
+      );
+    }
+
+    Widget content = NavigationToolbar(
+      leading: leading,
+      middle: middle,
+      trailing: widget.trailing,
+      centerMiddle: widget.centerTitle,
+      middleSpacing: NavigationToolbar.kMiddleSpacing,
+    );
+
+    content = SafeArea(
+      bottom: false,
+      child: content,
+    );
+
+    content = Container(
+      height: MediaQuery.paddingOf(context).top + widget.preferredSize.height,
+      color: backgroundColor,
+      child: content,
+    );
+
+    return updateStatusBar(content, backgroundColor);
+  }
+
+  Widget updateStatusBar(Widget content, Color backgroundColor) {
+    final ThemeData theme = Theme.of(context);
+    final SystemUiOverlayStyle overlayStyle = _systemOverlayStyleForBrightness(
+      ThemeData.estimateBrightnessForColor(backgroundColor),
+      theme.useMaterial3 ? const Color(0x00000000) : null,
+    );
+
+    return Semantics(
+      container: true,
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: overlayStyle,
+        child: Material(
+          child: Semantics(
+            explicitChildNodes: true,
+            child: content,
+          ),
+        ),
+      ),
+    );
+  }
+
+  SystemUiOverlayStyle _systemOverlayStyleForBrightness(Brightness brightness,
+      [Color? backgroundColor]) {
+    final SystemUiOverlayStyle style = brightness == Brightness.dark
+        ? SystemUiOverlayStyle.light
+        : SystemUiOverlayStyle.dark;
+
+    return SystemUiOverlayStyle(
+      statusBarColor: backgroundColor,
+      statusBarBrightness: style.statusBarBrightness,
+      statusBarIconBrightness: style.statusBarIconBrightness,
+      systemStatusBarContrastEnforced: style.systemStatusBarContrastEnforced,
+    );
+  }
+}
