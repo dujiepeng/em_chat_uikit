@@ -17,6 +17,7 @@ class ChatUIKitAlphabeticalView extends StatefulWidget {
     required this.controller,
     required this.builder,
     this.enableSorting = true,
+    this.showAlphabetical = true,
     this.special = '#',
     this.targets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#',
     this.rightPadding = 2,
@@ -29,6 +30,7 @@ class ChatUIKitAlphabeticalView extends StatefulWidget {
   });
 
   final String targets;
+  final bool showAlphabetical;
   final List<ChatUIKitListItemModelBase>? beforeList;
   final String special;
   final ListViewBuilder builder;
@@ -64,23 +66,26 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     }
 
     List<ChatUIKitListItemModelBase> list = sortList();
+
     Widget content = widget.builder.call(
       context,
       list,
     );
 
-    content = Stack(
-      children: [
-        content,
-        Positioned(
-          top: 0,
-          bottom: 0,
-          width: 30,
-          right: widget.rightPadding,
-          child: letterWidget(),
-        ),
-      ],
-    );
+    if (widget.showAlphabetical) {
+      content = Stack(
+        children: [
+          content,
+          Positioned(
+            top: 0,
+            bottom: 0,
+            width: 30,
+            right: widget.rightPadding,
+            child: letterWidget(),
+          ),
+        ],
+      );
+    }
 
     return content;
   }

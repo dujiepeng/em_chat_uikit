@@ -44,6 +44,7 @@ class ConversationListView extends StatefulWidget {
 class _ConversationListViewState extends State<ConversationListView>
     with ChatObserver {
   late ConversationListViewController controller;
+  bool enableSearchBar = true;
   @override
   void initState() {
     super.initState();
@@ -80,6 +81,7 @@ class _ConversationListViewState extends State<ConversationListView>
           refresh: () {
             controller.fetchItemList();
           },
+          enableSearchBar: enableSearchBar,
           errorMessage: widget.errorMessage,
           reloadMessage: widget.reloadMessage,
           afterBuilder: widget.afterBuilder,

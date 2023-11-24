@@ -105,7 +105,7 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
       return Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          widget.onSearchTap != null ? fakeSearchBar() : Container(),
+          widget.enableSearchBar ? fakeSearchBar() : Container(),
           Expanded(
             child: Center(
               child: widget.background ?? ChatUIKitImageLoader.listEmpty(),
@@ -119,7 +119,7 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
       return Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          widget.onSearchTap != null ? fakeSearchBar() : Container(),
+          widget.enableSearchBar ? fakeSearchBar() : Container(),
           Expanded(
             child: Center(
               child: Column(
@@ -173,7 +173,7 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
     Widget content = CustomScrollView(
       controller: widget.scrollController,
       slivers: [
-        if (widget.onSearchTap != null)
+        if (widget.enableSearchBar)
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {

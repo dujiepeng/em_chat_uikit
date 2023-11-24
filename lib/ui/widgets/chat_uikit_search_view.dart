@@ -123,12 +123,13 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
                       size: 22,
                       color: ChatUIKitTheme.of(context).color.neutralColor3,
                     ),
+                    const SizedBox(width: 6),
                     Expanded(
                       child: TextField(
                         autofocus: true,
                         style: TextStyle(
-                            fontWeight: theme.font.labelMedium.fontWeight,
-                            fontSize: theme.font.labelMedium.fontSize,
+                            fontWeight: theme.font.bodyLarge.fontWeight,
+                            fontSize: theme.font.bodyLarge.fontSize,
                             color: theme.color.isDark
                                 ? theme.color.neutralColor98
                                 : theme.color.neutralColor1),
@@ -189,8 +190,8 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
                     color: theme.color.isDark
                         ? theme.color.primaryColor6
                         : theme.color.primaryColor5,
-                    fontWeight: theme.font.labelMedium.fontWeight,
-                    fontSize: theme.font.labelMedium.fontSize,
+                    fontWeight: theme.font.bodyLarge.fontWeight,
+                    fontSize: theme.font.bodyLarge.fontSize,
                   ),
                 ),
               ),
