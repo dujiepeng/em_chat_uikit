@@ -63,7 +63,19 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     widget.scrollController.addListener(listDidMove);
   }
 
-  void listDidMove() {}
+  void listDidMove() {
+    if (onTouch || !widget.highlight || !widget.enableSorting) return;
+
+    for (var str in targets) {
+      double? position = positionMap[str];
+      if (position != 0) {
+        if (widget.scrollController.offset >= position!) {
+          latestSelected = str;
+          selectIndex.value = targets.indexOf(str);
+        }
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -125,7 +137,6 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
             if (widget.highlight) {
               selected = value == i;
             }
-
             Widget? content = Container(
               clipBehavior: Clip.hardEdge,
               width: letterWidth,
@@ -321,11 +332,7 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     double position = positionMap[alphabetical]!;
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      widget.scrollController.animateTo(
-        min(position, widget.scrollController.position.maxScrollExtent),
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.linear,
-      );
+      widget.scrollController.jumpTo(position);
     });
   }
 }
