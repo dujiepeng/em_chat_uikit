@@ -70,7 +70,7 @@ class _MyPageState extends State<MyPage> {
           ElevatedButton(
             onPressed: () {
               showChatUIKitDialog(
-                borderType: ChatUIKitRectangleType.filletCorner,
+                borderType: ChatUIKitRectangleType.circular,
                 title: 'Sign in & Sign up',
                 content: 'Input your userId and password.',
                 context: context,

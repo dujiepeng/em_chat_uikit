@@ -53,6 +53,8 @@ class _ConversationViewState extends State<ConversationView> {
       appBar: widget.appBar ??
           ChatUIKitAppBar(
             title: 'Chats',
+            subTitle: 'Online',
+            centerTitle: false,
             titleTextStyle: TextStyle(
               color: theme.color.isDark
                   ? theme.color.primaryColor6
@@ -60,11 +62,8 @@ class _ConversationViewState extends State<ConversationView> {
               fontSize: theme.font.titleLarge.fontSize,
               fontWeight: FontWeight.w900,
             ),
-            autoBackButton: false,
-            leading: Container(
-              margin: const EdgeInsets.fromLTRB(12, 6, 12, 6),
-              child: const ChatUIKitAvatar(size: 32),
-            ),
+            autoBackButton: true,
+            leading: const ChatUIKitAvatar(size: 32),
             trailing: IconButton(
               iconSize: 24,
               color: theme.color.isDark

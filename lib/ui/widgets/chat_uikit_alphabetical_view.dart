@@ -14,7 +14,7 @@ const double letterWidth = 16;
 class ChatUIKitAlphabeticalView extends StatefulWidget {
   const ChatUIKitAlphabeticalView({
     required this.list,
-    required this.controller,
+    required this.scrollController,
     required this.builder,
     this.enableSorting = true,
     this.showAlphabetical = true,
@@ -36,7 +36,7 @@ class ChatUIKitAlphabeticalView extends StatefulWidget {
   final ListViewBuilder builder;
   final bool enableSorting;
   final double rightPadding;
-  final ScrollController controller;
+  final ScrollController scrollController;
   final void Function(BuildContext context, String alphabetical)? onTap;
   final VoidCallback? onTapCancel;
   final bool listViewHasSearchBar;
@@ -55,6 +55,27 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
   ValueNotifier<int> selectIndex = ValueNotifier(-1);
 
   Map<String, double> positionMap = {};
+
+  @override
+  void initState() {
+    super.initState();
+    widget.scrollController.addListener(listDidMove);
+  }
+
+  void listDidMove() {}
+
+  @override
+  void dispose() {
+    widget.scrollController.removeListener(listDidMove);
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant ChatUIKitAlphabeticalView oldWidget) {
+    widget.scrollController.removeListener(listDidMove);
+    widget.scrollController.addListener(listDidMove);
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -292,8 +313,8 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     }
     double position = positionMap[alphabetical]!;
 
-    widget.controller.animateTo(
-      min(position, widget.controller.position.maxScrollExtent),
+    widget.scrollController.animateTo(
+      min(position, widget.scrollController.position.maxScrollExtent),
       duration: const Duration(milliseconds: 100),
       curve: Curves.linear,
     );

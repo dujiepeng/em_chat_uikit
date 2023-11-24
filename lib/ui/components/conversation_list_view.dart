@@ -1,5 +1,6 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
+
 import 'package:flutter/material.dart';
 
 typedef ChatUIKitConversationItemBuilder = Widget Function(
@@ -104,13 +105,7 @@ class _ConversationListViewState extends State<ConversationListView>
               onLongPress: () {
                 widget.onLongPress?.call(info);
               },
-              child: const ListTile(
-                title: Text('title'),
-                subtitle: Text('model.subtitle'),
-                trailing: Text('model.time'),
-                isThreeLine: true,
-                titleAlignment: ListTileTitleAlignment.titleHeight,
-              ),
+              child: ChatUIKitConversationItem(model),
             );
 
             return item;

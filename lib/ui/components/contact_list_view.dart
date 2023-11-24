@@ -73,7 +73,7 @@ class _ContactListViewState extends State<ContactListView> {
           listViewHasSearchBar: enableSearchBar,
           onTap: (context, alphabetical) {},
           list: controller.list,
-          controller: scrollController,
+          scrollController: scrollController,
           builder: (context, list) {
             return ChatUIKitListView(
               scrollController: scrollController,

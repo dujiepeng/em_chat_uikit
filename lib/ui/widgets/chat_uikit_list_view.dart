@@ -4,19 +4,6 @@ import 'package:flutter/material.dart';
 typedef ChatUIKitListItemBuilder = Widget Function(
     BuildContext context, ChatUIKitListItemModelBase model);
 
-mixin SearchKeyword on ChatUIKitListItemModelBase {
-  String get searchKeyword => '';
-}
-
-mixin Alphabetical on ChatUIKitListItemModelBase {
-  String get showName;
-}
-
-abstract mixin class ChatUIKitListItemModelBase {
-  double get itemHeight;
-  bool get canSearch => false;
-}
-
 enum ChatUIKitListViewType { loading, empty, error, normal }
 
 class ChatUIKitListView extends StatefulWidget {
