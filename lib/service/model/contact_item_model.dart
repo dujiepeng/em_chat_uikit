@@ -1,7 +1,7 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
 class ContactItemModel
-    with ChatUIKitListItemModel
+    with ChatUIKitListItemModelBase
     implements SearchKeywordProtocol, AlphabeticalProtocol {
   final String id;
   final String? avatarUrl;
@@ -25,4 +25,7 @@ class ContactItemModel
   static ContactItemModel fromContact(String userId) {
     return ContactItemModel(id: userId);
   }
+
+  @override
+  double get itemHeight => 60;
 }

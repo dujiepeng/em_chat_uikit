@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 typedef ListViewBuilder = Widget Function(
   BuildContext context,
-  List<ChatUIKitListItemModel> list,
+  List<ChatUIKitListItemModelBase> list,
 );
 
 const double letterHeight = 16;
@@ -19,7 +19,7 @@ class ChatUIKitAlphabeticalView extends StatefulWidget {
     this.enableSorting = true,
     this.special = '#',
     this.targets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#',
-    this.rightPadding = 10,
+    this.rightPadding = 2,
     this.onTap,
     this.onTapCancel,
     this.highlight = true,
@@ -29,7 +29,7 @@ class ChatUIKitAlphabeticalView extends StatefulWidget {
   });
 
   final String targets;
-  final List<ChatUIKitListItemModel>? beforeList;
+  final List<ChatUIKitListItemModelBase>? beforeList;
   final String special;
   final ListViewBuilder builder;
   final bool enableSorting;
@@ -40,7 +40,7 @@ class ChatUIKitAlphabeticalView extends StatefulWidget {
   final bool listViewHasSearchBar;
   final bool highlight;
 
-  final List<ChatUIKitListItemModel> list;
+  final List<ChatUIKitListItemModelBase> list;
 
   @override
   State<ChatUIKitAlphabeticalView> createState() =>
@@ -63,7 +63,7 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
       );
     }
 
-    List<ChatUIKitListItemModel> list = sortList();
+    List<ChatUIKitListItemModelBase> list = sortList();
     Widget content = widget.builder.call(
       context,
       list,
@@ -144,8 +144,9 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
       children: letters,
     );
 
-    // 设置最大响应宽度为100
-    content = SizedBox(
+    // 设置最大响应宽度为100, 如果不使用空白色填充，则会导致点击事件无法触发
+    content = Container(
+      color: Colors.transparent,
       width: 100,
       child: content,
     );
@@ -205,11 +206,11 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     widget.onTapCancel?.call();
   }
 
-  List<ChatUIKitListItemModel> sortList() {
+  List<ChatUIKitListItemModelBase> sortList() {
     targets.clear();
     List<String> targetList = widget.targets.toLowerCase().split('');
 
-    List<ChatUIKitListItemModel> ret = [];
+    List<ChatUIKitListItemModelBase> ret = [];
     List<AlphabeticalProtocol> tmp = [];
     for (var item in widget.list) {
       if (item is AlphabeticalProtocol) {
@@ -257,7 +258,7 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
 
     if (widget.beforeList?.isNotEmpty == true) {
       for (var beforeItem in widget.beforeList!) {
-        position += beforeItem.height;
+        position += beforeItem.itemHeight;
       }
     }
 
@@ -266,12 +267,12 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
       positionMap[item] = position;
       final letterModel = AlphabeticalItemModel(item.toUpperCase());
       ret.add(letterModel);
-      position += letterModel.height;
+      position += letterModel.itemHeight;
       List<AlphabeticalProtocol> list = map[item]!;
       for (var element in list) {
-        final model = element as ChatUIKitListItemModel;
+        final model = element as ChatUIKitListItemModelBase;
         ret.add(model);
-        position += model.height;
+        position += model.itemHeight;
       }
 
       targets.add(item);

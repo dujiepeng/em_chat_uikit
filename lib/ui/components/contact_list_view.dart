@@ -13,7 +13,7 @@ class ContactListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: model.height,
+      height: model.itemHeight,
       child: ListTile(
         title: Text(model.id),
         subtitle: const Text('model.subtitle'),
@@ -45,8 +45,8 @@ class ContactListView extends StatefulWidget {
   });
 
   final VoidCallback? onSearchTap;
-  final List<ChatUIKitListItemModel>? beforeList;
-  final List<ChatUIKitListItemModel>? afterList;
+  final List<ChatUIKitListItemModelBase>? beforeList;
+  final List<ChatUIKitListItemModelBase>? afterList;
   final ChatUIKitListItemBuilder? beforeBuilder;
   final ChatUIKitListItemBuilder? afterBuilder;
   final ChatUIKitContactItemBuilder? itemBuilder;

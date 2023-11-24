@@ -1,7 +1,7 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
 class ConversationItemModel
-    with ChatUIKitListItemModel
+    with ChatUIKitListItemModelBase
     implements SearchKeywordProtocol {
   final String id;
   final String? avatarUrl;
@@ -46,4 +46,7 @@ class ConversationItemModel
     );
     return info;
   }
+
+  @override
+  double get itemHeight => 60;
 }

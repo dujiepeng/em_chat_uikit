@@ -23,8 +23,8 @@ class ContactView extends StatefulWidget {
   final ContactListViewController? controller;
   final ChatUIKitAppBar? appBar;
   final VoidCallback? onSearchTap;
-  final List<ChatUIKitListItemModel>? listViewBeforeList;
-  final List<ChatUIKitListItemModel>? listViewAfterList;
+  final List<ChatUIKitListItemModelBase>? listViewBeforeList;
+  final List<ChatUIKitListItemModelBase>? listViewAfterList;
   final ChatUIKitListItemBuilder? listViewBeforeBuilder;
   final ChatUIKitListItemBuilder? listViewAfterBuilder;
   final ChatUIKitListItemBuilder? listViewItemBuilder;
@@ -99,6 +99,8 @@ class _ContactViewState extends State<ContactView> {
 
     return content;
   }
+
+  // List<ChatUIKitListItemModelBase> beforeModels() {}
 
   void onSearchTap() {
     debugPrint('onSearchTap');

@@ -22,8 +22,8 @@ class ConversationView extends StatefulWidget {
   final ConversationListViewController? controller;
   final ChatUIKitAppBar? appBar;
   final VoidCallback? onSearchTap;
-  final List<ChatUIKitListItemModel>? listViewBeforeList;
-  final List<ChatUIKitListItemModel>? listViewAfterList;
+  final List<ChatUIKitListItemModelBase>? listViewBeforeList;
+  final List<ChatUIKitListItemModelBase>? listViewAfterList;
   final ChatUIKitListItemBuilder? listViewBeforeBuilder;
   final ChatUIKitListItemBuilder? listViewAfterBuilder;
   final ChatUIKitListItemBuilder? listViewItemBuilder;

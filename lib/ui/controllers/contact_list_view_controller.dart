@@ -31,8 +31,8 @@ class ContactListViewController with ChatUIKitListViewControllerBase {
   }
 
   @override
-  Future<List<ChatUIKitListItemModel>> fetchMoreItemList() async {
-    List<ChatUIKitListItemModel> list = [];
+  Future<List<ChatUIKitListItemModelBase>> fetchMoreItemList() async {
+    List<ChatUIKitListItemModelBase> list = [];
     return list;
   }
 

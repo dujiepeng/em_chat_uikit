@@ -8,11 +8,6 @@ class ContactPage extends StatefulWidget {
   State<ContactPage> createState() => _ContactPageState();
 }
 
-class TestModel with ChatUIKitListItemModel {
-  TestModel(this.name);
-  final String name;
-}
-
 class _ContactPageState extends State<ContactPage> {
   @override
   Widget build(BuildContext context) {

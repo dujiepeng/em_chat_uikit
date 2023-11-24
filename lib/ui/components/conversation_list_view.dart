@@ -5,9 +5,6 @@ import 'package:flutter/material.dart';
 typedef ChatUIKitConversationItemBuilder = Widget Function(
     BuildContext context, ConversationItemModel model);
 
-
-
-
 class ConversationListView extends StatefulWidget {
   const ConversationListView({
     required this.controller,
@@ -27,8 +24,8 @@ class ConversationListView extends StatefulWidget {
   });
 
   final VoidCallback? onSearchTap;
-  final List<ChatUIKitListItemModel>? beforeList;
-  final List<ChatUIKitListItemModel>? afterList;
+  final List<ChatUIKitListItemModelBase>? beforeList;
+  final List<ChatUIKitListItemModelBase>? afterList;
   final ChatUIKitListItemBuilder? beforeBuilder;
   final ChatUIKitListItemBuilder? afterBuilder;
   final ChatUIKitConversationItemBuilder? itemBuilder;

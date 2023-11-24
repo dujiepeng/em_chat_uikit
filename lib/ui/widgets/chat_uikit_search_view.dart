@@ -9,7 +9,7 @@ class SearchNotification extends Notification {
 typedef ListViewSearchBuilder = Widget Function(
   BuildContext context,
   String? searchKeyword,
-  List<ChatUIKitListItemModel> list,
+  List<ChatUIKitListItemModelBase> list,
 );
 
 class ChatUIKitSearchView extends StatefulWidget {
@@ -21,14 +21,14 @@ class ChatUIKitSearchView extends StatefulWidget {
   });
   final ListViewSearchBuilder builder;
   final String searchHideText;
-  final List<ChatUIKitListItemModel> list;
+  final List<ChatUIKitListItemModelBase> list;
 
   @override
   State<ChatUIKitSearchView> createState() => _ChatUIKitSearchViewState();
 }
 
 class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
-  late final List<ChatUIKitListItemModel> list;
+  late final List<ChatUIKitListItemModelBase> list;
   TextEditingController searchController = TextEditingController();
   bool isSearch = false;
   bool isShowClear = false;

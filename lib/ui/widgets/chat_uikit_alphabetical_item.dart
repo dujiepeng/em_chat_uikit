@@ -1,9 +1,8 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:em_chat_uikit/ui/widgets/chat_uikit_list_item.dart';
+
 import 'package:flutter/widgets.dart';
 
-class ChatUIKitAlphabeticalItem extends StatelessWidget
-    with ChatUIKitListModelItemWidget {
+class ChatUIKitAlphabeticalItem extends StatelessWidget {
   const ChatUIKitAlphabeticalItem({
     required this.model,
     super.key,
@@ -17,7 +16,7 @@ class ChatUIKitAlphabeticalItem extends StatelessWidget
 
     return Container(
       padding: const EdgeInsets.only(left: 16, bottom: 6, top: 6),
-      height: model.height,
+      height: model.itemHeight,
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(model.alphabetical,
@@ -31,7 +30,4 @@ class ChatUIKitAlphabeticalItem extends StatelessWidget
       ),
     );
   }
-
-  @override
-  ChatUIKitListItemModel get listModel => model;
 }

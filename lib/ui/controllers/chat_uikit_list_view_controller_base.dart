@@ -17,5 +17,5 @@ abstract mixin class ChatUIKitListViewControllerBase {
     return;
   }
 
-  List<ChatUIKitListItemModel> list = [];
+  List<ChatUIKitListItemModelBase> list = [];
 }

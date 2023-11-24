@@ -2,7 +2,7 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 typedef ChatUIKitListItemBuilder = Widget Function(
-    BuildContext context, ChatUIKitListItemModel model);
+    BuildContext context, ChatUIKitListItemModelBase model);
 
 abstract class SearchKeywordProtocol {
   String get searchKeyword => '';
@@ -12,10 +12,10 @@ abstract class AlphabeticalProtocol {
   String get alphabetical => '#';
 }
 
-abstract mixin class ChatUIKitListItemModel {
+abstract mixin class ChatUIKitListItemModelBase {
   bool enableLongPress = true;
   bool enableTap = true;
-  double height = 56;
+  double get itemHeight;
 }
 
 enum ChatUIKitListViewType { loading, empty, error, normal }
@@ -57,9 +57,9 @@ class ChatUIKitListView extends StatefulWidget {
           BuildContext context, AlphabeticalItemModel alphabeticalItem)?
       alphabeticalBuilder;
   final String? searchHideText;
-  final List<ChatUIKitListItemModel> list;
-  final List<ChatUIKitListItemModel>? beforeList;
-  final List<ChatUIKitListItemModel>? afterList;
+  final List<ChatUIKitListItemModelBase> list;
+  final List<ChatUIKitListItemModelBase>? beforeList;
+  final List<ChatUIKitListItemModelBase>? afterList;
   final ChatUIKitListItemBuilder itemBuilder;
   final ChatUIKitListItemBuilder? beforeBuilder;
   final ChatUIKitListItemBuilder? afterBuilder;
@@ -187,8 +187,8 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               if (widget.afterList?.isNotEmpty == true) {
-                ChatUIKitListItemModel? model = widget.beforeList?[index];
-                double height = model?.height ?? 0;
+                ChatUIKitListItemModelBase? model = widget.beforeList?[index];
+                double height = model?.itemHeight ?? 0;
                 return SizedBox(
                   height: height,
                   child: widget.beforeBuilder?.call(
@@ -206,19 +206,23 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              ChatUIKitListItemModel? model = widget.list[index];
+              ChatUIKitListItemModelBase model = widget.list[index];
+
               if (model is AlphabeticalItemModel) {
                 Widget content;
                 if (widget.alphabeticalBuilder != null) {
                   content = widget.alphabeticalBuilder!(context, model);
-                  content = SizedBox(height: model.height, child: content);
+                  content = SizedBox(height: model.itemHeight, child: content);
                 } else {
                   content = ChatUIKitAlphabeticalItem(model: model);
                 }
                 return content;
               }
 
-              return widget.itemBuilder(context, model);
+              return SizedBox(
+                height: model.itemHeight,
+                child: widget.itemBuilder(context, model),
+              );
             },
             childCount: widget.list.length,
           ),
@@ -227,8 +231,8 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               if (widget.afterList?.isNotEmpty == true) {
-                ChatUIKitListItemModel? model = widget.afterList?[index];
-                double height = model?.height ?? 0;
+                ChatUIKitListItemModelBase? model = widget.afterList?[index];
+                double height = model?.itemHeight ?? 0;
                 return SizedBox(
                   height: height,
                   child: widget.afterBuilder?.call(
