@@ -53,6 +53,7 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
   List<String> targets = [];
   String? latestSelected;
   ValueNotifier<int> selectIndex = ValueNotifier(-1);
+  bool onTouch = false;
 
   Map<String, double> positionMap = {};
 
@@ -220,13 +221,14 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     if (latestSelected == str) {
       return;
     }
-
+    onTouch = true;
     widget.onTap?.call(context, str);
     latestSelected = str;
     moveTo(str);
   }
 
   void cancelSelected() {
+    onTouch = false;
     latestSelected = null;
     // selectIndex.value = -1;
     widget.onTapCancel?.call();
@@ -310,6 +312,9 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
   }
 
   void moveTo(String alphabetical) {
+    if (!onTouch) {
+      return;
+    }
     if (!positionMap.containsKey(alphabetical)) {
       return;
     }

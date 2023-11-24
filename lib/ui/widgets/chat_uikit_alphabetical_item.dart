@@ -19,14 +19,16 @@ class ChatUIKitAlphabeticalItem extends StatelessWidget {
       height: model.height,
       child: Align(
         alignment: Alignment.centerLeft,
-        child: Text(model.alphabetical,
-            style: TextStyle(
-              fontWeight: theme.font.titleSmall.fontWeight,
-              fontSize: theme.font.titleSmall.fontSize,
-              color: theme.color.isDark
-                  ? theme.color.neutralColor6
-                  : theme.color.neutralColor5,
-            )),
+        child: Text(
+          model.alphabetical,
+          style: TextStyle(
+            fontWeight: theme.font.titleSmall.fontWeight,
+            fontSize: theme.font.titleSmall.fontSize,
+            color: theme.color.isDark
+                ? theme.color.neutralColor6
+                : theme.color.neutralColor5,
+          ),
+        ),
       ),
     );
   }
