@@ -1,8 +1,7 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
 class ContactItemModel
-    with ChatUIKitListItemModelBase
-    implements SearchKeywordProtocol, AlphabeticalProtocol {
+    with ChatUIKitListItemModelBase, SearchKeyword, Alphabetical {
   final String id;
   final String? avatarUrl;
   final String? nickName;

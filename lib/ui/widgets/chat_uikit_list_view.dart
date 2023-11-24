@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 typedef ChatUIKitListItemBuilder = Widget Function(
     BuildContext context, ChatUIKitListItemModelBase model);
 
-abstract class SearchKeywordProtocol {
+mixin SearchKeyword on ChatUIKitListItemModelBase {
   String get searchKeyword => '';
 }
 
-abstract class AlphabeticalProtocol {
+mixin Alphabetical on ChatUIKitListItemModelBase {
   String get showName;
 }
 

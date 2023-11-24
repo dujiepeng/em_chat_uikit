@@ -211,14 +211,14 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     List<String> targetList = widget.targets.toLowerCase().split('');
 
     List<ChatUIKitListItemModelBase> ret = [];
-    List<AlphabeticalProtocol> tmp = [];
+    List<Alphabetical> tmp = [];
     for (var item in widget.list) {
-      if (item is AlphabeticalProtocol) {
-        tmp.add(item as AlphabeticalProtocol);
+      if (item is Alphabetical) {
+        tmp.add(item);
       }
     }
 
-    Map<String, List<AlphabeticalProtocol>> map = {};
+    Map<String, List<Alphabetical>> map = {};
     for (var letter in targetList) {
       map[letter] = [];
     }
@@ -268,9 +268,9 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
       final letterModel = AlphabeticalItemModel(item.toUpperCase());
       ret.add(letterModel);
       position += letterModel.itemHeight;
-      List<AlphabeticalProtocol> list = map[item]!;
+      List<Alphabetical> list = map[item]!;
       for (var element in list) {
-        final model = element as ChatUIKitListItemModelBase;
+        Alphabetical model = element;
         ret.add(model);
         position += model.itemHeight;
       }
