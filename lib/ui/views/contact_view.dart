@@ -32,8 +32,10 @@ class ContactView extends StatefulWidget {
   final void Function(ContactItemModel)? onItemLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
-  final Widget Function(BuildContext context, String alphabetical)?
-      alphabeticalBuilder;
+  final Widget Function(
+    BuildContext context,
+    AlphabeticalItemModel alphabeticalItem,
+  )? alphabeticalBuilder;
   @override
   State<ContactView> createState() => _ContactViewState();
 }

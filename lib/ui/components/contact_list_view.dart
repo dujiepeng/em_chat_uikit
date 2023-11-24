@@ -57,7 +57,8 @@ class ContactListView extends StatefulWidget {
   final String? errorMessage;
   final String? reloadMessage;
   final ChatUIKitListViewControllerBase controller;
-  final Widget Function(BuildContext context, String target)?
+  final Widget Function(
+          BuildContext context, AlphabeticalItemModel alphabeticalItem)?
       alphabeticalBuilder;
 
   @override
@@ -113,14 +114,8 @@ class _ContactListViewState extends State<ContactListView> {
               background: widget.background,
               onSearchTap: widget.onSearchTap,
               searchHideText: widget.searchHideText,
+              alphabeticalBuilder: widget.alphabeticalBuilder,
               itemBuilder: (context, model) {
-                if (model is AlphabeticalItemModel) {
-                  Widget? content = widget.alphabeticalBuilder
-                      ?.call(context, model.alphabetical);
-                  content ??= ChatUIKitAlphabeticalItem(model: model);
-                  return content;
-                }
-
                 if (model is ContactItemModel) {
                   Widget? item;
                   if (widget.itemBuilder != null) {

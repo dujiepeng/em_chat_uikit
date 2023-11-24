@@ -38,6 +38,7 @@ class _HomePageState extends State<HomePage>
             _currentIndex = value;
           });
         },
+        currentIndex: _currentIndex,
         items: const [
           BottomNavigationBarItem(
             label: '会话',

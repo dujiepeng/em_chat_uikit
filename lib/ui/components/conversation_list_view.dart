@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 typedef ChatUIKitConversationItemBuilder = Widget Function(
     BuildContext context, ConversationItemModel model);
 
+
+
+
 class ConversationListView extends StatefulWidget {
   const ConversationListView({
     required this.controller,
@@ -59,6 +62,12 @@ class _ConversationListViewState extends State<ConversationListView>
   @override
   void onMessagesReceived(List<Message> messages) {
     widget.controller.fetchItemList();
+  }
+
+  void beforeList() {
+    if (widget.beforeList != null) {
+      widget.controller.list.insertAll(0, widget.beforeList!);
+    }
   }
 
   @override

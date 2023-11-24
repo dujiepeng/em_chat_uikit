@@ -39,6 +39,7 @@ class ChatUIKitListView extends StatefulWidget {
     this.errorMessage,
     this.reloadMessage,
     this.scrollController,
+    this.alphabeticalBuilder,
     super.key,
   });
 
@@ -52,6 +53,9 @@ class ChatUIKitListView extends StatefulWidget {
   final Widget? background;
   final VoidCallback? onSearchTap;
   final bool enableSearchBar;
+  final Widget Function(
+          BuildContext context, AlphabeticalItemModel alphabeticalItem)?
+      alphabeticalBuilder;
   final String? searchHideText;
   final List<ChatUIKitListItemModel> list;
   final List<ChatUIKitListItemModel>? beforeList;
@@ -182,15 +186,19 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              ChatUIKitListItemModel? model = widget.beforeList?[index];
-              double height = model?.height ?? 0;
-              return SizedBox(
-                height: height,
-                child: widget.beforeBuilder?.call(
-                  context,
-                  widget.beforeList![index],
-                ),
-              );
+              if (widget.afterList?.isNotEmpty == true) {
+                ChatUIKitListItemModel? model = widget.beforeList?[index];
+                double height = model?.height ?? 0;
+                return SizedBox(
+                  height: height,
+                  child: widget.beforeBuilder?.call(
+                    context,
+                    widget.beforeList![index],
+                  ),
+                );
+              } else {
+                return const SizedBox();
+              }
             },
             childCount: widget.beforeList?.length ?? 0,
           ),
@@ -198,10 +206,19 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return widget.itemBuilder(
-                context,
-                widget.list[index],
-              );
+              ChatUIKitListItemModel? model = widget.list[index];
+              if (model is AlphabeticalItemModel) {
+                Widget content;
+                if (widget.alphabeticalBuilder != null) {
+                  content = widget.alphabeticalBuilder!(context, model);
+                  content = SizedBox(height: model.height, child: content);
+                } else {
+                  content = ChatUIKitAlphabeticalItem(model: model);
+                }
+                return content;
+              }
+
+              return widget.itemBuilder(context, model);
             },
             childCount: widget.list.length,
           ),
@@ -209,15 +226,19 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              ChatUIKitListItemModel? model = widget.afterList?[index];
-              double height = model?.height ?? 0;
-              return SizedBox(
-                height: height,
-                child: widget.afterBuilder?.call(
-                  context,
-                  widget.afterList![index],
-                ),
-              );
+              if (widget.afterList?.isNotEmpty == true) {
+                ChatUIKitListItemModel? model = widget.afterList?[index];
+                double height = model?.height ?? 0;
+                return SizedBox(
+                  height: height,
+                  child: widget.afterBuilder?.call(
+                    context,
+                    widget.afterList![index],
+                  ),
+                );
+              } else {
+                return const SizedBox();
+              }
             },
             childCount: widget.afterList?.length ?? 0,
           ),

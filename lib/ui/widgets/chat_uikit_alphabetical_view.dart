@@ -8,47 +8,8 @@ typedef ListViewBuilder = Widget Function(
   List<ChatUIKitListItemModel> list,
 );
 
-class AlphabeticalItemModel with ChatUIKitListItemModel {
-  final String alphabetical;
-  AlphabeticalItemModel(this.alphabetical) {
-    height = 32;
-    enableLongPress = false;
-    enableTap = false;
-  }
-}
-
 const double letterHeight = 16;
 const double letterWidth = 16;
-
-class ChatUIKitAlphabeticalItem extends StatelessWidget {
-  const ChatUIKitAlphabeticalItem({
-    required this.model,
-    super.key,
-  });
-
-  final AlphabeticalItemModel model;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = ChatUIKitTheme.of(context);
-
-    return Container(
-      padding: const EdgeInsets.only(left: 16, bottom: 6, top: 6),
-      height: model.height,
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(model.alphabetical,
-            style: TextStyle(
-              fontWeight: theme.font.titleSmall.fontWeight,
-              fontSize: theme.font.titleSmall.fontSize,
-              color: theme.color.isDark
-                  ? theme.color.neutralColor6
-                  : theme.color.neutralColor5,
-            )),
-      ),
-    );
-  }
-}
 
 class ChatUIKitAlphabeticalView extends StatefulWidget {
   const ChatUIKitAlphabeticalView({
@@ -63,11 +24,12 @@ class ChatUIKitAlphabeticalView extends StatefulWidget {
     this.onTapCancel,
     this.highlight = true,
     this.listViewHasSearchBar = true,
+    this.beforeList,
     super.key,
   });
 
   final String targets;
-
+  final List<ChatUIKitListItemModel>? beforeList;
   final String special;
   final ListViewBuilder builder;
   final bool enableSorting;
@@ -239,7 +201,7 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
 
   void cancelSelected() {
     latestSelected = null;
-    selectIndex.value = -1;
+    // selectIndex.value = -1;
     widget.onTapCancel?.call();
   }
 
@@ -289,7 +251,15 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     targetList.removeWhere((element) => !map.containsKey(element));
 
     positionMap.clear();
+
+    // 索引初始位置
     double position = widget.listViewHasSearchBar ? 44 : 0;
+
+    if (widget.beforeList?.isNotEmpty == true) {
+      for (var beforeItem in widget.beforeList!) {
+        position += beforeItem.height;
+      }
+    }
 
     // 计算index 位置 转为最终序列
     for (var item in targetList) {
