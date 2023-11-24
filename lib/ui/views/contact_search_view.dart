@@ -13,11 +13,17 @@ class ContactListSearchView extends StatefulWidget {
 class _ContactListSearchViewState extends State<ContactListSearchView> {
   @override
   Widget build(BuildContext context) {
+    final theme = ChatUIKitTheme.of(context);
     Widget content = ChatUIKitSearchView(
       builder: (context, searchKeyword, list) {
         return ChatUIKitListView(
             itemBuilder: (context, model) {
-              if (model is ContactItemModel) return ChatUIKitContactItem(model);
+              if (model is ContactItemModel) {
+                return ChatUIKitContactItem(
+                  model,
+                  searchKeyword: searchKeyword,
+                );
+              }
               return const SizedBox();
             },
             list: list,
@@ -43,11 +49,14 @@ class _ContactListSearchViewState extends State<ContactListSearchView> {
     );
 
     content = Scaffold(
+      backgroundColor: theme.color.isDark
+          ? theme.color.neutralColor1
+          : theme.color.neutralColor98,
       appBar: const ChatUIKitAppBar(),
       body: content,
     );
 
-    content = SafeArea(child: content);
+    // content = SafeArea(child: content);
 
     return content;
   }

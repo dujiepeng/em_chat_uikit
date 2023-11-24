@@ -69,7 +69,21 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
           child: ValueListenableBuilder(
             valueListenable: searchKeyword,
             builder: (context, keyword, child) {
-              return widget.builder(context, keyword, list);
+              if (keyword.isEmpty) {
+                return widget.builder(context, keyword, list);
+              } else {
+                List<ChatUIKitListItemModelBase> searched = [];
+                for (var item in list) {
+                  if (item is SearchKeyword) {
+                    if (item.searchKeyword
+                        .toLowerCase()
+                        .contains(keyword.toLowerCase())) {
+                      searched.add(item);
+                    }
+                  }
+                }
+                return widget.builder(context, keyword, searched);
+              }
             },
           ),
         ),
@@ -80,6 +94,8 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
   }
 
   Widget searchTextInputBar() {
+    final theme = ChatUIKitTheme.of(context);
+
     return SizedBox(
       height: 44,
       child: Container(
@@ -95,9 +111,9 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
                 clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
-                  color: ChatUIKitTheme.of(context).color.isDark
-                      ? ChatUIKitTheme.of(context).color.neutralColor2
-                      : ChatUIKitTheme.of(context).color.neutralColor95,
+                  color: theme.color.isDark
+                      ? theme.color.neutralColor2
+                      : theme.color.neutralColor95,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -110,6 +126,12 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
                     Expanded(
                       child: TextField(
                         autofocus: true,
+                        style: TextStyle(
+                            fontWeight: theme.font.labelMedium.fontWeight,
+                            fontSize: theme.font.labelMedium.fontSize,
+                            color: theme.color.isDark
+                                ? theme.color.neutralColor98
+                                : theme.color.neutralColor1),
                         controller: searchController,
                         scrollPadding: EdgeInsets.zero,
                         decoration: InputDecoration(
@@ -117,11 +139,9 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
                           contentPadding: EdgeInsets.zero,
                           isDense: true,
                           hintStyle: TextStyle(
-                            color: ChatUIKitTheme.of(context).color.isDark
-                                ? ChatUIKitTheme.of(context).color.neutralColor4
-                                : ChatUIKitTheme.of(context)
-                                    .color
-                                    .neutralColor6,
+                            color: theme.color.isDark
+                                ? theme.color.neutralColor4
+                                : theme.color.neutralColor6,
                           ),
                           border: InputBorder.none,
                         ),
@@ -130,7 +150,6 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
                     ValueListenableBuilder(
                       valueListenable: searchKeyword,
                       builder: (context, value, child) {
-                        // TODO
                         if (value.isEmpty) {
                           return const SizedBox();
                         } else {
@@ -143,9 +162,7 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
                               child: Icon(
                                 Icons.cancel,
                                 size: 22,
-                                color: ChatUIKitTheme.of(context)
-                                    .color
-                                    .neutralColor7,
+                                color: theme.color.neutralColor7,
                               ),
                             ),
                           );
@@ -169,13 +186,11 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
                 child: Text(
                   '取消',
                   style: TextStyle(
-                    color: ChatUIKitTheme.of(context).color.isDark
-                        ? ChatUIKitTheme.of(context).color.primaryColor6
-                        : ChatUIKitTheme.of(context).color.primaryColor5,
-                    fontWeight:
-                        ChatUIKitTheme.of(context).font.labelMedium.fontWeight,
-                    fontSize:
-                        ChatUIKitTheme.of(context).font.labelMedium.fontSize,
+                    color: theme.color.isDark
+                        ? theme.color.primaryColor6
+                        : theme.color.primaryColor5,
+                    fontWeight: theme.font.labelMedium.fontWeight,
+                    fontSize: theme.font.labelMedium.fontSize,
                   ),
                 ),
               ),
