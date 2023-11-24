@@ -174,7 +174,11 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
             (context, index) {
               if (widget.beforeList?.isNotEmpty == true) {
                 ChatUIKitListItemModelBase? model = widget.beforeList?[index];
-                double height = model?.itemHeight ?? 0;
+                double height = 0;
+                if (model is NeedAlphabetical) {
+                  height = model.itemHeight;
+                }
+
                 return SizedBox(
                   height: height,
                   child: widget.beforeBuilder?.call(
@@ -193,22 +197,25 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               ChatUIKitListItemModelBase model = widget.list[index];
-
               if (model is AlphabeticalItemModel) {
                 Widget content;
                 if (widget.alphabeticalBuilder != null) {
                   content = widget.alphabeticalBuilder!(context, model);
-                  content = SizedBox(height: model.itemHeight, child: content);
+                  content = SizedBox(height: model.height, child: content);
                 } else {
                   content = ChatUIKitAlphabeticalItem(model: model);
                 }
                 return content;
               }
 
-              return SizedBox(
-                height: model.itemHeight,
-                child: widget.itemBuilder(context, model),
-              );
+              if (model is NeedAlphabetical) {
+                return SizedBox(
+                  height: model.itemHeight,
+                  child: widget.itemBuilder(context, model),
+                );
+              }
+
+              return widget.itemBuilder(context, model);
             },
             childCount: widget.list.length,
           ),
@@ -218,7 +225,10 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
             (context, index) {
               if (widget.afterList?.isNotEmpty == true) {
                 ChatUIKitListItemModelBase? model = widget.afterList?[index];
-                double height = model?.itemHeight ?? 0;
+                double height = 0;
+                if (model is NeedAlphabetical) {
+                  height = model.itemHeight;
+                }
                 return SizedBox(
                   height: height,
                   child: widget.afterBuilder?.call(
@@ -246,7 +256,7 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
         onTap: () {
           List<ChatUIKitListItemModelBase> list = [];
           for (var item in widget.list) {
-            if (item.canSearch) {
+            if (item is SearchKeyword) {
               list.add(item);
             }
           }

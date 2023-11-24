@@ -44,7 +44,4 @@ class ConversationItemModel with ChatUIKitListItemModelBase, SearchKeyword {
     );
     return info;
   }
-
-  @override
-  double get itemHeight => 76;
 }

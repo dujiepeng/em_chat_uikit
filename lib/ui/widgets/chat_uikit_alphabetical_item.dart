@@ -16,7 +16,7 @@ class ChatUIKitAlphabeticalItem extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.only(left: 16, bottom: 6, top: 6),
-      height: model.itemHeight,
+      height: model.height,
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(model.alphabetical,

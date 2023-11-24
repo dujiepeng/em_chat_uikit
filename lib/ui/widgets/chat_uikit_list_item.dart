@@ -50,8 +50,13 @@ class ChatUIKitListItem extends StatelessWidget {
       );
     }
 
+    double height = 60;
+    if (model is NeedAlphabetical) {
+      height = model.itemHeight;
+    }
+
     content = Container(
-      height: model.itemHeight - borderHeight,
+      height: height - borderHeight,
       decoration: BoxDecoration(
         color: theme.color.isDark
             ? theme.color.neutralColor1

@@ -4,7 +4,4 @@ class AlphabeticalItemModel with ChatUIKitListItemModelBase {
   final String alphabetical;
   final double height;
   AlphabeticalItemModel(this.alphabetical, {this.height = 32});
-
-  @override
-  double get itemHeight => height;
 }

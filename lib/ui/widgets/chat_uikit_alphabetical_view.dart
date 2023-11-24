@@ -237,14 +237,14 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     List<String> targetList = widget.targets.toLowerCase().split('');
 
     List<ChatUIKitListItemModelBase> ret = [];
-    List<Alphabetical> tmp = [];
+    List<NeedAlphabetical> tmp = [];
     for (var item in widget.list) {
-      if (item is Alphabetical) {
+      if (item is NeedAlphabetical) {
         tmp.add(item);
       }
     }
 
-    Map<String, List<Alphabetical>> map = {};
+    Map<String, List<NeedAlphabetical>> map = {};
     for (var letter in targetList) {
       map[letter] = [];
     }
@@ -284,7 +284,9 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
 
     if (widget.beforeList?.isNotEmpty == true) {
       for (var beforeItem in widget.beforeList!) {
-        position += beforeItem.itemHeight;
+        if (beforeItem is NeedAlphabetical) {
+          position += beforeItem.itemHeight;
+        }
       }
     }
 
@@ -293,10 +295,10 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
       positionMap[item] = position;
       final letterModel = AlphabeticalItemModel(item.toUpperCase());
       ret.add(letterModel);
-      position += letterModel.itemHeight;
-      List<Alphabetical> list = map[item]!;
+      position += letterModel.height;
+      List<NeedAlphabetical> list = map[item]!;
       for (var element in list) {
-        Alphabetical model = element;
+        NeedAlphabetical model = element;
         ret.add(model);
         position += model.itemHeight;
       }
@@ -313,10 +315,12 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     }
     double position = positionMap[alphabetical]!;
 
-    widget.scrollController.animateTo(
-      min(position, widget.scrollController.position.maxScrollExtent),
-      duration: const Duration(milliseconds: 100),
-      curve: Curves.linear,
-    );
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      widget.scrollController.animateTo(
+        min(position, widget.scrollController.position.maxScrollExtent),
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.linear,
+      );
+    });
   }
 }

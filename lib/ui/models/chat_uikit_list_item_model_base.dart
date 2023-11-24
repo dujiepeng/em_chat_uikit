@@ -1,12 +1,13 @@
-abstract mixin class ChatUIKitListItemModelBase {
-  double get itemHeight;
-  bool get canSearch => false;
-}
+abstract mixin class ChatUIKitListItemModelBase {}
 
 mixin SearchKeyword on ChatUIKitListItemModelBase {
   String get searchKeyword => '';
 }
 
-mixin Alphabetical on ChatUIKitListItemModelBase {
+mixin NeedAlphabetical on ChatUIKitListItemModelBase, NeedHeight {
   String get showName;
+}
+
+mixin NeedHeight on ChatUIKitListItemModelBase {
+  double get itemHeight;
 }

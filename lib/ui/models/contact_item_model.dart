@@ -1,7 +1,11 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
 class ContactItemModel
-    with ChatUIKitListItemModelBase, SearchKeyword, Alphabetical {
+    with
+        ChatUIKitListItemModelBase,
+        SearchKeyword,
+        NeedHeight,
+        NeedAlphabetical {
   final String id;
   final String? avatarUrl;
   final String? nickName;
@@ -11,9 +15,6 @@ class ContactItemModel
     this.avatarUrl,
     this.nickName,
   });
-
-  @override
-  bool get canSearch => true;
 
   @override
   String get showName {
