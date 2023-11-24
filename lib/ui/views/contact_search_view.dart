@@ -17,6 +17,7 @@ class _ContactListSearchViewState extends State<ContactListSearchView> {
     Widget content = ChatUIKitSearchView(
       builder: (context, searchKeyword, list) {
         return ChatUIKitListView(
+            enableSearchBar: false,
             itemBuilder: (context, model) {
               if (model is ContactItemModel) {
                 return ChatUIKitContactItem(
