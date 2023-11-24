@@ -9,13 +9,12 @@ abstract class SearchKeywordProtocol {
 }
 
 abstract class AlphabeticalProtocol {
-  String get alphabetical => '#';
+  String get showName;
 }
 
 abstract mixin class ChatUIKitListItemModelBase {
-  bool enableLongPress = true;
-  bool enableTap = true;
   double get itemHeight;
+  bool get canSearch => false;
 }
 
 enum ChatUIKitListViewType { loading, empty, error, normal }
@@ -51,7 +50,7 @@ class ChatUIKitListView extends StatefulWidget {
   final VoidCallback? loadMore;
   final VoidCallback? refresh;
   final Widget? background;
-  final VoidCallback? onSearchTap;
+  final void Function(List<ChatUIKitListItemModelBase> data)? onSearchTap;
   final bool enableSearchBar;
   final Widget Function(
           BuildContext context, AlphabeticalItemModel alphabeticalItem)?
@@ -186,7 +185,7 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              if (widget.afterList?.isNotEmpty == true) {
+              if (widget.beforeList?.isNotEmpty == true) {
                 ChatUIKitListItemModelBase? model = widget.beforeList?[index];
                 double height = model?.itemHeight ?? 0;
                 return SizedBox(
@@ -258,7 +257,13 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
       height: 44,
       child: InkWell(
         onTap: () {
-          widget.onSearchTap?.call();
+          List<ChatUIKitListItemModelBase> list = [];
+          for (var item in widget.list) {
+            if (item.canSearch) {
+              list.add(item);
+            }
+          }
+          widget.onSearchTap?.call(list);
         },
         child: Container(
           margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),

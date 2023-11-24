@@ -5,29 +5,9 @@ import 'package:flutter/material.dart';
 typedef ChatUIKitContactItemBuilder = Widget Function(
     BuildContext context, ContactItemModel model);
 
-class ContactListItem extends StatelessWidget {
-  const ContactListItem(this.model, {super.key});
-
-  final ContactItemModel model;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: model.itemHeight,
-      child: ListTile(
-        title: Text(model.id),
-        subtitle: const Text('model.subtitle'),
-        trailing: const Text('model.time'),
-        isThreeLine: true,
-        titleAlignment: ListTileTitleAlignment.titleHeight,
-      ),
-    );
-  }
-}
-
 class ContactListView extends StatefulWidget {
   const ContactListView({
-    required this.controller,
+    this.controller,
     this.itemBuilder,
     this.beforeBuilder,
     this.beforeList,
@@ -44,7 +24,7 @@ class ContactListView extends StatefulWidget {
     super.key,
   });
 
-  final VoidCallback? onSearchTap;
+  final void Function(List<ChatUIKitListItemModelBase> data)? onSearchTap;
   final List<ChatUIKitListItemModelBase>? beforeList;
   final List<ChatUIKitListItemModelBase>? afterList;
   final ChatUIKitListItemBuilder? beforeBuilder;
@@ -56,7 +36,7 @@ class ContactListView extends StatefulWidget {
   final Widget? background;
   final String? errorMessage;
   final String? reloadMessage;
-  final ChatUIKitListViewControllerBase controller;
+  final ContactListViewController? controller;
   final Widget Function(
           BuildContext context, AlphabeticalItemModel alphabeticalItem)?
       alphabeticalBuilder;
@@ -67,13 +47,14 @@ class ContactListView extends StatefulWidget {
 
 class _ContactListViewState extends State<ContactListView> {
   ScrollController scrollController = ScrollController();
-
+  late final ContactListViewController controller;
   bool enableSearchBar = true;
 
   @override
   void initState() {
     super.initState();
-    widget.controller.fetchItemList();
+    controller = widget.controller ?? ContactListViewController();
+    controller.fetchItemList();
   }
 
   @override
@@ -84,17 +65,14 @@ class _ContactListViewState extends State<ContactListView> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<ChatUIKitListViewType>(
-      valueListenable: widget.controller.loadingType,
+    Widget content = ValueListenableBuilder<ChatUIKitListViewType>(
+      valueListenable: controller.loadingType,
       builder: (context, type, child) {
         return ChatUIKitAlphabeticalView(
+          beforeList: widget.beforeList,
           listViewHasSearchBar: enableSearchBar,
-          onTap: (context, alphabetical) {
-            debugPrint(' $alphabetical');
-          },
-          // highlight: false,
-
-          list: widget.controller.list,
+          onTap: (context, alphabetical) {},
+          list: controller.list,
           controller: scrollController,
           builder: (context, list) {
             return ChatUIKitListView(
@@ -102,7 +80,7 @@ class _ContactListViewState extends State<ContactListView> {
               type: type,
               list: list,
               refresh: () {
-                widget.controller.fetchItemList();
+                controller.fetchItemList();
               },
               enableSearchBar: enableSearchBar,
               errorMessage: widget.errorMessage,
@@ -128,7 +106,7 @@ class _ContactListViewState extends State<ContactListView> {
                     onLongPress: () {
                       widget.onLongPress?.call(model);
                     },
-                    child: ContactListItem(model),
+                    child: ChatUIKitContactItem(model),
                   );
 
                   return item;
@@ -141,5 +119,7 @@ class _ContactListViewState extends State<ContactListView> {
         );
       },
     );
+
+    return content;
   }
 }

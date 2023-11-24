@@ -17,11 +17,15 @@ class ChatUIKitSearchView extends StatefulWidget {
     required this.builder,
     required this.searchHideText,
     required this.list,
+    this.enableSearch = true,
+    this.autoFocus = false,
     super.key,
   });
   final ListViewSearchBuilder builder;
   final String searchHideText;
+  final bool enableSearch;
   final List<ChatUIKitListItemModelBase> list;
+  final bool autoFocus;
 
   @override
   State<ChatUIKitSearchView> createState() => _ChatUIKitSearchViewState();
@@ -37,6 +41,7 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
   void initState() {
     super.initState();
     list = widget.list;
+    isSearch = widget.autoFocus;
     searchController.addListener(() {
       searchKeyword.value = searchController.text;
     });
@@ -53,6 +58,10 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
 
   @override
   Widget build(BuildContext context) {
+    if (!widget.enableSearch) {
+      return widget.builder(context, '', list);
+    }
+
     Widget content = Column(
       children: [
         isSearch ? searchTextInputBar() : searchBar(),
@@ -66,6 +75,7 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
         ),
       ],
     );
+
     return content;
   }
 
@@ -206,7 +216,7 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  '搜索',
+                  widget.searchHideText,
                   style: TextStyle(
                     color: ChatUIKitTheme.of(context).color.isDark
                         ? ChatUIKitTheme.of(context).color.neutralColor4

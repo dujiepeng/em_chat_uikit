@@ -22,7 +22,7 @@ class ContactView extends StatefulWidget {
 
   final ContactListViewController? controller;
   final ChatUIKitAppBar? appBar;
-  final VoidCallback? onSearchTap;
+  final void Function(List<ChatUIKitListItemModelBase> data)? onSearchTap;
   final List<ChatUIKitListItemModelBase>? listViewBeforeList;
   final List<ChatUIKitListItemModelBase>? listViewAfterList;
   final ChatUIKitListItemBuilder? listViewBeforeBuilder;
@@ -53,39 +53,55 @@ class _ContactViewState extends State<ContactView> {
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
     Widget content = Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: theme.color.isDark
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
-      appBar: ChatUIKitAppBar(
-        title: 'Contacts',
-        titleTextStyle: TextStyle(
-          color: theme.color.isDark
-              ? theme.color.primaryColor6
-              : theme.color.primaryColor5,
-          fontSize: theme.font.titleLarge.fontSize,
-          fontWeight: theme.font.titleLarge.fontWeight,
-        ),
-        autoBackButton: false,
-        leading: Container(
-          margin: const EdgeInsets.fromLTRB(12, 6, 12, 6),
-          color: Colors.red,
-          width: 32,
-          height: 32,
-        ),
-        trailing: IconButton(
-          iconSize: 24,
-          color: theme.color.isDark
-              ? theme.color.neutralColor95
-              : theme.color.neutralColor3,
-          icon: const Icon(Icons.person_add_alt_1_outlined),
-          onPressed: () {},
-        ),
-      ),
+      appBar: widget.appBar ??
+          ChatUIKitAppBar(
+            title: 'Contacts',
+            titleTextStyle: TextStyle(
+              color: theme.color.isDark
+                  ? theme.color.primaryColor6
+                  : theme.color.primaryColor5,
+              fontSize: theme.font.titleLarge.fontSize,
+              fontWeight: FontWeight.w900,
+            ),
+            autoBackButton: false,
+            leading: Container(
+              margin: const EdgeInsets.fromLTRB(12, 6, 12, 6),
+              child: const ChatUIKitAvatar(size: 32),
+            ),
+            trailing: IconButton(
+              iconSize: 24,
+              color: theme.color.isDark
+                  ? theme.color.neutralColor95
+                  : theme.color.neutralColor3,
+              icon: const Icon(Icons.person_add_alt_1_outlined),
+              onPressed: () {},
+            ),
+          ),
       body: ContactListView(
         controller: controller,
         itemBuilder: widget.listViewItemBuilder,
-        beforeBuilder: widget.listViewBeforeBuilder,
-        beforeList: widget.listViewBeforeList,
+        beforeBuilder: (context, model) {
+          Widget content;
+          if (widget.listViewBeforeBuilder != null) {
+            content = widget.listViewBeforeBuilder!(context, model);
+          } else {
+            content = ChatUIKitListItem(
+              model: model as ChatUIKitListItemModel,
+              trailing: Container(
+                width: 20,
+                height: 100,
+                color: Colors.red,
+              ),
+            );
+          }
+
+          return content;
+        },
+        beforeList: beforeModels,
         afterBuilder: widget.listViewAfterBuilder,
         afterList: widget.listViewAfterList,
         searchHideText: widget.fakeSearchHideText,
@@ -100,13 +116,32 @@ class _ContactViewState extends State<ContactView> {
     return content;
   }
 
-  // List<ChatUIKitListItemModelBase> beforeModels() {}
-
-  void onSearchTap() {
-    debugPrint('onSearchTap');
+  List<ChatUIKitListItemModel> get beforeModels {
+    return [
+      ChatUIKitListItemModel('新请求', index: 0, onTap: () {
+        debugPrint('新请求');
+      }),
+      ChatUIKitListItemModel('群聊', index: 1, onTap: () {
+        debugPrint('群聊');
+      }),
+    ];
   }
 
-  void tapContactInfo(ContactItemModel info) {}
+  void onSearchTap(List<ChatUIKitListItemModelBase> data) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return ContactListSearchView(data);
+      },
+    );
+  }
 
-  void longContactInfo(ContactItemModel info) {}
+  void tapContactInfo(ContactItemModel info) {
+    debugPrint('tapContactInfo');
+  }
+
+  void longContactInfo(ContactItemModel info) {
+    debugPrint('longContactInfo');
+  }
 }

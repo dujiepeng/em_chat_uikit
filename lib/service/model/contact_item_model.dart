@@ -14,7 +14,10 @@ class ContactItemModel
   });
 
   @override
-  String get alphabetical {
+  bool get canSearch => true;
+
+  @override
+  String get showName {
     return nickName ?? id;
   }
 

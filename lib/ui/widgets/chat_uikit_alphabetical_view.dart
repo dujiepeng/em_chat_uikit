@@ -225,10 +225,10 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     map[widget.special] = [];
 
     for (var item in tmp) {
-      if (item.alphabetical.isEmpty) {
+      if (item.showName.isEmpty) {
         map[widget.special]?.add(item);
       }
-      String letter = item.alphabetical.substring(0, 1).toLowerCase();
+      String letter = item.showName.substring(0, 1).toLowerCase();
       if (!targetList.contains(letter)) {
         map[widget.special]?.add(item);
       } else {
@@ -237,7 +237,7 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     }
     // 对序列内容排序
     for (var item in map.keys) {
-      map[item]!.sort((a, b) => a.alphabetical.compareTo(b.alphabetical));
+      map[item]!.sort((a, b) => a.showName.compareTo(b.showName));
     }
 
     // 清空空序列

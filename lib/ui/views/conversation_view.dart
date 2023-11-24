@@ -21,7 +21,7 @@ class ConversationView extends StatefulWidget {
 
   final ConversationListViewController? controller;
   final ChatUIKitAppBar? appBar;
-  final VoidCallback? onSearchTap;
+  final void Function(List<ChatUIKitListItemModelBase> data)? onSearchTap;
   final List<ChatUIKitListItemModelBase>? listViewBeforeList;
   final List<ChatUIKitListItemModelBase>? listViewAfterList;
   final ChatUIKitListItemBuilder? listViewBeforeBuilder;
@@ -58,14 +58,12 @@ class _ConversationViewState extends State<ConversationView> {
                   ? theme.color.primaryColor6
                   : theme.color.primaryColor5,
               fontSize: theme.font.titleLarge.fontSize,
-              fontWeight: theme.font.titleLarge.fontWeight,
+              fontWeight: FontWeight.w900,
             ),
             autoBackButton: false,
             leading: Container(
               margin: const EdgeInsets.fromLTRB(12, 6, 12, 6),
-              color: Colors.red,
-              width: 32,
-              height: 32,
+              child: const ChatUIKitAvatar(size: 32),
             ),
             trailing: IconButton(
               iconSize: 24,
@@ -93,7 +91,7 @@ class _ConversationViewState extends State<ConversationView> {
             (ConversationItemModel model) {
               showBottomSheet();
             },
-        onSearchTap: widget.onSearchTap ?? onSearchTap,
+        onSearchTap: widget.onSearchTap,
       ),
     );
 

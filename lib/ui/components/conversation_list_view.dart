@@ -7,7 +7,7 @@ typedef ChatUIKitConversationItemBuilder = Widget Function(
 
 class ConversationListView extends StatefulWidget {
   const ConversationListView({
-    required this.controller,
+    this.controller,
     this.itemBuilder,
     this.beforeBuilder,
     this.beforeList,
@@ -23,7 +23,7 @@ class ConversationListView extends StatefulWidget {
     super.key,
   });
 
-  final VoidCallback? onSearchTap;
+  final void Function(List<ChatUIKitListItemModelBase> data)? onSearchTap;
   final List<ChatUIKitListItemModelBase>? beforeList;
   final List<ChatUIKitListItemModelBase>? afterList;
   final ChatUIKitListItemBuilder? beforeBuilder;
@@ -35,7 +35,7 @@ class ConversationListView extends StatefulWidget {
   final Widget? background;
   final String? errorMessage;
   final String? reloadMessage;
-  final ChatUIKitListViewControllerBase controller;
+  final ConversationListViewController? controller;
 
   @override
   State<ConversationListView> createState() => _ConversationListViewState();
@@ -43,11 +43,13 @@ class ConversationListView extends StatefulWidget {
 
 class _ConversationListViewState extends State<ConversationListView>
     with ChatObserver {
+  late ConversationListViewController controller;
   @override
   void initState() {
     super.initState();
     ChatUIKit.instance.addObserver(this);
-    widget.controller.fetchItemList();
+    controller = widget.controller ?? ConversationListViewController();
+    controller.fetchItemList();
   }
 
   @override
@@ -58,25 +60,25 @@ class _ConversationListViewState extends State<ConversationListView>
 
   @override
   void onMessagesReceived(List<Message> messages) {
-    widget.controller.fetchItemList();
+    controller.fetchItemList();
   }
 
   void beforeList() {
     if (widget.beforeList != null) {
-      widget.controller.list.insertAll(0, widget.beforeList!);
+      controller.list.insertAll(0, widget.beforeList!);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ChatUIKitListViewType>(
-      valueListenable: widget.controller.loadingType,
+      valueListenable: controller.loadingType,
       builder: (context, type, child) {
         return ChatUIKitListView(
           type: type,
-          list: widget.controller.list,
+          list: controller.list,
           refresh: () {
-            widget.controller.fetchItemList();
+            controller.fetchItemList();
           },
           errorMessage: widget.errorMessage,
           reloadMessage: widget.reloadMessage,
