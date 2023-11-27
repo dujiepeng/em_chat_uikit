@@ -12,13 +12,12 @@ class ChatUIKitConversationItem extends StatelessWidget {
 
     Widget content = Container(
       padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
-      height: 76 - 0.5,
     );
 
     content = Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.max,
       children: [
-        content,
+        Expanded(child: content),
         Container(
           height: borderHeight,
           color: theme.color.isDark

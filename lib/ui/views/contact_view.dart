@@ -5,10 +5,6 @@ import 'package:flutter/material.dart';
 class ContactView extends StatefulWidget {
   const ContactView({
     this.listViewItemBuilder,
-    this.listViewBeforeBuilder,
-    this.listViewBeforeList,
-    this.listViewAfterBuilder,
-    this.listViewAfterList,
     this.onSearchTap,
     this.fakeSearchHideText,
     this.listViewBackground,
@@ -21,12 +17,9 @@ class ContactView extends StatefulWidget {
 
   final ContactListViewController? controller;
   final ChatUIKitAppBar? appBar;
-  final void Function(List<ChatUIKitListItemModelBase> data)? onSearchTap;
-  final List<ChatUIKitListItemModelBase>? listViewBeforeList;
-  final List<ChatUIKitListItemModelBase>? listViewAfterList;
-  final ChatUIKitListItemBuilder? listViewBeforeBuilder;
-  final ChatUIKitListItemBuilder? listViewAfterBuilder;
-  final ChatUIKitListItemBuilder? listViewItemBuilder;
+  final void Function(List<ContactItemModel> data)? onSearchTap;
+
+  final ChatUIKitContactItemBuilder? listViewItemBuilder;
   final void Function(ContactItemModel)? onItemTap;
   final void Function(ContactItemModel)? onItemLongPress;
   final String? fakeSearchHideText;
@@ -107,12 +100,10 @@ class _ContactViewState extends State<ContactView> {
     ];
   }
 
-  void onSearchTap(List<ChatUIKitListItemModelBase> data) {
+  void onSearchTap(List<ContactItemModel> data) {
     List<NeedSearch> list = [];
     for (var item in data) {
-      if (item is NeedSearch) {
-        list.add(item);
-      }
+      list.add(item);
     }
     showModalBottomSheet(
       isScrollControlled: true,

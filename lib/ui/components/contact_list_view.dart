@@ -21,7 +21,7 @@ class ContactListView extends StatefulWidget {
     super.key,
   });
 
-  final void Function(List<ChatUIKitListItemModelBase> data)? onSearchTap;
+  final void Function(List<ContactItemModel> data)? onSearchTap;
   final List<NeedAlphabeticalWidget>? beforeWidgets;
   final List<NeedAlphabeticalWidget>? afterWidgets;
   final ChatUIKitContactItemBuilder? itemBuilder;
@@ -85,7 +85,15 @@ class _ContactListViewState extends State<ContactListView> {
               beforeWidgets: widget.beforeWidgets,
               afterWidgets: widget.afterWidgets,
               background: widget.background,
-              onSearchTap: widget.onSearchTap,
+              onSearchTap: (data) {
+                List<ContactItemModel> list = [];
+                for (var item in data) {
+                  if (item is ContactItemModel) {
+                    list.add(item);
+                  }
+                }
+                widget.onSearchTap?.call(list);
+              },
               searchHideText: widget.searchHideText,
               itemBuilder: (context, model) {
                 if (model is ContactItemModel) {

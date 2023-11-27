@@ -11,6 +11,10 @@ class ContactPage extends StatefulWidget {
 class _ContactPageState extends State<ContactPage> {
   @override
   Widget build(BuildContext context) {
-    return const ContactView();
+    return ContactView(
+      listViewItemBuilder: (context, model) {
+        return ChatUIKitContactItem(model);
+      },
+    );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:username/username.dart';
+// import 'package:username/username.dart';
 
 class ContactListViewController with ChatUIKitListViewControllerBase {
   ContactListViewController();

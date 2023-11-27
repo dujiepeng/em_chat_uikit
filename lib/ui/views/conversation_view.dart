@@ -19,7 +19,7 @@ class ConversationView extends StatefulWidget {
 
   final ConversationListViewController? controller;
   final ChatUIKitAppBar? appBar;
-  final void Function(List<ChatUIKitListItemModelBase> data)? onSearchTap;
+  final void Function(List<ConversationItemModel> data)? onSearchTap;
   final List<NeedAlphabeticalWidget>? beforeWidgets;
   final List<NeedAlphabeticalWidget>? afterWidgets;
   final ChatUIKitListItemBuilder? listViewItemBuilder;
@@ -91,12 +91,10 @@ class _ConversationViewState extends State<ConversationView> {
     return content;
   }
 
-  void onSearchTap(List<ChatUIKitListItemModelBase> data) {
+  void onSearchTap(List<ConversationItemModel> data) {
     List<NeedSearch> list = [];
     for (var item in data) {
-      if (item is NeedSearch) {
-        list.add(item);
-      }
+      list.add(item);
     }
     showModalBottomSheet(
       isScrollControlled: true,

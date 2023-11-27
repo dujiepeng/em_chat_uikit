@@ -21,7 +21,7 @@ class ConversationListView extends StatefulWidget {
     super.key,
   });
 
-  final void Function(List<ChatUIKitListItemModelBase> data)? onSearchTap;
+  final void Function(List<ConversationItemModel> data)? onSearchTap;
   final ChatUIKitConversationItemBuilder? itemBuilder;
   final void Function(ConversationItemModel)? onTap;
   final List<NeedAlphabeticalWidget>? beforeWidgets;
@@ -77,7 +77,15 @@ class _ConversationListViewState extends State<ConversationListView>
           beforeWidgets: widget.beforeWidgets,
           afterWidgets: widget.afterWidgets,
           background: widget.background,
-          onSearchTap: widget.onSearchTap,
+          onSearchTap: (data) {
+            List<ConversationItemModel> list = [];
+            for (var item in data) {
+              if (item is ConversationItemModel) {
+                list.add(item);
+              }
+            }
+            widget.onSearchTap?.call(list);
+          },
           searchHideText: widget.searchHideText,
           itemBuilder: (context, model) {
             if (model is ConversationItemModel) {
@@ -92,7 +100,10 @@ class _ConversationListViewState extends State<ConversationListView>
                 onLongPress: () {
                   widget.onLongPress?.call(model);
                 },
-                child: ChatUIKitConversationItem(model),
+                child: SizedBox(
+                  height: 76,
+                  child: ChatUIKitConversationItem(model),
+                ),
               );
 
               return item;
