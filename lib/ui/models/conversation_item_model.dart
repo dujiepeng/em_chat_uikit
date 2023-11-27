@@ -5,7 +5,6 @@ class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
   final int unreadCount;
   final bool pinned;
   final bool noDisturb;
-  @override
   ChatUIKitProfile profile;
 
   ConversationItemModel({
@@ -25,20 +24,12 @@ class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
         ? ChatUIKitProfileType.chat
         : ChatUIKitProfileType.groupChat;
 
-    int? updateTime;
-    if (ChatUIKitContext.instance.conversationsCache[conversation.id] != null) {
-      updateTime = DateTime.now().microsecondsSinceEpoch;
-    }
+    ChatUIKitProfile profile =
+        ChatUIKitContext.instance.conversationsCache[conversation.id] ??
+            ChatUIKitProfile(id: conversation.id, type: type);
+
     ConversationItemModel info = ConversationItemModel(
-      profile: ChatUIKitProfile(
-        id: conversation.id,
-        type: type,
-        name: ChatUIKitContext
-            .instance.conversationsCache[conversation.id]?.nickName,
-        avatarUrl: ChatUIKitContext
-            .instance.conversationsCache[conversation.id]?.avatarUrl,
-        updateTime: updateTime,
-      ),
+      profile: profile,
       unreadCount: unreadCount,
       lastMessage: lastMessage,
       pinned: conversation.isPinned,

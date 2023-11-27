@@ -13,7 +13,8 @@ class ChatUIKitContext {
   late SharedPreferences sharedPreferences;
   String? _currentUserId;
   Map<String, dynamic> cachedMap = {};
-  Map<String, EaseProfileProtocol> conversationsCache = {};
+  Map<String, ChatUIKitProfile> conversationsCache = {};
+  Map<String, ChatUIKitProfile> contactsCache = {};
   ChatUIKitProfile? currentUserProfile;
 
   static ChatUIKitContext? _instance;
