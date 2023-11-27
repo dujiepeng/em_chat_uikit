@@ -6,11 +6,13 @@ class SearchView extends StatefulWidget {
   const SearchView({
     required this.searchData,
     required this.searchHideText,
+    this.onTap,
     super.key,
   });
 
   final List<NeedSearch> searchData;
   final String searchHideText;
+  final void Function(BuildContext context, ChatUIKitProfile profile)? onTap;
 
   @override
   State<SearchView> createState() => _SearchViewState();
@@ -26,9 +28,14 @@ class _SearchViewState extends State<SearchView> {
             enableSearchBar: false,
             itemBuilder: (context, model) {
               if (model is NeedSearch) {
-                return ChatUIKitSearchItem(
-                  profile: model.profile,
-                  highlightWord: searchKeyword,
+                return InkWell(
+                  onTap: () {
+                    widget.onTap?.call(context, model.profile);
+                  },
+                  child: ChatUIKitSearchItem(
+                    profile: model.profile,
+                    highlightWord: searchKeyword,
+                  ),
                 );
               }
               return const SizedBox();

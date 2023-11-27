@@ -1,20 +1,15 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
 class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
-  final String id;
-  final String? avatarUrl;
-  final String? name;
   final Message? lastMessage;
   final int unreadCount;
-  final ConversationType type;
   final bool pinned;
   final bool noDisturb;
+  @override
+  ChatUIKitProfile profile;
 
   ConversationItemModel({
-    required this.id,
-    required this.type,
-    this.avatarUrl,
-    this.name,
+    required this.profile,
     this.lastMessage,
     this.unreadCount = 0,
     this.noDisturb = false,
@@ -26,16 +21,26 @@ class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
   ) async {
     int unreadCount = await conversation.unreadCount();
     Message? lastMessage = await conversation.latestMessage();
+    ChatUIKitProfileType type = conversation.type == ConversationType.Chat
+        ? ChatUIKitProfileType.chat
+        : ChatUIKitProfileType.groupChat;
 
+    int? updateTime;
+    if (ChatUIKitContext.instance.conversationsCache[conversation.id] != null) {
+      updateTime = DateTime.now().microsecondsSinceEpoch;
+    }
     ConversationItemModel info = ConversationItemModel(
-      id: conversation.id,
-      type: conversation.type,
+      profile: ChatUIKitProfile(
+        id: conversation.id,
+        type: type,
+        name: ChatUIKitContext
+            .instance.conversationsCache[conversation.id]?.nickName,
+        avatarUrl: ChatUIKitContext
+            .instance.conversationsCache[conversation.id]?.avatarUrl,
+        updateTime: updateTime,
+      ),
       unreadCount: unreadCount,
       lastMessage: lastMessage,
-      name: ChatUIKitContext
-          .instance.conversationsCache[conversation.id]?.nickName,
-      avatarUrl: ChatUIKitContext
-          .instance.conversationsCache[conversation.id]?.avatarUrl,
       pinned: conversation.isPinned,
       noDisturb: ChatUIKitContext.instance.conversationIsMute(conversation.id),
     );
@@ -43,8 +48,5 @@ class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
   }
 
   @override
-  String get showName => name ?? id;
-
-  @override
-  ChatUIKitProfile get profile => ChatUIKitProfile.chat(id: id);
+  String get showName => profile.name ?? profile.id;
 }

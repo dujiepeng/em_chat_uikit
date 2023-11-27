@@ -124,6 +124,10 @@ class _ContactViewState extends State<ContactView> {
       context: context,
       builder: (context) {
         return SearchView(
+          onTap: (ctx, profile) {
+            Navigator.of(ctx).pop();
+            debugPrint('onTap: ${profile.id}');
+          },
           searchHideText: '搜索联系人',
           searchData: list,
         );

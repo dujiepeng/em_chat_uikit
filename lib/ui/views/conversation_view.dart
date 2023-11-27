@@ -103,6 +103,10 @@ class _ConversationViewState extends State<ConversationView> {
       context: context,
       builder: (context) {
         return SearchView(
+          onTap: (ctx, profile) {
+            Navigator.of(ctx).pop();
+            debugPrint('onTap: ${profile.id}');
+          },
           searchHideText: '搜索',
           searchData: list,
         );

@@ -21,8 +21,8 @@ class ChatUIKitProfile {
     this.name,
     this.avatarUrl,
     this.type,
-    this.updateTime = -1,
-  });
+    int? updateTime,
+  }) : updateTime = updateTime ?? -1;
 
   ChatUIKitProfile.contact({
     required String id,
