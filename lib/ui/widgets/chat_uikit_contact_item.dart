@@ -1,21 +1,26 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:em_chat_uikit/tools/chat_uikit_highlight_tool.dart';
 import 'package:flutter/material.dart';
 
 class ChatUIKitContactItem extends StatelessWidget {
-  const ChatUIKitContactItem(this.model, {this.highlightWork, super.key});
+  const ChatUIKitContactItem(this.model, {super.key});
 
-  final String? highlightWork;
   final ContactItemModel model;
 
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
 
-    Widget name = HighlightTool.highlightWidget(
-      context,
+    TextStyle normalStyle = TextStyle(
+      color: theme.color.isDark
+          ? theme.color.neutralColor98
+          : theme.color.neutralColor1,
+      fontSize: theme.font.titleMedium.fontSize,
+      fontWeight: theme.font.titleMedium.fontWeight,
+    );
+
+    Widget name = Text(
       model.showName,
-      searchKey: highlightWork,
+      style: normalStyle,
     );
 
     Widget avatar = ChatUIKitAvatar(

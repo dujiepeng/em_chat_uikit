@@ -12,6 +12,9 @@ class ContactItemModel
   }
 
   @override
+  double get itemHeight => 60;
+
+  @override
   String get showName {
     return profile.name ?? profile.id;
   }

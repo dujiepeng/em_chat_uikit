@@ -1,4 +1,6 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/ui/models/alphabetical_item_model.dart';
+import 'package:em_chat_uikit/ui/widgets/chat_uikit_alphabetical_item.dart';
 import 'package:flutter/material.dart';
 
 typedef ChatUIKitListItemBuilder = Widget Function(
@@ -173,15 +175,16 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               ChatUIKitListItemModelBase model = widget.list[index];
-              if (model is AlphabeticalItemModel) {
-                return ChatUIKitAlphabeticalItem(model: model);
-              }
 
               if (model is NeedAlphabetical) {
                 return SizedBox(
                   height: model.itemHeight,
                   child: widget.itemBuilder(context, model),
                 );
+              }
+
+              if (model is AlphabeticalItemModel) {
+                return ChatUIKitAlphabeticalItem(model: model);
               }
 
               return widget.itemBuilder(context, model);

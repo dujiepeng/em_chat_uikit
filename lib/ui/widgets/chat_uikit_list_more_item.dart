@@ -89,4 +89,7 @@ class ChatUIKitListMoreItem extends StatelessWidget
 
     return content;
   }
+  
+  @override
+  double get itemHeight => 56;
 }

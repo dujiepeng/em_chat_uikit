@@ -16,7 +16,6 @@ class ContactView extends StatefulWidget {
     this.onItemLongPress,
     this.appBar,
     this.controller,
-    this.alphabeticalBuilder,
     super.key,
   });
 
@@ -32,10 +31,7 @@ class ContactView extends StatefulWidget {
   final void Function(ContactItemModel)? onItemLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
-  final Widget Function(
-    BuildContext context,
-    AlphabeticalItemModel alphabeticalItem,
-  )? alphabeticalBuilder;
+
   @override
   State<ContactView> createState() => _ContactViewState();
 }
@@ -90,7 +86,6 @@ class _ContactViewState extends State<ContactView> {
         onTap: widget.onItemTap ?? tapContactInfo,
         onLongPress: widget.onItemLongPress ?? longContactInfo,
         onSearchTap: widget.onSearchTap ?? onSearchTap,
-        alphabeticalBuilder: widget.alphabeticalBuilder,
       ),
     );
 

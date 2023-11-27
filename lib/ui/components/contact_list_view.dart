@@ -18,7 +18,6 @@ class ContactListView extends StatefulWidget {
     this.reloadMessage,
     this.onTap,
     this.onLongPress,
-    this.alphabeticalBuilder,
     super.key,
   });
 
@@ -33,9 +32,6 @@ class ContactListView extends StatefulWidget {
   final String? errorMessage;
   final String? reloadMessage;
   final ContactListViewController? controller;
-  final Widget Function(
-          BuildContext context, AlphabeticalItemModel alphabeticalItem)?
-      alphabeticalBuilder;
 
   @override
   State<ContactListView> createState() => _ContactListViewState();

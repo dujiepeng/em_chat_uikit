@@ -12,7 +12,6 @@ export 'service/protocol/chat_uikit_profile.dart';
 
 export 'ui/models/conversation_item_model.dart';
 export 'ui/models/contact_item_model.dart';
-export 'ui/models/alphabetical_item_model.dart';
 export 'ui/models/list_item_model.dart';
 
 export 'tools/chat_uikit_image_loader.dart';
@@ -25,7 +24,7 @@ export 'ui/widgets/chat_uikit_bottom_sheet.dart';
 export 'ui/widgets/chat_uikit_list_view.dart';
 export 'ui/widgets/chat_uikit_search_view.dart';
 export 'ui/widgets/chat_uikit_alphabetical_view.dart';
-export 'ui/widgets/chat_uikit_alphabetical_item.dart';
+
 export 'ui/widgets/chat_uikit_list_more_item.dart';
 export 'ui/widgets/chat_uikit_contact_item.dart';
 export 'ui/widgets/chat_uikit_conversation_item.dart';

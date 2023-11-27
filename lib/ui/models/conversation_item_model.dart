@@ -5,6 +5,7 @@ class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
   final int unreadCount;
   final bool pinned;
   final bool noDisturb;
+  @override
   ChatUIKitProfile profile;
 
   ConversationItemModel({

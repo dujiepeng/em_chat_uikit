@@ -10,9 +10,9 @@ mixin NeedSearch on ChatUIKitListItemModelBase {
 }
 
 mixin NeedAlphabetical on ChatUIKitListItemModelBase {
-  double get itemHeight => 60;
+  double get itemHeight;
 }
 
 mixin NeedAlphabeticalWidget implements Widget {
-  double get itemHeight => 56;
+  double get itemHeight;
 }
