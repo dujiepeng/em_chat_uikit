@@ -1,6 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
-
 import 'package:flutter/material.dart';
 
 typedef ChatUIKitConversationItemBuilder = Widget Function(
@@ -10,10 +9,8 @@ class ConversationListView extends StatefulWidget {
   const ConversationListView({
     this.controller,
     this.itemBuilder,
-    this.beforeBuilder,
-    this.beforeList,
-    this.afterBuilder,
-    this.afterList,
+    this.beforeWidgets,
+    this.afterWidgets,
     this.onSearchTap,
     this.searchHideText,
     this.background,
@@ -25,12 +22,10 @@ class ConversationListView extends StatefulWidget {
   });
 
   final void Function(List<ChatUIKitListItemModelBase> data)? onSearchTap;
-  final List<ChatUIKitListItemModelBase>? beforeList;
-  final List<ChatUIKitListItemModelBase>? afterList;
-  final ChatUIKitListItemBuilder? beforeBuilder;
-  final ChatUIKitListItemBuilder? afterBuilder;
   final ChatUIKitConversationItemBuilder? itemBuilder;
   final void Function(ConversationItemModel)? onTap;
+  final List<NeedAlphabeticalWidget>? beforeWidgets;
+  final List<NeedAlphabeticalWidget>? afterWidgets;
   final void Function(ConversationItemModel)? onLongPress;
   final String? searchHideText;
   final Widget? background;
@@ -65,12 +60,6 @@ class _ConversationListViewState extends State<ConversationListView>
     controller.fetchItemList();
   }
 
-  void beforeList() {
-    if (widget.beforeList != null) {
-      controller.list.insertAll(0, widget.beforeList!);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ChatUIKitListViewType>(
@@ -85,30 +74,31 @@ class _ConversationListViewState extends State<ConversationListView>
           enableSearchBar: enableSearchBar,
           errorMessage: widget.errorMessage,
           reloadMessage: widget.reloadMessage,
-          afterBuilder: widget.afterBuilder,
-          afterList: widget.afterList,
-          beforeBuilder: widget.beforeBuilder,
-          beforeList: widget.beforeList,
+          beforeWidgets: widget.beforeWidgets,
+          afterWidgets: widget.afterWidgets,
           background: widget.background,
           onSearchTap: widget.onSearchTap,
           searchHideText: widget.searchHideText,
           itemBuilder: (context, model) {
-            ConversationItemModel info = model as ConversationItemModel;
-            Widget? item;
-            if (widget.itemBuilder != null) {
-              item = widget.itemBuilder!(context, info);
-            }
-            item ??= InkWell(
-              onTap: () {
-                widget.onTap?.call(info);
-              },
-              onLongPress: () {
-                widget.onLongPress?.call(info);
-              },
-              child: ChatUIKitConversationItem(model),
-            );
+            if (model is ConversationItemModel) {
+              Widget? item;
+              if (widget.itemBuilder != null) {
+                item = widget.itemBuilder!(context, model);
+              }
+              item ??= InkWell(
+                onTap: () {
+                  widget.onTap?.call(model);
+                },
+                onLongPress: () {
+                  widget.onLongPress?.call(model);
+                },
+                child: ChatUIKitConversationItem(model),
+              );
 
-            return item;
+              return item;
+            } else {
+              return const SizedBox();
+            }
           },
         );
       },

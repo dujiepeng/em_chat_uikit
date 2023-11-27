@@ -9,14 +9,14 @@ class ContactListViewController with ChatUIKitListViewControllerBase {
   @override
   Future<void> fetchItemList() async {
     loadingType.value = ChatUIKitListViewType.loading;
-    // List<String> items = await ChatUIKit.instance.getAllContacts();
-    List<String> items = () {
-      List<String> list = [];
-      for (var i = 0; i < 1000; i++) {
-        list.add(Username.en().fullname);
-      }
-      return list;
-    }();
+    List<String> items = await ChatUIKit.instance.getAllContacts();
+    // List<String> items = () {
+    //   List<String> list = [];
+    //   for (var i = 0; i < 1000; i++) {
+    //     list.add(Username.en().fullname);
+    //   }
+    //   return list;
+    // }();
     try {
       if (items.isEmpty && !ChatUIKitContext.instance.isContactLoadFinished()) {
         items = await fetchContacts();

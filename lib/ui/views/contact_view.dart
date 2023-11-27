@@ -84,26 +84,7 @@ class _ContactViewState extends State<ContactView> {
       body: ContactListView(
         controller: controller,
         itemBuilder: widget.listViewItemBuilder,
-        beforeBuilder: (context, model) {
-          Widget content;
-          if (widget.listViewBeforeBuilder != null) {
-            content = widget.listViewBeforeBuilder!(context, model);
-          } else {
-            content = ChatUIKitListItem(
-              model: model as ChatUIKitListItemModel,
-              trailing: Container(
-                width: 20,
-                height: 100,
-                color: Colors.red,
-              ),
-            );
-          }
-
-          return content;
-        },
-        beforeList: beforeModels,
-        afterBuilder: widget.listViewAfterBuilder,
-        afterList: widget.listViewAfterList,
+        beforeWidgets: beforeWidgets,
         searchHideText: widget.fakeSearchHideText,
         background: widget.listViewBackground,
         onTap: widget.onItemTap ?? tapContactInfo,
@@ -116,23 +97,36 @@ class _ContactViewState extends State<ContactView> {
     return content;
   }
 
-  List<ChatUIKitListItemModel> get beforeModels {
+  List<ChatUIKitListMoreItem> get beforeWidgets {
     return [
-      ChatUIKitListItemModel('新请求', index: 0, onTap: () {
-        debugPrint('新请求');
-      }),
-      ChatUIKitListItemModel('群聊', index: 1, onTap: () {
-        debugPrint('群聊');
-      }),
+      ChatUIKitListMoreItem(
+          title: '新请求',
+          onTap: () {
+            debugPrint('新请求');
+          }),
+      ChatUIKitListMoreItem(
+          title: '群聊',
+          onTap: () {
+            debugPrint('群聊');
+          }),
     ];
   }
 
   void onSearchTap(List<ChatUIKitListItemModelBase> data) {
+    List<NeedSearch> list = [];
+    for (var item in data) {
+      if (item is NeedSearch) {
+        list.add(item);
+      }
+    }
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (context) {
-        return ContactListSearchView(data);
+        return SearchView(
+          searchHideText: '搜索联系人',
+          searchData: list,
+        );
       },
     );
   }

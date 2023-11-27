@@ -4,18 +4,16 @@ export 'chat_uikit_context.dart';
 
 export 'chat_uikit_settings.dart';
 
-export 'provider/profile_provider.dart';
 export 'provider/profile.dart';
 
 export 'sdk_wrapper/chat_sdk_wrapper.dart';
 export 'service/chat_uikit_service.dart';
+export 'service/protocol/chat_uikit_profile.dart';
 
 export 'ui/models/conversation_item_model.dart';
 export 'ui/models/contact_item_model.dart';
 export 'ui/models/alphabetical_item_model.dart';
 export 'ui/models/list_item_model.dart';
-
-export 'service/protocol/chat_uikit_user_info_protocol.dart';
 
 export 'tools/chat_uikit_image_loader.dart';
 
@@ -28,7 +26,7 @@ export 'ui/widgets/chat_uikit_list_view.dart';
 export 'ui/widgets/chat_uikit_search_view.dart';
 export 'ui/widgets/chat_uikit_alphabetical_view.dart';
 export 'ui/widgets/chat_uikit_alphabetical_item.dart';
-export 'ui/widgets/chat_uikit_list_item.dart';
+export 'ui/widgets/chat_uikit_list_more_item.dart';
 export 'ui/widgets/chat_uikit_contact_item.dart';
 export 'ui/widgets/chat_uikit_conversation_item.dart';
 export 'ui/controllers/chat_uikit_list_view_controller_base.dart';
@@ -42,6 +40,6 @@ export 'ui/components/contact_list_view.dart';
 
 export 'ui/views/conversation_view.dart';
 export 'ui/views/contact_view.dart';
-export 'ui/views/contact_search_view.dart';
+export 'ui/views/search_view.dart';
 
 export 'ui/widgets/chat_uikit_app_bar.dart';

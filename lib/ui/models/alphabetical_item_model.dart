@@ -1,10 +1,18 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:flutter/widgets.dart';
 
-class AlphabeticalItemModel with ChatUIKitListItemModelBase, NeedHeight {
+class AlphabeticalItemModel with ChatUIKitListItemModelBase {
   final String alphabetical;
   final double height;
-  AlphabeticalItemModel(this.alphabetical, {this.height = 32});
+  final TextStyle? textStyle;
+  final Color? backgroundColor;
+  AlphabeticalItemModel(
+    this.alphabetical, {
+    this.height = 32,
+    this.textStyle,
+    this.backgroundColor,
+  });
 
   @override
-  double get itemHeight => height;
+  String get showName => alphabetical;
 }

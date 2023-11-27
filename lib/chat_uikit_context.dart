@@ -14,7 +14,7 @@ class ChatUIKitContext {
   String? _currentUserId;
   Map<String, dynamic> cachedMap = {};
   Map<String, EaseProfileProtocol> conversationsCache = {};
-  UserInfoProtocol? currentUserInfo;
+  ChatUIKitProfile? currentUserProfile;
 
   static ChatUIKitContext? _instance;
   static ChatUIKitContext get instance {

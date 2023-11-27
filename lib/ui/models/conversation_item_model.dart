@@ -1,6 +1,6 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
-class ConversationItemModel with ChatUIKitListItemModelBase, SearchKeyword {
+class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
   final String id;
   final String? avatarUrl;
   final String? name;
@@ -20,9 +20,6 @@ class ConversationItemModel with ChatUIKitListItemModelBase, SearchKeyword {
     this.noDisturb = false,
     this.pinned = false,
   });
-
-  @override
-  String get searchKeyword => name ?? id;
 
   static Future<ConversationItemModel> fromConversation(
     Conversation conversation,
@@ -44,4 +41,10 @@ class ConversationItemModel with ChatUIKitListItemModelBase, SearchKeyword {
     );
     return info;
   }
+
+  @override
+  String get showName => name ?? id;
+
+  @override
+  ChatUIKitProfile get profile => ChatUIKitProfile.chat(id: id);
 }

@@ -9,10 +9,8 @@ class ContactListView extends StatefulWidget {
   const ContactListView({
     this.controller,
     this.itemBuilder,
-    this.beforeBuilder,
-    this.beforeList,
-    this.afterBuilder,
-    this.afterList,
+    this.beforeWidgets,
+    this.afterWidgets,
     this.onSearchTap,
     this.searchHideText,
     this.background,
@@ -25,10 +23,8 @@ class ContactListView extends StatefulWidget {
   });
 
   final void Function(List<ChatUIKitListItemModelBase> data)? onSearchTap;
-  final List<ChatUIKitListItemModelBase>? beforeList;
-  final List<ChatUIKitListItemModelBase>? afterList;
-  final ChatUIKitListItemBuilder? beforeBuilder;
-  final ChatUIKitListItemBuilder? afterBuilder;
+  final List<NeedAlphabeticalWidget>? beforeWidgets;
+  final List<NeedAlphabeticalWidget>? afterWidgets;
   final ChatUIKitContactItemBuilder? itemBuilder;
   final void Function(ContactItemModel)? onTap;
   final void Function(ContactItemModel)? onLongPress;
@@ -69,9 +65,14 @@ class _ContactListViewState extends State<ContactListView> {
       valueListenable: controller.loadingType,
       builder: (context, type, child) {
         return ChatUIKitAlphabeticalView(
-          beforeList: widget.beforeList,
+          onTapCancel: () {
+            debugPrint('tap cancel');
+          },
+          onTap: (context, alphabetical) {
+            debugPrint('tap $alphabetical');
+          },
+          beforeWidgets: widget.beforeWidgets,
           listViewHasSearchBar: enableSearchBar,
-          onTap: (context, alphabetical) {},
           list: controller.list,
           scrollController: scrollController,
           builder: (context, list) {
@@ -85,14 +86,11 @@ class _ContactListViewState extends State<ContactListView> {
               enableSearchBar: enableSearchBar,
               errorMessage: widget.errorMessage,
               reloadMessage: widget.reloadMessage,
-              afterBuilder: widget.afterBuilder,
-              afterList: widget.afterList,
-              beforeBuilder: widget.beforeBuilder,
-              beforeList: widget.beforeList,
+              beforeWidgets: widget.beforeWidgets,
+              afterWidgets: widget.afterWidgets,
               background: widget.background,
               onSearchTap: widget.onSearchTap,
               searchHideText: widget.searchHideText,
-              alphabeticalBuilder: widget.alphabeticalBuilder,
               itemBuilder: (context, model) {
                 if (model is ContactItemModel) {
                   Widget? item;

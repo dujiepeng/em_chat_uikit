@@ -2,36 +2,17 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 class ChatUIKitConversationItem extends StatelessWidget {
-  const ChatUIKitConversationItem(
-    this.model, {
-    this.onTap,
-    this.onLongPress,
-    super.key,
-  });
-
+  const ChatUIKitConversationItem(this.model, {this.highlightWord, super.key});
+  final String? highlightWord;
   final ConversationItemModel model;
-
-  final void Function(ConversationItemModel model)? onTap;
-
-  final void Function(ConversationItemModel model)? onLongPress;
 
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
 
-    Widget content = InkWell(
-      onTap: () {
-        onTap?.call(model);
-      },
-      onLongPress: () {
-        onLongPress?.call(model);
-      },
-    );
-
-    content = Container(
+    Widget content = Container(
       padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
       height: 76 - 0.5,
-      child: content,
     );
 
     content = Column(

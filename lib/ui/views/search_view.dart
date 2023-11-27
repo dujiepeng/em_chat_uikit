@@ -1,16 +1,22 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/ui/widgets/chat_uikit_search_item.dart';
 import 'package:flutter/material.dart';
 
-class ContactListSearchView extends StatefulWidget {
-  const ContactListSearchView(this.searchData, {super.key});
+class SearchView extends StatefulWidget {
+  const SearchView({
+    required this.searchData,
+    required this.searchHideText,
+    super.key,
+  });
 
-  final List<ChatUIKitListItemModelBase> searchData;
+  final List<NeedSearch> searchData;
+  final String searchHideText;
 
   @override
-  State<ContactListSearchView> createState() => _ContactListSearchViewState();
+  State<SearchView> createState() => _SearchViewState();
 }
 
-class _ContactListSearchViewState extends State<ContactListSearchView> {
+class _SearchViewState extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
@@ -19,10 +25,10 @@ class _ContactListSearchViewState extends State<ContactListSearchView> {
         return ChatUIKitListView(
             enableSearchBar: false,
             itemBuilder: (context, model) {
-              if (model is ContactItemModel) {
-                return ChatUIKitContactItem(
-                  model,
-                  searchKeyword: searchKeyword,
+              if (model is NeedSearch) {
+                return ChatUIKitSearchItem(
+                  profile: model.profile,
+                  highlightWord: searchKeyword,
                 );
               }
               return const SizedBox();
@@ -32,7 +38,7 @@ class _ContactListSearchViewState extends State<ContactListSearchView> {
                 ? ChatUIKitListViewType.empty
                 : ChatUIKitListViewType.normal);
       },
-      searchHideText: '搜索联系人',
+      searchHideText: widget.searchHideText,
       list: widget.searchData,
       autoFocus: true,
     );

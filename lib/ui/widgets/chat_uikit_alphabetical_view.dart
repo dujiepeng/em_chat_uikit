@@ -18,20 +18,27 @@ class ChatUIKitAlphabeticalView extends StatefulWidget {
     required this.builder,
     this.enableSorting = true,
     this.showAlphabetical = true,
+    this.selectionTextStyle,
+    this.selectionHeight = 32,
+    this.selectionBackgroundColor,
     this.special = '#',
     this.targets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#',
     this.rightPadding = 2,
     this.onTap,
     this.onTapCancel,
     this.highlight = true,
+    this.highlightColor,
     this.listViewHasSearchBar = true,
-    this.beforeList,
+    this.beforeWidgets,
     super.key,
   });
 
   final String targets;
+  final TextStyle? selectionTextStyle;
+  final double selectionHeight;
+  final Color? selectionBackgroundColor;
   final bool showAlphabetical;
-  final List<ChatUIKitListItemModelBase>? beforeList;
+  final List<Widget>? beforeWidgets;
   final String special;
   final ListViewBuilder builder;
   final bool enableSorting;
@@ -41,6 +48,7 @@ class ChatUIKitAlphabeticalView extends StatefulWidget {
   final VoidCallback? onTapCancel;
   final bool listViewHasSearchBar;
   final bool highlight;
+  final Color? highlightColor;
 
   final List<ChatUIKitListItemModelBase> list;
 
@@ -99,11 +107,9 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
       );
     }
 
-    List<ChatUIKitListItemModelBase> list = sortList();
-
     Widget content = widget.builder.call(
       context,
-      list,
+      sortList(),
     );
 
     if (widget.showAlphabetical) {
@@ -143,9 +149,10 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
               height: letterHeight,
               decoration: BoxDecoration(
                 color: selected
-                    ? (theme.color.isDark
-                        ? theme.color.primaryColor6
-                        : theme.color.primaryColor5)
+                    ? widget.highlightColor ??
+                        (theme.color.isDark
+                            ? theme.color.primaryColor6
+                            : theme.color.primaryColor5)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(letterHeight / 2),
               ),
@@ -240,7 +247,7 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
 
   void cancelSelected() {
     onTouch = false;
-    latestSelected = null;
+    // latestSelected = null;
     // selectIndex.value = -1;
     widget.onTapCancel?.call();
   }
@@ -295,9 +302,9 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     // 索引初始位置
     double position = widget.listViewHasSearchBar ? 44 : 0;
 
-    if (widget.beforeList?.isNotEmpty == true) {
-      for (var beforeItem in widget.beforeList!) {
-        if (beforeItem is NeedAlphabetical) {
+    if (widget.beforeWidgets?.isNotEmpty == true) {
+      for (var beforeItem in widget.beforeWidgets!) {
+        if (beforeItem is NeedAlphabeticalWidget) {
           position += beforeItem.itemHeight;
         }
       }
@@ -306,7 +313,12 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     // 计算index 位置 转为最终序列
     for (var item in targetList) {
       positionMap[item] = position;
-      final letterModel = AlphabeticalItemModel(item.toUpperCase());
+      final letterModel = AlphabeticalItemModel(
+        item.toUpperCase(),
+        textStyle: widget.selectionTextStyle,
+        height: widget.selectionHeight,
+        backgroundColor: widget.selectionBackgroundColor,
+      );
       ret.add(letterModel);
       position += letterModel.height;
       List<NeedAlphabetical> list = map[item]!;
@@ -330,6 +342,8 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
       return;
     }
     double position = positionMap[alphabetical]!;
+
+    position = min(position, widget.scrollController.position.maxScrollExtent);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       widget.scrollController.jumpTo(position);

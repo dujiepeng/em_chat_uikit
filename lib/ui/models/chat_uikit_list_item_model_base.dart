@@ -1,13 +1,18 @@
-abstract mixin class ChatUIKitListItemModelBase {}
+import 'package:em_chat_uikit/service/protocol/chat_uikit_profile.dart';
+import 'package:flutter/widgets.dart';
 
-mixin SearchKeyword on ChatUIKitListItemModelBase {
-  String get searchKeyword => '';
-}
-
-mixin NeedAlphabetical on ChatUIKitListItemModelBase, NeedHeight {
+abstract mixin class ChatUIKitListItemModelBase {
   String get showName;
 }
 
-mixin NeedHeight on ChatUIKitListItemModelBase {
-  double get itemHeight;
+mixin NeedSearch on ChatUIKitListItemModelBase {
+  ChatUIKitProfile get profile;
+}
+
+mixin NeedAlphabetical on ChatUIKitListItemModelBase {
+  double get itemHeight => 60;
+}
+
+mixin NeedAlphabeticalWidget implements Widget {
+  double get itemHeight => 56;
 }

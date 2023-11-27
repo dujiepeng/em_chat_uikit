@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> with ChatObserver {
 
   @override
   Widget build(BuildContext context) {
-    isLight = !isLight;
+    // isLight = !isLight;
     return MaterialApp(
       builder: EasyLoading.init(builder: (context, child) {
         return ChatUIKitTheme(

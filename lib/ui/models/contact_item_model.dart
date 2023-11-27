@@ -1,34 +1,27 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
 class ContactItemModel
-    with
-        ChatUIKitListItemModelBase,
-        SearchKeyword,
-        NeedHeight,
-        NeedAlphabetical {
-  final String id;
-  final String? avatarUrl;
-  final String? nickName;
+    with ChatUIKitListItemModelBase, NeedAlphabetical, NeedSearch {
+  @override
+  ChatUIKitProfile profile;
 
   ContactItemModel({
-    required this.id,
-    this.avatarUrl,
-    this.nickName,
-  });
+    required this.profile,
+  }) {
+    profile = profile;
+  }
 
   @override
   String get showName {
-    return nickName ?? id;
+    return profile.name ?? profile.id;
   }
 
-  @override
-  String get searchKeyword => nickName ?? id;
+  String? get avatarUrl {
+    return profile.avatarUrl;
+  }
 
   // TODO: 升级到新版本后不需要这种api，传入Contact 对象更合理；
   static ContactItemModel fromContact(String userId) {
-    return ContactItemModel(id: userId);
+    return ContactItemModel(profile: ChatUIKitProfile.contact(id: userId));
   }
-
-  @override
-  double get itemHeight => 60;
 }

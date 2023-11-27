@@ -3,15 +3,22 @@ import 'package:flutter/material.dart';
 
 const double borderHeight = 0.5;
 
-class ChatUIKitListItem extends StatelessWidget {
-  const ChatUIKitListItem({
-    required this.model,
+class ChatUIKitListMoreItem extends StatelessWidget
+    with NeedAlphabeticalWidget {
+  const ChatUIKitListMoreItem({
+    required this.title,
     this.trailing,
+    this.enableArrow = true,
+    this.onTap,
     super.key,
   });
-  final ChatUIKitListItemModel model;
+  final String title;
 
   final Widget? trailing;
+
+  final bool enableArrow;
+
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +27,7 @@ class ChatUIKitListItem extends StatelessWidget {
     Widget content = Row(
       children: [
         Text(
-          model.title,
+          title,
           style: TextStyle(
             color: theme.color.isDark
                 ? theme.color.neutralColor98
@@ -32,7 +39,7 @@ class ChatUIKitListItem extends StatelessWidget {
       ],
     );
 
-    if (model.enableArrow) {
+    if (enableArrow) {
       content = Row(
         children: [
           Expanded(
@@ -50,13 +57,8 @@ class ChatUIKitListItem extends StatelessWidget {
       );
     }
 
-    double height = 60;
-    if (model is NeedAlphabetical) {
-      height = model.itemHeight;
-    }
-
     content = Container(
-      height: height - borderHeight,
+      height: itemHeight - borderHeight,
       decoration: BoxDecoration(
         color: theme.color.isDark
             ? theme.color.neutralColor1
@@ -80,12 +82,10 @@ class ChatUIKitListItem extends StatelessWidget {
       ],
     );
 
-    if (model.onTap != null) {
-      content = InkWell(
-        onTap: model.onTap,
-        child: content,
-      );
-    }
+    content = InkWell(
+      onTap: onTap,
+      child: content,
+    );
 
     return content;
   }

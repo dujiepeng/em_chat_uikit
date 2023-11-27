@@ -5,10 +5,8 @@ import 'package:flutter/material.dart';
 class ConversationView extends StatefulWidget {
   const ConversationView({
     this.listViewItemBuilder,
-    this.listViewBeforeBuilder,
-    this.listViewBeforeList,
-    this.listViewAfterBuilder,
-    this.listViewAfterList,
+    this.beforeWidgets,
+    this.afterWidgets,
     this.onSearchTap,
     this.fakeSearchHideText,
     this.listViewBackground,
@@ -22,10 +20,8 @@ class ConversationView extends StatefulWidget {
   final ConversationListViewController? controller;
   final ChatUIKitAppBar? appBar;
   final void Function(List<ChatUIKitListItemModelBase> data)? onSearchTap;
-  final List<ChatUIKitListItemModelBase>? listViewBeforeList;
-  final List<ChatUIKitListItemModelBase>? listViewAfterList;
-  final ChatUIKitListItemBuilder? listViewBeforeBuilder;
-  final ChatUIKitListItemBuilder? listViewAfterBuilder;
+  final List<NeedAlphabeticalWidget>? beforeWidgets;
+  final List<NeedAlphabeticalWidget>? afterWidgets;
   final ChatUIKitListItemBuilder? listViewItemBuilder;
   final void Function(ConversationItemModel)? onItemTap;
   final void Function(ConversationItemModel)? onItemLongPress;
@@ -76,10 +72,8 @@ class _ConversationViewState extends State<ConversationView> {
       body: ConversationListView(
         controller: controller,
         itemBuilder: widget.listViewItemBuilder,
-        beforeBuilder: widget.listViewBeforeBuilder,
-        beforeList: widget.listViewBeforeList,
-        afterBuilder: widget.listViewAfterBuilder,
-        afterList: widget.listViewAfterList,
+        beforeWidgets: widget.beforeWidgets,
+        afterWidgets: widget.afterWidgets,
         searchHideText: widget.fakeSearchHideText,
         background: widget.listViewBackground,
         onTap: widget.onItemTap ??
@@ -90,15 +84,30 @@ class _ConversationViewState extends State<ConversationView> {
             (ConversationItemModel model) {
               showBottomSheet();
             },
-        onSearchTap: widget.onSearchTap,
+        onSearchTap: widget.onSearchTap ?? onSearchTap,
       ),
     );
 
     return content;
   }
 
-  void onSearchTap() {
-    debugPrint('onSearchTap');
+  void onSearchTap(List<ChatUIKitListItemModelBase> data) {
+    List<NeedSearch> list = [];
+    for (var item in data) {
+      if (item is NeedSearch) {
+        list.add(item);
+      }
+    }
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return SearchView(
+          searchHideText: '搜索',
+          searchData: list,
+        );
+      },
+    );
   }
 
   void pushToMessageInfoPage() {}

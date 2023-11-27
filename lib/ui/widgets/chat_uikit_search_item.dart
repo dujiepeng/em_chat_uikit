@@ -1,12 +1,17 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit/tools/chat_uikit_highlight_tool.dart';
+
 import 'package:flutter/material.dart';
 
-class ChatUIKitContactItem extends StatelessWidget {
-  const ChatUIKitContactItem(this.model, {this.highlightWork, super.key});
+class ChatUIKitSearchItem extends StatelessWidget {
+  final ChatUIKitProfile profile;
+  final String? highlightWord;
 
-  final String? highlightWork;
-  final ContactItemModel model;
+  const ChatUIKitSearchItem({
+    required this.profile,
+    this.highlightWord,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +19,12 @@ class ChatUIKitContactItem extends StatelessWidget {
 
     Widget name = HighlightTool.highlightWidget(
       context,
-      model.showName,
-      searchKey: highlightWork,
+      profile.name ?? profile.id,
+      searchKey: highlightWord,
     );
 
     Widget avatar = ChatUIKitAvatar(
-      avatarUrl: model.avatarUrl,
+      avatarUrl: profile.avatarUrl,
       size: 40,
     );
 
@@ -32,7 +37,7 @@ class ChatUIKitContactItem extends StatelessWidget {
     );
     content = Container(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-      height: model.itemHeight - 0.5,
+      height: 60 - 0.5,
       child: content,
     );
 

@@ -70,12 +70,12 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
             valueListenable: searchKeyword,
             builder: (context, keyword, child) {
               if (keyword.isEmpty) {
-                return widget.builder(context, keyword, list);
+                return widget.builder(context, keyword, []);
               } else {
                 List<ChatUIKitListItemModelBase> searched = [];
                 for (var item in list) {
-                  if (item is SearchKeyword) {
-                    if (item.searchKeyword
+                  if (item is NeedSearch) {
+                    if (item.showName
                         .toLowerCase()
                         .contains(keyword.toLowerCase())) {
                       searched.add(item);
