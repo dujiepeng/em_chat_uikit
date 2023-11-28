@@ -67,7 +67,7 @@ class _ContactViewState extends State<ContactView> {
                   ? theme.color.neutralColor95
                   : theme.color.neutralColor3,
               icon: const Icon(Icons.person_add_alt_1_outlined),
-              onPressed: () {},
+              onPressed: addContact,
             ),
           ),
       body: ContactListView(
@@ -127,5 +127,33 @@ class _ContactViewState extends State<ContactView> {
 
   void longContactInfo(ContactItemModel info) {
     debugPrint('longContactInfo');
+  }
+
+  void addContact() async {
+    String? userId = await showChatUIKitDialog(
+      borderType: ChatUIKitRectangleType.filletCorner,
+      title: '添加联系人',
+      content: '通过用户ID添加联系人',
+      context: context,
+      hintsText: ['输入用户ID'],
+      items: [
+        ChatUIKitDialogItem.cancel(
+          label: '取消',
+          onTap: () async {
+            Navigator.of(context).pop();
+          },
+        ),
+        ChatUIKitDialogItem.inputsConfirm(
+          label: '添加',
+          onInputsTap: (inputs) async {
+            Navigator.of(context).pop(inputs);
+          },
+        ),
+      ],
+    );
+
+    if (userId?.isNotEmpty == true) {
+      // TODO: add contact.
+    }
   }
 }
