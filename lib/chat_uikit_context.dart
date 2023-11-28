@@ -73,19 +73,19 @@ extension ConversationFirstLoad on ChatUIKitContext {
 
 extension ConversationMute on ChatUIKitContext {
   void addConversationMute(Map<String, int> map) {
-    Map<String, int> tmpMap = cachedMap[muteMapKey] ?? {};
+    dynamic tmpMap = cachedMap[muteMapKey] ?? {};
     tmpMap.addAll(map);
     cachedMap[muteMapKey] = tmpMap;
     _updateStore();
   }
 
   bool conversationIsMute(String conversationId) {
-    Map<String, int> tmpMap = cachedMap[muteMapKey] ?? {};
-    return tmpMap.containsKey(conversationId);
+    dynamic tmpMap = cachedMap[muteMapKey] ?? {};
+    return tmpMap?.containsKey(conversationId) ?? false;
   }
 
   void deleteConversationMute(List<String> list) {
-    Map<String, bool> tmpMap = cachedMap[muteMapKey] ?? {};
+    dynamic tmpMap = cachedMap[muteMapKey] ?? {};
     for (var element in list) {
       tmpMap.remove(element);
     }

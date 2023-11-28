@@ -25,8 +25,8 @@ abstract mixin class GroupObserver implements ChatUIKitObserverBase {
       String groupId, String newOwner, String oldOwner) {}
   void onRequestToJoinAcceptedFromGroup(
       String groupId, String? groupName, String accepter) {}
-  void onRequestToJoinDeclinedFromGroup(
-      String groupId, String? groupName, String decliner, String? reason) {}
+  void onRequestToJoinDeclinedFromGroup(String groupId, String? groupName,
+      String? decliner, String? reason, String? applicant) {}
   void onRequestToJoinReceivedFromGroup(
       String groupId, String? groupName, String applicant, String? reason) {}
   void onSharedFileAddedFromGroup(String groupId, GroupSharedFile sharedFile) {}

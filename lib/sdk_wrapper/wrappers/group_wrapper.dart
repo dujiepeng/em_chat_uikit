@@ -175,10 +175,15 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
 
   @protected
   void onRequestToJoinDeclinedFromGroup(
-      String groupId, String? groupName, String decliner, String? reason) {
+    String groupId,
+    String? groupName,
+    String? decliner,
+    String? reason,
+    String? applicant,
+  ) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       (observer as GroupObserver).onRequestToJoinDeclinedFromGroup(
-          groupId, groupName, decliner, reason);
+          groupId, groupName, decliner, reason, applicant);
     }
   }
 

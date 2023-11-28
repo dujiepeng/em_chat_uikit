@@ -223,7 +223,8 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
           margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius:
+                BorderRadius.circular(CornerRadiusHelper.searchBarRadius(36)),
             color: ChatUIKitTheme.of(context).color.isDark
                 ? ChatUIKitTheme.of(context).color.neutralColor2
                 : ChatUIKitTheme.of(context).color.neutralColor95,

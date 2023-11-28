@@ -18,33 +18,23 @@ class ChatUIKitAvatar extends StatefulWidget {
 }
 
 class _ChatUIKitAvatarState extends State<ChatUIKitAvatar> {
-  late final CornerRadius cornerRadius;
   @override
   void initState() {
-    cornerRadius = widget.cornerRadius ?? ChatUIKitSettings.avatarRadius;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    double circular = 0;
-    if (cornerRadius == CornerRadius.extraSmall) {
-      circular = widget.size / 16;
-    } else if (cornerRadius == CornerRadius.small) {
-      circular = widget.size / 8;
-    } else if (cornerRadius == CornerRadius.medium) {
-      circular = widget.size / 4;
-    } else {
-      circular = widget.size / 2;
-    }
-
     Widget content = Container(
       width: widget.size,
       height: widget.size,
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: Colors.red,
-        borderRadius: BorderRadius.circular(circular),
+        borderRadius: BorderRadius.circular(CornerRadiusHelper.avatarRadius(
+          widget.size,
+          cornerRadius: widget.cornerRadius,
+        )),
       ),
     );
     return content;

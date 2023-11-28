@@ -110,7 +110,8 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
                 padding: const EdgeInsets.fromLTRB(6, 7, 0, 7),
                 clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(
+                      CornerRadiusHelper.searchBarRadius(36)),
                   color: theme.color.isDark
                       ? theme.color.neutralColor2
                       : theme.color.neutralColor95,
@@ -216,7 +217,8 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
           margin: const EdgeInsets.fromLTRB(8, 4, 8, 4),
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius:
+                BorderRadius.circular(CornerRadiusHelper.searchBarRadius(36)),
             color: ChatUIKitTheme.of(context).color.isDark
                 ? ChatUIKitTheme.of(context).color.neutralColor2
                 : ChatUIKitTheme.of(context).color.neutralColor95,

@@ -17,6 +17,7 @@ export 'ui/models/list_item_model.dart';
 export 'tools/chat_uikit_image_loader.dart';
 
 export 'universal/enums.dart';
+export 'tools/chat_uikit_helper.dart';
 
 export 'ui/widgets/chat_uikit_avatar.dart';
 export 'ui/widgets/chat_uikit_dialog.dart';

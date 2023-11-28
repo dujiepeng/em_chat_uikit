@@ -18,6 +18,7 @@ class ConversationListView extends StatefulWidget {
     this.reloadMessage,
     this.onTap,
     this.onLongPress,
+    this.enableLongPress = true,
     super.key,
   });
 
@@ -32,6 +33,7 @@ class ConversationListView extends StatefulWidget {
   final String? errorMessage;
   final String? reloadMessage;
   final ConversationListViewController? controller;
+  final bool enableLongPress;
 
   @override
   State<ConversationListView> createState() => _ConversationListViewState();
@@ -57,6 +59,11 @@ class _ConversationListViewState extends State<ConversationListView>
 
   @override
   void onMessagesReceived(List<Message> messages) {
+    controller.fetchItemList();
+  }
+
+  @override
+  void onConversationsUpdate() {
     controller.fetchItemList();
   }
 
@@ -98,7 +105,9 @@ class _ConversationListViewState extends State<ConversationListView>
                   widget.onTap?.call(model);
                 },
                 onLongPress: () {
-                  widget.onLongPress?.call(model);
+                  if (widget.enableLongPress) {
+                    widget.onLongPress?.call(model);
+                  }
                 },
                 child: SizedBox(
                   height: 76,

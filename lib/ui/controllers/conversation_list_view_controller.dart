@@ -73,6 +73,16 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
       }
     }
 
+    await updateMuteType(items);
+
+    if (hasMore) {
+      List<Conversation> tmp = await fetchConversations();
+      items.addAll(tmp);
+    }
+    return items;
+  }
+
+  Future<void> updateMuteType(List<Conversation> items) async {
     try {
       Map<String, ChatSilentModeResult> map =
           await ChatUIKit.instance.fetchSilentModel(conversations: items);
@@ -82,12 +92,6 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
     } catch (e) {
       debugPrint(e.toString());
     }
-
-    if (hasMore) {
-      List<Conversation> tmp = await fetchConversations();
-      items.addAll(tmp);
-    }
-    return items;
   }
 
   Future<List<ConversationItemModel>> mappers(

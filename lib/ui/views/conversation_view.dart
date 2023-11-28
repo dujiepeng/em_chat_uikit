@@ -82,7 +82,7 @@ class _ConversationViewState extends State<ConversationView> {
             },
         onLongPress: widget.onItemLongPress ??
             (ConversationItemModel model) {
-              showBottomSheet();
+              longPressed(model);
             },
         onSearchTap: widget.onSearchTap ?? onSearchTap,
       ),
@@ -114,5 +114,63 @@ class _ConversationViewState extends State<ConversationView> {
 
   void pushToMessageInfoPage() {}
 
-  void showBottomSheet() {}
+  void longPressed(ConversationItemModel model) {
+    showChatUIKitBottomSheet(
+      cancelTitle: '取消',
+      context: context,
+      items: [
+        ChatUIKitBottomSheetItem.normal(
+          label: model.noDisturb ? '取消静音' : '静音',
+          onTap: () async {
+            final type = model.profile.type == ChatUIKitProfileType.groupChat
+                ? ConversationType.GroupChat
+                : ConversationType.Chat;
+
+            if (model.noDisturb) {
+              ChatUIKit.instance.clearChatUIKitSilentMode(
+                conversationId: model.profile.id,
+                type: type,
+              );
+            } else {
+              ChatUIKit.instance.setChatUIKitSilentMode(
+                conversationId: model.profile.id,
+                type: type,
+              );
+            }
+
+            Navigator.of(context).pop();
+          },
+        ),
+        ChatUIKitBottomSheetItem.normal(
+          label: model.pinned ? '取消置顶' : '置顶',
+          onTap: () async {
+            ChatUIKit.instance.pinConversation(
+              conversationId: model.profile.id,
+              isPinned: !model.pinned,
+            );
+            Navigator.of(context).pop();
+          },
+        ),
+        if (model.unreadCount > 0)
+          ChatUIKitBottomSheetItem.normal(
+            label: '标记已读',
+            onTap: () async {
+              ChatUIKit.instance.markConversationAsRead(
+                conversationId: model.profile.id,
+              );
+              Navigator.of(context).pop();
+            },
+          ),
+        ChatUIKitBottomSheetItem.destructive(
+          label: '删除会话',
+          onTap: () async {
+            ChatUIKit.instance.deleteLocalConversation(
+              conversationId: model.profile.id,
+            );
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  }
 }

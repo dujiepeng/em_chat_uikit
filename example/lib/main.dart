@@ -17,18 +17,18 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> with ChatObserver {
+class _MyAppState extends State<MyApp> {
   bool isLight = true;
 
   @override
   void initState() {
     super.initState();
-    ChatUIKit.instance.addObserver(this);
   }
 
   @override
   Widget build(BuildContext context) {
-    // isLight = !isLight;
+    isLight = !isLight;
+    ChatUIKitSettings.avatarRadius = CornerRadius.medium;
     return MaterialApp(
       builder: EasyLoading.init(builder: (context, child) {
         return ChatUIKitTheme(

@@ -43,6 +43,16 @@ class ChatUIKitImageLoader {
     );
   }
 
+  static Widget noDisturb({double size = 20, Color? color}) {
+    return Image.asset(
+      'assets/images/no_disturb.png',
+      package: packageName,
+      width: size,
+      height: size,
+      color: color,
+    );
+  }
+
   static Widget defaultAvatar({double size = 30, Color? color}) {
     return Image.asset(
       'assets/images/avatar.png',

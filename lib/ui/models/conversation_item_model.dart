@@ -40,5 +40,11 @@ class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
   }
 
   @override
-  String get showName => profile.name ?? profile.id;
+  String get showName {
+    return profile.name ?? profile.id;
+  }
+
+  String? get avatarUrl {
+    return profile.avatarUrl;
+  }
 }

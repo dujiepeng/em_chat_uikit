@@ -58,7 +58,19 @@ mixin ChatActions on ChatWrapper {
   }
 
   Future<void> markAllConversationsAsRead() async {
-    return Client.getInstance.chatManager.markAllConversationsAsRead();
+   await Client.getInstance.chatManager.markAllConversationsAsRead();
+    super.onConversationsUpdate();
+  }
+
+  Future<void> markConversationAsRead({
+    required String conversationId,
+  }) async {
+    Conversation? conv = await Client.getInstance.chatManager.getConversation(
+      conversationId,
+    );
+
+    await conv?.markAllMessagesAsRead();
+    super.onConversationsUpdate();
   }
 
   Future<int> getUnreadMessageCount() async {
@@ -295,10 +307,11 @@ mixin ChatActions on ChatWrapper {
     required String conversationId,
     required bool isPinned,
   }) async {
-    return Client.getInstance.chatManager.pinConversation(
+  await  Client.getInstance.chatManager.pinConversation(
       conversationId: conversationId,
       isPinned: isPinned,
     );
+    super.onConversationsUpdate();
   }
 
   Future<Message> modifyMessage({

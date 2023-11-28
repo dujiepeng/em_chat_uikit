@@ -88,7 +88,7 @@ class ChatSDKWrapper extends ChatUIKitWrapperBase
     final options = Options(
       appKey: appkey,
       autoLogin: autoLogin,
-      debugModel: debugMode,
+      debugMode: debugMode,
     );
     await Client.getInstance.init(options);
   }
@@ -97,7 +97,7 @@ class ChatSDKWrapper extends ChatUIKitWrapperBase
     required String userId,
     required String password,
   }) async {
-    await Client.getInstance.login(userId, password);
+    await Client.getInstance.loginWithPassword(userId, password);
   }
 
   bool isLogin() {

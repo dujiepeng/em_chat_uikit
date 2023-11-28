@@ -30,7 +30,7 @@ mixin NotificationActions on NotificationWrapper {
     required ConversationType type,
     required ChatSilentModeParam param,
   }) async {
-    return Client.getInstance.pushManager.setConversationSilentMode(
+    await Client.getInstance.pushManager.setConversationSilentMode(
       conversationId: conversationId,
       type: type,
       param: param,
@@ -41,7 +41,7 @@ mixin NotificationActions on NotificationWrapper {
     required String conversationId,
     required ConversationType type,
   }) async {
-    return Client.getInstance.pushManager.removeConversationSilentMode(
+    await Client.getInstance.pushManager.removeConversationSilentMode(
       conversationId: conversationId,
       type: type,
     );
