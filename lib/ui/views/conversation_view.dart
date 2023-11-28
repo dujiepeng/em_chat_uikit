@@ -191,7 +191,7 @@ class _ConversationViewState extends State<ConversationView> {
           ),
           onTap: () async {
             Navigator.of(context).pop();
-            showNewConversations();
+            newConversations();
           },
         ),
         ChatUIKitBottomSheetItem.normal(
@@ -204,6 +204,7 @@ class _ConversationViewState extends State<ConversationView> {
           ),
           onTap: () async {
             Navigator.of(context).pop();
+            addContact();
           },
         ),
         ChatUIKitBottomSheetItem.normal(
@@ -222,7 +223,7 @@ class _ConversationViewState extends State<ConversationView> {
     );
   }
 
-  void showNewConversations() async {
+  void newConversations() async {
     ChatUIKitProfile profile = await showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -234,6 +235,31 @@ class _ConversationViewState extends State<ConversationView> {
       },
     );
 
+    // TODO: push chat page
     debugPrint('model: ${profile.id}');
+  }
+
+  void addContact() async {
+    showChatUIKitDialog(
+      borderType: ChatUIKitRectangleType.filletCorner,
+      title: '添加联系人',
+      content: '通过用户ID添加联系人',
+      context: context,
+      hintsText: ['输入用户ID'],
+      items: [
+        ChatUIKitDialogItem.cancel(
+          label: '取消',
+          onTap: () async {
+            return Navigator.of(context).pop();
+          },
+        ),
+        ChatUIKitDialogItem.inputsConfirm(
+          label: '添加',
+          onInputsTap: (inputs) async {
+            return Navigator.of(context).pop(inputs);
+          },
+        ),
+      ],
+    );
   }
 }

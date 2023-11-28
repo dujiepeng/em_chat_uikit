@@ -41,7 +41,7 @@ class _MyPageState extends State<MyPage> {
                 title: 'Sign in & Sign up',
                 content: 'Input your userId and password.',
                 context: context,
-                hintsText: ['UserId', 'Password'],
+                hintsText: ['UserId'],
                 items: [
                   ChatUIKitDialogItem.inputsConfirm(
                     label: 'SIGN IN',
