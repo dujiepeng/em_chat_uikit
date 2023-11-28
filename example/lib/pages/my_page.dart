@@ -49,8 +49,8 @@ class _MyPageState extends State<MyPage> {
                       return Navigator.of(context).pop(inputs);
                     },
                   ),
-                  ChatUIKitDialogItem.confirm(
-                    label: 'SIGN IN',
+                  ChatUIKitDialogItem.cancel(
+                    label: 'No',
                     onTap: () async {
                       return Navigator.of(context).pop();
                     },

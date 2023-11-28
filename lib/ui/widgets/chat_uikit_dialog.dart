@@ -43,6 +43,7 @@ enum ChatUIKitRectangleType {
 
 enum ChatUIKitDialogItemType {
   confirm,
+  inputConfirm,
   cancel,
   destructive,
 }
@@ -66,7 +67,7 @@ class ChatUIKitDialogItem<T> {
     required this.label,
     this.style,
     this.onInputsTap,
-  })  : type = ChatUIKitDialogItemType.confirm,
+  })  : type = ChatUIKitDialogItemType.inputConfirm,
         onTap = null;
 
   ChatUIKitDialogItem.destructive({
@@ -122,12 +123,25 @@ class ChatUIKitDialog<T> extends StatefulWidget {
 
 class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
   final List<TextEditingController> _controllers = [];
+  int inputConfirmCount = 0;
   @override
   void initState() {
     super.initState();
     widget.hintsText?.forEach((element) {
       _controllers.add(TextEditingController());
     });
+
+    for (var item in widget.items) {
+      if (item.type == ChatUIKitDialogItemType.inputConfirm) {
+        inputConfirmCount++;
+      }
+    }
+
+    if (_controllers.length == 1) {
+      _controllers.first.addListener(() {
+        setState(() {});
+      });
+    }
   }
 
   @override
@@ -163,11 +177,14 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
   }
 
   _buildContent(BuildContext context) {
+    final themeColor = ChatUIKitTheme.of(context).color;
+    final themeFont = ChatUIKitTheme.of(context).font;
+
     Widget contentWidget = Container(
       padding: const EdgeInsets.fromLTRB(0, 12, 0, 16),
-      color: (ChatUIKitTheme.of(context).color.isDark
-          ? ChatUIKitTheme.of(context).color.neutralColor1
-          : ChatUIKitTheme.of(context).color.neutralColor98),
+      color: (themeColor.isDark
+          ? themeColor.neutralColor1
+          : themeColor.neutralColor98),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -182,12 +199,10 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                 textAlign: TextAlign.center,
                 style: widget.titleStyle ??
                     TextStyle(
-                      fontWeight:
-                          ChatUIKitTheme.of(context).font.titleLarge.fontWeight,
-                      fontSize:
-                          ChatUIKitTheme.of(context).font.titleLarge.fontSize,
-                      color: ChatUIKitTheme.of(context).color.isDark
-                          ? ChatUIKitTheme.of(context).color.neutralColor98
+                      fontWeight: themeFont.titleLarge.fontWeight,
+                      fontSize: themeFont.titleLarge.fontSize,
+                      color: themeColor.isDark
+                          ? themeColor.neutralColor98
                           : Colors.black,
                     ),
               ),
@@ -203,15 +218,11 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                 textAlign: TextAlign.center,
                 style: widget.contentStyle ??
                     TextStyle(
-                      fontWeight: ChatUIKitTheme.of(context)
-                          .font
-                          .labelMedium
-                          .fontWeight,
-                      fontSize:
-                          ChatUIKitTheme.of(context).font.labelMedium.fontSize,
-                      color: (ChatUIKitTheme.of(context).color.isDark
-                          ? ChatUIKitTheme.of(context).color.neutralColor6
-                          : ChatUIKitTheme.of(context).color.neutralColor5),
+                      fontWeight: themeFont.labelMedium.fontWeight,
+                      fontSize: themeFont.labelMedium.fontSize,
+                      color: (themeColor.isDark
+                          ? themeColor.neutralColor6
+                          : themeColor.neutralColor5),
                     ),
               ),
             ),
@@ -239,9 +250,9 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                         }
                       }(),
                       color: () {
-                        return (ChatUIKitTheme.of(context).color.isDark
-                            ? ChatUIKitTheme.of(context).color.neutralColor2
-                            : ChatUIKitTheme.of(context).color.neutralColor95);
+                        return (themeColor.isDark
+                            ? themeColor.neutralColor2
+                            : themeColor.neutralColor95);
                       }(),
                     ),
                     height: 48,
@@ -249,37 +260,41 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                       padding: const EdgeInsets.only(left: 14, right: 14),
                       child: TextField(
                         style: TextStyle(
-                            fontWeight: ChatUIKitTheme.of(context)
-                                .font
-                                .bodyLarge
-                                .fontWeight,
-                            fontSize: ChatUIKitTheme.of(context)
-                                .font
-                                .bodyLarge
-                                .fontSize,
-                            color: ChatUIKitTheme.of(context).color.isDark
+                            fontWeight: themeFont.bodyLarge.fontWeight,
+                            fontSize: themeFont.bodyLarge.fontSize,
+                            color: themeColor.isDark
                                 ? Colors.white
                                 : Colors.black),
                         controller: _controllers[i],
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintStyle: TextStyle(
-                              fontWeight: ChatUIKitTheme.of(context)
-                                  .font
-                                  .bodyLarge
-                                  .fontWeight,
-                              fontSize: ChatUIKitTheme.of(context)
-                                  .font
-                                  .bodyLarge
-                                  .fontSize,
-                              color: ChatUIKitTheme.of(context).color.isDark
-                                  ? ChatUIKitTheme.of(context)
-                                      .color
-                                      .neutralColor4
-                                  : ChatUIKitTheme.of(context)
-                                      .color
-                                      .neutralColor6),
+                              fontWeight: themeFont.bodyLarge.fontWeight,
+                              fontSize: themeFont.bodyLarge.fontSize,
+                              color: themeColor.isDark
+                                  ? themeColor.neutralColor4
+                                  : themeColor.neutralColor6),
                           hintText: widget.hintsText![i],
+                          suffixIconConstraints: const BoxConstraints(),
+                          suffixIcon: () {
+                            if (_controllers.length == 1) {
+                              if (_controllers.first.text.isNotEmpty) {
+                                return InkWell(
+                                  onTap: () {
+                                    _controllers.first.clear();
+                                  },
+                                  child: Icon(
+                                    Icons.cancel,
+                                    color: themeColor.isDark
+                                        ? themeColor.neutralColor8
+                                        : themeColor.neutralColor3,
+                                  ),
+                                );
+                              }
+                            } else {
+                              return null;
+                            }
+                          }(),
                         ),
                       ),
                     ),
@@ -297,12 +312,22 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
               widgets.add(
                 InkWell(
                   onTap: () {
-                    if (item.onInputsTap != null) {
-                      List<String> inputs = [];
-                      for (var controller in _controllers) {
-                        inputs.add(controller.text);
+                    if (item.type == ChatUIKitDialogItemType.inputConfirm) {
+                      if (inputConfirmCount == 1 && _controllers.length == 1) {
+                        if (_controllers.first.text.isNotEmpty == true) {
+                          List<String> inputs = [];
+                          for (var controller in _controllers) {
+                            inputs.add(controller.text);
+                          }
+                          item.onInputsTap?.call(inputs);
+                        }
+                      } else {
+                        List<String> inputs = [];
+                        for (var controller in _controllers) {
+                          inputs.add(controller.text);
+                        }
+                        item.onInputsTap?.call(inputs);
                       }
-                      item.onInputsTap?.call(inputs);
                     } else {
                       item.onTap?.call();
                     }
@@ -327,35 +352,67 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                         color: () {
                           if (item.type ==
                               ChatUIKitDialogItemType.destructive) {
-                            return (ChatUIKitTheme.of(context).color.isDark
-                                ? ChatUIKitTheme.of(context).color.errorColor6
-                                : ChatUIKitTheme.of(context).color.errorColor5);
+                            return (themeColor.isDark
+                                ? themeColor.errorColor6
+                                : themeColor.errorColor5);
                           } else if (item.type ==
                               ChatUIKitDialogItemType.confirm) {
-                            return (ChatUIKitTheme.of(context).color.isDark
-                                ? ChatUIKitTheme.of(context).color.primaryColor6
-                                : ChatUIKitTheme.of(context)
-                                    .color
-                                    .primaryColor5);
+                            return (themeColor.isDark
+                                ? themeColor.primaryColor6
+                                : themeColor.primaryColor5);
+                          } else if (item.type ==
+                              ChatUIKitDialogItemType.inputConfirm) {
+                            if (_controllers.length == 1 &&
+                                inputConfirmCount == 1) {
+                              if (_controllers.first.text.isNotEmpty == true) {
+                                return (themeColor.isDark
+                                    ? themeColor.primaryColor6
+                                    : themeColor.neutralColor95);
+                              } else {
+                                return (themeColor.isDark
+                                    ? themeColor.neutralColor3
+                                    : themeColor.neutralColor95);
+                              }
+                            } else {
+                              return (themeColor.isDark
+                                  ? themeColor.primaryColor6
+                                  : themeColor.primaryColor5);
+                            }
                           } else {
-                            return (ChatUIKitTheme.of(context).color.isDark
-                                ? ChatUIKitTheme.of(context).color.neutralColor4
-                                : ChatUIKitTheme.of(context)
-                                    .color
-                                    .neutralColor7);
+                            return (themeColor.isDark
+                                ? themeColor.neutralColor4
+                                : themeColor.neutralColor7);
                           }
                         }(),
                       ),
                       color: () {
                         if (item.type == ChatUIKitDialogItemType.destructive) {
-                          return (ChatUIKitTheme.of(context).color.isDark
-                              ? ChatUIKitTheme.of(context).color.errorColor6
-                              : ChatUIKitTheme.of(context).color.errorColor5);
+                          return (themeColor.isDark
+                              ? themeColor.errorColor6
+                              : themeColor.errorColor5);
                         } else if (item.type ==
                             ChatUIKitDialogItemType.confirm) {
-                          return (ChatUIKitTheme.of(context).color.isDark
-                              ? ChatUIKitTheme.of(context).color.primaryColor6
-                              : ChatUIKitTheme.of(context).color.primaryColor5);
+                          return (themeColor.isDark
+                              ? themeColor.primaryColor6
+                              : themeColor.primaryColor5);
+                        } else if (item.type ==
+                            ChatUIKitDialogItemType.inputConfirm) {
+                          if (_controllers.length == 1 &&
+                              inputConfirmCount == 1) {
+                            if (_controllers.first.text.isNotEmpty == true) {
+                              return (themeColor.isDark
+                                  ? themeColor.primaryColor6
+                                  : themeColor.primaryColor5);
+                            } else {
+                              return (themeColor.isDark
+                                  ? themeColor.neutralColor3
+                                  : themeColor.neutralColor95);
+                            }
+                          } else {
+                            return (themeColor.isDark
+                                ? themeColor.primaryColor6
+                                : themeColor.primaryColor5);
+                          }
                         }
                       }(),
                     ),
@@ -363,38 +420,41 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                       child: Text(
                         item.label,
                         style: TextStyle(
-                          fontSize: ChatUIKitTheme.of(context)
-                              .font
-                              .headlineSmall
-                              .fontSize,
-                          fontWeight: ChatUIKitTheme.of(context)
-                              .font
-                              .headlineSmall
-                              .fontWeight,
+                          fontSize: themeFont.headlineSmall.fontSize,
+                          fontWeight: themeFont.headlineSmall.fontWeight,
                           color: () {
                             if (item.type ==
                                 ChatUIKitDialogItemType.destructive) {
-                              return (ChatUIKitTheme.of(context).color.isDark
-                                  ? ChatUIKitTheme.of(context)
-                                      .color
-                                      .neutralColor98
-                                  : ChatUIKitTheme.of(context)
-                                      .color
-                                      .neutralColor98);
+                              return (themeColor.isDark
+                                  ? themeColor.neutralColor98
+                                  : themeColor.neutralColor98);
                             } else if (item.type ==
                                 ChatUIKitDialogItemType.confirm) {
-                              return (ChatUIKitTheme.of(context).color.isDark
-                                  ? ChatUIKitTheme.of(context)
-                                      .color
-                                      .neutralColor98
-                                  : ChatUIKitTheme.of(context)
-                                      .color
-                                      .neutralColor98);
+                              return (themeColor.isDark
+                                  ? themeColor.neutralColor98
+                                  : themeColor.neutralColor98);
+                            } else if (item.type ==
+                                ChatUIKitDialogItemType.inputConfirm) {
+                              if (_controllers.length == 1 &&
+                                  inputConfirmCount == 1) {
+                                if (_controllers.first.text.isNotEmpty ==
+                                    true) {
+                                  return themeColor.isDark
+                                      ? themeColor.neutralColor98
+                                      : themeColor.neutralColor98;
+                                } else {
+                                  return (themeColor.isDark
+                                      ? themeColor.neutralColor5
+                                      : themeColor.neutralColor7);
+                                }
+                              } else {
+                                return themeColor.isDark
+                                    ? themeColor.neutralColor98
+                                    : Colors.black;
+                              }
                             } else {
-                              return ChatUIKitTheme.of(context).color.isDark
-                                  ? ChatUIKitTheme.of(context)
-                                      .color
-                                      .neutralColor98
+                              return themeColor.isDark
+                                  ? themeColor.neutralColor98
                                   : Colors.black;
                             }
                           }(),
