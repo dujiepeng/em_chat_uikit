@@ -35,3 +35,4 @@ typedef FetchMessageOptions = chat.FetchMessageOptions;
 typedef SearchDirection = chat.EMSearchDirection;
 typedef ChatType = chat.ChatType;
 typedef MessageType = chat.MessageType;
+typedef GroupStyle = chat.EMGroupStyle;

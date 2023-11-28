@@ -2,10 +2,11 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit/ui/widgets/chat_uikit_search_item.dart';
 import 'package:flutter/material.dart';
 
-class SearchView extends StatefulWidget {
-  const SearchView({
+class SearchContactsView extends StatefulWidget {
+  const SearchContactsView({
     required this.searchData,
     required this.searchHideText,
+    this.itemBuilder,
     this.onTap,
     super.key,
   });
@@ -13,12 +14,14 @@ class SearchView extends StatefulWidget {
   final List<NeedSearch> searchData;
   final String searchHideText;
   final void Function(BuildContext context, ChatUIKitProfile profile)? onTap;
+  final Widget Function(BuildContext context, ChatUIKitProfile profile,
+      String? searchKeyword)? itemBuilder;
 
   @override
-  State<SearchView> createState() => _SearchViewState();
+  State<SearchContactsView> createState() => _SearchContactsViewState();
 }
 
-class _SearchViewState extends State<SearchView> {
+class _SearchContactsViewState extends State<SearchContactsView> {
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
@@ -28,6 +31,11 @@ class _SearchViewState extends State<SearchView> {
             enableSearchBar: false,
             itemBuilder: (context, model) {
               if (model is NeedSearch) {
+                if (widget.itemBuilder != null) {
+                  return widget.itemBuilder!
+                      .call(context, model.profile, searchKeyword);
+                }
+
                 return InkWell(
                   onTap: () {
                     widget.onTap?.call(context, model.profile);

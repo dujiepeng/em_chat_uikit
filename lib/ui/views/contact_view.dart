@@ -109,7 +109,7 @@ class _ContactViewState extends State<ContactView> {
       isScrollControlled: true,
       context: context,
       builder: (context) {
-        return SearchView(
+        return SearchContactsView(
           onTap: (ctx, profile) {
             Navigator.of(ctx).pop();
             debugPrint('onTap: ${profile.id}');

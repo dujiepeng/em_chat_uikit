@@ -40,6 +40,6 @@ export 'ui/components/contact_list_view.dart';
 
 export 'ui/views/conversation_view.dart';
 export 'ui/views/contact_view.dart';
-export 'ui/views/search_view.dart';
+export 'ui/views/search_contacts_view.dart';
 
 export 'ui/widgets/chat_uikit_app_bar.dart';

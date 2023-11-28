@@ -1,5 +1,6 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit/ui/views/new_conversation_view.dart';
+import 'package:em_chat_uikit/ui/views/new_group_view.dart';
 
 import 'package:flutter/material.dart';
 
@@ -101,7 +102,7 @@ class _ConversationViewState extends State<ConversationView> {
       isScrollControlled: true,
       context: context,
       builder: (context) {
-        return SearchView(
+        return SearchContactsView(
           onTap: (ctx, profile) {
             Navigator.of(ctx).pop();
             debugPrint('onTap: ${profile.id}');
@@ -217,6 +218,7 @@ class _ConversationViewState extends State<ConversationView> {
           ),
           onTap: () async {
             Navigator.of(context).pop();
+            newGroup();
           },
         ),
       ],
@@ -224,7 +226,7 @@ class _ConversationViewState extends State<ConversationView> {
   }
 
   void newConversations() async {
-    ChatUIKitProfile profile = await showModalBottomSheet(
+    ChatUIKitProfile? profile = await showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (context) {
@@ -235,12 +237,14 @@ class _ConversationViewState extends State<ConversationView> {
       },
     );
 
-    // TODO: push chat page
-    debugPrint('model: ${profile.id}');
+    if (profile != null) {
+      // TODO: push chat page
+      debugPrint('profile: ${profile.id}');
+    }
   }
 
   void addContact() async {
-    showChatUIKitDialog(
+    String? userId = await showChatUIKitDialog(
       borderType: ChatUIKitRectangleType.filletCorner,
       title: '添加联系人',
       content: '通过用户ID添加联系人',
@@ -250,16 +254,48 @@ class _ConversationViewState extends State<ConversationView> {
         ChatUIKitDialogItem.cancel(
           label: '取消',
           onTap: () async {
-            return Navigator.of(context).pop();
+            Navigator.of(context).pop();
           },
         ),
         ChatUIKitDialogItem.inputsConfirm(
           label: '添加',
           onInputsTap: (inputs) async {
-            return Navigator.of(context).pop(inputs);
+            Navigator.of(context).pop(inputs);
           },
         ),
       ],
     );
+
+    if (userId?.isNotEmpty == true) {
+      // TODO: add contact.
+    }
+  }
+
+  void newGroup() async {
+    List<ChatUIKitProfile>? profiles = await showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.95,
+          child: const NewGroupView(),
+        );
+      },
+    );
+
+    if (profiles?.isNotEmpty == true) {
+      List<String> userIds = [];
+      for (var item in profiles!) {
+        userIds.add(item.id);
+      }
+      await ChatUIKit.instance.createGroup(
+        groupName: 'groupName',
+        options: GroupOptions(
+          maxCount: 2000,
+          style: GroupStyle.PrivateMemberCanInvite,
+        ),
+        inviteMembers: userIds,
+      );
+    }
   }
 }

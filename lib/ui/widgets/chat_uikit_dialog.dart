@@ -88,8 +88,8 @@ class ChatUIKitDialogItem<T> {
   final ChatUIKitDialogItemType type;
   final String label;
   final TextStyle? style;
-  final Future<T?> Function()? onTap;
-  final Future<T?> Function(List<String> inputs)? onInputsTap;
+  final Future<void> Function()? onTap;
+  final Future<void> Function(List<String> inputs)? onInputsTap;
 }
 
 class ChatUIKitDialog<T> extends StatefulWidget {

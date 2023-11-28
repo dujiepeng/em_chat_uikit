@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    isLight = !isLight;
+    // isLight = !isLight;
     ChatUIKitSettings.avatarRadius = CornerRadius.medium;
     return MaterialApp(
       builder: EasyLoading.init(builder: (context, child) {
