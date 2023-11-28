@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/ui/views/new_conversation_view.dart';
 
 import 'package:flutter/material.dart';
 
@@ -49,8 +50,6 @@ class _ConversationViewState extends State<ConversationView> {
       appBar: widget.appBar ??
           ChatUIKitAppBar(
             title: 'Chats',
-            subTitle: 'Online',
-            centerTitle: false,
             titleTextStyle: TextStyle(
               color: theme.color.isDark
                   ? theme.color.primaryColor6
@@ -58,15 +57,17 @@ class _ConversationViewState extends State<ConversationView> {
               fontSize: theme.font.titleLarge.fontSize,
               fontWeight: FontWeight.w900,
             ),
-            autoBackButton: true,
-            leading: const ChatUIKitAvatar(size: 32),
+            leading: Container(
+              margin: const EdgeInsets.fromLTRB(12, 6, 12, 6),
+              child: const ChatUIKitAvatar(size: 32),
+            ),
             trailing: IconButton(
               iconSize: 24,
               color: theme.color.isDark
                   ? theme.color.neutralColor95
                   : theme.color.neutralColor3,
               icon: const Icon(Icons.add_circle_outline),
-              onPressed: () {},
+              onPressed: showMoreInfo,
             ),
           ),
       body: ConversationListView(
@@ -78,7 +79,7 @@ class _ConversationViewState extends State<ConversationView> {
         background: widget.listViewBackground,
         onTap: widget.onItemTap ??
             (ConversationItemModel model) {
-              pushToMessageInfoPage();
+              pushToMessagePage();
             },
         onLongPress: widget.onItemLongPress ??
             (ConversationItemModel model) {
@@ -112,7 +113,7 @@ class _ConversationViewState extends State<ConversationView> {
     );
   }
 
-  void pushToMessageInfoPage() {}
+  void pushToMessagePage() {}
 
   void longPressed(ConversationItemModel model) {
     showChatUIKitBottomSheet(
@@ -172,5 +173,67 @@ class _ConversationViewState extends State<ConversationView> {
         ),
       ],
     );
+  }
+
+  void showMoreInfo() {
+    final theme = ChatUIKitTheme.of(context);
+    showChatUIKitBottomSheet(
+      cancelTitle: '取消',
+      context: context,
+      items: [
+        ChatUIKitBottomSheetItem.normal(
+          label: '发起新会话',
+          icon: Icon(
+            Icons.message,
+            color: theme.color.isDark
+                ? theme.color.primaryColor5
+                : theme.color.primaryColor5,
+          ),
+          onTap: () async {
+            Navigator.of(context).pop();
+            showNewConversations();
+          },
+        ),
+        ChatUIKitBottomSheetItem.normal(
+          label: '添加联系人',
+          icon: Icon(
+            Icons.person_add_alt_1,
+            color: theme.color.isDark
+                ? theme.color.primaryColor5
+                : theme.color.primaryColor5,
+          ),
+          onTap: () async {
+            Navigator.of(context).pop();
+          },
+        ),
+        ChatUIKitBottomSheetItem.normal(
+          label: '创建群组',
+          icon: Icon(
+            Icons.group,
+            color: theme.color.isDark
+                ? theme.color.primaryColor5
+                : theme.color.primaryColor5,
+          ),
+          onTap: () async {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  }
+
+  void showNewConversations() async {
+    ChatUIKitProfile profile = await showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.95,
+          child: const NewConversationView(),
+        );
+      },
+    );
+
+    debugPrint('model: ${profile.id}');
   }
 }

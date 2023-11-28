@@ -45,12 +45,14 @@ class ChatUIKitBottomSheetItem<T> {
     required this.label,
     this.style,
     this.onTap,
+    this.icon,
   }) : type = ChatUIKitBottomSheetItemType.normal;
 
   ChatUIKitBottomSheetItem.destructive({
     required this.label,
     this.style,
     this.onTap,
+    this.icon,
   }) : type = ChatUIKitBottomSheetItemType.destructive;
 
   ChatUIKitBottomSheetItem({
@@ -58,11 +60,13 @@ class ChatUIKitBottomSheetItem<T> {
     required this.label,
     this.style,
     this.onTap,
+    this.icon,
   });
 
   final ChatUIKitBottomSheetItemType type;
   final String label;
   final TextStyle? style;
+  final Widget? icon;
   final Future<T?> Function()? onTap;
 }
 
@@ -162,13 +166,33 @@ class ChatUIKitBottomSheet<T> extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 17),
             alignment: Alignment.center,
-            child: Text(
-              element.label,
-              style: element.style ??
-                  (element.type == ChatUIKitBottomSheetItemType.normal
-                      ? normalStyle
-                      : destructive),
-            ),
+            child: element.icon != null
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Container(
+                        width: 24,
+                        height: 24,
+                        margin: const EdgeInsets.fromLTRB(16, 4, 4, 4),
+                        child: element.icon,
+                      ),
+                      Text(
+                        element.label,
+                        style: element.style ??
+                            (element.type == ChatUIKitBottomSheetItemType.normal
+                                ? normalStyle
+                                : destructive),
+                      ),
+                    ],
+                  )
+                : Text(
+                    element.label,
+                    style: element.style ??
+                        (element.type == ChatUIKitBottomSheetItemType.normal
+                            ? normalStyle
+                            : destructive),
+                  ),
           ),
         ),
       );

@@ -180,8 +180,16 @@ class ChatUIKitConversationItem extends StatelessWidget {
     );
     content = Container(
       padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
+      color: model.pinned
+          ? (theme.color.isDark
+              ? theme.color.neutralColor2
+              : theme.color.neutralColor9)
+          : theme.color.isDark
+              ? theme.color.neutralColor1
+              : theme.color.neutralColor98,
       child: content,
     );
+
     content = Column(
       mainAxisSize: MainAxisSize.max,
       children: [
