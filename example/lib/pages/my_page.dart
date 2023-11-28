@@ -49,7 +49,7 @@ class _MyPageState extends State<MyPage> {
                       return Navigator.of(context).pop(inputs);
                     },
                   ),
-                  ChatUIKitDialogItem.cancel(
+                  ChatUIKitDialogItem.confirm(
                     label: 'No',
                     onTap: () async {
                       return Navigator.of(context).pop();

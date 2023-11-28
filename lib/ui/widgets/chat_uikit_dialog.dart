@@ -123,7 +123,7 @@ class ChatUIKitDialog<T> extends StatefulWidget {
 
 class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
   final List<TextEditingController> _controllers = [];
-  int inputConfirmCount = 0;
+  int confirmCount = 0;
   @override
   void initState() {
     super.initState();
@@ -132,13 +132,14 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
     });
 
     for (var item in widget.items) {
-      if (item.type == ChatUIKitDialogItemType.inputConfirm) {
-        inputConfirmCount++;
+      if (item.type == ChatUIKitDialogItemType.inputConfirm ||
+          item.type == ChatUIKitDialogItemType.confirm) {
+        confirmCount++;
       }
     }
 
-    if (_controllers.length == 1) {
-      _controllers.first.addListener(() {
+    for (var element in _controllers) {
+      element.addListener(() {
         setState(() {});
       });
     }
@@ -277,22 +278,18 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                           hintText: widget.hintsText![i],
                           suffixIconConstraints: const BoxConstraints(),
                           suffixIcon: () {
-                            if (_controllers.length == 1) {
-                              if (_controllers.first.text.isNotEmpty) {
-                                return InkWell(
-                                  onTap: () {
-                                    _controllers.first.clear();
-                                  },
-                                  child: Icon(
-                                    Icons.cancel,
-                                    color: themeColor.isDark
-                                        ? themeColor.neutralColor8
-                                        : themeColor.neutralColor3,
-                                  ),
-                                );
-                              }
-                            } else {
-                              return null;
+                            if (_controllers[i].text.isNotEmpty) {
+                              return InkWell(
+                                onTap: () {
+                                  _controllers[i].clear();
+                                },
+                                child: Icon(
+                                  Icons.cancel,
+                                  color: themeColor.isDark
+                                      ? themeColor.neutralColor8
+                                      : themeColor.neutralColor3,
+                                ),
+                              );
                             }
                           }(),
                         ),
@@ -313,7 +310,7 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                 InkWell(
                   onTap: () {
                     if (item.type == ChatUIKitDialogItemType.inputConfirm) {
-                      if (inputConfirmCount == 1 && _controllers.length == 1) {
+                      if (confirmCount == 1 && _controllers.length == 1) {
                         if (_controllers.first.text.isNotEmpty == true) {
                           List<String> inputs = [];
                           for (var controller in _controllers) {
@@ -362,8 +359,7 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                                 : themeColor.primaryColor5);
                           } else if (item.type ==
                               ChatUIKitDialogItemType.inputConfirm) {
-                            if (_controllers.length == 1 &&
-                                inputConfirmCount == 1) {
+                            if (_controllers.length == 1 && confirmCount == 1) {
                               if (_controllers.first.text.isNotEmpty == true) {
                                 return (themeColor.isDark
                                     ? themeColor.primaryColor6
@@ -397,8 +393,7 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                               : themeColor.primaryColor5);
                         } else if (item.type ==
                             ChatUIKitDialogItemType.inputConfirm) {
-                          if (_controllers.length == 1 &&
-                              inputConfirmCount == 1) {
+                          if (_controllers.length == 1 && confirmCount == 1) {
                             if (_controllers.first.text.isNotEmpty == true) {
                               return (themeColor.isDark
                                   ? themeColor.primaryColor6
@@ -436,7 +431,7 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                             } else if (item.type ==
                                 ChatUIKitDialogItemType.inputConfirm) {
                               if (_controllers.length == 1 &&
-                                  inputConfirmCount == 1) {
+                                  confirmCount == 1) {
                                 if (_controllers.first.text.isNotEmpty ==
                                     true) {
                                   return themeColor.isDark
@@ -450,7 +445,7 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                               } else {
                                 return themeColor.isDark
                                     ? themeColor.neutralColor98
-                                    : Colors.black;
+                                    : themeColor.neutralColor98;
                               }
                             } else {
                               return themeColor.isDark
