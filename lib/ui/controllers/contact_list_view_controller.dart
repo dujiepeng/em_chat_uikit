@@ -19,7 +19,7 @@ class ContactListViewController with ChatUIKitListViewControllerBase {
     // }();
     try {
       if (items.isEmpty && !ChatUIKitContext.instance.isContactLoadFinished()) {
-        items = await fetchContacts();
+        items = await _fetchContacts();
       }
       List<ContactItemModel> tmp = mappers(items);
       list.clear();
@@ -36,7 +36,7 @@ class ContactListViewController with ChatUIKitListViewControllerBase {
     return list;
   }
 
-  Future<List<String>> fetchContacts() async {
+  Future<List<String>> _fetchContacts() async {
     List<String> result = await ChatUIKit.instance.fetchAllContacts();
     ChatUIKitContext.instance.setContactLoadFinished();
     return result;

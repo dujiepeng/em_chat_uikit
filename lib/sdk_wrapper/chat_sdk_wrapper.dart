@@ -80,6 +80,7 @@ class ChatSDKWrapper extends ChatUIKitWrapperBase
       debugMode: debugMode,
     );
     await Client.getInstance.init(options);
+    Client.getInstance.startCallback();
   }
 
   Future<void> login({
@@ -87,6 +88,7 @@ class ChatSDKWrapper extends ChatUIKitWrapperBase
     required String password,
   }) async {
     await Client.getInstance.loginWithPassword(userId, password);
+    Client.getInstance.startCallback();
   }
 
   Future<void> logout() async {
