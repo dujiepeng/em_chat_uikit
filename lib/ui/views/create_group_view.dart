@@ -1,10 +1,9 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:em_chat_uikit/ui/widgets/chat_uikit_search_item.dart';
 
 import 'package:flutter/material.dart';
 
-class NewGroupView extends StatefulWidget {
-  const NewGroupView({
+class CreateGroupView extends StatefulWidget {
+  const CreateGroupView({
     this.listViewItemBuilder,
     this.onSearchTap,
     this.fakeSearchHideText,
@@ -27,10 +26,10 @@ class NewGroupView extends StatefulWidget {
   final Widget? listViewBackground;
 
   @override
-  State<NewGroupView> createState() => _NewGroupViewState();
+  State<CreateGroupView> createState() => _CreateGroupViewState();
 }
 
-class _NewGroupViewState extends State<NewGroupView> {
+class _CreateGroupViewState extends State<CreateGroupView> {
   late final ContactListViewController controller;
   final ValueNotifier<List<ChatUIKitProfile>> selectedProfiles =
       ValueNotifier<List<ChatUIKitProfile>>([]);
@@ -52,14 +51,19 @@ class _NewGroupViewState extends State<NewGroupView> {
       appBar: widget.appBar ??
           ChatUIKitAppBar(
             autoBackButton: true,
-            leading: Text(
-              '新群组',
-              style: TextStyle(
-                color: theme.color.isDark
-                    ? theme.color.neutralColor98
-                    : theme.color.neutralColor1,
-                fontWeight: theme.font.titleMedium.fontWeight,
-                fontSize: theme.font.titleMedium.fontSize,
+            leading: InkWell(
+              onTap: () {
+                Navigator.maybePop(context);
+              },
+              child: Text(
+                '新群组',
+                style: TextStyle(
+                  color: theme.color.isDark
+                      ? theme.color.neutralColor98
+                      : theme.color.neutralColor1,
+                  fontWeight: theme.font.titleMedium.fontWeight,
+                  fontSize: theme.font.titleMedium.fontSize,
+                ),
               ),
             ),
             trailing: InkWell(

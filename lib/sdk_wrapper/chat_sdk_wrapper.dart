@@ -1,19 +1,8 @@
 library chat_sdk_wrapper;
 
+import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit/sdk_wrapper/actions/contact_actions.dart';
 import 'package:flutter/material.dart';
-
-import 'actions/chat_actions.dart';
-import 'actions/group_actions.dart';
-import 'actions/notification_actions.dart';
-import 'typedef_define.dart';
-import 'wrappers/chat_wrapper.dart';
-import 'wrappers/connect_wrapper.dart';
-import 'wrappers/contact_wrapper.dart';
-import 'wrappers/group_wrapper.dart';
-import 'wrappers/message_wrapper.dart';
-import 'wrappers/multi_wrapper.dart';
-import 'wrappers/notification_wrapper.dart';
 
 export 'actions/chat_actions.dart';
 export 'actions/group_actions.dart';
@@ -98,6 +87,10 @@ class ChatSDKWrapper extends ChatUIKitWrapperBase
     required String password,
   }) async {
     await Client.getInstance.loginWithPassword(userId, password);
+  }
+
+  Future<void> logout() async {
+    await Client.getInstance.logout();
   }
 
   bool isLogin() {

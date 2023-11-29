@@ -41,51 +41,63 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
   @protected
   void onGroupDestroyed(String groupId, String? groupName) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver).onGroupDestroyed(groupId, groupName);
+      if (observer is GroupObserver) {
+        observer.onGroupDestroyed(groupId, groupName);
+      }
     }
   }
 
   @protected
   void onAdminAddedFromGroup(String groupId, String admin) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver).onAdminAddedFromGroup(groupId, admin);
+      if (observer is GroupObserver) {
+        observer.onAdminAddedFromGroup(groupId, admin);
+      }
     }
   }
 
   @protected
   void onAdminRemovedFromGroup(String groupId, String admin) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver).onAdminRemovedFromGroup(groupId, admin);
+      if (observer is GroupObserver) {
+        observer.onAdminRemovedFromGroup(groupId, admin);
+      }
     }
   }
 
   @protected
   void onAllGroupMemberMuteStateChanged(String groupId, bool isAllMuted) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver)
-          .onAllGroupMemberMuteStateChanged(groupId, isAllMuted);
+      if (observer is GroupObserver) {
+        observer.onAllGroupMemberMuteStateChanged(groupId, isAllMuted);
+      }
     }
   }
 
   @protected
   void onAllowListAddedFromGroup(String groupId, List<String> members) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver).onAllowListAddedFromGroup(groupId, members);
+      if (observer is GroupObserver) {
+        observer.onAllowListAddedFromGroup(groupId, members);
+      }
     }
   }
 
   @protected
   void onAllowListRemovedFromGroup(String groupId, List<String> members) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver).onAllowListRemovedFromGroup(groupId, members);
+      if (observer is GroupObserver) {
+        observer.onAllowListRemovedFromGroup(groupId, members);
+      }
     }
   }
 
   @protected
   void onAnnouncementChangedFromGroup(String groupId, String announcement) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver)
-          .onAnnouncementChangedFromGroup(groupId, announcement);
+      if (observer is GroupObserver) {
+        observer.onAnnouncementChangedFromGroup(groupId, announcement);
+      }
     }
   }
 
@@ -93,8 +105,10 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
   void onAutoAcceptInvitationFromGroup(
       String groupId, String inviter, String? inviteMessage) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver)
-          .onAutoAcceptInvitationFromGroup(groupId, inviter, inviteMessage);
+      if (observer is GroupObserver) {
+        observer.onAutoAcceptInvitationFromGroup(
+            groupId, inviter, inviteMessage);
+      }
     }
   }
 
@@ -102,8 +116,9 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
   void onInvitationAcceptedFromGroup(
       String groupId, String invitee, String? reason) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver)
-          .onInvitationAcceptedFromGroup(groupId, invitee, reason);
+      if (observer is GroupObserver) {
+        observer.onInvitationAcceptedFromGroup(groupId, invitee, reason);
+      }
     }
   }
 
@@ -111,8 +126,9 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
   void onInvitationDeclinedFromGroup(
       String groupId, String invitee, String? reason) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver)
-          .onInvitationDeclinedFromGroup(groupId, invitee, reason);
+      if (observer is GroupObserver) {
+        observer.onInvitationDeclinedFromGroup(groupId, invitee, reason);
+      }
     }
   }
 
@@ -120,22 +136,28 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
   void onInvitationReceivedFromGroup(
       String groupId, String? groupName, String inviter, String? reason) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver)
-          .onInvitationReceivedFromGroup(groupId, groupName, inviter, reason);
+      if (observer is GroupObserver) {
+        observer.onInvitationReceivedFromGroup(
+            groupId, groupName, inviter, reason);
+      }
     }
   }
 
   @protected
   void onMemberExitedFromGroup(String groupId, String member) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver).onMemberExitedFromGroup(groupId, member);
+      if (observer is GroupObserver) {
+        observer.onMemberExitedFromGroup(groupId, member);
+      }
     }
   }
 
   @protected
   void onMemberJoinedFromGroup(String groupId, String member) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver).onMemberJoinedFromGroup(groupId, member);
+      if (observer is GroupObserver) {
+        observer.onMemberJoinedFromGroup(groupId, member);
+      }
     }
   }
 
@@ -143,15 +165,18 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
   void onMuteListAddedFromGroup(
       String groupId, List<String> mutes, int? muteExpire) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver)
-          .onMuteListAddedFromGroup(groupId, mutes, muteExpire);
+      if (observer is GroupObserver) {
+        observer.onMuteListAddedFromGroup(groupId, mutes, muteExpire);
+      }
     }
   }
 
   @protected
   void onMuteListRemovedFromGroup(String groupId, List<String> mutes) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver).onMuteListRemovedFromGroup(groupId, mutes);
+      if (observer is GroupObserver) {
+        observer.onMuteListRemovedFromGroup(groupId, mutes);
+      }
     }
   }
 
@@ -159,8 +184,9 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
   void onOwnerChangedFromGroup(
       String groupId, String newOwner, String oldOwner) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver)
-          .onOwnerChangedFromGroup(groupId, newOwner, oldOwner);
+      if (observer is GroupObserver) {
+        observer.onOwnerChangedFromGroup(groupId, newOwner, oldOwner);
+      }
     }
   }
 
@@ -168,8 +194,9 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
   void onRequestToJoinAcceptedFromGroup(
       String groupId, String? groupName, String accepter) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver)
-          .onRequestToJoinAcceptedFromGroup(groupId, groupName, accepter);
+      if (observer is GroupObserver) {
+        observer.onRequestToJoinAcceptedFromGroup(groupId, groupName, accepter);
+      }
     }
   }
 
@@ -182,8 +209,10 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
     String? applicant,
   ) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver).onRequestToJoinDeclinedFromGroup(
-          groupId, groupName, decliner, reason, applicant);
+      if (observer is GroupObserver) {
+        observer.onRequestToJoinDeclinedFromGroup(
+            groupId, groupName, decliner, reason, applicant);
+      }
     }
   }
 
@@ -191,44 +220,55 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
   void onRequestToJoinReceivedFromGroup(
       String groupId, String? groupName, String applicant, String? reason) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver).onRequestToJoinReceivedFromGroup(
-          groupId, groupName, applicant, reason);
+      if (observer is GroupObserver) {
+        observer.onRequestToJoinReceivedFromGroup(
+            groupId, groupName, applicant, reason);
+      }
     }
   }
 
   @protected
   void onSharedFileAddedFromGroup(String groupId, GroupSharedFile sharedFile) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver)
-          .onSharedFileAddedFromGroup(groupId, sharedFile);
+      if (observer is GroupObserver) {
+        observer.onSharedFileAddedFromGroup(groupId, sharedFile);
+      }
     }
   }
 
   @protected
   void onSpecificationDidUpdate(Group group) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver).onSpecificationDidUpdate(group);
+      if (observer is GroupObserver) {
+        observer.onSpecificationDidUpdate(group);
+      }
     }
   }
 
   @protected
   void onDisableChanged(String groupId, bool isDisable) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver).onDisableChanged(groupId, isDisable);
+      if (observer is GroupObserver) {
+        observer.onDisableChanged(groupId, isDisable);
+      }
     }
   }
 
   @protected
   void onSharedFileDeletedFromGroup(String groupId, String fileId) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver).onSharedFileDeletedFromGroup(groupId, fileId);
+      if (observer is GroupObserver) {
+        observer.onSharedFileDeletedFromGroup(groupId, fileId);
+      }
     }
   }
 
   @protected
   void onUserRemovedFromGroup(String groupId, String? groupName) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver).onUserRemovedFromGroup(groupId, groupName);
+      if (observer is GroupObserver) {
+        observer.onUserRemovedFromGroup(groupId, groupName);
+      }
     }
   }
 
@@ -236,8 +276,10 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
   void onAttributesChangedOfGroupMember(String groupId, String userId,
       Map<String, String>? attributes, String? operatorId) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as GroupObserver).onAttributesChangedOfGroupMember(
-          groupId, userId, attributes, operatorId);
+      if (observer is GroupObserver) {
+        observer.onAttributesChangedOfGroupMember(
+            groupId, userId, attributes, operatorId);
+      }
     }
   }
 }

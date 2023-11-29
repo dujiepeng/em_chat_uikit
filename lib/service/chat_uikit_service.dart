@@ -1,7 +1,7 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:em_chat_uikit/service/action/chat_uikit_notification_actions.dart';
 
-class ChatUIKit extends ChatSDKWrapper with ChatUIKitNotificationActions {
+class ChatUIKit extends ChatSDKWrapper
+    with ChatUIKitNotificationActions, ChatUIKitMultiWrapper {
   static ChatUIKit? _instance;
   static ChatUIKit get instance {
     return _instance ??= ChatUIKit();
@@ -16,8 +16,9 @@ class ChatUIKit extends ChatSDKWrapper with ChatUIKitNotificationActions {
     required String appkey,
     bool autoLogin = true,
     bool debugMode = false,
-  })async  {
-    await super.init(appkey: appkey, autoLogin: autoLogin, debugMode: debugMode);
+  }) async {
+    await super
+        .init(appkey: appkey, autoLogin: autoLogin, debugMode: debugMode);
     ChatUIKitContext.instance.currentUserId = currentUserId();
   }
 

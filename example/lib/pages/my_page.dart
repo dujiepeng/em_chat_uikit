@@ -17,79 +17,29 @@ class _MyPageState extends State<MyPage> {
         children: [
           ElevatedButton(
             onPressed: () {
-              showChatUIKitBottomSheet(
-                title: 'Sign in & Sign up',
-                context: context,
-                items: [
-                  ChatUIKitBottomSheetItem.normal(
-                    label: 'Login',
-                  ),
-                  ChatUIKitBottomSheetItem.normal(
-                    label: 'Register',
-                    onTap: () async {
-                      return Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-            child: const Text('Bottom Sheet'),
-          ),
-          ElevatedButton(
-            onPressed: () {
               showChatUIKitDialog(
-                title: 'Sign in & Sign up',
-                content: 'Input your userId and password.',
+                title: 'Logout',
                 context: context,
-                hintsText: ['UserId'],
                 items: [
-                  ChatUIKitDialogItem.inputsConfirm(
-                    label: 'SIGN IN',
-                    onInputsTap: (inputs) async {
-                      return Navigator.of(context).pop(inputs);
+                  ChatUIKitDialogItem.cancel(
+                    label: 'CANCEL',
+                    onTap: () async {
+                      Navigator.of(context).pop();
                     },
                   ),
                   ChatUIKitDialogItem.confirm(
-                    label: 'No',
+                    label: 'LOGOUT',
                     onTap: () async {
-                      return Navigator.of(context).pop();
-                    },
-                  ),
-                  ChatUIKitDialogItem.cancel(
-                    label: 'CANCEL',
-                    onTap: () async {
-                      return Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      ChatUIKit.instance.logout().then((value) {
+                        Navigator.of(context).popAndPushNamed('/login');
+                      });
                     },
                   ),
                 ],
               );
             },
-            child: const Text('Dialog'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              showChatUIKitDialog(
-                title: 'Sign in & Sign up',
-                content: 'Input your userId and password.',
-                context: context,
-                hintsText: ['UserId', 'Password'],
-                items: [
-                  ChatUIKitDialogItem.inputsConfirm(
-                    label: 'SIGN IN',
-                    onInputsTap: (inputs) async {
-                      return Navigator.of(context).pop(inputs);
-                    },
-                  ),
-                  ChatUIKitDialogItem.cancel(
-                    label: 'CANCEL',
-                    onTap: () async {
-                      return Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-            child: const Text('Dialog'),
+            child: const Text('Logout'),
           ),
         ],
       ),

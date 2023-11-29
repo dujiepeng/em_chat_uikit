@@ -1,6 +1,4 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:em_chat_uikit/ui/views/new_conversation_view.dart';
-import 'package:em_chat_uikit/ui/views/new_group_view.dart';
 
 import 'package:flutter/material.dart';
 
@@ -80,7 +78,7 @@ class _ConversationViewState extends State<ConversationView> {
         background: widget.listViewBackground,
         onTap: widget.onItemTap ??
             (ConversationItemModel model) {
-              pushToMessagePage();
+              pushToMessagePage(model);
             },
         onLongPress: widget.onItemLongPress ??
             (ConversationItemModel model) {
@@ -114,7 +112,9 @@ class _ConversationViewState extends State<ConversationView> {
     );
   }
 
-  void pushToMessagePage() {}
+  void pushToMessagePage(ConversationItemModel model) {
+    // TODO: push chat page
+  }
 
   void longPressed(ConversationItemModel model) {
     showChatUIKitBottomSheet(
@@ -232,7 +232,7 @@ class _ConversationViewState extends State<ConversationView> {
       builder: (context) {
         return SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.95,
-          child: const NewConversationView(),
+          child: const NewChatView(),
         );
       },
     );
@@ -278,7 +278,7 @@ class _ConversationViewState extends State<ConversationView> {
       builder: (context) {
         return SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.95,
-          child: const NewGroupView(),
+          child: const CreateGroupView(),
         );
       },
     );

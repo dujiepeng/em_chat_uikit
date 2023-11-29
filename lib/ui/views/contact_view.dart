@@ -122,7 +122,13 @@ class _ContactViewState extends State<ContactView> {
   }
 
   void tapContactInfo(ContactItemModel info) {
-    debugPrint('tapContactInfo');
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return ContactDetailsView(
+          profile: info.profile,
+        );
+      },
+    ));
   }
 
   void longContactInfo(ContactItemModel info) {

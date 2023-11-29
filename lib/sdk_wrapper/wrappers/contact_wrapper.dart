@@ -21,35 +21,45 @@ mixin ContactWrapper on ChatUIKitWrapperBase {
   @protected
   void onContactAdded(String userId) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as ContactObserver).onContactAdded(userId);
+      if (observer is ContactObserver) {
+        observer.onContactAdded(userId);
+      }
     }
   }
 
   @protected
   void onContactDeleted(String userId) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as ContactObserver).onContactDeleted(userId);
+      if (observer is ContactObserver) {
+        observer.onContactDeleted(userId);
+      }
     }
   }
 
   @protected
   void onContactInvited(String userId, String? reason) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as ContactObserver).onContactInvited(userId, reason);
+      if (observer is ContactObserver) {
+        observer.onContactInvited(userId, reason);
+      }
     }
   }
 
   @protected
   void onFriendRequestAccepted(String userId) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as ContactObserver).onFriendRequestAccepted(userId);
+      if (observer is ContactObserver) {
+        observer.onFriendRequestAccepted(userId);
+      }
     }
   }
 
   @protected
   void onFriendRequestDeclined(String userId) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as ContactObserver).onFriendRequestDeclined(userId);
+      if (observer is ContactObserver) {
+        observer.onFriendRequestDeclined(userId);
+      }
     }
   }
 }

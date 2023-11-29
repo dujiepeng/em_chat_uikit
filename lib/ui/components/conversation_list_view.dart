@@ -40,7 +40,7 @@ class ConversationListView extends StatefulWidget {
 }
 
 class _ConversationListViewState extends State<ConversationListView>
-    with ChatObserver {
+    with ChatObserver, MultiObserver {
   late ConversationListViewController controller;
   bool enableSearchBar = true;
   @override
@@ -65,6 +65,16 @@ class _ConversationListViewState extends State<ConversationListView>
   @override
   void onConversationsUpdate() {
     controller.fetchItemList();
+  }
+
+  @override
+  void onConversationEvent(
+      MultiDevicesEvent event, String conversationId, ConversationType type) {
+    if (event == MultiDevicesEvent.CONVERSATION_DELETE ||
+        event == MultiDevicesEvent.CONVERSATION_PINNED ||
+        event == MultiDevicesEvent.CONVERSATION_UNPINNED) {
+      controller.fetchItemList();
+    }
   }
 
   @override

@@ -164,7 +164,9 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
                               child: Icon(
                                 Icons.cancel,
                                 size: 22,
-                                color: theme.color.neutralColor7,
+                                color: theme.color.isDark
+                                    ? theme.color.neutralColor7
+                                    : theme.color.neutralColor3,
                               ),
                             ),
                           );

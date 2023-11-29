@@ -19,21 +19,27 @@ mixin MessageWrapper on ChatUIKitWrapperBase {
   @protected
   void onSuccess(String msgId, Message msg) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as MessageObserver).onSuccess(msgId, msg);
+      if (observer is MessageObserver) {
+        observer.onSuccess(msgId, msg);
+      }
     }
   }
 
   @protected
   void onError(String msgId, Message message, ChatError error) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as MessageObserver).onError(msgId, message, error);
+      if (observer is MessageObserver) {
+        observer.onError(msgId, message, error);
+      }
     }
   }
 
   @protected
   void onProgress(String msgId, int progress) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as MessageObserver).onProgress(msgId, progress);
+      if (observer is MessageObserver) {
+        observer.onProgress(msgId, progress);
+      }
     }
   }
 }

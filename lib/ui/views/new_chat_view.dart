@@ -2,8 +2,8 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
-class NewConversationView extends StatefulWidget {
-  const NewConversationView({
+class NewChatView extends StatefulWidget {
+  const NewChatView({
     this.listViewItemBuilder,
     this.onSearchTap,
     this.fakeSearchHideText,
@@ -26,10 +26,10 @@ class NewConversationView extends StatefulWidget {
   final Widget? listViewBackground;
 
   @override
-  State<NewConversationView> createState() => _NewConversationViewState();
+  State<NewChatView> createState() => _NewChatViewState();
 }
 
-class _NewConversationViewState extends State<NewConversationView> {
+class _NewChatViewState extends State<NewChatView> {
   late final ContactListViewController controller;
 
   @override

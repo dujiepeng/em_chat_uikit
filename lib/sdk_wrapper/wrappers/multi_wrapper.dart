@@ -21,7 +21,9 @@ mixin MultiWrapper on ChatUIKitWrapperBase {
   @protected
   void onContactEvent(MultiDevicesEvent event, String userId, String? ext) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as MultiObserver).onContactEvent(event, userId, ext);
+      if (observer is MultiObserver) {
+        observer.onContactEvent(event, userId, ext);
+      }
     }
   }
 
@@ -29,7 +31,9 @@ mixin MultiWrapper on ChatUIKitWrapperBase {
   void onGroupEvent(
       MultiDevicesEvent event, String groupId, List<String>? userIds) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as MultiObserver).onGroupEvent(event, groupId, userIds);
+      if (observer is MultiObserver) {
+        observer.onGroupEvent(event, groupId, userIds);
+      }
     }
   }
 
@@ -37,16 +41,18 @@ mixin MultiWrapper on ChatUIKitWrapperBase {
   void onChatThreadEvent(
       MultiDevicesEvent event, String chatThreadId, List<String> userIds) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as MultiObserver)
-          .onChatThreadEvent(event, chatThreadId, userIds);
+      if (observer is MultiObserver) {
+        observer.onChatThreadEvent(event, chatThreadId, userIds);
+      }
     }
   }
 
   @protected
   void onRemoteMessagesRemoved(String conversationId, String deviceId) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as MultiObserver)
-          .onRemoteMessagesRemoved(conversationId, deviceId);
+      if (observer is MultiObserver) {
+        observer.onRemoteMessagesRemoved(conversationId, deviceId);
+      }
     }
   }
 
@@ -54,8 +60,9 @@ mixin MultiWrapper on ChatUIKitWrapperBase {
   void onConversationEvent(
       MultiDevicesEvent event, String conversationId, ConversationType type) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as MultiObserver)
-          .onConversationEvent(event, conversationId, type);
+      if (observer is MultiObserver) {
+        observer.onConversationEvent(event, conversationId, type);
+      }
     }
   }
 }
