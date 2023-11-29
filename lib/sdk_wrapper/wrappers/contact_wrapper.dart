@@ -11,7 +11,7 @@ mixin ContactWrapper on ChatUIKitWrapperBase {
       ContactEventHandler(
         onContactAdded: onContactAdded,
         onContactDeleted: onContactDeleted,
-        onContactInvited: onContactInvited,
+        onContactInvited: onReceiveFriendRequest,
         onFriendRequestAccepted: onFriendRequestAccepted,
         onFriendRequestDeclined: onFriendRequestDeclined,
       ),
@@ -37,10 +37,10 @@ mixin ContactWrapper on ChatUIKitWrapperBase {
   }
 
   @protected
-  void onContactInvited(String userId, String? reason) {
+  void onReceiveFriendRequest(String userId, String? reason) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       if (observer is ContactObserver) {
-        observer.onContactInvited(userId, reason);
+        observer.onReceiveFriendRequest(userId, reason);
       }
     }
   }

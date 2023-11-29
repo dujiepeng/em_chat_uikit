@@ -1,12 +1,12 @@
 library chat_sdk_wrapper;
 
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:em_chat_uikit/sdk_wrapper/actions/contact_actions.dart';
 import 'package:flutter/material.dart';
 
 export 'actions/chat_actions.dart';
 export 'actions/group_actions.dart';
 export 'actions/notification_actions.dart';
+export 'actions/contact_actions.dart';
 
 export 'typedef_define.dart';
 
@@ -18,12 +18,12 @@ export 'wrappers/message_wrapper.dart';
 export 'wrappers/multi_wrapper.dart';
 export 'wrappers/notification_wrapper.dart';
 
-export 'observers/chat_wrapper_observer.dart';
-export 'observers/connect_wrapper_observer.dart';
-export 'observers/contact_wrapper_observer.dart';
-export 'observers/group_wrapper_observer.dart';
-export 'observers/message_wrapper_observer.dart';
-export 'observers/multi_wrapper_observer.dart';
+export 'observers/chat_observer.dart';
+export 'observers/connect_observer.dart';
+export 'observers/contact_observer.dart';
+export 'observers/group_observer.dart';
+export 'observers/message_observer.dart';
+export 'observers/multi_observer.dart';
 
 const String sdkEventKey = 'chat_uikit';
 

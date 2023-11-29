@@ -7,10 +7,9 @@ export 'chat_uikit_settings.dart';
 export 'provider/profile.dart';
 
 export 'sdk_wrapper/chat_sdk_wrapper.dart';
-export 'service/action/chat_uikit_notification_actions.dart';
+
 export 'service/chat_uikit_service.dart';
-export 'service/protocol/chat_uikit_profile.dart';
-export 'service/wrappers/chat_uikit_multi_wrapper.dart';
+export 'service/protocols/chat_uikit_profile.dart';
 
 export 'ui/models/conversation_item_model.dart';
 export 'ui/models/contact_item_model.dart';

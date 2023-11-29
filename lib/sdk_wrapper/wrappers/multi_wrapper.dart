@@ -66,5 +66,3 @@ mixin MultiWrapper on ChatUIKitWrapperBase {
     }
   }
 }
-
-extension MultiWrapperAction on MultiWrapper {}

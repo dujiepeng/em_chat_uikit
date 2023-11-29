@@ -130,11 +130,17 @@ class _ContactListViewState extends State<ContactListView>
 
   @override
   void onContactAdded(String userId) {
+    debugPrint('test onContactAdded: $userId');
     controller.fetchItemList();
   }
 
   @override
   void onContactDeleted(String userId) {
     controller.fetchItemList();
+  }
+
+  @override
+  void onReceiveFriendRequest(String userId, String? reason) {
+    debugPrint('reason: $reason');
   }
 }

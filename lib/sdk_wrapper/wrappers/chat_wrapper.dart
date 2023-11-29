@@ -27,62 +27,80 @@ mixin ChatWrapper on ChatUIKitWrapperBase {
   @protected
   void onCmdMessagesReceived(List<Message> messages) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as ChatObserver).onCmdMessagesReceived(messages);
+      if (observer is ChatObserver) {
+        observer.onCmdMessagesReceived(messages);
+      }
     }
   }
 
   @protected
   void onMessagesRead(List<Message> messages) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as ChatObserver).onMessagesRead(messages);
+      if (observer is ChatObserver) {
+        observer.onMessagesRead(messages);
+      }
     }
   }
 
   @protected
   void onGroupMessageRead(List<GroupMessageAck> groupMessageAcks) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as ChatObserver).onGroupMessageRead(groupMessageAcks);
+      if (observer is ChatObserver) {
+        observer.onGroupMessageRead(groupMessageAcks);
+      }
     }
   }
 
   @protected
   void onReadAckForGroupMessageUpdated() {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as ChatObserver).onReadAckForGroupMessageUpdated();
+      if (observer is ChatObserver) {
+        observer.onReadAckForGroupMessageUpdated();
+      }
     }
   }
 
   @protected
   void onMessagesDelivered(List<Message> messages) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as ChatObserver).onMessagesDelivered(messages);
+      if (observer is ChatObserver) {
+        observer.onMessagesDelivered(messages);
+      }
     }
   }
 
   @protected
   void onMessagesRecalled(List<Message> messages) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as ChatObserver).onMessagesRecalled(messages);
+      if (observer is ChatObserver) {
+        observer.onMessagesRecalled(messages);
+      }
     }
   }
 
   void onConversationsUpdate() {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as ChatObserver).onConversationsUpdate();
+      if (observer is ChatObserver) {
+        observer.onConversationsUpdate();
+      }
     }
   }
 
   @protected
   void onConversationRead(String from, String to) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as ChatObserver).onConversationRead(from, to);
+      if (observer is ChatObserver) {
+        observer.onConversationRead(from, to);
+      }
     }
   }
 
   @protected
   void onMessageReactionDidChange(List<MessageReactionEvent> events) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as ChatObserver).onMessageReactionDidChange(events);
+      if (observer is ChatObserver) {
+        observer.onMessageReactionDidChange(events);
+      }
     }
   }
 
@@ -90,15 +108,18 @@ mixin ChatWrapper on ChatUIKitWrapperBase {
   void onMessageContentChanged(
       Message message, String operatorId, int operationTime) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as ChatObserver)
-          .onMessageContentChanged(message, operatorId, operationTime);
+      if (observer is ChatObserver) {
+        observer.onMessageContentChanged(message, operatorId, operationTime);
+      }
     }
   }
 
   @protected
   void onMessagesReceived(List<Message> messages) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
-      (observer as ChatObserver).onMessagesReceived(messages);
+      if (observer is ChatObserver) {
+        observer.onMessagesReceived(messages);
+      }
     }
   }
 }

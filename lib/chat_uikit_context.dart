@@ -8,13 +8,19 @@ const String convLoadFinishedKey =
 const String contactLoadFinishedKey =
     'EaseChatUIKit_contact_load_more_finished';
 const String muteMapKey = 'EaseChatUIKit_conversation_mute_map';
+const String requestsKey = 'EaseChatUIKit_friend_requests';
 
 class ChatUIKitContext {
   late SharedPreferences sharedPreferences;
   String? _currentUserId;
+
   Map<String, dynamic> cachedMap = {};
+
+  // 缓存 profile, 不需要存；
   Map<String, ChatUIKitProfile> conversationsCache = {};
+  // 缓存 profile, 不需要存；
   Map<String, ChatUIKitProfile> contactsCache = {};
+
   ChatUIKitProfile? currentUserProfile;
 
   static ChatUIKitContext? _instance;
@@ -46,6 +52,22 @@ class ChatUIKitContext {
 
   void _updateStore() {
     sharedPreferences.setString(_currentUserId!, json.encode(cachedMap));
+  }
+}
+
+extension Request on ChatUIKitContext {
+  void addFriendRequest(String userId, String? reason) {
+    dynamic tmpMap = cachedMap[requestsKey] ?? {};
+    tmpMap[userId] = reason;
+    cachedMap[requestsKey] = tmpMap;
+    _updateStore();
+  }
+
+  void removeFriendRequest(String userId, String? reason) {
+    dynamic tmpMap = cachedMap[requestsKey] ?? {};
+    tmpMap[userId] = reason;
+    cachedMap[requestsKey] = tmpMap;
+    _updateStore();
   }
 }
 
