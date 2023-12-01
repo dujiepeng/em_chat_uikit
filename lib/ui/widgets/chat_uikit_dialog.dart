@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:chat_uikit_theme/chat_uikit_theme.dart';
 import 'package:em_chat_uikit/chat_uikit_settings.dart';
 import 'package:flutter/material.dart';
@@ -155,7 +157,9 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width - 50;
+    double width = min(MediaQuery.of(context).size.width,
+            MediaQuery.of(context).size.height) -
+        50;
     return Dialog(
       clipBehavior: Clip.hardEdge,
       shape: ContinuousRectangleBorder(
