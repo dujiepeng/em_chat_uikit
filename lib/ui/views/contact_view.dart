@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/ui/widgets/chat_uikit_badge.dart';
 
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,8 @@ class ContactView extends StatefulWidget {
     this.onItemLongPress,
     this.appBar,
     this.controller,
+    this.loadErrorMessage,
+    this.onAddContactError,
     super.key,
   });
 
@@ -24,17 +27,20 @@ class ContactView extends StatefulWidget {
   final void Function(ContactItemModel)? onItemLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
+  final String? loadErrorMessage;
+  final void Function(ChatError error)? onAddContactError;
 
   @override
   State<ContactView> createState() => _ContactViewState();
 }
 
-class _ContactViewState extends State<ContactView> {
+class _ContactViewState extends State<ContactView> with ContactObserver {
   late final ContactListViewController controller;
 
   @override
   void initState() {
     super.initState();
+    ChatUIKit.instance.addObserver(this);
     controller = widget.controller ?? ContactListViewController();
   }
 
@@ -67,10 +73,13 @@ class _ContactViewState extends State<ContactView> {
                   ? theme.color.neutralColor95
                   : theme.color.neutralColor3,
               icon: const Icon(Icons.person_add_alt_1_outlined),
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
               onPressed: addContact,
             ),
           ),
-      body: ContactListView(
+      body: SafeArea(
+          child: ContactListView(
         controller: controller,
         itemBuilder: widget.listViewItemBuilder,
         beforeWidgets: beforeWidgets,
@@ -79,7 +88,8 @@ class _ContactViewState extends State<ContactView> {
         onTap: widget.onItemTap ?? tapContactInfo,
         onLongPress: widget.onItemLongPress ?? longContactInfo,
         onSearchTap: widget.onSearchTap ?? onSearchTap,
-      ),
+        errorMessage: widget.loadErrorMessage,
+      )),
     );
 
     return content;
@@ -88,15 +98,38 @@ class _ContactViewState extends State<ContactView> {
   List<ChatUIKitListMoreItem> get beforeWidgets {
     return [
       ChatUIKitListMoreItem(
-          title: '新请求',
-          onTap: () {
-            debugPrint('新请求');
-          }),
+        title: '新请求',
+        onTap: () {
+          Navigator.maybeOf(context)?.push(MaterialPageRoute(
+            builder: (context) {
+              return const NewRequestView();
+            },
+          )).then((value) {
+            setState(() {});
+          });
+        },
+        trailing: () {
+          if (ChatUIKitContext.instance.requestList().isNotEmpty == true) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 5),
+              child: ChatUIKitBadge(
+                  ChatUIKitContext.instance.requestList().length),
+            );
+          } else {
+            return const SizedBox();
+          }
+        }(),
+      ),
       ChatUIKitListMoreItem(
-          title: '群聊',
-          onTap: () {
-            debugPrint('群聊');
-          }),
+        title: '群聊',
+        onTap: () {
+          Navigator.maybeOf(context)?.push(MaterialPageRoute(
+            builder: (context) {
+              return const GroupView();
+            },
+          ));
+        },
+      ),
     ];
   }
 
@@ -152,14 +185,25 @@ class _ContactViewState extends State<ContactView> {
         ChatUIKitDialogItem.inputsConfirm(
           label: '添加',
           onInputsTap: (inputs) async {
-            Navigator.of(context).pop(inputs);
+            Navigator.of(context).pop(inputs.first);
           },
         ),
       ],
     );
 
     if (userId?.isNotEmpty == true) {
-      // TODO: add contact.
+      ChatUIKit.instance.sendContactRequest(userId: userId!);
     }
+  }
+
+  @override
+  void dispose() {
+    ChatUIKit.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void onReceiveFriendRequest(String userId, String? reason) {
+    setState(() {});
   }
 }

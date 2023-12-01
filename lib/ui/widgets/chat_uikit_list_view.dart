@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 typedef ChatUIKitListItemBuilder = Widget Function(
     BuildContext context, ChatUIKitListItemModelBase model);
 
-enum ChatUIKitListViewType { loading, empty, error, normal }
+enum ChatUIKitListViewType { loading, empty, error, normal, refresh }
 
 class ChatUIKitListView extends StatefulWidget {
   const ChatUIKitListView({
@@ -49,11 +49,15 @@ class ChatUIKitListView extends StatefulWidget {
 }
 
 class _ChatUIKitListViewState extends State<ChatUIKitListView> {
+  ScrollController? controller;
+
   bool hasError = false;
   bool firstLoad = true;
   @override
   void initState() {
     super.initState();
+    controller =
+        widget.scrollController ?? ScrollController(keepScrollOffset: true);
   }
 
   @override
@@ -152,7 +156,8 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
     }
 
     Widget content = CustomScrollView(
-      controller: widget.scrollController,
+      physics: const AlwaysScrollableScrollPhysics(),
+      controller: controller,
       slivers: [
         if (widget.enableSearchBar)
           SliverList(

@@ -236,6 +236,12 @@ class ChatUIKitBottomSheet<T> extends StatelessWidget {
       children: list,
     );
 
+    content = ListView(
+      physics: const BouncingScrollPhysics(),
+      shrinkWrap: true,
+      children: [content],
+    );
+
     content = SafeArea(child: content);
 
     content = Container(

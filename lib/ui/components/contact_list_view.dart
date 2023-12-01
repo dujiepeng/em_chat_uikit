@@ -25,8 +25,8 @@ class ContactListView extends StatefulWidget {
   final List<NeedAlphabeticalWidget>? beforeWidgets;
   final List<NeedAlphabeticalWidget>? afterWidgets;
   final ChatUIKitContactItemBuilder? itemBuilder;
-  final void Function(ContactItemModel)? onTap;
-  final void Function(ContactItemModel)? onLongPress;
+  final void Function(ContactItemModel model)? onTap;
+  final void Function(ContactItemModel model)? onLongPress;
   final String? searchHideText;
   final Widget? background;
   final String? errorMessage;
@@ -64,12 +64,8 @@ class _ContactListViewState extends State<ContactListView>
       valueListenable: controller.loadingType,
       builder: (context, type, child) {
         return ChatUIKitAlphabeticalView(
-          onTapCancel: () {
-            debugPrint('tap cancel');
-          },
-          onTap: (context, alphabetical) {
-            debugPrint('tap $alphabetical');
-          },
+          onTapCancel: () {},
+          onTap: (context, alphabetical) {},
           beforeWidgets: widget.beforeWidgets,
           listViewHasSearchBar: enableSearchBar,
           list: controller.list,
@@ -130,13 +126,12 @@ class _ContactListViewState extends State<ContactListView>
 
   @override
   void onContactAdded(String userId) {
-    debugPrint('test onContactAdded: $userId');
-    controller.fetchItemList();
+    controller.refresh();
   }
 
   @override
   void onContactDeleted(String userId) {
-    controller.fetchItemList();
+    controller.refresh();
   }
 
   @override

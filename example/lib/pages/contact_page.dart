@@ -1,5 +1,6 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class ContactPage extends StatefulWidget {
   const ContactPage({super.key});
@@ -11,6 +12,10 @@ class ContactPage extends StatefulWidget {
 class _ContactPageState extends State<ContactPage> {
   @override
   Widget build(BuildContext context) {
-    return const ContactView();
+    return ContactView(
+      onAddContactError: (error) {
+        EasyLoading.showError(error.description);
+      },
+    );
   }
 }

@@ -77,8 +77,8 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
 
     for (var str in targets) {
       double? position = positionMap[str];
-      if (position != 0) {
-        if (widget.scrollController.offset >= position!) {
+      if (position != null && position != 0) {
+        if (widget.scrollController.offset >= position) {
           latestSelected = str;
           selectIndex.value = targets.indexOf(str);
         }
@@ -122,7 +122,11 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
             bottom: 0,
             width: 30,
             right: widget.rightPadding,
-            child: letterWidget(),
+            child: SafeArea(child: LayoutBuilder(
+              builder: (context, constraints) {
+                return letterWidget(constraints.maxHeight);
+              },
+            )),
           ),
         ],
       );
@@ -131,7 +135,19 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
     return content;
   }
 
-  Widget letterWidget() {
+  Widget letterWidget(double height) {
+    MediaQuery.of(context);
+    if (targets.length * letterHeight > height) {
+      List<String> tmp = [];
+      for (var i = 0; i < targets.length; i++) {
+        if (i % 3 == 0) {
+          tmp.add(targets[i]);
+          tmp.add("·");
+        }
+      }
+      targets = tmp;
+    }
+
     final theme = ChatUIKitTheme.of(context);
     List<Widget> letters = [];
     for (var i = 0; i < targets.length; i++) {
@@ -142,7 +158,7 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
           builder: (context, value, child) {
             bool selected = false;
             if (widget.highlight) {
-              selected = value == i;
+              selected = (value == i) && targets[i] != '·';
             }
             Widget? content = Container(
               clipBehavior: Clip.hardEdge,
@@ -157,7 +173,6 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(letterHeight / 2),
               ),
-              padding: const EdgeInsets.all(2),
               child: Center(
                 child: Text(
                   element.toUpperCase(),
@@ -241,6 +256,9 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
       return;
     }
     onTouch = true;
+    if (str == '·') {
+      return;
+    }
     widget.onTap?.call(context, str);
     latestSelected = str;
     moveTo(str);

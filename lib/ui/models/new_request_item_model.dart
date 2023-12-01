@@ -1,12 +1,15 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
-class ContactItemModel
+class NewRequestItemModel
     with ChatUIKitListItemModelBase, NeedAlphabetical, NeedSearch {
   @override
   ChatUIKitProfile profile;
 
-  ContactItemModel({
+  final String? reason;
+
+  NewRequestItemModel({
     required this.profile,
+    this.reason,
   }) {
     profile = profile;
   }
@@ -23,10 +26,10 @@ class ContactItemModel
     return profile.avatarUrl;
   }
 
-  static ContactItemModel fromContact(String userId) {
+  static NewRequestItemModel fromUserId(String userId, [String? reason]) {
     ChatUIKitProfile profile =
         ChatUIKitContext.instance.contactsCache[userId] ??
             ChatUIKitProfile.contact(id: userId);
-    return ContactItemModel(profile: profile);
+    return NewRequestItemModel(profile: profile, reason: reason);
   }
 }

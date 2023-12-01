@@ -1,3 +1,4 @@
+import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit_example/pages/contact_page.dart';
 import 'package:em_chat_uikit_example/pages/conversation_page.dart';
 import 'package:em_chat_uikit_example/pages/my_page.dart';
@@ -34,6 +35,20 @@ class _HomePageState extends State<HomePage>
         children: _pages(context),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        selectedLabelStyle: TextStyle(
+          fontSize: ChatUIKitTheme.of(context).font.labelExtraSmall.fontSize,
+          fontWeight:
+              ChatUIKitTheme.of(context).font.labelExtraSmall.fontWeight,
+        ),
+        backgroundColor: ChatUIKitTheme.of(context).color.isDark
+            ? ChatUIKitTheme.of(context).color.neutralColor1
+            : ChatUIKitTheme.of(context).color.neutralColor98,
+        selectedItemColor: ChatUIKitTheme.of(context).color.isDark
+            ? ChatUIKitTheme.of(context).color.primaryColor6
+            : ChatUIKitTheme.of(context).color.primaryColor5,
+        unselectedItemColor: ChatUIKitTheme.of(context).color.isDark
+            ? ChatUIKitTheme.of(context).color.neutralColor3
+            : ChatUIKitTheme.of(context).color.neutralColor5,
         onTap: (value) {
           setState(() {
             _currentIndex = value;

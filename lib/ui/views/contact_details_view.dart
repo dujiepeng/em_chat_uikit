@@ -27,11 +27,56 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
                 ? theme.color.neutralColor95
                 : theme.color.neutralColor3,
             icon: const Icon(Icons.more_vert),
-            onPressed: () {},
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            onPressed: showBottom,
           ),
         ),
         body: Container());
 
     return content;
+  }
+
+  void showBottom() async {
+    bool? ret = await showChatUIKitBottomSheet(
+      cancelTitle: '取消',
+      context: context,
+      items: [
+        ChatUIKitBottomSheetItem.destructive(
+          label: '删除联系人',
+          onTap: () async {
+            Navigator.of(context).pop(true);
+            return true;
+          },
+        ),
+      ],
+    );
+
+    if (ret == true) {
+      deleteContact();
+    }
+  }
+
+  void deleteContact() {
+    showChatUIKitDialog(
+      title: '确认删除联系人?',
+      content: '确认删除${widget.profile.name ?? widget.profile.id}同时删除与该联系人的聊天记录。',
+      context: context,
+      items: [
+        ChatUIKitDialogItem.cancel(
+          label: '取消',
+          onTap: () async {
+            Navigator.of(context).pop();
+          },
+        ),
+        ChatUIKitDialogItem.confirm(
+          label: '确认',
+          onTap: () async {
+            Navigator.of(context).pop();
+            ChatUIKit.instance.deleteContact(userId: widget.profile.id);
+          },
+        ),
+      ],
+    );
   }
 }

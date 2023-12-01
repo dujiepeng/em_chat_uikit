@@ -66,25 +66,29 @@ class _ConversationViewState extends State<ConversationView> {
                   ? theme.color.neutralColor95
                   : theme.color.neutralColor3,
               icon: const Icon(Icons.add_circle_outline),
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
               onPressed: showMoreInfo,
             ),
           ),
-      body: ConversationListView(
-        controller: controller,
-        itemBuilder: widget.listViewItemBuilder,
-        beforeWidgets: widget.beforeWidgets,
-        afterWidgets: widget.afterWidgets,
-        searchHideText: widget.fakeSearchHideText,
-        background: widget.listViewBackground,
-        onTap: widget.onItemTap ??
-            (ConversationItemModel model) {
-              pushToMessagePage(model);
-            },
-        onLongPress: widget.onItemLongPress ??
-            (ConversationItemModel model) {
-              longPressed(model);
-            },
-        onSearchTap: widget.onSearchTap ?? onSearchTap,
+      body: SafeArea(
+        child: ConversationListView(
+          controller: controller,
+          itemBuilder: widget.listViewItemBuilder,
+          beforeWidgets: widget.beforeWidgets,
+          afterWidgets: widget.afterWidgets,
+          searchHideText: widget.fakeSearchHideText,
+          background: widget.listViewBackground,
+          onTap: widget.onItemTap ??
+              (ConversationItemModel model) {
+                pushToMessagePage(model);
+              },
+          onLongPress: widget.onItemLongPress ??
+              (ConversationItemModel model) {
+                longPressed(model);
+              },
+          onSearchTap: widget.onSearchTap ?? onSearchTap,
+        ),
       ),
     );
 
@@ -129,12 +133,15 @@ class _ConversationViewState extends State<ConversationView> {
                 : ConversationType.Chat;
 
             if (model.noDisturb) {
-              ChatUIKit.instance.clearChatUIKitSilentMode(
+              ChatUIKit.instance.clearSilentMode(
                 conversationId: model.profile.id,
                 type: type,
               );
             } else {
-              ChatUIKit.instance.setChatUIKitSilentMode(
+              final param = ChatSilentModeParam.remindType(
+                  ChatPushRemindType.MENTION_ONLY);
+              ChatUIKit.instance.setSilentMode(
+                param: param,
                 conversationId: model.profile.id,
                 type: type,
               );
@@ -260,14 +267,14 @@ class _ConversationViewState extends State<ConversationView> {
         ChatUIKitDialogItem.inputsConfirm(
           label: '添加',
           onInputsTap: (inputs) async {
-            Navigator.of(context).pop(inputs);
+            Navigator.of(context).pop(inputs.first);
           },
         ),
       ],
     );
 
     if (userId?.isNotEmpty == true) {
-      // TODO: add contact.
+      ChatUIKit.instance.sendContactRequest(userId: userId!);
     }
   }
 

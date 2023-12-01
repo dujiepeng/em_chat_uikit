@@ -25,6 +25,9 @@ class _SearchContactsViewState extends State<SearchContactsView> {
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
     Widget content = ChatUIKitSearchView(
+      searchHideText: widget.searchHideText,
+      list: widget.searchData,
+      autoFocus: true,
       builder: (context, searchKeyword, list) {
         return ChatUIKitListView(
             enableSearchBar: false,
@@ -52,9 +55,6 @@ class _SearchContactsViewState extends State<SearchContactsView> {
                 ? ChatUIKitListViewType.empty
                 : ChatUIKitListViewType.normal);
       },
-      searchHideText: widget.searchHideText,
-      list: widget.searchData,
-      autoFocus: true,
     );
 
     content = NotificationListener(
@@ -74,7 +74,7 @@ class _SearchContactsViewState extends State<SearchContactsView> {
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
       appBar: const ChatUIKitAppBar(),
-      body: content,
+      body: SafeArea(child: content),
     );
 
     // content = SafeArea(child: content);

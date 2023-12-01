@@ -2,27 +2,39 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 mixin NotificationActions on NotificationWrapper {
   Future<PushConfigs> fetchPushConfig() async {
-    return Client.getInstance.pushManager.fetchPushConfigsFromServer();
+    return checkResult(ChatSDKWrapperActionEvent.fetchPushConfig, () {
+      return Client.getInstance.pushManager.fetchPushConfigsFromServer();
+    });
   }
 
   Future<void> uploadPushDisplayName({required displayName}) async {
-    return Client.getInstance.pushManager.updatePushNickname(displayName);
+    return checkResult(ChatSDKWrapperActionEvent.uploadPushDisplayName, () {
+      return Client.getInstance.pushManager.updatePushNickname(displayName);
+    });
   }
 
   Future<void> updatePushDisplayStyle({required DisplayStyle style}) async {
-    return Client.getInstance.pushManager.updatePushDisplayStyle(style);
+    return checkResult(ChatSDKWrapperActionEvent.updatePushDisplayStyle, () {
+      return Client.getInstance.pushManager.updatePushDisplayStyle(style);
+    });
   }
 
   Future<void> uploadHMSPushToken({required String token}) async {
-    return Client.getInstance.pushManager.updateHMSPushToken(token);
+    return checkResult(ChatSDKWrapperActionEvent.uploadHMSPushToken, () {
+      return Client.getInstance.pushManager.updateHMSPushToken(token);
+    });
   }
 
   Future<void> uploadFCMPushToken({required String token}) async {
-    return Client.getInstance.pushManager.updateFCMPushToken(token);
+    return checkResult(ChatSDKWrapperActionEvent.uploadFCMPushToken, () {
+      return Client.getInstance.pushManager.updateFCMPushToken(token);
+    });
   }
 
   Future<void> uploadAPNsPushToken({required String token}) async {
-    return Client.getInstance.pushManager.updateAPNsDeviceToken(token);
+    return checkResult(ChatSDKWrapperActionEvent.uploadAPNsPushToken, () {
+      return Client.getInstance.pushManager.updateAPNsDeviceToken(token);
+    });
   }
 
   Future<void> setSilentMode({
@@ -30,31 +42,39 @@ mixin NotificationActions on NotificationWrapper {
     required ConversationType type,
     required ChatSilentModeParam param,
   }) async {
-    await Client.getInstance.pushManager.setConversationSilentMode(
-      conversationId: conversationId,
-      type: type,
-      param: param,
-    );
+    return checkResult(ChatSDKWrapperActionEvent.setSilentMode, () {
+      return Client.getInstance.pushManager.setConversationSilentMode(
+        conversationId: conversationId,
+        type: type,
+        param: param,
+      );
+    });
   }
 
   Future<void> clearSilentMode({
     required String conversationId,
     required ConversationType type,
   }) async {
-    await Client.getInstance.pushManager.removeConversationSilentMode(
-      conversationId: conversationId,
-      type: type,
-    );
+    return checkResult(ChatSDKWrapperActionEvent.clearSilentMode, () {
+      return Client.getInstance.pushManager.removeConversationSilentMode(
+        conversationId: conversationId,
+        type: type,
+      );
+    });
   }
 
   Future<Map<String, ChatSilentModeResult>> fetchSilentModel({
     required List<Conversation> conversations,
   }) async {
-    return Client.getInstance.pushManager
-        .fetchSilentModeForConversations(conversations);
+    return checkResult(ChatSDKWrapperActionEvent.fetchSilentModel, () {
+      return Client.getInstance.pushManager
+          .fetchSilentModeForConversations(conversations);
+    });
   }
 
   Future<void> setAllSilentMode({required ChatSilentModeParam param}) async {
-    return Client.getInstance.pushManager.setSilentModeForAll(param: param);
+    return checkResult(ChatSDKWrapperActionEvent.setAllSilentMode, () {
+      return Client.getInstance.pushManager.setSilentModeForAll(param: param);
+    });
   }
 }

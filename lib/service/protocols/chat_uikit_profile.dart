@@ -7,6 +7,9 @@ enum ChatUIKitProfileType {
 
   /// Profile type for contact
   contact,
+
+  /// Profile type for group
+  group,
 }
 
 class ChatUIKitProfile {
@@ -44,6 +47,17 @@ class ChatUIKitProfile {
           name: name,
           avatarUrl: avatarUrl,
           type: ChatUIKitProfileType.groupChat,
+        );
+
+  ChatUIKitProfile.group({
+    required String id,
+    String? name,
+    String? avatarUrl,
+  }) : this(
+          id: id,
+          name: name,
+          avatarUrl: avatarUrl,
+          type: ChatUIKitProfileType.group,
         );
 
   ChatUIKitProfile.chat({

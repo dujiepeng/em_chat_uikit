@@ -24,6 +24,9 @@ export 'observers/contact_observer.dart';
 export 'observers/group_observer.dart';
 export 'observers/message_observer.dart';
 export 'observers/multi_observer.dart';
+export 'observers/action_event_observer.dart';
+
+export 'chat_sdk_wrapper_action_events.dart';
 
 const String sdkEventKey = 'chat_uikit';
 
@@ -48,6 +51,30 @@ abstract class ChatUIKitWrapperBase {
   void removeObserver(ChatUIKitObserverBase observer) {
     observers.remove(observer);
   }
+
+  @protected
+  Future<T> checkResult<T>(
+    ChatSDKWrapperActionEvent actionEvent,
+    Future<T> Function() method,
+  ) async {
+    T result;
+    try {
+      result = await method.call();
+      _onEventHandler(actionEvent, null);
+      return result;
+    } on ChatError catch (e) {
+      _onEventHandler(actionEvent, e);
+      rethrow;
+    }
+  }
+
+  void _onEventHandler(ChatSDKWrapperActionEvent event, ChatError? error) {
+    for (var observer in observers) {
+      if (observer is ChatSDKActionEventsObserver) {
+        observer.onEventHandler(event, error);
+      }
+    }
+  }
 }
 
 class ChatSDKWrapper extends ChatUIKitWrapperBase
@@ -62,7 +89,8 @@ class ChatSDKWrapper extends ChatUIKitWrapperBase
         ChatActions,
         ContactActions,
         GroupActions,
-        NotificationActions {
+        NotificationActions,
+        ChatSDKActionEventsObserver {
   static ChatSDKWrapper? _instance;
   static ChatSDKWrapper get instance {
     return _instance ??= ChatSDKWrapper();

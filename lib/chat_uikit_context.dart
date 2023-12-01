@@ -56,17 +56,31 @@ class ChatUIKitContext {
 }
 
 extension Request on ChatUIKitContext {
-  void addFriendRequest(String userId, String? reason) {
-    dynamic tmpMap = cachedMap[requestsKey] ?? {};
-    tmpMap[userId] = reason;
-    cachedMap[requestsKey] = tmpMap;
-    _updateStore();
+  List requestList() {
+    return cachedMap[requestsKey] ?? [];
   }
 
-  void removeFriendRequest(String userId, String? reason) {
-    dynamic tmpMap = cachedMap[requestsKey] ?? {};
-    tmpMap[userId] = reason;
-    cachedMap[requestsKey] = tmpMap;
+  bool addRequest(String userId, String? reason, [bool isGroup = false]) {
+    dynamic requestList = cachedMap[requestsKey] ?? [];
+    if (requestList.any((element) =>
+        element['id'] == userId && element['isGroup'] == isGroup)) {
+      return false;
+    }
+    requestList.add({
+      'id': userId,
+      'reason': reason,
+      'isGroup': isGroup,
+    });
+    cachedMap[requestsKey] = requestList;
+    _updateStore();
+    return true;
+  }
+
+  void removeRequest(String userId, [bool isGroup = false]) {
+    dynamic requestList = cachedMap[requestsKey] ?? [];
+    requestList.removeWhere(
+        (element) => element['id'] == userId && element['isGroup'] == isGroup);
+    cachedMap[requestsKey] = requestList;
     _updateStore();
   }
 }

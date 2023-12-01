@@ -22,9 +22,27 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
       List<ConversationItemModel> tmp = await mappers(items);
       list.clear();
       list.addAll(tmp);
-      loadingType.value = ChatUIKitListViewType.normal;
+      if (list.isEmpty) {
+        loadingType.value = ChatUIKitListViewType.empty;
+      } else {
+        loadingType.value = ChatUIKitListViewType.normal;
+      }
     } catch (e) {
       loadingType.value = ChatUIKitListViewType.error;
+    }
+  }
+
+  @override
+  Future<void> refresh() async {
+    loadingType.value = ChatUIKitListViewType.refresh;
+    List<Conversation> items = await ChatUIKit.instance.getAllConversations();
+    List<ConversationItemModel> tmp = await mappers(items);
+    list.clear();
+    list.addAll(tmp);
+    if (list.isEmpty) {
+      loadingType.value = ChatUIKitListViewType.empty;
+    } else {
+      loadingType.value = ChatUIKitListViewType.normal;
     }
   }
 

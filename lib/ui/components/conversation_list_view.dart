@@ -24,10 +24,11 @@ class ConversationListView extends StatefulWidget {
 
   final void Function(List<ConversationItemModel> data)? onSearchTap;
   final ChatUIKitConversationItemBuilder? itemBuilder;
-  final void Function(ConversationItemModel)? onTap;
+  final void Function(ConversationItemModel model)? onTap;
+  final void Function(ConversationItemModel model)? onLongPress;
   final List<NeedAlphabeticalWidget>? beforeWidgets;
   final List<NeedAlphabeticalWidget>? afterWidgets;
-  final void Function(ConversationItemModel)? onLongPress;
+
   final String? searchHideText;
   final Widget? background;
   final String? errorMessage;
@@ -59,12 +60,14 @@ class _ConversationListViewState extends State<ConversationListView>
 
   @override
   void onMessagesReceived(List<Message> messages) {
-    controller.fetchItemList();
+    // controller.fetchItemList();
+    controller.refresh();
   }
 
   @override
   void onConversationsUpdate() {
-    controller.fetchItemList();
+    // controller.fetchItemList();
+    controller.refresh();
   }
 
   @override
