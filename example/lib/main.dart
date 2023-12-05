@@ -44,17 +44,20 @@ class _MyAppState extends State<MyApp> {
       }),
       home: const WelcomePage(),
       onGenerateRoute: (settings) {
-        return MaterialPageRoute(
-          builder: (context) {
-            if (settings.name == '/home') {
-              return const HomePage();
-            } else if (settings.name == '/login') {
-              return const LoginPage();
-            } else {
-              return const WelcomePage();
-            }
-          },
-        );
+        debugPrint(settings.name);
+
+        return ChatUIKitRoute.generateRoute(settings) ??
+            MaterialPageRoute(
+              builder: (context) {
+                if (settings.name == '/home') {
+                  return const HomePage();
+                } else if (settings.name == '/login') {
+                  return const LoginPage();
+                } else {
+                  return const WelcomePage();
+                }
+              },
+            );
       },
     );
   }

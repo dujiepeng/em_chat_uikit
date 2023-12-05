@@ -24,8 +24,8 @@ class GroupListView extends StatefulWidget {
   final List<NeedAlphabeticalWidget>? beforeWidgets;
   final List<NeedAlphabeticalWidget>? afterWidgets;
   final ChatUIKitGroupItemBuilder? itemBuilder;
-  final void Function(GroupItemModel model)? onTap;
-  final void Function(GroupItemModel model)? onLongPress;
+  final void Function(BuildContext context, GroupItemModel model)? onTap;
+  final void Function(BuildContext context, GroupItemModel model)? onLongPress;
   final String? searchHideText;
   final Widget? background;
   final String? errorMessage;
@@ -72,10 +72,10 @@ class _GroupListViewState extends State<GroupListView> {
               }
               item ??= InkWell(
                 onTap: () {
-                  widget.onTap?.call(model);
+                  widget.onTap?.call(context, model);
                 },
                 onLongPress: () {
-                  widget.onLongPress?.call(model);
+                  widget.onLongPress?.call(context, model);
                 },
                 child: ChatUIKitGroupItem(model),
               );

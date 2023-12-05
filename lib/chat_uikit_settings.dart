@@ -6,7 +6,7 @@ class ChatUIKitSettings {
   static CornerRadius searchBarRadius = ChatUIKitSettings.avatarRadius;
   static CornerRadius alertRadius = CornerRadius.medium;
   static ChatUIKitRectangleType alertRectangleType =
-      ChatUIKitRectangleType.rightAngle;
+      ChatUIKitRectangleType.filletCorner;
 
   static bool showConversationListAvatar = true;
   static String? conversationListMuteImage;

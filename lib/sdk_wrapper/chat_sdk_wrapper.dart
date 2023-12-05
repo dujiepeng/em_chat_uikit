@@ -1,6 +1,9 @@
+// ignore_for_file: duplicate_export
+
 library chat_sdk_wrapper;
 
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/sdk_wrapper/actions/presence_actions.dart';
 import 'package:flutter/material.dart';
 
 export 'actions/chat_actions.dart';
@@ -16,6 +19,7 @@ export 'wrappers/contact_wrapper.dart';
 export 'wrappers/group_wrapper.dart';
 export 'wrappers/message_wrapper.dart';
 export 'wrappers/multi_wrapper.dart';
+export 'wrappers/presence_wrapper.dart';
 export 'wrappers/notification_wrapper.dart';
 
 export 'observers/chat_observer.dart';
@@ -24,8 +28,11 @@ export 'observers/contact_observer.dart';
 export 'observers/group_observer.dart';
 export 'observers/message_observer.dart';
 export 'observers/multi_observer.dart';
+export 'observers/presence_observer.dart';
 export 'observers/action_event_observer.dart';
 
+export 'chat_sdk_wrapper_action_events.dart';
+export 'typedef_define.dart';
 export 'chat_sdk_wrapper_action_events.dart';
 
 const String sdkEventKey = 'chat_uikit';
@@ -39,6 +46,10 @@ abstract class ChatUIKitWrapperBase {
   @protected
   @mustCallSuper
   void addListeners() {}
+
+  @protected
+  @mustCallSuper
+  void removeListeners() {}
 
   ChatUIKitWrapperBase() {
     addListeners();
@@ -59,19 +70,36 @@ abstract class ChatUIKitWrapperBase {
   ) async {
     T result;
     try {
+      _onEventBegin(actionEvent);
       result = await method.call();
-      _onEventHandler(actionEvent, null);
+      _onEventEnd(actionEvent);
       return result;
     } on ChatError catch (e) {
-      _onEventHandler(actionEvent, e);
+      _onEventError(actionEvent, e);
       rethrow;
     }
   }
 
-  void _onEventHandler(ChatSDKWrapperActionEvent event, ChatError? error) {
+  void _onEventBegin(ChatSDKWrapperActionEvent event) {
     for (var observer in observers) {
       if (observer is ChatSDKActionEventsObserver) {
-        observer.onEventHandler(event, error);
+        observer.onEventBegin(event);
+      }
+    }
+  }
+
+  void _onEventEnd(ChatSDKWrapperActionEvent event) {
+    for (var observer in observers) {
+      if (observer is ChatSDKActionEventsObserver) {
+        observer.onEventEnd(event);
+      }
+    }
+  }
+
+  void _onEventError(ChatSDKWrapperActionEvent event, ChatError error) {
+    for (var observer in observers) {
+      if (observer is ChatSDKActionEventsObserver) {
+        observer.onEventErrorHandler(event, error);
       }
     }
   }
@@ -86,10 +114,12 @@ class ChatSDKWrapper extends ChatUIKitWrapperBase
         MultiWrapper,
         MessageWrapper,
         NotificationWrapper,
+        PresenceWrapper,
         ChatActions,
         ContactActions,
         GroupActions,
         NotificationActions,
+        PresenceActions,
         ChatSDKActionEventsObserver {
   static ChatSDKWrapper? _instance;
   static ChatSDKWrapper get instance {

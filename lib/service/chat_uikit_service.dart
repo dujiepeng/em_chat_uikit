@@ -36,11 +36,11 @@ class ChatUIKit extends ChatSDKWrapper
     required String userId,
     required String password,
   }) async {
-    try {
-      await super.login(userId: userId, password: password);
-      ChatUIKitContext.instance.currentUserId = userId;
-    } catch (e) {
-      rethrow;
-    }
+    await super.login(userId: userId, password: password);
+    ChatUIKitContext.instance.currentUserId = userId;
+  }
+
+  int contactRequestCount() {
+    return ChatUIKitContext.instance.requestList().length;
   }
 }

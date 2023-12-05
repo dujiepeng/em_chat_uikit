@@ -36,3 +36,6 @@ typedef SearchDirection = chat.EMSearchDirection;
 typedef ChatType = chat.ChatType;
 typedef MessageType = chat.MessageType;
 typedef GroupStyle = chat.EMGroupStyle;
+typedef PresenceEventHandler = chat.EMPresenceEventHandler;
+typedef Presence = chat.EMPresence;
+typedef GroupPermissionType = chat.EMGroupPermissionType;

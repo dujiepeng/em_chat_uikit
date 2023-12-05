@@ -24,8 +24,9 @@ class ConversationListView extends StatefulWidget {
 
   final void Function(List<ConversationItemModel> data)? onSearchTap;
   final ChatUIKitConversationItemBuilder? itemBuilder;
-  final void Function(ConversationItemModel model)? onTap;
-  final void Function(ConversationItemModel model)? onLongPress;
+  final void Function(BuildContext context, ConversationItemModel model)? onTap;
+  final void Function(BuildContext context, ConversationItemModel model)?
+      onLongPress;
   final List<NeedAlphabeticalWidget>? beforeWidgets;
   final List<NeedAlphabeticalWidget>? afterWidgets;
 
@@ -115,11 +116,11 @@ class _ConversationListViewState extends State<ConversationListView>
               }
               item ??= InkWell(
                 onTap: () {
-                  widget.onTap?.call(model);
+                  widget.onTap?.call(context, model);
                 },
                 onLongPress: () {
                   if (widget.enableLongPress) {
-                    widget.onLongPress?.call(model);
+                    widget.onLongPress?.call(context, model);
                   }
                 },
                 child: SizedBox(

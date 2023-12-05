@@ -1,5 +1,5 @@
+import 'package:em_chat_uikit/sdk_wrapper/chat_sdk_wrapper.dart';
 import 'package:flutter/foundation.dart';
-import '../chat_sdk_wrapper.dart';
 
 mixin ContactWrapper on ChatUIKitWrapperBase {
   @protected
@@ -11,11 +11,17 @@ mixin ContactWrapper on ChatUIKitWrapperBase {
       ContactEventHandler(
         onContactAdded: onContactAdded,
         onContactDeleted: onContactDeleted,
-        onContactInvited: onReceiveFriendRequest,
+        onContactInvited: onContactRequestReceived,
         onFriendRequestAccepted: onFriendRequestAccepted,
         onFriendRequestDeclined: onFriendRequestDeclined,
       ),
     );
+  }
+
+  @override
+  void removeListeners() {
+    super.removeListeners();
+    Client.getInstance.contactManager.removeEventHandler(sdkEventKey);
   }
 
   @protected
@@ -37,10 +43,10 @@ mixin ContactWrapper on ChatUIKitWrapperBase {
   }
 
   @protected
-  void onReceiveFriendRequest(String userId, String? reason) {
+  void onContactRequestReceived(String userId, String? reason) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       if (observer is ContactObserver) {
-        observer.onReceiveFriendRequest(userId, reason);
+        observer.onContactRequestReceived(userId, reason);
       }
     }
   }

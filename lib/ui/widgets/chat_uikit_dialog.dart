@@ -161,6 +161,7 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
             MediaQuery.of(context).size.height) -
         50;
     return Dialog(
+      backgroundColor: Colors.transparent,
       clipBehavior: Clip.hardEdge,
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.circular(() {
@@ -188,7 +189,7 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
     Widget contentWidget = Container(
       padding: const EdgeInsets.fromLTRB(0, 12, 0, 16),
       color: (themeColor.isDark
-          ? themeColor.neutralColor1
+          ? themeColor.neutralColor2
           : themeColor.neutralColor98),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -256,7 +257,7 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                       }(),
                       color: () {
                         return (themeColor.isDark
-                            ? themeColor.neutralColor2
+                            ? themeColor.neutralColor3
                             : themeColor.neutralColor95);
                       }(),
                     ),
@@ -268,8 +269,8 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                             fontWeight: themeFont.bodyLarge.fontWeight,
                             fontSize: themeFont.bodyLarge.fontSize,
                             color: themeColor.isDark
-                                ? Colors.white
-                                : Colors.black),
+                                ? themeColor.neutralColor98
+                                : themeColor.neutralColor1),
                         controller: _controllers[i],
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -277,7 +278,7 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                               fontWeight: themeFont.bodyLarge.fontWeight,
                               fontSize: themeFont.bodyLarge.fontSize,
                               color: themeColor.isDark
-                                  ? themeColor.neutralColor4
+                                  ? themeColor.neutralColor5
                                   : themeColor.neutralColor6),
                           hintText: widget.hintsText![i],
                           suffixIconConstraints: const BoxConstraints(),

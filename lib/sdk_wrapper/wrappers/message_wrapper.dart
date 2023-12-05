@@ -1,5 +1,5 @@
+import 'package:em_chat_uikit/sdk_wrapper/chat_sdk_wrapper.dart';
 import 'package:flutter/foundation.dart';
-import '../chat_sdk_wrapper.dart';
 
 mixin MessageWrapper on ChatUIKitWrapperBase {
   @protected
@@ -14,6 +14,12 @@ mixin MessageWrapper on ChatUIKitWrapperBase {
         onProgress: onProgress,
       ),
     );
+  }
+
+  @override
+  void removeListeners() {
+    super.removeListeners();
+    Client.getInstance.chatManager.removeMessageEvent(sdkEventKey);
   }
 
   @protected

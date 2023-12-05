@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/ui/widgets/chat_uikit_badge.dart';
 import 'package:em_chat_uikit_example/pages/contact_page.dart';
 import 'package:em_chat_uikit_example/pages/conversation_page.dart';
 import 'package:em_chat_uikit_example/pages/my_page.dart';
@@ -12,11 +13,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage>
-    with AutomaticKeepAliveClientMixin {
+    with
+        AutomaticKeepAliveClientMixin,
+        ChatObserver,
+        ContactObserver,
+        ChatSDKActionEventsObserver {
   int _currentIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    ChatUIKit.instance.addObserver(this);
+  }
+
+  @override
   void dispose() {
+    ChatUIKit.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -27,7 +39,7 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
+    final theme = ChatUIKitTheme.of(context);
     Widget content = Scaffold(
       resizeToAvoidBottomInset: false,
       body: IndexedStack(
@@ -36,6 +48,11 @@ class _HomePageState extends State<HomePage>
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedLabelStyle: TextStyle(
+          fontSize: ChatUIKitTheme.of(context).font.labelExtraSmall.fontSize,
+          fontWeight:
+              ChatUIKitTheme.of(context).font.labelExtraSmall.fontWeight,
+        ),
+        unselectedLabelStyle: TextStyle(
           fontSize: ChatUIKitTheme.of(context).font.labelExtraSmall.fontSize,
           fontWeight:
               ChatUIKitTheme.of(context).font.labelExtraSmall.fontWeight,
@@ -55,18 +72,52 @@ class _HomePageState extends State<HomePage>
           });
         },
         currentIndex: _currentIndex,
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          CustomBottomNavigationBarItem(
             label: '会话',
-            icon: Icon(Icons.chat),
+            image: 'assets/images/chat.png',
+            unreadCountWidget: FutureBuilder(
+              future: ChatUIKit.instance.getUnreadMessageCount(),
+              builder: (context, snapshot) {
+                return ChatUIKitBadge(
+                  snapshot.hasData ? snapshot.data ?? 0 : 0,
+                  textColor: theme.color.neutralColor98,
+                  backgroundColor: theme.color.isDark
+                      ? theme.color.errorColor6
+                      : theme.color.errorColor5,
+                );
+              },
+            ),
+            borderColor: theme.color.isDark
+                ? theme.color.neutralColor1
+                : theme.color.neutralColor98,
+            isSelect: _currentIndex == 0,
+            imageSelectColor: theme.color.primaryColor5,
+            imageUnSelectColor: theme.color.neutralColor5,
           ),
-          BottomNavigationBarItem(
+          CustomBottomNavigationBarItem(
             label: '联系人',
-            icon: Icon(Icons.person),
+            image: 'assets/images/contact.png',
+            unreadCountWidget: ChatUIKitBadge(
+              ChatUIKit.instance.contactRequestCount(),
+              textColor: theme.color.neutralColor98,
+              backgroundColor: theme.color.isDark
+                  ? theme.color.errorColor6
+                  : theme.color.errorColor5,
+            ),
+            isSelect: _currentIndex == 1,
+            borderColor: theme.color.isDark
+                ? theme.color.neutralColor1
+                : theme.color.neutralColor98,
+            imageSelectColor: theme.color.primaryColor5,
+            imageUnSelectColor: theme.color.neutralColor5,
           ),
-          BottomNavigationBarItem(
+          CustomBottomNavigationBarItem(
             label: '我',
-            icon: Icon(Icons.person),
+            image: 'assets/images/me.png',
+            isSelect: _currentIndex == 2,
+            imageSelectColor: theme.color.primaryColor5,
+            imageUnSelectColor: theme.color.neutralColor5,
           )
         ],
       ),
@@ -77,4 +128,75 @@ class _HomePageState extends State<HomePage>
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  // 用于刷新消息未读数
+  void onMessagesReceived(List<Message> messages) {
+    setState(() {});
+  }
+
+  @override
+  // 用于刷新好友申请未读数
+  void onContactRequestReceived(String username, String? reason) {
+    setState(() {});
+  }
+
+  @override
+  // 用于刷新消息和联系人未读数
+  void onEventEnd(ChatSDKWrapperActionEvent event) {
+    if (event == ChatSDKWrapperActionEvent.acceptContactRequest ||
+        event == ChatSDKWrapperActionEvent.declineContactRequest ||
+        event == ChatSDKWrapperActionEvent.markConversationAsRead) {
+      setState(() {});
+    }
+  }
+}
+
+class CustomBottomNavigationBarItem extends BottomNavigationBarItem {
+  CustomBottomNavigationBarItem({
+    required this.image,
+    required super.label,
+    this.imageUnSelectColor,
+    this.imageSelectColor,
+    this.unreadCountWidget,
+    this.isSelect = false,
+    this.borderColor,
+  }) : super(
+          icon: Stack(
+            children: [
+              SizedBox(
+                width: 76,
+                height: 34,
+                child: Padding(
+                    padding: const EdgeInsets.only(left: 4, right: 4, top: 10),
+                    child: Image.asset(
+                      image,
+                      fit: BoxFit.contain,
+                      color: isSelect ? imageSelectColor : imageUnSelectColor,
+                    )),
+              ),
+              Positioned(
+                  top: 0,
+                  left: 36,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(100),
+                      border: Border.all(
+                        color: borderColor ?? Colors.transparent,
+                        width: 2,
+                      ),
+                    ),
+                    child: unreadCountWidget ?? const SizedBox(),
+                  ))
+            ],
+          ),
+        );
+
+  final String image;
+  final Widget? unreadCountWidget;
+  final Color? imageUnSelectColor;
+  final Color? imageSelectColor;
+  final Color? borderColor;
+  final bool isSelect;
 }

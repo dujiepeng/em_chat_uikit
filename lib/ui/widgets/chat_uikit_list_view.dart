@@ -63,95 +63,81 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
+
+    Widget? sliverView;
+
     if (widget.type == ChatUIKitListViewType.loading) {
-      return Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          widget.enableSearchBar ? fakeSearchBar() : Container(),
-          Expanded(
-            child: Center(
-              child: SizedBox(
-                width: 30,
-                height: 30,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: theme.color.isDark
-                      ? theme.color.neutralColor4
-                      : theme.color.neutralColor7,
-                ),
-              ),
-            ),
-          )
-        ],
+      sliverView = Center(
+        child: SizedBox(
+          width: 30,
+          height: 30,
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            color: theme.color.isDark
+                ? theme.color.neutralColor4
+                : theme.color.neutralColor7,
+          ),
+        ),
       );
     }
 
     if (widget.type == ChatUIKitListViewType.empty) {
-      return Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          widget.enableSearchBar ? fakeSearchBar() : Container(),
-          Expanded(
-            child: Center(
-              child: widget.background ?? ChatUIKitImageLoader.listEmpty(),
-            ),
-          )
-        ],
+      sliverView = Center(
+        child: widget.background ?? ChatUIKitImageLoader.listEmpty(),
       );
     }
 
     if (widget.type == ChatUIKitListViewType.error) {
-      return Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          widget.enableSearchBar ? fakeSearchBar() : Container(),
-          Expanded(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  widget.background ?? ChatUIKitImageLoader.listEmpty(),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.errorMessage ?? '加载失败',
-                    style: TextStyle(
-                      color: theme.color.isDark
-                          ? theme.color.neutralColor7
-                          : theme.color.neutralColor4,
-                      fontWeight: theme.font.bodyMedium.fontWeight,
-                      fontSize: theme.font.bodyMedium.fontSize,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  InkWell(
-                    onTap: () {
-                      widget.refresh?.call();
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(20, 9, 20, 9),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        color: theme.color.isDark
-                            ? theme.color.primaryColor6
-                            : theme.color.primaryColor5,
-                      ),
-                      child: Text(
-                        widget.reloadMessage ?? '重新加载',
-                        style: TextStyle(
-                          color: theme.color.isDark
-                              ? theme.color.neutralColor98
-                              : theme.color.neutralColor98,
-                          fontWeight: theme.font.labelMedium.fontWeight,
-                          fontSize: theme.font.labelMedium.fontSize,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
+      sliverView = Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            widget.background ?? ChatUIKitImageLoader.listEmpty(),
+            const SizedBox(height: 8),
+            Text(
+              widget.errorMessage ?? '加载失败',
+              style: TextStyle(
+                color: theme.color.isDark
+                    ? theme.color.neutralColor7
+                    : theme.color.neutralColor4,
+                fontWeight: theme.font.bodyMedium.fontWeight,
+                fontSize: theme.font.bodyMedium.fontSize,
               ),
             ),
-          )
-        ],
+            const SizedBox(height: 8),
+            InkWell(
+              onTap: () {
+                widget.refresh?.call();
+              },
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(20, 9, 20, 9),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: theme.color.isDark
+                      ? theme.color.primaryColor6
+                      : theme.color.primaryColor5,
+                ),
+                child: Text(
+                  widget.reloadMessage ?? '重新加载',
+                  style: TextStyle(
+                    color: theme.color.isDark
+                        ? theme.color.neutralColor98
+                        : theme.color.neutralColor98,
+                    fontWeight: theme.font.labelMedium.fontWeight,
+                    fontSize: theme.font.labelMedium.fontSize,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    if (sliverView != null) {
+      sliverView = SliverFillRemaining(
+        hasScrollBody: false,
+        child: sliverView,
       );
     }
 
@@ -176,6 +162,7 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
             childCount: widget.beforeWidgets?.length ?? 0,
           ),
         ),
+        if (sliverView != null) sliverView,
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {

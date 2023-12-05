@@ -25,8 +25,9 @@ class NewRequestsListView extends StatefulWidget {
   final List<NeedAlphabeticalWidget>? beforeWidgets;
   final List<NeedAlphabeticalWidget>? afterWidgets;
   final ChatUIKitNewRequestItemBuilder? itemBuilder;
-  final void Function(NewRequestItemModel model)? onTap;
-  final void Function(NewRequestItemModel model)? onLongPress;
+  final void Function(BuildContext context, NewRequestItemModel model)? onTap;
+  final void Function(BuildContext context, NewRequestItemModel model)?
+      onLongPress;
   final String? searchHideText;
   final Widget? background;
   final String? errorMessage;
@@ -45,7 +46,7 @@ class _NewRequestsListViewState extends State<NewRequestsListView>
   void initState() {
     super.initState();
     ChatUIKit.instance.addObserver(this);
-    controller = NewRequestListViewController();
+    controller = widget.controller ?? NewRequestListViewController();
     controller.fetchItemList();
   }
 
@@ -72,10 +73,10 @@ class _NewRequestsListViewState extends State<NewRequestsListView>
               }
               item ??= InkWell(
                 onTap: () {
-                  widget.onTap?.call(model);
+                  widget.onTap?.call(context, model);
                 },
                 onLongPress: () {
-                  widget.onLongPress?.call(model);
+                  widget.onLongPress?.call(context, model);
                 },
                 child: ChatUIKitNewRequestItem(model),
               );
@@ -93,7 +94,7 @@ class _NewRequestsListViewState extends State<NewRequestsListView>
   }
 
   @override
-  void onReceiveFriendRequest(String userId, String? reason) {
+  void onContactRequestReceived(String userId, String? reason) {
     controller.fetchItemList();
   }
 

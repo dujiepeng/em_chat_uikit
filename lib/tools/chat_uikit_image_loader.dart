@@ -3,6 +3,16 @@ import 'package:flutter/material.dart';
 const String packageName = 'em_chat_uikit';
 
 class ChatUIKitImageLoader {
+  static Widget chatIcon({double size = 24, Color? color}) {
+    return Image.asset(
+      'assets/images/chat.png',
+      package: packageName,
+      width: size,
+      height: size,
+      color: color,
+    );
+  }
+
   static Widget emoji(String imageName, {double size = 36}) {
     String name = imageName.substring(0, imageName.length);
     return Image.asset(

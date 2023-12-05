@@ -20,8 +20,8 @@ class CreateGroupView extends StatefulWidget {
   final void Function(List<ContactItemModel> data)? onSearchTap;
 
   final ChatUIKitContactItemBuilder? listViewItemBuilder;
-  final void Function(ContactItemModel)? onItemTap;
-  final void Function(ContactItemModel)? onItemLongPress;
+  final void Function(ContactItemModel model)? onItemTap;
+  final void Function(ContactItemModel model)? onItemLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
 

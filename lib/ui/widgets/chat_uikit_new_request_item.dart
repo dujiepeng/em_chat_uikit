@@ -79,7 +79,6 @@ class ChatUIKitNewRequestItem extends StatelessWidget {
     );
     content = Container(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 5),
-      height: model.itemHeight - 0.5,
       child: content,
     );
 

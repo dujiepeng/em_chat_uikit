@@ -38,6 +38,9 @@ class ChatUIKitContactItem extends StatelessWidget {
     content = Container(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
       height: model.itemHeight - 0.5,
+      color: theme.color.isDark
+          ? theme.color.neutralColor1
+          : theme.color.neutralColor98,
       child: content,
     );
 

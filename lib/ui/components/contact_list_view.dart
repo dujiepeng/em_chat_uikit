@@ -25,8 +25,9 @@ class ContactListView extends StatefulWidget {
   final List<NeedAlphabeticalWidget>? beforeWidgets;
   final List<NeedAlphabeticalWidget>? afterWidgets;
   final ChatUIKitContactItemBuilder? itemBuilder;
-  final void Function(ContactItemModel model)? onTap;
-  final void Function(ContactItemModel model)? onLongPress;
+  final void Function(BuildContext context, ContactItemModel model)? onTap;
+  final void Function(BuildContext context, ContactItemModel model)?
+      onLongPress;
   final String? searchHideText;
   final Widget? background;
   final String? errorMessage;
@@ -102,10 +103,10 @@ class _ContactListViewState extends State<ContactListView>
                   }
                   item ??= InkWell(
                     onTap: () {
-                      widget.onTap?.call(model);
+                      widget.onTap?.call(context, model);
                     },
                     onLongPress: () {
-                      widget.onLongPress?.call(model);
+                      widget.onLongPress?.call(context, model);
                     },
                     child: ChatUIKitContactItem(model),
                   );
@@ -132,10 +133,5 @@ class _ContactListViewState extends State<ContactListView>
   @override
   void onContactDeleted(String userId) {
     controller.refresh();
-  }
-
-  @override
-  void onReceiveFriendRequest(String userId, String? reason) {
-    debugPrint('reason: $reason');
   }
 }

@@ -1,5 +1,5 @@
+import 'package:em_chat_uikit/sdk_wrapper/chat_sdk_wrapper.dart';
 import 'package:flutter/foundation.dart';
-import '../chat_sdk_wrapper.dart';
 
 mixin MultiWrapper on ChatUIKitWrapperBase {
   @protected
@@ -16,6 +16,12 @@ mixin MultiWrapper on ChatUIKitWrapperBase {
         onConversationEvent: onConversationEvent,
       ),
     );
+  }
+
+  @override
+  void removeListeners() {
+    super.removeListeners();
+    Client.getInstance.removeMultiDeviceEventHandler(sdkEventKey);
   }
 
   @protected

@@ -10,8 +10,8 @@ class ConversationView extends StatefulWidget {
     this.onSearchTap,
     this.fakeSearchHideText,
     this.listViewBackground,
-    this.onItemTap,
-    this.onItemLongPress,
+    this.onTap,
+    this.onLongPress,
     this.appBar,
     this.controller,
     super.key,
@@ -23,8 +23,9 @@ class ConversationView extends StatefulWidget {
   final List<NeedAlphabeticalWidget>? beforeWidgets;
   final List<NeedAlphabeticalWidget>? afterWidgets;
   final ChatUIKitListItemBuilder? listViewItemBuilder;
-  final void Function(ConversationItemModel)? onItemTap;
-  final void Function(ConversationItemModel)? onItemLongPress;
+  final void Function(BuildContext context, ConversationItemModel model)? onTap;
+  final void Function(BuildContext context, ConversationItemModel model)?
+      onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   @override
@@ -79,12 +80,12 @@ class _ConversationViewState extends State<ConversationView> {
           afterWidgets: widget.afterWidgets,
           searchHideText: widget.fakeSearchHideText,
           background: widget.listViewBackground,
-          onTap: widget.onItemTap ??
-              (ConversationItemModel model) {
+          onTap: widget.onTap ??
+              (BuildContext context, ConversationItemModel model) {
                 pushToMessagePage(model);
               },
-          onLongPress: widget.onItemLongPress ??
-              (ConversationItemModel model) {
+          onLongPress: widget.onLongPress ??
+              (BuildContext context, ConversationItemModel model) {
                 longPressed(model);
               },
           onSearchTap: widget.onSearchTap ?? onSearchTap,

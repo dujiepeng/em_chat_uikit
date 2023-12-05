@@ -74,7 +74,7 @@ class _SearchContactsViewState extends State<SearchContactsView> {
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
       appBar: const ChatUIKitAppBar(),
-      body: SafeArea(child: content),
+      body: content,
     );
 
     // content = SafeArea(child: content);

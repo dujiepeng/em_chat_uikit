@@ -9,12 +9,11 @@ class ContactView extends StatefulWidget {
     this.onSearchTap,
     this.fakeSearchHideText,
     this.listViewBackground,
-    this.onItemTap,
-    this.onItemLongPress,
+    this.onTap,
+    this.onLongPress,
     this.appBar,
     this.controller,
     this.loadErrorMessage,
-    this.onAddContactError,
     super.key,
   });
 
@@ -23,12 +22,12 @@ class ContactView extends StatefulWidget {
   final void Function(List<ContactItemModel> data)? onSearchTap;
 
   final ChatUIKitContactItemBuilder? listViewItemBuilder;
-  final void Function(ContactItemModel)? onItemTap;
-  final void Function(ContactItemModel)? onItemLongPress;
+  final void Function(BuildContext context, ContactItemModel model)? onTap;
+  final void Function(BuildContext context, ContactItemModel model)?
+      onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
-  final void Function(ChatError error)? onAddContactError;
 
   @override
   State<ContactView> createState() => _ContactViewState();
@@ -85,8 +84,8 @@ class _ContactViewState extends State<ContactView> with ContactObserver {
         beforeWidgets: beforeWidgets,
         searchHideText: widget.fakeSearchHideText,
         background: widget.listViewBackground,
-        onTap: widget.onItemTap ?? tapContactInfo,
-        onLongPress: widget.onItemLongPress ?? longContactInfo,
+        onTap: widget.onTap ?? tapContactInfo,
+        onLongPress: widget.onLongPress ?? longContactInfo,
         onSearchTap: widget.onSearchTap ?? onSearchTap,
         errorMessage: widget.loadErrorMessage,
       )),
@@ -100,34 +99,23 @@ class _ContactViewState extends State<ContactView> with ContactObserver {
       ChatUIKitListMoreItem(
         title: '新请求',
         onTap: () {
-          Navigator.maybeOf(context)?.push(MaterialPageRoute(
-            builder: (context) {
-              return const NewRequestView();
-            },
-          )).then((value) {
-            setState(() {});
-          });
+          Navigator.of(context).pushNamed(
+            NewRequestView.routeName,
+            arguments: const NewRequestViewArguments(),
+          );
         },
-        trailing: () {
-          if (ChatUIKitContext.instance.requestList().isNotEmpty == true) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 5),
-              child: ChatUIKitBadge(
-                  ChatUIKitContext.instance.requestList().length),
-            );
-          } else {
-            return const SizedBox();
-          }
-        }(),
+        trailing: Padding(
+          padding: const EdgeInsets.only(right: 5),
+          child: ChatUIKitBadge(ChatUIKitContext.instance.requestList().length),
+        ),
       ),
       ChatUIKitListMoreItem(
         title: '群聊',
         onTap: () {
-          Navigator.maybeOf(context)?.push(MaterialPageRoute(
-            builder: (context) {
-              return const GroupView();
-            },
-          ));
+          Navigator.of(context).pushNamed(
+            GroupView.routeName,
+            arguments: const GroupViewArguments(),
+          );
         },
       ),
     ];
@@ -154,17 +142,25 @@ class _ContactViewState extends State<ContactView> with ContactObserver {
     );
   }
 
-  void tapContactInfo(ContactItemModel info) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) {
-        return ContactDetailsView(
-          profile: info.profile,
-        );
-      },
-    ));
+  void tapContactInfo(BuildContext context, ContactItemModel info) {
+    Navigator.of(context).pushNamed(
+      ContactDetailsView.routeName,
+      arguments: ContactDetailsViewArguments(
+        profile: info.profile,
+        actions: [
+          ChatUIKitActionItem(
+            title: '发消息',
+            icon: 'assets/images/chat.png',
+            onTap: (context) {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
   }
 
-  void longContactInfo(ContactItemModel info) {
+  void longContactInfo(BuildContext context, ContactItemModel info) {
     debugPrint('longContactInfo');
   }
 
@@ -203,7 +199,8 @@ class _ContactViewState extends State<ContactView> with ContactObserver {
   }
 
   @override
-  void onReceiveFriendRequest(String userId, String? reason) {
+  // 用于更新好友请求未读数
+  void onContactRequestReceived(String userId, String? reason) {
     setState(() {});
   }
 }

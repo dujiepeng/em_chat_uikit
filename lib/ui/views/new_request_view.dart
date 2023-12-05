@@ -2,14 +2,52 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
+class NewRequestViewArguments {
+  const NewRequestViewArguments({
+    this.controller,
+    this.appBar,
+    this.onSearchTap,
+    this.listViewItemBuilder,
+    this.onTap,
+    this.onLongPress,
+    this.fakeSearchHideText,
+    this.listViewBackground,
+    this.loadErrorMessage,
+  });
+
+  final NewRequestListViewController? controller;
+  final ChatUIKitAppBar? appBar;
+  final void Function(List<NewRequestItemModel> data)? onSearchTap;
+  final ChatUIKitNewRequestItemBuilder? listViewItemBuilder;
+  final void Function(BuildContext context, NewRequestItemModel model)? onTap;
+  final void Function(BuildContext context, NewRequestItemModel model)?
+      onLongPress;
+  final String? fakeSearchHideText;
+  final Widget? listViewBackground;
+  final String? loadErrorMessage;
+}
+
 class NewRequestView extends StatefulWidget {
+  static get routeName => '/NewRequestView';
+
+  NewRequestView.arguments(NewRequestViewArguments argument, {super.key})
+      : controller = argument.controller,
+        appBar = argument.appBar,
+        onSearchTap = argument.onSearchTap,
+        listViewItemBuilder = argument.listViewItemBuilder,
+        onTap = argument.onTap,
+        onLongPress = argument.onLongPress,
+        fakeSearchHideText = argument.fakeSearchHideText,
+        listViewBackground = argument.listViewBackground,
+        loadErrorMessage = argument.loadErrorMessage;
+
   const NewRequestView({
     this.controller,
     this.appBar,
     this.onSearchTap,
     this.listViewItemBuilder,
-    this.onItemTap,
-    this.onItemLongPress,
+    this.onTap,
+    this.onLongPress,
     this.fakeSearchHideText,
     this.listViewBackground,
     this.loadErrorMessage,
@@ -20,8 +58,9 @@ class NewRequestView extends StatefulWidget {
   final ChatUIKitAppBar? appBar;
   final void Function(List<NewRequestItemModel> data)? onSearchTap;
   final ChatUIKitNewRequestItemBuilder? listViewItemBuilder;
-  final void Function(NewRequestItemModel)? onItemTap;
-  final void Function(NewRequestItemModel)? onItemLongPress;
+  final void Function(BuildContext context, NewRequestItemModel model)? onTap;
+  final void Function(BuildContext context, NewRequestItemModel model)?
+      onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
@@ -73,13 +112,27 @@ class _NewRequestViewState extends State<NewRequestView> {
             searchHideText: widget.fakeSearchHideText,
             background: widget.listViewBackground,
             errorMessage: widget.loadErrorMessage,
-            onTap: widget.onItemTap ?? onItemTap,
-            onLongPress: widget.onItemLongPress,
+            onTap: widget.onTap ?? onItemTap,
+            onLongPress: widget.onLongPress,
           ),
         ));
 
     return content;
   }
 
-  void onItemTap(NewRequestItemModel model) {}
+  void onItemTap(BuildContext context, NewRequestItemModel model) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return NewRequestDetailsView(
+            profile: model.profile,
+          );
+        },
+      ),
+    ).then((value) {
+      if (value == true) {
+        controller.refresh();
+      }
+    });
+  }
 }

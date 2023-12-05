@@ -1,8 +1,8 @@
-import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/sdk_wrapper/chat_sdk_wrapper.dart';
 
 mixin ContactActions on ContactWrapper {
   Future<List<String>> getAllContacts() {
-    return checkResult(ChatSDKWrapperActionEvent.sendContactRequest, () {
+    return checkResult(ChatSDKWrapperActionEvent.getAllContacts, () {
       return Client.getInstance.contactManager.getAllContactsFromDB();
     });
   }
@@ -15,7 +15,7 @@ mixin ContactActions on ContactWrapper {
   }
 
   Future<void> acceptContactRequest({required String userId}) {
-    return checkResult(ChatSDKWrapperActionEvent.sendContactRequest, () {
+    return checkResult(ChatSDKWrapperActionEvent.acceptContactRequest, () {
       return Client.getInstance.contactManager.acceptInvitation(userId);
     });
   }

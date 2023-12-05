@@ -6,6 +6,7 @@ enum ChatSDKWrapperActionEvent {
   sendGroupMessageReadAck,
   sendConversationReadAck,
   createConversation,
+  getConversation,
   getThreadConversation,
   markAllConversationsAsRead,
   markConversationAsRead,
@@ -103,4 +104,9 @@ enum ChatSDKWrapperActionEvent {
   clearSilentMode,
   fetchSilentModel,
   setAllSilentMode,
+  publishPresence,
+  subscribe,
+  unsubscribe,
+  fetchSubscribedMembers,
+  fetchPresenceStatus,
 }

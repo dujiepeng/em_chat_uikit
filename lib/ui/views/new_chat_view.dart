@@ -8,8 +8,8 @@ class NewChatView extends StatefulWidget {
     this.onSearchTap,
     this.fakeSearchHideText,
     this.listViewBackground,
-    this.onItemTap,
-    this.onItemLongPress,
+    this.onTap,
+    this.onLongPress,
     this.appBar,
     this.controller,
     super.key,
@@ -20,8 +20,9 @@ class NewChatView extends StatefulWidget {
   final void Function(List<ContactItemModel> data)? onSearchTap;
 
   final ChatUIKitContactItemBuilder? listViewItemBuilder;
-  final void Function(ContactItemModel)? onItemTap;
-  final void Function(ContactItemModel)? onItemLongPress;
+  final void Function(BuildContext context, ContactItemModel model)? onTap;
+  final void Function(BuildContext context, ContactItemModel model)?
+      onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
 
@@ -65,7 +66,7 @@ class _NewChatViewState extends State<NewChatView> {
         itemBuilder: widget.listViewItemBuilder,
         searchHideText: widget.fakeSearchHideText,
         background: widget.listViewBackground,
-        onTap: widget.onItemTap ?? tapContactInfo,
+        onTap: widget.onTap ?? tapContactInfo,
         onSearchTap: widget.onSearchTap ?? onSearchTap,
       ),
     );
@@ -97,7 +98,7 @@ class _NewChatViewState extends State<NewChatView> {
     });
   }
 
-  void tapContactInfo(ContactItemModel info) {
+  void tapContactInfo(BuildContext context, ContactItemModel info) {
     Navigator.of(context).pop(info.profile);
   }
 }

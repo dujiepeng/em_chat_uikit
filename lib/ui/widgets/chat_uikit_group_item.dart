@@ -37,7 +37,6 @@ class ChatUIKitGroupItem extends StatelessWidget {
     );
     content = Container(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-      height: model.itemHeight - 0.5,
       child: content,
     );
 

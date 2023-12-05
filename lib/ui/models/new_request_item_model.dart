@@ -1,7 +1,6 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
-class NewRequestItemModel
-    with ChatUIKitListItemModelBase, NeedAlphabetical, NeedSearch {
+class NewRequestItemModel with ChatUIKitListItemModelBase, NeedSearch {
   @override
   ChatUIKitProfile profile;
 
@@ -13,9 +12,6 @@ class NewRequestItemModel
   }) {
     profile = profile;
   }
-
-  @override
-  double get itemHeight => 60;
 
   @override
   String get showName {

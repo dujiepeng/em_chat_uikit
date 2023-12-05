@@ -1,4 +1,4 @@
-import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/sdk_wrapper/chat_sdk_wrapper.dart';
 
 mixin ChatActions on ChatWrapper {
   Future<Message> sendMessage({required Message message}) async {
@@ -55,15 +55,25 @@ mixin ChatActions on ChatWrapper {
     });
   }
 
-  Future<Conversation?> createConversation({
+  Future<Conversation> createConversation({
     required String conversationId,
     ConversationType type = ConversationType.Chat,
   }) {
     return checkResult(ChatSDKWrapperActionEvent.createConversation, () async {
-      return Client.getInstance.chatManager.getConversation(
-        conversationId,
-        type: type,
-      );
+      Conversation? conv = await Client.getInstance.chatManager
+          .getConversation(conversationId, type: type, createIfNeed: true);
+      return conv!;
+    });
+  }
+
+  Future<Conversation?> getConversation({
+    required String conversationId,
+    ConversationType type = ConversationType.Chat,
+  }) {
+    return checkResult(ChatSDKWrapperActionEvent.getConversation, () async {
+      Conversation? conv = await Client.getInstance.chatManager
+          .getConversation(conversationId, type: type, createIfNeed: false);
+      return conv;
     });
   }
 

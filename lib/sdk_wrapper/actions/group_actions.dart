@@ -1,7 +1,7 @@
-import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/sdk_wrapper/chat_sdk_wrapper.dart';
 
 mixin GroupActions on GroupWrapper {
-  Future<Group?> getGroupId({required String groupId}) {
+  Future<Group?> getGroup({required String groupId}) {
     return checkResult(ChatSDKWrapperActionEvent.getGroupId, () {
       return Client.getInstance.groupManager.getGroupWithId(groupId);
     });

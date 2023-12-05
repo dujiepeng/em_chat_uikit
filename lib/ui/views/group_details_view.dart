@@ -1,41 +1,43 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class ContactDetailsViewArguments {
-  final ChatUIKitProfile profile;
-  final List<ChatUIKitActionItem> actions;
-  ContactDetailsViewArguments({
+const String userGroupName = 'chatUIKit_group_member_nick_name';
+
+class GroupDetailsViewArguments {
+  const GroupDetailsViewArguments({
     required this.profile,
     required this.actions,
   });
+  final ChatUIKitProfile profile;
+  final List<ChatUIKitActionItem> actions;
 }
 
-class ContactDetailsView extends StatefulWidget {
-  static String routeName = '/ContactDetailsView';
+class GroupDetailsView extends StatefulWidget {
+  static const routeName = '/GroupDetailsView';
 
-  ContactDetailsView.arguments(ContactDetailsViewArguments arguments,
-      {super.key})
-      : actions = arguments.actions,
-        profile = arguments.profile;
-
-  const ContactDetailsView({
-    required this.profile,
-    required this.actions,
+  GroupDetailsView.arguments(
+    GroupDetailsViewArguments arguments, {
     super.key,
-  });
+  })  : profile = arguments.profile,
+        actions = arguments.actions;
 
-  final ChatUIKitProfile profile;
+  const GroupDetailsView(
+      {required this.profile, required this.actions, super.key});
   final List<ChatUIKitActionItem> actions;
+  final ChatUIKitProfile profile;
+
   @override
-  State<ContactDetailsView> createState() => _ContactDetailsViewState();
+  State<GroupDetailsView> createState() => _GroupDetailsViewState();
 }
 
-class _ContactDetailsViewState extends State<ContactDetailsView> {
+class _GroupDetailsViewState extends State<GroupDetailsView> {
   ValueNotifier<bool> isNotDisturb = ValueNotifier<bool>(false);
-
+  ValueNotifier<int> memberCount = ValueNotifier<int>(0);
+  Group? group;
   late final List<ChatUIKitActionItem>? actions;
   @override
   void initState() {
@@ -44,11 +46,20 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
         'The number of actions in the list cannot exceed 5');
     actions = widget.actions;
     fetchInfo();
+    fetchGroup();
+  }
+
+  void fetchGroup() async {
+    group = await ChatUIKit.instance.getGroup(groupId: widget.profile.id);
+    group ??=
+        await ChatUIKit.instance.fetchGroupInfo(groupId: widget.profile.id);
+    debugPrint(group?.memberCount.toString());
+    memberCount.value = (group?.memberCount ?? 0) + 1;
   }
 
   void fetchInfo() async {
     Conversation conversation = await ChatUIKit.instance.createConversation(
-        conversationId: widget.profile.id, type: ConversationType.Chat);
+        conversationId: widget.profile.id, type: ConversationType.GroupChat);
     Map<String, ChatSilentModeResult> map = await ChatUIKit.instance
         .fetchSilentModel(conversations: [conversation]);
     isNotDisturb.value = map.values.first.remindType != ChatPushRemindType.ALL;
@@ -219,6 +230,69 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
     content = ListView(
       children: [
         content,
+        InkWell(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) {
+                return GroupMemberListView(
+                  groupId: widget.profile.id,
+                );
+              },
+            ));
+          },
+          child: ChatUIKitDetailsItem(
+            title: '群成员',
+            trailing: SizedBox(
+              width: 100,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ValueListenableBuilder(
+                    valueListenable: memberCount,
+                    builder: (context, value, child) {
+                      if (memberCount.value == 0) {
+                        return const SizedBox();
+                      } else {
+                        return Text(
+                          '${memberCount.value}人',
+                          style: TextStyle(
+                            color: theme.color.isDark
+                                ? theme.color.neutralColor6
+                                : theme.color.neutralColor5,
+                            fontSize: theme.font.labelLarge.fontSize,
+                            fontWeight: theme.font.labelLarge.fontWeight,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    color: theme.color.isDark
+                        ? theme.color.neutralColor5
+                        : theme.color.neutralColor7,
+                    size: 18,
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            changeInfo('我在本群的昵称', hint: '请输入');
+          },
+          child: ChatUIKitDetailsItem(
+            title: '我在本群昵称',
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              color: theme.color.isDark
+                  ? theme.color.neutralColor5
+                  : theme.color.neutralColor7,
+              size: 18,
+            ),
+          ),
+        ),
         ChatUIKitDetailsItem(
           title: '消息免打扰',
           trailing: ValueListenableBuilder(
@@ -236,7 +310,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
                   if (value == true) {
                     await ChatUIKit.instance.setSilentMode(
                         conversationId: widget.profile.id,
-                        type: ConversationType.Chat,
+                        type: ConversationType.GroupChat,
                         param: ChatSilentModeParam.remindType(
                             ChatPushRemindType.MENTION_ONLY));
                   } else {
@@ -262,14 +336,9 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
     return content;
   }
 
-  void doNotDisturb() {}
-
-  void blockUser() {}
-
   void clearAllHistory() {
     showChatUIKitDialog(
       title: '确认清空聊天记录?',
-      content: '清空聊天记录后，你将无法查看与该联系人的聊天记录。',
       context: context,
       items: [
         ChatUIKitDialogItem.cancel(
@@ -294,28 +363,47 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
   }
 
   void showBottom() async {
-    bool? ret = await showChatUIKitBottomSheet(
-      cancelTitle: '取消',
-      context: context,
-      items: [
-        ChatUIKitBottomSheetItem.destructive(
-          label: '删除联系人',
+    List<ChatUIKitBottomSheetItem> list = [];
+    if (group?.permissionType == GroupPermissionType.Owner) {
+      list.add(
+        ChatUIKitBottomSheetItem.normal(
+          label: '转移群组',
           onTap: () async {
             Navigator.of(context).pop(true);
-            return true;
+            changeOwner();
           },
         ),
-      ],
-    );
-
-    if (ret == true) {
-      deleteContact();
+      );
+      list.add(
+        ChatUIKitBottomSheetItem.destructive(
+          label: '解散群组',
+          onTap: () async {
+            Navigator.of(context).pop(true);
+            destroyGroup();
+          },
+        ),
+      );
+    } else {
+      list.add(
+        ChatUIKitBottomSheetItem.destructive(
+          label: '退出群聊',
+          onTap: () async {
+            Navigator.of(context).pop(true);
+            leaveGroup();
+          },
+        ),
+      );
     }
+
+    await showChatUIKitBottomSheet(
+      cancelTitle: '取消',
+      context: context,
+      items: list,
+    );
   }
 
   Widget statusAvatar() {
     final theme = ChatUIKitTheme.of(context);
-
     return FutureBuilder(
       future:
           ChatUIKit.instance.fetchPresenceStatus(members: [widget.profile.id]),
@@ -388,10 +476,10 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
     );
   }
 
-  void deleteContact() {
+  void destroyGroup() {
     showChatUIKitDialog(
-      title: '确认删除联系人?',
-      content: '确认删除${widget.profile.name ?? widget.profile.id}同时删除与该联系人的聊天记录。',
+      title: '确认解散群组?',
+      content: '确认解散群组，同时删除该群的聊天记录。',
       context: context,
       items: [
         ChatUIKitDialogItem.cancel(
@@ -401,13 +489,79 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
           },
         ),
         ChatUIKitDialogItem.confirm(
-          label: '确认',
+          label: '解散',
           onTap: () async {
             Navigator.of(context).pop();
-            ChatUIKit.instance.deleteContact(userId: widget.profile.id);
+            ChatUIKit.instance.destroyGroup(groupId: widget.profile.id);
           },
         ),
       ],
     );
+  }
+
+  void leaveGroup() {
+    showChatUIKitDialog(
+      title: '确认退出群聊?',
+      content: '确认退出群组，同时删除该群的聊天记录。',
+      context: context,
+      items: [
+        ChatUIKitDialogItem.cancel(
+          label: '取消',
+          onTap: () async {
+            Navigator.of(context).pop();
+          },
+        ),
+        ChatUIKitDialogItem.confirm(
+          label: '退出',
+          onTap: () async {
+            Navigator.of(context).pop();
+            ChatUIKit.instance.leaveGroup(groupId: widget.profile.id);
+          },
+        ),
+      ],
+    );
+  }
+
+  void changeOwner() {
+    Navigator.of(context).pushNamed(
+      GroupChangeOwnerView.routeName,
+      arguments: GroupChangeOwnerViewArguments(
+        groupId: widget.profile.id,
+      ),
+    );
+  }
+
+  void changeInfo(String title, {String? hint}) {
+    Navigator.of(context)
+        .pushNamed(ChangeInfoView.routeName,
+            arguments: ChangeInfoViewArguments(
+                title: title,
+                hint: hint,
+                inputTextCallback: () async {
+                  if (group?.groupId != null) {
+                    Map<String, String> map = await ChatUIKit.instance
+                        .fetchGroupMemberAttributes(
+                            groupId: group!.groupId,
+                            userId: ChatUIKit.instance.currentUserId());
+
+                    return map[userGroupName];
+                  }
+                  return null;
+                }))
+        .then((value) {
+      if (value != null) {
+        if (value is String) {
+          ChatUIKit.instance
+              .setGroupMemberAttributes(
+                  groupId: group!.groupId,
+                  userId: ChatUIKit.instance.currentUserId(),
+                  attributes: {userGroupName: value})
+              .then((_) {})
+              .catchError((e) {
+                debugPrint(e.toString());
+              });
+        }
+      }
+    });
   }
 }
