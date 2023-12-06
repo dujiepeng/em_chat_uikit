@@ -29,4 +29,18 @@ class ContactItemModel
             ChatUIKitProfile.contact(id: userId);
     return ContactItemModel(profile: profile);
   }
+
+  static ContactItemModel fromGroupId(String groupId, String userId) {
+    Map<String, ChatUIKitProfile>? profilesMap =
+        ChatUIKitContext.instance.groupMembersCache[groupId];
+    if (profilesMap == null) {
+      profilesMap = {};
+      ChatUIKitContext.instance.groupMembersCache[groupId] = profilesMap;
+    }
+
+    ChatUIKitProfile profile =
+        profilesMap[userId] ?? ChatUIKitProfile.contact(id: userId);
+
+    return ContactItemModel(profile: profile);
+  }
 }

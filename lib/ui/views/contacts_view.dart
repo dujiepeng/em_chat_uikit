@@ -2,9 +2,9 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
-class ContactView extends StatefulWidget {
-  ContactView.arguments(
-    ContactViewArguments arguments, {
+class ContactsView extends StatefulWidget {
+  ContactsView.arguments(
+    ContactsViewArguments arguments, {
     super.key,
   })  : listViewItemBuilder = arguments.listViewItemBuilder,
         onSearchTap = arguments.onSearchTap,
@@ -16,7 +16,7 @@ class ContactView extends StatefulWidget {
         controller = arguments.controller,
         loadErrorMessage = arguments.loadErrorMessage;
 
-  const ContactView({
+  const ContactsView({
     this.listViewItemBuilder,
     this.onSearchTap,
     this.fakeSearchHideText,
@@ -42,10 +42,10 @@ class ContactView extends StatefulWidget {
   final String? loadErrorMessage;
 
   @override
-  State<ContactView> createState() => _ContactViewState();
+  State<ContactsView> createState() => _ContactsViewState();
 }
 
-class _ContactViewState extends State<ContactView> with ContactObserver {
+class _ContactsViewState extends State<ContactsView> with ContactObserver {
   late final ContactListViewController controller;
 
   @override
@@ -90,17 +90,18 @@ class _ContactViewState extends State<ContactView> with ContactObserver {
             ),
           ),
       body: SafeArea(
-          child: ContactListView(
-        controller: controller,
-        itemBuilder: widget.listViewItemBuilder,
-        beforeWidgets: beforeWidgets,
-        searchHideText: widget.fakeSearchHideText,
-        background: widget.listViewBackground,
-        onTap: widget.onTap ?? tapContactInfo,
-        onLongPress: widget.onLongPress ?? longContactInfo,
-        onSearchTap: widget.onSearchTap ?? onSearchTap,
-        errorMessage: widget.loadErrorMessage,
-      )),
+        child: ContactListView(
+          controller: controller,
+          itemBuilder: widget.listViewItemBuilder,
+          beforeWidgets: beforeWidgets,
+          searchHideText: widget.fakeSearchHideText,
+          background: widget.listViewBackground,
+          onTap: widget.onTap ?? tapContactInfo,
+          onLongPress: widget.onLongPress ?? longContactInfo,
+          onSearchTap: widget.onSearchTap ?? onSearchTap,
+          errorMessage: widget.loadErrorMessage,
+        ),
+      ),
     );
 
     return content;
@@ -112,8 +113,8 @@ class _ContactViewState extends State<ContactView> with ContactObserver {
         title: '新请求',
         onTap: () {
           Navigator.of(context).pushNamed(
-            ChatUIKitRouteNames.newRequestView,
-            arguments: NewRequestViewArguments(),
+            ChatUIKitRouteNames.newRequestsView,
+            arguments: NewRequestsViewArguments(),
           );
         },
         trailing: Padding(
@@ -125,8 +126,8 @@ class _ContactViewState extends State<ContactView> with ContactObserver {
         title: '群聊',
         onTap: () {
           Navigator.of(context).pushNamed(
-            ChatUIKitRouteNames.groupView,
-            arguments: GroupViewArguments(),
+            ChatUIKitRouteNames.groupsView,
+            arguments: GroupsViewArguments(),
           );
         },
       ),
@@ -164,6 +165,7 @@ class _ContactViewState extends State<ContactView> with ContactObserver {
             title: '发消息',
             icon: 'assets/images/chat.png',
             onTap: (context) {
+              // TODO: 直接跳转到聊天页面
               Navigator.of(context).pop();
             },
           ),

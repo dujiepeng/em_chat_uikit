@@ -1,8 +1,9 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/widgets.dart';
 
-class ContactViewArguments implements ChatUIKitViewArguments {
-  ContactViewArguments({
+class GroupMembersViewArguments implements ChatUIKitViewArguments {
+  GroupMembersViewArguments({
+    required this.groupId,
     this.controller,
     this.appBar,
     this.onSearchTap,
@@ -13,9 +14,11 @@ class ContactViewArguments implements ChatUIKitViewArguments {
     this.listViewBackground,
     this.loadErrorMessage,
     this.attributes,
+    this.enableMemberOperation = false,
   });
 
-  final ContactListViewController? controller;
+  final String groupId;
+  final GroupMemberListViewController? controller;
   final ChatUIKitAppBar? appBar;
   final void Function(List<ContactItemModel> data)? onSearchTap;
 
@@ -26,6 +29,8 @@ class ContactViewArguments implements ChatUIKitViewArguments {
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
+  final bool enableMemberOperation;
+
   @override
   String? attributes;
 }

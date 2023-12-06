@@ -2,8 +2,8 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
-class GroupView extends StatefulWidget {
-  GroupView.arguments(GroupViewArguments argument, {super.key})
+class GroupsView extends StatefulWidget {
+  GroupsView.arguments(GroupsViewArguments argument, {super.key})
       : controller = argument.controller,
         appBar = argument.appBar,
         onSearchTap = argument.onSearchTap,
@@ -14,7 +14,7 @@ class GroupView extends StatefulWidget {
         listViewBackground = argument.listViewBackground,
         loadErrorMessage = argument.loadErrorMessage;
 
-  const GroupView({
+  const GroupsView({
     this.controller,
     this.appBar,
     this.onSearchTap,
@@ -38,10 +38,10 @@ class GroupView extends StatefulWidget {
   final String? loadErrorMessage;
 
   @override
-  State<GroupView> createState() => _GroupViewState();
+  State<GroupsView> createState() => _GroupsViewState();
 }
 
-class _GroupViewState extends State<GroupView> {
+class _GroupsViewState extends State<GroupsView> {
   int? joinedCount;
   @override
   void initState() {
@@ -107,6 +107,7 @@ class _GroupViewState extends State<GroupView> {
             title: '发消息',
             icon: 'assets/images/chat.png',
             onTap: (context) {
+              // TODO: 直接跳转到聊天页面
               Navigator.of(context).pop();
             },
           ),

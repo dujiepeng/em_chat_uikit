@@ -25,14 +25,15 @@ class _ContactPageState extends State<ContactPage>
 
   @override
   Widget build(BuildContext context) {
-    return const ContactView();
+    return const ContactsView();
   }
 
   @override
   void onEventBegin(ChatSDKWrapperActionEvent event) {
     if (event == ChatSDKWrapperActionEvent.acceptContactRequest ||
         event == ChatSDKWrapperActionEvent.fetchGroupMemberAttributes ||
-        event == ChatSDKWrapperActionEvent.setGroupMemberAttributes) {
+        event == ChatSDKWrapperActionEvent.setGroupMemberAttributes ||
+        event == ChatSDKWrapperActionEvent.sendContactRequest) {
       EasyLoading.show();
     }
   }
@@ -41,7 +42,8 @@ class _ContactPageState extends State<ContactPage>
   void onEventEnd(ChatSDKWrapperActionEvent event) {
     if (event == ChatSDKWrapperActionEvent.acceptContactRequest ||
         event == ChatSDKWrapperActionEvent.fetchGroupMemberAttributes ||
-        event == ChatSDKWrapperActionEvent.setGroupMemberAttributes) {
+        event == ChatSDKWrapperActionEvent.setGroupMemberAttributes ||
+        event == ChatSDKWrapperActionEvent.sendContactRequest) {
       EasyLoading.dismiss();
     }
   }

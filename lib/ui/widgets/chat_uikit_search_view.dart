@@ -145,7 +145,8 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
                                 ? theme.color.neutralColor4
                                 : theme.color.neutralColor6,
                           ),
-                          border: InputBorder.none,
+                          border: const OutlineInputBorder(
+                              borderSide: BorderSide.none),
                         ),
                       ),
                     ),

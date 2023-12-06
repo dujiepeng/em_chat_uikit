@@ -6,17 +6,28 @@ import 'package:flutter/services.dart';
 class NewRequestDetailsView extends StatefulWidget {
   NewRequestDetailsView.arguments(NewRequestDetailsViewArguments arguments,
       {super.key})
-      : profile = arguments.profile;
+      : profile = arguments.profile,
+        btnText = arguments.btnText,
+        isReceivedRequest = arguments.isReceivedRequest;
 
-  const NewRequestDetailsView({required this.profile, super.key});
+  const NewRequestDetailsView({
+    required this.profile,
+    this.isReceivedRequest = false,
+    this.btnText,
+    super.key,
+  });
 
   final ChatUIKitProfile profile;
+  final String? btnText;
+  final bool isReceivedRequest;
 
   @override
   State<NewRequestDetailsView> createState() => _NewRequestDetailsViewState();
 }
 
 class _NewRequestDetailsViewState extends State<NewRequestDetailsView> {
+  bool hasSend = false;
+
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
@@ -90,30 +101,36 @@ class _NewRequestDetailsViewState extends State<NewRequestDetailsView> {
       ],
     );
 
-    Widget button = InkWell(
-      onTap: addAction,
-      child: Container(
-        height: 40,
-        width: 120,
-        decoration: BoxDecoration(
-          color: theme.color.isDark
-              ? theme.color.primaryColor6
-              : theme.color.primaryColor5,
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: Center(
-          child: Text(
-            '添加联系人',
-            style: TextStyle(
-              fontSize: theme.font.headlineSmall.fontSize,
-              fontWeight: theme.font.headlineSmall.fontWeight,
-              color: theme.color.isDark
-                  ? theme.color.neutralColor1
-                  : theme.color.neutralColor98,
-            ),
+    Widget button = Container(
+      height: 40,
+      width: 120,
+      decoration: BoxDecoration(
+        color: hasSend
+            ? (theme.color.isDark
+                ? theme.color.neutralColor2
+                : theme.color.neutralColor9)
+            : (theme.color.isDark
+                ? theme.color.primaryColor6
+                : theme.color.primaryColor5),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Center(
+        child: Text(
+          widget.btnText ?? '添加联系人',
+          style: TextStyle(
+            fontSize: theme.font.headlineSmall.fontSize,
+            fontWeight: theme.font.headlineSmall.fontWeight,
+            color: theme.color.isDark
+                ? theme.color.neutralColor1
+                : theme.color.neutralColor98,
           ),
         ),
       ),
+    );
+
+    button = InkWell(
+      onTap: addAction,
+      child: button,
     );
 
     Widget content = Column(
@@ -133,12 +150,25 @@ class _NewRequestDetailsViewState extends State<NewRequestDetailsView> {
   }
 
   void addAction() {
+    if (hasSend) return;
+    bool needSetState = false;
     try {
-      ChatUIKit.instance
-          .acceptContactRequest(userId: widget.profile.id)
-          .then((value) {
-        Navigator.of(context).pop();
-      });
+      if (widget.isReceivedRequest) {
+        ChatUIKit.instance
+            .acceptContactRequest(userId: widget.profile.id)
+            .then((value) {
+          Navigator.of(context).pop();
+        });
+      } else {
+        ChatUIKit.instance.sendContactRequest(userId: widget.profile.id);
+        needSetState = true;
+      }
+      if (needSetState) {
+        setState(() {
+          hasSend = true;
+        });
+      }
+
       // ignore: empty_catches
     } on ChatError {}
   }

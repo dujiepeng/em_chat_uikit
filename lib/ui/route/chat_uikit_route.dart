@@ -15,8 +15,8 @@ class ChatUIKitRoute {
       return ContactDetailsView.arguments(
           arguments as ContactDetailsViewArguments);
     },
-    ChatUIKitRouteNames.contactView: (context, arguments) {
-      return ContactView.arguments(arguments as ContactViewArguments);
+    ChatUIKitRouteNames.contactsView: (context, arguments) {
+      return ContactsView.arguments(arguments as ContactsViewArguments);
     },
     ChatUIKitRouteNames.groupChangeOwnerView: (context, arguments) {
       return GroupChangeOwnerView.arguments(
@@ -25,11 +25,11 @@ class ChatUIKitRoute {
     ChatUIKitRouteNames.groupDetailsView: (context, arguments) {
       return GroupDetailsView.arguments(arguments as GroupDetailsViewArguments);
     },
-    ChatUIKitRouteNames.newRequestView: (context, arguments) {
-      return NewRequestView.arguments(arguments as NewRequestViewArguments);
+    ChatUIKitRouteNames.newRequestsView: (context, arguments) {
+      return NewRequestsView.arguments(arguments as NewRequestsViewArguments);
     },
-    ChatUIKitRouteNames.groupView: (context, arguments) {
-      return GroupView.arguments(arguments as GroupViewArguments);
+    ChatUIKitRouteNames.groupsView: (context, arguments) {
+      return GroupsView.arguments(arguments as GroupsViewArguments);
     },
     ChatUIKitRouteNames.newChatView: (context, arguments) {
       return NewChatView.arguments(arguments as NewChatViewArguments);
@@ -41,7 +41,22 @@ class ChatUIKitRoute {
     ChatUIKitRouteNames.searchContactsView: (context, arguments) {
       return SearchContactsView.arguments(
           arguments as SearchContactsViewArguments);
-    }
+    },
+    ChatUIKitRouteNames.groupMembersView: (context, arguments) {
+      return GroupMembersView.arguments(arguments as GroupMembersViewArguments);
+    },
+    ChatUIKitRouteNames.groupAddMembersView: (context, arguments) {
+      return GroupAddMembersView.arguments(
+          arguments as GroupAddMembersViewArguments);
+    },
+    ChatUIKitRouteNames.groupDeleteMembersView: (context, arguments) {
+      return GroupDeleteMembersView.arguments(
+          arguments as GroupDeleteMembersViewArguments);
+    },
+    ChatUIKitRouteNames.searchGroupMembersView: (context, arguments) {
+      return SearchGroupMembersView.arguments(
+          arguments as SearchGroupMembersViewArguments);
+    },
   };
 
   static Route? generateRoute<T extends Object>(RouteSettings settings) {

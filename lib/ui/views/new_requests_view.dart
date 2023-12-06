@@ -2,10 +2,8 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
-class NewRequestView extends StatefulWidget {
- 
-
-  NewRequestView.arguments(NewRequestViewArguments argument, {super.key})
+class NewRequestsView extends StatefulWidget {
+  NewRequestsView.arguments(NewRequestsViewArguments argument, {super.key})
       : controller = argument.controller,
         appBar = argument.appBar,
         onSearchTap = argument.onSearchTap,
@@ -16,7 +14,7 @@ class NewRequestView extends StatefulWidget {
         listViewBackground = argument.listViewBackground,
         loadErrorMessage = argument.loadErrorMessage;
 
-  const NewRequestView({
+  const NewRequestsView({
     this.controller,
     this.appBar,
     this.onSearchTap,
@@ -41,10 +39,10 @@ class NewRequestView extends StatefulWidget {
   final String? loadErrorMessage;
 
   @override
-  State<NewRequestView> createState() => _NewRequestViewState();
+  State<NewRequestsView> createState() => _NewRequestsViewState();
 }
 
-class _NewRequestViewState extends State<NewRequestView> {
+class _NewRequestsViewState extends State<NewRequestsView> {
   late final NewRequestListViewController controller;
   int? joinedCount;
   @override
@@ -87,7 +85,8 @@ class _NewRequestViewState extends State<NewRequestView> {
             searchHideText: widget.fakeSearchHideText,
             background: widget.listViewBackground,
             errorMessage: widget.loadErrorMessage,
-            onTap: widget.onTap ?? onItemTap,
+            // onTap: widget.onTap ?? onItemTap,
+            onTap: widget.onTap,
             onLongPress: widget.onLongPress,
           ),
         ));
@@ -95,12 +94,14 @@ class _NewRequestViewState extends State<NewRequestView> {
     return content;
   }
 
+  // 暂定不需要跳进详情页面
   void onItemTap(BuildContext context, NewRequestItemModel model) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (BuildContext context) {
           return NewRequestDetailsView(
             profile: model.profile,
+            isReceivedRequest: true,
           );
         },
       ),

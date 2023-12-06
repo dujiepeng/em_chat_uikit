@@ -1,8 +1,8 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/widgets.dart';
 
-class GroupViewArguments implements ChatUIKitViewArguments {
-  GroupViewArguments({
+class NewRequestsViewArguments implements ChatUIKitViewArguments {
+  NewRequestsViewArguments({
     this.controller,
     this.appBar,
     this.onSearchTap,
@@ -14,12 +14,14 @@ class GroupViewArguments implements ChatUIKitViewArguments {
     this.loadErrorMessage,
     this.attributes,
   });
-  final GroupListViewController? controller;
+
+  final NewRequestListViewController? controller;
   final ChatUIKitAppBar? appBar;
-  final void Function(List<GroupItemModel> data)? onSearchTap;
-  final ChatUIKitGroupItemBuilder? listViewItemBuilder;
-  final void Function(BuildContext context, GroupItemModel model)? onTap;
-  final void Function(BuildContext context, GroupItemModel model)? onLongPress;
+  final void Function(List<NewRequestItemModel> data)? onSearchTap;
+  final ChatUIKitNewRequestItemBuilder? listViewItemBuilder;
+  final void Function(BuildContext context, NewRequestItemModel model)? onTap;
+  final void Function(BuildContext context, NewRequestItemModel model)?
+      onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;

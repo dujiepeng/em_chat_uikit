@@ -1,10 +1,11 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:flutter/foundation.dart';
-// import 'package:username/username.dart';
 
 class GroupMemberListViewController with ChatUIKitListViewControllerBase {
-  GroupMemberListViewController(this.groupId,
-      {this.owner, this.pageSize = 200});
+  GroupMemberListViewController({
+    required this.groupId,
+    this.owner,
+    this.pageSize = 200,
+  });
   final String groupId;
   final int pageSize;
   final String? owner;
@@ -15,18 +16,9 @@ class GroupMemberListViewController with ChatUIKitListViewControllerBase {
     try {
       loadingType.value = ChatUIKitListViewType.loading;
       cursor = null;
-      CursorResult<String> items =
-          await ChatUIKit.instance.fetchGroupMemberList(
-        groupId: groupId,
-        pageSize: pageSize,
-        cursor: cursor,
-      );
-      cursor = items.cursor;
-      if (items.data.length < pageSize) {
-        hasMore = false;
-      }
+      List<String> ret = await fetchAllMembers();
 
-      List<String> userIds = items.data;
+      List<String> userIds = ret;
       if (owner != null) {
         userIds.insert(0, owner!);
       }
@@ -34,7 +26,6 @@ class GroupMemberListViewController with ChatUIKitListViewControllerBase {
       list.clear();
       list.addAll(tmp);
 
-      debugPrint('list length: ${list.length}');
       if (list.isEmpty) {
         loadingType.value = ChatUIKitListViewType.empty;
       } else {
@@ -43,6 +34,26 @@ class GroupMemberListViewController with ChatUIKitListViewControllerBase {
     } catch (e) {
       loadingType.value = ChatUIKitListViewType.error;
     }
+  }
+
+  Future<List<String>> fetchAllMembers() async {
+    List<String> ret = [];
+    do {
+      CursorResult<String> items =
+          await ChatUIKit.instance.fetchGroupMemberList(
+        groupId: groupId,
+        pageSize: pageSize,
+        cursor: cursor,
+      );
+
+      cursor = items.cursor;
+      ret.addAll(items.data);
+      if (items.data.length < pageSize) {
+        hasMore = false;
+      }
+    } while (hasMore);
+
+    return ret;
   }
 
   @override
@@ -72,12 +83,15 @@ class GroupMemberListViewController with ChatUIKitListViewControllerBase {
   List<ContactItemModel> mappers(List<String> contacts) {
     List<ContactItemModel> mapperList = [];
     for (var item in contacts) {
-      ContactItemModel info = ContactItemModel.fromContact(item);
+      ContactItemModel info = ContactItemModel.fromGroupId(groupId, item);
       mapperList.add(info);
     }
     return mapperList;
   }
 
   @override
-  Future<void> refresh() async {}
+  Future<void> refresh() async {
+    loadingType.value = ChatUIKitListViewType.loading;
+    loadingType.value = ChatUIKitListViewType.normal;
+  }
 }

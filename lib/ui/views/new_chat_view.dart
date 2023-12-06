@@ -61,7 +61,9 @@ class _NewChatViewState extends State<NewChatView> {
           ChatUIKitAppBar(
             autoBackButton: true,
             leading: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+              },
               child: Text(
                 '新会话',
                 style: TextStyle(

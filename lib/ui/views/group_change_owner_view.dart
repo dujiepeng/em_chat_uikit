@@ -3,8 +3,6 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 class GroupChangeOwnerView extends StatefulWidget {
-
-
   GroupChangeOwnerView.arguments(GroupChangeOwnerViewArguments arguments,
       {super.key})
       : groupId = arguments.groupId,
@@ -55,8 +53,8 @@ class _GroupChangeOwnerViewState extends State<GroupChangeOwnerView> {
   @override
   void initState() {
     super.initState();
-    controller =
-        widget.controller ?? GroupMemberListViewController(widget.groupId);
+    controller = widget.controller ??
+        GroupMemberListViewController(groupId: widget.groupId);
   }
 
   @override

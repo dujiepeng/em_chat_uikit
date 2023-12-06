@@ -48,8 +48,8 @@ class _GroupMemberListViewState extends State<GroupMemberListView> {
   void initState() {
     super.initState();
 
-    controller =
-        widget.controller ?? GroupMemberListViewController(widget.groupId);
+    controller = widget.controller ??
+        GroupMemberListViewController(groupId: widget.groupId);
     controller.fetchItemList();
   }
 
@@ -61,72 +61,62 @@ class _GroupMemberListViewState extends State<GroupMemberListView> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = ChatUIKitTheme.of(context);
     Widget content = ValueListenableBuilder<ChatUIKitListViewType>(
       valueListenable: controller.loadingType,
       builder: (context, type, child) {
-        debugPrint('${controller.list}, type: $type');
-        return ChatUIKitListView(
-          scrollController: scrollController,
-          type: type,
-          list: controller.list,
-          refresh: () {
-            controller.fetchItemList();
-          },
-          enableSearchBar: widget.enableSearchBar,
-          errorMessage: widget.errorMessage,
-          reloadMessage: widget.reloadMessage,
+        return ChatUIKitAlphabeticalView(
+          onTapCancel: () {},
+          onTap: (context, alphabetical) {},
           beforeWidgets: widget.beforeWidgets,
-          afterWidgets: widget.afterWidgets,
-          background: widget.background,
-          onSearchTap: (data) {
-            List<ContactItemModel> list = [];
-            for (var item in data) {
-              if (item is ContactItemModel) {
-                list.add(item);
-              }
-            }
-            widget.onSearchTap?.call(list);
-          },
-          searchHideText: widget.searchHideText,
-          itemBuilder: (context, model) {
-            if (model is ContactItemModel) {
-              Widget? item;
-              if (widget.itemBuilder != null) {
-                item = widget.itemBuilder!(context, model);
-              }
-              item ??= InkWell(
-                onTap: () {
-                  if (controller.owner != model.profile.id) {
-                    widget.onTap?.call(context, model);
+          listViewHasSearchBar: enableSearchBar,
+          list: controller.list,
+          scrollController: scrollController,
+          builder: (context, list) {
+            return ChatUIKitListView(
+              scrollController: scrollController,
+              type: type,
+              list: list,
+              refresh: () {
+                controller.fetchItemList();
+              },
+              enableSearchBar: enableSearchBar,
+              errorMessage: widget.errorMessage,
+              reloadMessage: widget.reloadMessage,
+              beforeWidgets: widget.beforeWidgets,
+              afterWidgets: widget.afterWidgets,
+              background: widget.background,
+              onSearchTap: (data) {
+                List<ContactItemModel> list = [];
+                for (var item in data) {
+                  if (item is ContactItemModel) {
+                    list.add(item);
                   }
-                },
-                onLongPress: () {
-                  if (controller.owner != model.profile.id) {
-                    widget.onLongPress?.call(context, model);
+                }
+                widget.onSearchTap?.call(list);
+              },
+              searchHideText: widget.searchHideText,
+              itemBuilder: (context, model) {
+                if (model is ContactItemModel) {
+                  Widget? item;
+                  if (widget.itemBuilder != null) {
+                    item = widget.itemBuilder!(context, model);
                   }
-                },
-                // child: ChatUIKitContactItem(model),
-                child: controller.owner == model.profile.id
-                    ? Stack(
-                        children: [
-                          ChatUIKitContactItem(model),
-                          Opacity(
-                            opacity: 0.4,
-                            child: Container(
-                                color: theme.color.isDark
-                                    ? theme.color.neutralColor1
-                                    : theme.color.neutralColor98),
-                          ),
-                        ],
-                      )
-                    : ChatUIKitContactItem(model),
-              );
+                  item ??= InkWell(
+                    onTap: () {
+                      widget.onTap?.call(context, model);
+                    },
+                    onLongPress: () {
+                      widget.onLongPress?.call(context, model);
+                    },
+                    child: ChatUIKitContactItem(model),
+                  );
 
-              return item;
-            } else {
-              return const SizedBox();
-            }
+                  return item;
+                } else {
+                  return const SizedBox();
+                }
+              },
+            );
           },
         );
       },

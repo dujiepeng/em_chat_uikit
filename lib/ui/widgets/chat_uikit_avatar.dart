@@ -31,10 +31,12 @@ class _ChatUIKitAvatarState extends State<ChatUIKitAvatar> {
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: Colors.red,
-        borderRadius: BorderRadius.circular(CornerRadiusHelper.avatarRadius(
-          widget.size,
-          cornerRadius: widget.cornerRadius,
-        )),
+        borderRadius: BorderRadius.circular(
+          CornerRadiusHelper.avatarRadius(
+            widget.size,
+            cornerRadius: widget.cornerRadius,
+          ),
+        ),
       ),
     );
     return content;

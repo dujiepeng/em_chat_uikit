@@ -1,8 +1,8 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/widgets.dart';
 
-class NewRequestViewArguments implements ChatUIKitViewArguments {
-  NewRequestViewArguments({
+class ContactsViewArguments implements ChatUIKitViewArguments {
+  ContactsViewArguments({
     this.controller,
     this.appBar,
     this.onSearchTap,
@@ -15,17 +15,17 @@ class NewRequestViewArguments implements ChatUIKitViewArguments {
     this.attributes,
   });
 
-  final NewRequestListViewController? controller;
+  final ContactListViewController? controller;
   final ChatUIKitAppBar? appBar;
-  final void Function(List<NewRequestItemModel> data)? onSearchTap;
-  final ChatUIKitNewRequestItemBuilder? listViewItemBuilder;
-  final void Function(BuildContext context, NewRequestItemModel model)? onTap;
-  final void Function(BuildContext context, NewRequestItemModel model)?
+  final void Function(List<ContactItemModel> data)? onSearchTap;
+
+  final ChatUIKitContactItemBuilder? listViewItemBuilder;
+  final void Function(BuildContext context, ContactItemModel model)? onTap;
+  final void Function(BuildContext context, ContactItemModel model)?
       onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
-
   @override
   String? attributes;
 }

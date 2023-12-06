@@ -23,7 +23,8 @@ class GroupDetailsView extends StatefulWidget {
   State<GroupDetailsView> createState() => _GroupDetailsViewState();
 }
 
-class _GroupDetailsViewState extends State<GroupDetailsView> {
+class _GroupDetailsViewState extends State<GroupDetailsView>
+    with GroupObserver {
   ValueNotifier<bool> isNotDisturb = ValueNotifier<bool>(false);
   ValueNotifier<int> memberCount = ValueNotifier<int>(0);
   Group? group;
@@ -33,17 +34,39 @@ class _GroupDetailsViewState extends State<GroupDetailsView> {
     super.initState();
     assert(widget.actions.length <= 5,
         'The number of actions in the list cannot exceed 5');
+
+    ChatUIKit.instance.addObserver(this);
+
     actions = widget.actions;
     fetchInfo();
     fetchGroup();
   }
 
+  @override
+  void dispose() {
+    ChatUIKit.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void onMemberJoinedFromGroup(String groupId, String member) {
+    memberCount.value = memberCount.value + 1;
+  }
+
+  @override
+  void onMemberExitedFromGroup(String groupId, String member) {
+    memberCount.value = memberCount.value - 1;
+  }
+
   void fetchGroup() async {
-    group = await ChatUIKit.instance.getGroup(groupId: widget.profile.id);
-    group ??=
-        await ChatUIKit.instance.fetchGroupInfo(groupId: widget.profile.id);
-    debugPrint(group?.memberCount.toString());
-    memberCount.value = (group?.memberCount ?? 0) + 1;
+    try {
+      group = await ChatUIKit.instance.getGroup(groupId: widget.profile.id);
+      group ??=
+          await ChatUIKit.instance.fetchGroupInfo(groupId: widget.profile.id);
+      debugPrint(group?.memberCount.toString());
+      memberCount.value = group?.memberCount ?? 0;
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   void fetchInfo() async {
@@ -221,13 +244,14 @@ class _GroupDetailsViewState extends State<GroupDetailsView> {
         content,
         InkWell(
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) {
-                return GroupMemberListView(
-                  groupId: widget.profile.id,
-                );
-              },
-            ));
+            Navigator.of(context).pushNamed(
+              ChatUIKitRouteNames.groupMembersView,
+              arguments: GroupMembersViewArguments(
+                groupId: widget.profile.id,
+                enableMemberOperation:
+                    group?.permissionType == GroupPermissionType.Owner,
+              ),
+            );
           },
           child: ChatUIKitDetailsItem(
             title: '群成员',

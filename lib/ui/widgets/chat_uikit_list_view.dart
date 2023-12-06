@@ -1,7 +1,10 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit/ui/models/alphabetical_item_model.dart';
 import 'package:em_chat_uikit/ui/widgets/chat_uikit_alphabetical_item.dart';
+
 import 'package:flutter/material.dart';
+
+enum ChatUIKitListViewType { loading, empty, error, normal, refresh }
 
 typedef ListViewBuilder = Widget Function(
   BuildContext context,
@@ -10,8 +13,6 @@ typedef ListViewBuilder = Widget Function(
 
 typedef ChatUIKitListItemBuilder = Widget Function(
     BuildContext context, ChatUIKitListItemModelBase model);
-
-enum ChatUIKitListViewType { loading, empty, error, normal, refresh }
 
 class ChatUIKitListView extends StatefulWidget {
   const ChatUIKitListView({

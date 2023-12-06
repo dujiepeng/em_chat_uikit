@@ -296,14 +296,18 @@ class _ConversationViewState extends State<ConversationView> {
       for (var item in profiles!) {
         userIds.add(item.id);
       }
-      await ChatUIKit.instance.createGroup(
-        groupName: 'groupName',
-        options: GroupOptions(
-          maxCount: 2000,
-          style: GroupStyle.PrivateMemberCanInvite,
-        ),
-        inviteMembers: userIds,
-      );
+
+      try {
+        await ChatUIKit.instance.createGroup(
+          groupName: 'groupName',
+          options: GroupOptions(
+            maxCount: 2000,
+            style: GroupStyle.PrivateMemberCanInvite,
+          ),
+          inviteMembers: userIds,
+        );
+      // ignore: empty_catches
+      } catch (e) {}
     }
   }
 }

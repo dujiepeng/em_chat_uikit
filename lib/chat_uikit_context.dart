@@ -20,6 +20,8 @@ class ChatUIKitContext {
   Map<String, ChatUIKitProfile> conversationsCache = {};
   // 缓存 profile, 不需要存；
   Map<String, ChatUIKitProfile> contactsCache = {};
+// 缓存 profile, 不需要存；
+  Map<String, Map<String, ChatUIKitProfile>> groupMembersCache = {};
 
   ChatUIKitProfile? currentUserProfile;
 
