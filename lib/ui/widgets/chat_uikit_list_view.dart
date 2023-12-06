@@ -3,6 +3,11 @@ import 'package:em_chat_uikit/ui/models/alphabetical_item_model.dart';
 import 'package:em_chat_uikit/ui/widgets/chat_uikit_alphabetical_item.dart';
 import 'package:flutter/material.dart';
 
+typedef ListViewBuilder = Widget Function(
+  BuildContext context,
+  List<ChatUIKitListItemModelBase> list,
+);
+
 typedef ChatUIKitListItemBuilder = Widget Function(
     BuildContext context, ChatUIKitListItemModelBase model);
 
