@@ -382,7 +382,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         ChatUIKitBottomSheetItem.normal(
           label: '转移群组',
           onTap: () async {
-            Navigator.of(context).pop(true);
+            Navigator.of(context).pop();
             changeOwner();
           },
         ),
@@ -391,7 +391,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         ChatUIKitBottomSheetItem.destructive(
           label: '解散群组',
           onTap: () async {
-            Navigator.of(context).pop(true);
+            Navigator.of(context).pop();
             destroyGroup();
           },
         ),
@@ -401,14 +401,14 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         ChatUIKitBottomSheetItem.destructive(
           label: '退出群聊',
           onTap: () async {
-            Navigator.of(context).pop(true);
+            Navigator.of(context).pop();
             leaveGroup();
           },
         ),
       );
     }
 
-    await showChatUIKitBottomSheet(
+    showChatUIKitBottomSheet(
       cancelTitle: '取消',
       context: context,
       items: list,
@@ -505,7 +505,11 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
           label: '解散',
           onTap: () async {
             Navigator.of(context).pop();
-            ChatUIKit.instance.destroyGroup(groupId: widget.profile.id);
+            ChatUIKit.instance
+                .destroyGroup(groupId: widget.profile.id)
+                .then((value) {
+              Navigator.of(context).pop(true);
+            }).catchError((e) {});
           },
         ),
       ],
@@ -528,7 +532,11 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
           label: '退出',
           onTap: () async {
             Navigator.of(context).pop();
-            ChatUIKit.instance.leaveGroup(groupId: widget.profile.id);
+            ChatUIKit.instance
+                .leaveGroup(groupId: widget.profile.id)
+                .then((value) {
+              Navigator.of(context).pop(true);
+            }).catchError((e) {});
           },
         ),
       ],

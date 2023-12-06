@@ -42,11 +42,13 @@ class GroupsView extends StatefulWidget {
 }
 
 class _GroupsViewState extends State<GroupsView> {
+  late final GroupListViewController controller;
+
   int? joinedCount;
   @override
   void initState() {
     super.initState();
-
+    controller = widget.controller ?? GroupListViewController();
     ChatUIKit.instance.fetchJoinedGroupCount().then((value) {
       if (mounted) {
         joinedCount = value;
@@ -84,7 +86,7 @@ class _GroupsViewState extends State<GroupsView> {
           ),
       body: SafeArea(
           child: GroupListView(
-        controller: widget.controller,
+        controller: controller,
         itemBuilder: widget.listViewItemBuilder,
         searchHideText: widget.fakeSearchHideText,
         background: widget.listViewBackground,
@@ -97,11 +99,12 @@ class _GroupsViewState extends State<GroupsView> {
     return content;
   }
 
-  void tapGroupInfo(BuildContext context, GroupItemModel info) {
-    Navigator.of(context).pushNamed(
+  void tapGroupInfo(BuildContext context, GroupItemModel model) {
+    Navigator.of(context)
+        .pushNamed(
       ChatUIKitRouteNames.groupDetailsView,
       arguments: GroupDetailsViewArguments(
-        profile: info.profile,
+        profile: model.profile,
         actions: [
           ChatUIKitActionItem(
             title: '发消息',
@@ -113,6 +116,15 @@ class _GroupsViewState extends State<GroupsView> {
           ),
         ],
       ),
-    );
+    )
+        .then((value) {
+      if (value != null && value == true) {
+        controller.list.removeWhere((element) {
+          return element is GroupItemModel &&
+              element.profile.id == model.profile.id;
+        });
+        controller.reload();
+      }
+    });
   }
 }

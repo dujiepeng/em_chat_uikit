@@ -19,5 +19,10 @@ abstract mixin class ChatUIKitListViewControllerBase {
 
   Future<void> refresh() async {}
 
+  Future<void> reload() async {
+    loadingType.value = ChatUIKitListViewType.refresh;
+    loadingType.value = ChatUIKitListViewType.normal;
+  }
+
   List<ChatUIKitListItemModelBase> list = [];
 }

@@ -88,10 +88,4 @@ class GroupMemberListViewController with ChatUIKitListViewControllerBase {
     }
     return mapperList;
   }
-
-  @override
-  Future<void> refresh() async {
-    loadingType.value = ChatUIKitListViewType.loading;
-    loadingType.value = ChatUIKitListViewType.normal;
-  }
 }

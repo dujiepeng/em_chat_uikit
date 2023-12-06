@@ -263,7 +263,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
             );
 
             controller.list.addAll(models);
-            controller.refresh();
+            controller.reload();
           }
         })
         .then((value) {})
