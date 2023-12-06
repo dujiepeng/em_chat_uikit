@@ -1,7 +1,16 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+
 import 'package:flutter/material.dart';
 
 class SearchContactsView extends StatefulWidget {
+  SearchContactsView.arguments(
+    SearchContactsViewArguments arguments, {
+    super.key,
+  })  : searchData = arguments.searchData,
+        searchHideText = arguments.searchHideText,
+        itemBuilder = arguments.itemBuilder,
+        onTap = arguments.onTap;
+
   const SearchContactsView({
     required this.searchData,
     required this.searchHideText,

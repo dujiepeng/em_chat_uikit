@@ -3,6 +3,16 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 class NewChatView extends StatefulWidget {
+  NewChatView.arguments(NewChatViewArguments arguments, {super.key})
+      : listViewItemBuilder = arguments.listViewItemBuilder,
+        onSearchTap = arguments.onSearchTap,
+        fakeSearchHideText = arguments.fakeSearchHideText,
+        listViewBackground = arguments.listViewBackground,
+        onTap = arguments.onTap,
+        onLongPress = arguments.onLongPress,
+        appBar = arguments.appBar,
+        controller = arguments.controller;
+
   const NewChatView({
     this.listViewItemBuilder,
     this.onSearchTap,
@@ -50,14 +60,17 @@ class _NewChatViewState extends State<NewChatView> {
       appBar: widget.appBar ??
           ChatUIKitAppBar(
             autoBackButton: true,
-            leading: Text(
-              '新会话',
-              style: TextStyle(
-                color: theme.color.isDark
-                    ? theme.color.neutralColor98
-                    : theme.color.neutralColor1,
-                fontWeight: theme.font.titleMedium.fontWeight,
-                fontSize: theme.font.titleMedium.fontSize,
+            leading: InkWell(
+              onTap: () {},
+              child: Text(
+                '新会话',
+                style: TextStyle(
+                  color: theme.color.isDark
+                      ? theme.color.neutralColor98
+                      : theme.color.neutralColor1,
+                  fontWeight: theme.font.titleMedium.fontWeight,
+                  fontSize: theme.font.titleMedium.fontSize,
+                ),
               ),
             ),
           ),

@@ -1,21 +1,8 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+
 import 'package:flutter/material.dart';
 
-class ChangeInfoViewArguments {
-  const ChangeInfoViewArguments({
-    required this.title,
-    this.hint,
-    this.inputTextCallback,
-  });
-
-  final String title;
-  final String? hint;
-  final Future<String?> Function()? inputTextCallback;
-}
-
 class ChangeInfoView extends StatefulWidget {
-  static const routeName = '/ChangeInfoView';
-
   ChangeInfoView.arguments(ChangeInfoViewArguments arguments, {super.key})
       : title = arguments.title,
         hint = arguments.hint,

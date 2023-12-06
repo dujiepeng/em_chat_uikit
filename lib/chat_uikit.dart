@@ -2,7 +2,6 @@ export 'package:chat_uikit_theme/chat_uikit_theme.dart';
 
 export 'chat_uikit_context.dart';
 export 'chat_uikit_settings.dart';
-export 'chat_uikit_route.dart';
 
 export 'provider/profile.dart';
 
@@ -19,6 +18,7 @@ export 'tools/chat_uikit_helper.dart';
 
 export 'ui/widgets/chat_uikit_app_bar.dart';
 export 'ui/widgets/chat_uikit_avatar.dart';
+export 'ui/widgets/chat_uikit_badge.dart';
 export 'ui/widgets/chat_uikit_bottom_sheet.dart';
 export 'ui/widgets/chat_uikit_dialog.dart';
 export 'ui/widgets/chat_uikit_details_item.dart';
@@ -64,5 +64,19 @@ export 'ui/views/new_chat_view.dart';
 export 'ui/views/new_request_view.dart';
 export 'ui/views/new_request_details_view.dart';
 export 'ui/views/search_contacts_view.dart';
+
+export 'ui/route/chat_uikit_route.dart';
+export 'ui/route/chat_uikit_route_names.dart';
+export 'ui/route/view_arguments/change_info_view_arguments.dart';
+export 'ui/route/view_arguments/contact_details_view_arguments.dart';
+export 'ui/route/view_arguments/contact_view_arguments.dart';
+export 'ui/route/view_arguments/group_change_owner_view_arguments.dart';
+export 'ui/route/view_arguments/group_details_view_arguments.dart';
+export 'ui/route/view_arguments/group_view_arguments.dart';
+export 'ui/route/view_arguments/new_chat_view_arguments.dart';
+export 'ui/route/view_arguments/new_request_details_view_arguments.dart';
+export 'ui/route/view_arguments/new_request_view_arguments.dart';
+export 'ui/route/view_arguments/search_contacts_view_arguments.dart';
+export 'ui/route/view_arguments/view_arguments_base.dart';
 
 export 'universal/chat_uikit_action_item.dart';

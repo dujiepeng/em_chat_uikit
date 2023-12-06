@@ -2,33 +2,8 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
-class NewRequestViewArguments {
-  const NewRequestViewArguments({
-    this.controller,
-    this.appBar,
-    this.onSearchTap,
-    this.listViewItemBuilder,
-    this.onTap,
-    this.onLongPress,
-    this.fakeSearchHideText,
-    this.listViewBackground,
-    this.loadErrorMessage,
-  });
-
-  final NewRequestListViewController? controller;
-  final ChatUIKitAppBar? appBar;
-  final void Function(List<NewRequestItemModel> data)? onSearchTap;
-  final ChatUIKitNewRequestItemBuilder? listViewItemBuilder;
-  final void Function(BuildContext context, NewRequestItemModel model)? onTap;
-  final void Function(BuildContext context, NewRequestItemModel model)?
-      onLongPress;
-  final String? fakeSearchHideText;
-  final Widget? listViewBackground;
-  final String? loadErrorMessage;
-}
-
 class NewRequestView extends StatefulWidget {
-  static get routeName => '/NewRequestView';
+ 
 
   NewRequestView.arguments(NewRequestViewArguments argument, {super.key})
       : controller = argument.controller,

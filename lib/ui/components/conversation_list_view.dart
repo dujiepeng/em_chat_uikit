@@ -61,13 +61,11 @@ class _ConversationListViewState extends State<ConversationListView>
 
   @override
   void onMessagesReceived(List<Message> messages) {
-    // controller.fetchItemList();
     controller.refresh();
   }
 
   @override
   void onConversationsUpdate() {
-    // controller.fetchItemList();
     controller.refresh();
   }
 

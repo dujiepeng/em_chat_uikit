@@ -2,33 +2,7 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
-class GroupViewArguments {
-  const GroupViewArguments({
-    this.controller,
-    this.appBar,
-    this.onSearchTap,
-    this.listViewItemBuilder,
-    this.onTap,
-    this.onLongPress,
-    this.fakeSearchHideText,
-    this.listViewBackground,
-    this.loadErrorMessage,
-  });
-
-  final GroupListViewController? controller;
-  final ChatUIKitAppBar? appBar;
-  final void Function(List<GroupItemModel> data)? onSearchTap;
-  final ChatUIKitGroupItemBuilder? listViewItemBuilder;
-  final void Function(BuildContext context, GroupItemModel model)? onTap;
-  final void Function(BuildContext context, GroupItemModel model)? onLongPress;
-  final String? fakeSearchHideText;
-  final Widget? listViewBackground;
-  final String? loadErrorMessage;
-}
-
 class GroupView extends StatefulWidget {
-  static get routeName => '/GroupView';
-
   GroupView.arguments(GroupViewArguments argument, {super.key})
       : controller = argument.controller,
         appBar = argument.appBar,
@@ -125,7 +99,7 @@ class _GroupViewState extends State<GroupView> {
 
   void tapGroupInfo(BuildContext context, GroupItemModel info) {
     Navigator.of(context).pushNamed(
-      GroupDetailsView.routeName,
+      ChatUIKitRouteNames.groupDetailsView,
       arguments: GroupDetailsViewArguments(
         profile: info.profile,
         actions: [

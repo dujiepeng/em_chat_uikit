@@ -1,21 +1,10 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:flutter/cupertino.dart';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class ContactDetailsViewArguments {
-  final ChatUIKitProfile profile;
-  final List<ChatUIKitActionItem> actions;
-  ContactDetailsViewArguments({
-    required this.profile,
-    required this.actions,
-  });
-}
-
 class ContactDetailsView extends StatefulWidget {
-  static String routeName = '/ContactDetailsView';
-
   ContactDetailsView.arguments(ContactDetailsViewArguments arguments,
       {super.key})
       : actions = arguments.actions,

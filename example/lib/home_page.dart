@@ -1,5 +1,4 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:em_chat_uikit/ui/widgets/chat_uikit_badge.dart';
 import 'package:em_chat_uikit_example/pages/contact_page.dart';
 import 'package:em_chat_uikit_example/pages/conversation_page.dart';
 import 'package:em_chat_uikit_example/pages/my_page.dart';

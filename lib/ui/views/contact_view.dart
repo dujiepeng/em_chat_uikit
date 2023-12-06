@@ -1,9 +1,21 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:em_chat_uikit/ui/widgets/chat_uikit_badge.dart';
 
 import 'package:flutter/material.dart';
 
 class ContactView extends StatefulWidget {
+  ContactView.arguments(
+    ContactViewArguments arguments, {
+    super.key,
+  })  : listViewItemBuilder = arguments.listViewItemBuilder,
+        onSearchTap = arguments.onSearchTap,
+        fakeSearchHideText = arguments.fakeSearchHideText,
+        listViewBackground = arguments.listViewBackground,
+        onTap = arguments.onTap,
+        onLongPress = arguments.onLongPress,
+        appBar = arguments.appBar,
+        controller = arguments.controller,
+        loadErrorMessage = arguments.loadErrorMessage;
+
   const ContactView({
     this.listViewItemBuilder,
     this.onSearchTap,
@@ -100,8 +112,8 @@ class _ContactViewState extends State<ContactView> with ContactObserver {
         title: '新请求',
         onTap: () {
           Navigator.of(context).pushNamed(
-            NewRequestView.routeName,
-            arguments: const NewRequestViewArguments(),
+            ChatUIKitRouteNames.newRequestView,
+            arguments: NewRequestViewArguments(),
           );
         },
         trailing: Padding(
@@ -113,8 +125,8 @@ class _ContactViewState extends State<ContactView> with ContactObserver {
         title: '群聊',
         onTap: () {
           Navigator.of(context).pushNamed(
-            GroupView.routeName,
-            arguments: const GroupViewArguments(),
+            ChatUIKitRouteNames.groupView,
+            arguments: GroupViewArguments(),
           );
         },
       ),
@@ -144,7 +156,7 @@ class _ContactViewState extends State<ContactView> with ContactObserver {
 
   void tapContactInfo(BuildContext context, ContactItemModel info) {
     Navigator.of(context).pushNamed(
-      ContactDetailsView.routeName,
+      ChatUIKitRouteNames.contactDetailsView,
       arguments: ContactDetailsViewArguments(
         profile: info.profile,
         actions: [

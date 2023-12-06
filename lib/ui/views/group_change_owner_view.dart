@@ -1,36 +1,9 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+
 import 'package:flutter/material.dart';
 
-class GroupChangeOwnerViewArguments {
-  const GroupChangeOwnerViewArguments({
-    required this.groupId,
-    this.listViewItemBuilder,
-    this.onSearchTap,
-    this.fakeSearchHideText,
-    this.listViewBackground,
-    this.onItemTap,
-    this.onItemLongPress,
-    this.appBar,
-    this.controller,
-    this.loadErrorMessage,
-  });
-
-  final String groupId;
-
-  final GroupMemberListViewController? controller;
-  final ChatUIKitAppBar? appBar;
-  final void Function(List<ContactItemModel> data)? onSearchTap;
-
-  final ChatUIKitContactItemBuilder? listViewItemBuilder;
-  final void Function(ContactItemModel model)? onItemTap;
-  final void Function(ContactItemModel model)? onItemLongPress;
-  final String? fakeSearchHideText;
-  final Widget? listViewBackground;
-  final String? loadErrorMessage;
-}
-
 class GroupChangeOwnerView extends StatefulWidget {
-  static get routeName => '/GroupChangeOwnerView';
+
 
   GroupChangeOwnerView.arguments(GroupChangeOwnerViewArguments arguments,
       {super.key})

@@ -7,18 +7,7 @@ import 'package:flutter/services.dart';
 
 const String userGroupName = 'chatUIKit_group_member_nick_name';
 
-class GroupDetailsViewArguments {
-  const GroupDetailsViewArguments({
-    required this.profile,
-    required this.actions,
-  });
-  final ChatUIKitProfile profile;
-  final List<ChatUIKitActionItem> actions;
-}
-
 class GroupDetailsView extends StatefulWidget {
-  static const routeName = '/GroupDetailsView';
-
   GroupDetailsView.arguments(
     GroupDetailsViewArguments arguments, {
     super.key,
@@ -524,7 +513,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView> {
 
   void changeOwner() {
     Navigator.of(context).pushNamed(
-      GroupChangeOwnerView.routeName,
+      ChatUIKitRouteNames.groupChangeOwnerView,
       arguments: GroupChangeOwnerViewArguments(
         groupId: widget.profile.id,
       ),
@@ -533,7 +522,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView> {
 
   void changeInfo(String title, {String? hint}) {
     Navigator.of(context)
-        .pushNamed(ChangeInfoView.routeName,
+        .pushNamed(ChatUIKitRouteNames.changeInfoView,
             arguments: ChangeInfoViewArguments(
                 title: title,
                 hint: hint,

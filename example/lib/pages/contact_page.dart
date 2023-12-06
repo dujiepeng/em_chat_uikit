@@ -29,20 +29,20 @@ class _ContactPageState extends State<ContactPage>
   }
 
   @override
-  void onEventEnd(ChatSDKWrapperActionEvent event) {
-    if (event == ChatSDKWrapperActionEvent.acceptContactRequest ||
-        event == ChatSDKWrapperActionEvent.fetchGroupMemberAttributes ||
-        event == ChatSDKWrapperActionEvent.setGroupMemberAttributes) {
-      EasyLoading.dismiss();
-    }
-  }
-
-  @override
   void onEventBegin(ChatSDKWrapperActionEvent event) {
     if (event == ChatSDKWrapperActionEvent.acceptContactRequest ||
         event == ChatSDKWrapperActionEvent.fetchGroupMemberAttributes ||
         event == ChatSDKWrapperActionEvent.setGroupMemberAttributes) {
       EasyLoading.show();
+    }
+  }
+
+  @override
+  void onEventEnd(ChatSDKWrapperActionEvent event) {
+    if (event == ChatSDKWrapperActionEvent.acceptContactRequest ||
+        event == ChatSDKWrapperActionEvent.fetchGroupMemberAttributes ||
+        event == ChatSDKWrapperActionEvent.setGroupMemberAttributes) {
+      EasyLoading.dismiss();
     }
   }
 

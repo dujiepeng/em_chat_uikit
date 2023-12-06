@@ -44,8 +44,6 @@ class _MyAppState extends State<MyApp> {
       }),
       home: const WelcomePage(),
       onGenerateRoute: (settings) {
-        debugPrint(settings.name);
-
         return ChatUIKitRoute.generateRoute(settings) ??
             MaterialPageRoute(
               builder: (context) {

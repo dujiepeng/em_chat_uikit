@@ -1,8 +1,13 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class NewRequestDetailsView extends StatefulWidget {
+  NewRequestDetailsView.arguments(NewRequestDetailsViewArguments arguments,
+      {super.key})
+      : profile = arguments.profile;
+
   const NewRequestDetailsView({required this.profile, super.key});
 
   final ChatUIKitProfile profile;
