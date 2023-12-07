@@ -59,7 +59,7 @@ class _NewChatViewState extends State<NewChatView> {
           : theme.color.neutralColor98,
       appBar: widget.appBar ??
           ChatUIKitAppBar(
-            autoBackButton: true,
+            showBackButton: true,
             leading: InkWell(
               onTap: () {
                 Navigator.of(context).pop();

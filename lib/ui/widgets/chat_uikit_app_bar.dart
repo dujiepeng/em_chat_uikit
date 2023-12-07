@@ -11,14 +11,14 @@ class ChatUIKitAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.subTitleTextStyle,
     this.leading,
     this.trailing,
-    this.autoBackButton = false,
+    this.showBackButton = true,
     this.onBackButtonPressed,
     this.centerTitle = true,
     this.systemOverlayStyle,
     super.key,
   });
 
-  final bool autoBackButton;
+  final bool showBackButton;
   final VoidCallback? onBackButtonPressed;
   final String? title;
   final TextStyle? titleTextStyle;
@@ -111,7 +111,7 @@ class _ChatUIKitAppBarState extends State<ChatUIKitAppBar> {
 
     Widget? leading;
     List<Widget> leadingWidgets = [];
-    if (widget.autoBackButton) {
+    if (widget.showBackButton) {
       leadingWidgets.add(
         InkWell(
           onTap: () {
@@ -122,11 +122,11 @@ class _ChatUIKitAppBarState extends State<ChatUIKitAppBar> {
             }
           },
           child: Padding(
-            padding: const EdgeInsets.only(
+            padding: EdgeInsets.only(
               left: 12,
               top: 12,
               bottom: 12,
-              right: 2,
+              right: (widget.leading == null && widget.centerTitle) ? 20 : 2,
             ),
             child: Icon(
               Icons.arrow_back_ios,

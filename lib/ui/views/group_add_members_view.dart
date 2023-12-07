@@ -68,7 +68,7 @@ class _GroupAddMembersViewState extends State<GroupAddMembersView> {
           : theme.color.neutralColor98,
       appBar: widget.appBar ??
           ChatUIKitAppBar(
-            autoBackButton: true,
+            showBackButton: true,
             leading: InkWell(
               onTap: () {
                 Navigator.maybePop(context);
@@ -156,7 +156,7 @@ class _GroupAddMembersViewState extends State<GroupAddMembersView> {
                                               ? theme.color.neutralColor4
                                               : theme.color.neutralColor7,
                                         ),
-                              ChatUIKitContactItem(model),
+                              ChatUIKitContactListViewItem(model),
                             ],
                           ),
                           if (widget.inGroupMembers
@@ -234,7 +234,7 @@ class _GroupAddMembersViewState extends State<GroupAddMembersView> {
                                             ? theme.color.neutralColor4
                                             : theme.color.neutralColor7,
                                       ),
-                            ChatUIKitSearchItem(profile: profile),
+                            ChatUIKitSearchListViewItem(profile: profile),
                           ],
                         ),
                         if (widget.inGroupMembers?.contains(profile.id) == true)

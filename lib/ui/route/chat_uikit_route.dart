@@ -57,6 +57,13 @@ class ChatUIKitRoute {
       return SearchGroupMembersView.arguments(
           arguments as SearchGroupMembersViewArguments);
     },
+    ChatUIKitRouteNames.messagesView: (context, arguments) {
+      return MessagesView.arguments(arguments as MessagesViewArguments);
+    },
+    ChatUIKitRouteNames.conversationsView: (context, arguments) {
+      return ConversationsView.arguments(
+          arguments as ConversationsViewArguments);
+    }
   };
 
   static Route? generateRoute<T extends Object>(RouteSettings settings) {

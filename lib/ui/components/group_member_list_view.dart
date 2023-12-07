@@ -108,7 +108,7 @@ class _GroupMemberListViewState extends State<GroupMemberListView> {
                     onLongPress: () {
                       widget.onLongPress?.call(context, model);
                     },
-                    child: ChatUIKitContactItem(model),
+                    child: ChatUIKitContactListViewItem(model),
                   );
 
                   return item;

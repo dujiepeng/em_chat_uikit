@@ -19,6 +19,8 @@ class ChatUIKitProfile {
   final ChatUIKitProfileType? type;
   final int updateTime;
 
+  String get showName => name ?? id;
+
   ChatUIKitProfile({
     required this.id,
     this.name,

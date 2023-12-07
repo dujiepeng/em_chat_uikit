@@ -61,7 +61,7 @@ class _NewRequestsViewState extends State<NewRequestsView> {
             : theme.color.neutralColor98,
         appBar: widget.appBar ??
             ChatUIKitAppBar(
-              autoBackButton: true,
+              showBackButton: true,
               leading: InkWell(
                 onTap: () {
                   Navigator.maybePop(context);

@@ -16,6 +16,6 @@ class _ConversationPageState extends State<ConversationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const ConversationView();
+    return const ConversationsView();
   }
 }

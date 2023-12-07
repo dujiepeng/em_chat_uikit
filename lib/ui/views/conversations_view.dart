@@ -2,8 +2,20 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
-class ConversationView extends StatefulWidget {
-  const ConversationView({
+class ConversationsView extends StatefulWidget {
+  ConversationsView.arguments(ConversationsViewArguments arguments, {super.key})
+      : listViewItemBuilder = arguments.listViewItemBuilder,
+        beforeWidgets = arguments.beforeWidgets,
+        afterWidgets = arguments.afterWidgets,
+        onSearchTap = arguments.onSearchTap,
+        fakeSearchHideText = arguments.fakeSearchHideText,
+        listViewBackground = arguments.listViewBackground,
+        onTap = arguments.onTap,
+        onLongPress = arguments.onLongPress,
+        appBar = arguments.appBar,
+        controller = arguments.controller;
+
+  const ConversationsView({
     this.listViewItemBuilder,
     this.beforeWidgets,
     this.afterWidgets,
@@ -29,10 +41,10 @@ class ConversationView extends StatefulWidget {
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   @override
-  State<ConversationView> createState() => _ConversationViewState();
+  State<ConversationsView> createState() => _ConversationsViewState();
 }
 
-class _ConversationViewState extends State<ConversationView> {
+class _ConversationsViewState extends State<ConversationsView> {
   late ConversationListViewController controller;
   @override
   void initState() {
@@ -118,7 +130,12 @@ class _ConversationViewState extends State<ConversationView> {
   }
 
   void pushToMessagePage(ConversationItemModel model) {
-    // TODO: push chat page
+    Navigator.of(context).pushNamed(
+      ChatUIKitRouteNames.messagesView,
+      arguments: MessagesViewArguments(
+        profile: model.profile,
+      ),
+    );
   }
 
   void longPressed(ConversationItemModel model) {
@@ -306,7 +323,7 @@ class _ConversationViewState extends State<ConversationView> {
           ),
           inviteMembers: userIds,
         );
-      // ignore: empty_catches
+        // ignore: empty_catches
       } catch (e) {}
     }
   }

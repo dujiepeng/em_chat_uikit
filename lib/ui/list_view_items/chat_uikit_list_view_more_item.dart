@@ -1,11 +1,9 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
-const double borderHeight = 0.5;
-
-class ChatUIKitListMoreItem extends StatelessWidget
+class ChatUIKitListViewMoreItem extends StatelessWidget
     with NeedAlphabeticalWidget {
-  const ChatUIKitListMoreItem({
+  const ChatUIKitListViewMoreItem({
     required this.title,
     this.trailing,
     this.enableArrow = true,
@@ -89,7 +87,7 @@ class ChatUIKitListMoreItem extends StatelessWidget
 
     return content;
   }
-  
+
   @override
   double get itemHeight => 56;
 }

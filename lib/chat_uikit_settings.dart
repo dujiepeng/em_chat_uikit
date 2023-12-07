@@ -10,4 +10,7 @@ class ChatUIKitSettings {
 
   static bool showConversationListAvatar = true;
   static String? conversationListMuteImage;
+
+  /// 时间显示间隔时长
+  static int timeLabelDisplayIntervalDuration = 300;
 }

@@ -52,7 +52,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
             ? theme.color.neutralColor1
             : theme.color.neutralColor98,
         appBar: ChatUIKitAppBar(
-          autoBackButton: true,
+          showBackButton: true,
           trailing: IconButton(
             iconSize: 24,
             color: theme.color.isDark
@@ -74,7 +74,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
     Widget avatar = statusAvatar();
 
     Widget name = Text(
-      widget.profile.name ?? widget.profile.id,
+      widget.profile.showName,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontSize: theme.font.headlineLarge.fontSize,
@@ -208,7 +208,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
     content = ListView(
       children: [
         content,
-        ChatUIKitDetailsItem(
+        ChatUIKitDetailsListViewItem(
           title: '消息免打扰',
           trailing: ValueListenableBuilder(
             valueListenable: isNotDisturb,
@@ -243,7 +243,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
         ),
         InkWell(
           onTap: clearAllHistory,
-          child: const ChatUIKitDetailsItem(title: '清空聊天记录'),
+          child: const ChatUIKitDetailsListViewItem(title: '清空聊天记录'),
         ),
       ],
     );
@@ -380,7 +380,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
   void deleteContact() {
     showChatUIKitDialog(
       title: '确认删除联系人?',
-      content: '确认删除${widget.profile.name ?? widget.profile.id}同时删除与该联系人的聊天记录。',
+      content: '确认删除${widget.profile.showName}同时删除与该联系人的聊天记录。',
       context: context,
       items: [
         ChatUIKitDialogItem.cancel(

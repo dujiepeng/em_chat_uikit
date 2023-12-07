@@ -1,8 +1,9 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
-class ChatUIKitDetailsItem extends StatelessWidget {
-  const ChatUIKitDetailsItem({required this.title, this.trailing, super.key});
+class ChatUIKitDetailsListViewItem extends StatelessWidget {
+  const ChatUIKitDetailsListViewItem(
+      {required this.title, this.trailing, super.key});
   final String title;
   final Widget? trailing;
 

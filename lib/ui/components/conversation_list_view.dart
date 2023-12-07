@@ -123,7 +123,7 @@ class _ConversationListViewState extends State<ConversationListView>
                 },
                 child: SizedBox(
                   height: 76,
-                  child: ChatUIKitConversationItem(model),
+                  child: ChatUIKitConversationListViewItem(model),
                 ),
               );
 

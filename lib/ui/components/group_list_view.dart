@@ -77,7 +77,7 @@ class _GroupListViewState extends State<GroupListView> {
                 onLongPress: () {
                   widget.onLongPress?.call(context, model);
                 },
-                child: ChatUIKitGroupItem(model),
+                child: ChatUIKitGroupListViewItem(model),
               );
 
               return item;

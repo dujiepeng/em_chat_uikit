@@ -86,7 +86,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
             ? theme.color.neutralColor1
             : theme.color.neutralColor98,
         appBar: ChatUIKitAppBar(
-          autoBackButton: true,
+          showBackButton: true,
           trailing: IconButton(
             iconSize: 24,
             color: theme.color.isDark
@@ -108,7 +108,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     Widget avatar = statusAvatar();
 
     Widget name = Text(
-      widget.profile.name ?? widget.profile.id,
+      widget.profile.showName,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontSize: theme.font.headlineLarge.fontSize,
@@ -253,7 +253,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
               ),
             );
           },
-          child: ChatUIKitDetailsItem(
+          child: ChatUIKitDetailsListViewItem(
             title: '群成员',
             trailing: SizedBox(
               width: 100,
@@ -295,7 +295,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
           onTap: () {
             changeInfo('我在本群的昵称', hint: '请输入');
           },
-          child: ChatUIKitDetailsItem(
+          child: ChatUIKitDetailsListViewItem(
             title: '我在本群昵称',
             trailing: Icon(
               Icons.arrow_forward_ios,
@@ -306,7 +306,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
             ),
           ),
         ),
-        ChatUIKitDetailsItem(
+        ChatUIKitDetailsListViewItem(
           title: '消息免打扰',
           trailing: ValueListenableBuilder(
             valueListenable: isNotDisturb,
@@ -341,7 +341,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         ),
         InkWell(
           onTap: clearAllHistory,
-          child: const ChatUIKitDetailsItem(title: '清空聊天记录'),
+          child: const ChatUIKitDetailsListViewItem(title: '清空聊天记录'),
         ),
       ],
     );

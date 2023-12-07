@@ -37,7 +37,7 @@ class _NewRequestDetailsViewState extends State<NewRequestDetailsView> {
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
       appBar: const ChatUIKitAppBar(
-        autoBackButton: true,
+        showBackButton: true,
       ),
       body: _buildContent(),
     );
@@ -53,7 +53,7 @@ class _NewRequestDetailsViewState extends State<NewRequestDetailsView> {
     );
 
     Widget name = Text(
-      widget.profile.name ?? widget.profile.id,
+      widget.profile.showName,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontSize: theme.font.headlineLarge.fontSize,

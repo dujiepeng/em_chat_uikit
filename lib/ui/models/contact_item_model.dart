@@ -16,7 +16,7 @@ class ContactItemModel
 
   @override
   String get showName {
-    return profile.name ?? profile.id;
+    return profile.showName;
   }
 
   String? get avatarUrl {

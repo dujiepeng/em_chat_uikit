@@ -50,7 +50,7 @@ class _CreateGroupViewState extends State<CreateGroupView> {
           : theme.color.neutralColor98,
       appBar: widget.appBar ??
           ChatUIKitAppBar(
-            autoBackButton: true,
+            showBackButton: true,
             leading: InkWell(
               onTap: () {
                 Navigator.maybePop(context);
@@ -123,7 +123,7 @@ class _CreateGroupViewState extends State<CreateGroupView> {
                                       ? theme.color.neutralColor4
                                       : theme.color.neutralColor7,
                                 ),
-                          ChatUIKitContactItem(model)
+                          ChatUIKitContactListViewItem(model)
                         ],
                       ),
                     ),
@@ -178,7 +178,7 @@ class _CreateGroupViewState extends State<CreateGroupView> {
                                     ? theme.color.neutralColor4
                                     : theme.color.neutralColor7,
                               ),
-                        ChatUIKitSearchItem(
+                        ChatUIKitSearchListViewItem(
                           profile: profile,
                           highlightWord: searchKeyword,
                         ),

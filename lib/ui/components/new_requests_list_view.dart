@@ -78,7 +78,7 @@ class _NewRequestsListViewState extends State<NewRequestsListView>
                 onLongPress: () {
                   widget.onLongPress?.call(context, model);
                 },
-                child: ChatUIKitNewRequestItem(model),
+                child: ChatUIKitNewRequestListViewItem(model),
               );
 
               return item;

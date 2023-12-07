@@ -108,7 +108,7 @@ class _ContactListViewState extends State<ContactListView>
                     onLongPress: () {
                       widget.onLongPress?.call(context, model);
                     },
-                    child: ChatUIKitContactItem(model),
+                    child: ChatUIKitContactListViewItem(model),
                   );
 
                   return item;

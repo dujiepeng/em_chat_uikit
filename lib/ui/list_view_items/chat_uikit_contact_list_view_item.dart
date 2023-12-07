@@ -1,10 +1,10 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
-class ChatUIKitGroupItem extends StatelessWidget {
-  const ChatUIKitGroupItem(this.model, {super.key});
+class ChatUIKitContactListViewItem extends StatelessWidget {
+  const ChatUIKitContactListViewItem(this.model, {super.key});
 
-  final GroupItemModel model;
+  final ContactItemModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +37,10 @@ class ChatUIKitGroupItem extends StatelessWidget {
     );
     content = Container(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+      height: model.itemHeight - 0.5,
+      color: theme.color.isDark
+          ? theme.color.neutralColor1
+          : theme.color.neutralColor98,
       child: content,
     );
 

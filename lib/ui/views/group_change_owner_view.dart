@@ -67,7 +67,7 @@ class _GroupChangeOwnerViewState extends State<GroupChangeOwnerView> {
           : theme.color.neutralColor98,
       appBar: widget.appBar ??
           ChatUIKitAppBar(
-              autoBackButton: true,
+              showBackButton: true,
               leading: InkWell(
                 onTap: () {
                   Navigator.maybePop(context);
@@ -98,7 +98,7 @@ class _GroupChangeOwnerViewState extends State<GroupChangeOwnerView> {
 
   void showConfirmDialog(BuildContext context, ContactItemModel model) async {
     bool? ret = await showChatUIKitDialog(
-      title: '确认转让群主身份给"${model.profile.name ?? model.profile.id}"?',
+      title: '确认转让群主身份给"${model.profile.showName}"?',
       context: context,
       items: [
         ChatUIKitDialogItem.cancel(

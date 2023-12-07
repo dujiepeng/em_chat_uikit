@@ -73,7 +73,7 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
               fontSize: theme.font.titleLarge.fontSize,
               fontWeight: FontWeight.w900,
             ),
-            autoBackButton: false,
+            showBackButton: false,
             leading: Container(
               margin: const EdgeInsets.fromLTRB(12, 6, 12, 6),
               child: const ChatUIKitAvatar(size: 32),
@@ -107,9 +107,9 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
     return content;
   }
 
-  List<ChatUIKitListMoreItem> get beforeWidgets {
+  List<ChatUIKitListViewMoreItem> get beforeWidgets {
     return [
-      ChatUIKitListMoreItem(
+      ChatUIKitListViewMoreItem(
         title: '新请求',
         onTap: () {
           Navigator.of(context).pushNamed(
@@ -122,7 +122,7 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
           child: ChatUIKitBadge(ChatUIKitContext.instance.requestList().length),
         ),
       ),
-      ChatUIKitListMoreItem(
+      ChatUIKitListViewMoreItem(
         title: '群聊',
         onTap: () {
           Navigator.of(context).pushNamed(

@@ -67,7 +67,7 @@ class _GroupsViewState extends State<GroupsView> {
           : theme.color.neutralColor98,
       appBar: widget.appBar ??
           ChatUIKitAppBar(
-            autoBackButton: true,
+            showBackButton: true,
             leading: InkWell(
               onTap: () {
                 Navigator.maybePop(context);

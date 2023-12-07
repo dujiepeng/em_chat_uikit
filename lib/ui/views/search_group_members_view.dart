@@ -52,7 +52,7 @@ class _SSearchGroupMembersViewState extends State<SearchGroupMembersView> {
                   onTap: () {
                     widget.onTap?.call(context, model.profile);
                   },
-                  child: ChatUIKitSearchItem(
+                  child: ChatUIKitSearchListViewItem(
                     profile: model.profile,
                     highlightWord: searchKeyword,
                   ),

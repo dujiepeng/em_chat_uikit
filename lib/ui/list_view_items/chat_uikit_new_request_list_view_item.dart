@@ -1,8 +1,8 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
-class ChatUIKitNewRequestItem extends StatelessWidget {
-  const ChatUIKitNewRequestItem(this.model, {super.key});
+class ChatUIKitNewRequestListViewItem extends StatelessWidget {
+  const ChatUIKitNewRequestListViewItem(this.model, {super.key});
 
   final NewRequestItemModel model;
 

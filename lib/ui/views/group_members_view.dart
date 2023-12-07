@@ -104,7 +104,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
           : theme.color.neutralColor98,
       appBar: widget.appBar ??
           ChatUIKitAppBar(
-            autoBackButton: true,
+            showBackButton: true,
             trailing: widget.enableMemberOperation
                 ? actionsWidget()
                 : const SizedBox(),
@@ -318,7 +318,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
               },
               child: Padding(
                 padding: const EdgeInsets.only(left: 19.5, right: 15.5),
-                child: ChatUIKitSearchItem(
+                child: ChatUIKitSearchListViewItem(
                   profile: profile,
                   highlightWord: searchKeyword,
                 ),
