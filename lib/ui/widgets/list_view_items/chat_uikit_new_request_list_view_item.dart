@@ -2,9 +2,14 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 class ChatUIKitNewRequestListViewItem extends StatelessWidget {
-  const ChatUIKitNewRequestListViewItem(this.model, {super.key});
+  const ChatUIKitNewRequestListViewItem(
+    this.model, {
+    this.onAcceptTap,
+    super.key,
+  });
 
   final NewRequestItemModel model;
+  final VoidCallback? onAcceptTap;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +58,7 @@ class ChatUIKitNewRequestListViewItem extends StatelessWidget {
           ),
         ),
         InkWell(
-          onTap: onAcceptTap,
+          onTap: onAcceptTap ?? _onAcceptTap,
           child: Container(
             width: 74,
             height: 28,
@@ -98,7 +103,7 @@ class ChatUIKitNewRequestListViewItem extends StatelessWidget {
     return content;
   }
 
-  void onAcceptTap() async {
+  void _onAcceptTap() async {
     try {
       ChatUIKit.instance.acceptContactRequest(userId: model.profile.id);
       // ignore: empty_catches

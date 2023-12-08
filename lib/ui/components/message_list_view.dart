@@ -1,4 +1,6 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/ui/widgets/list_view_items/message_list_view_items/chat_uikit_message_list_view_bubble.dart';
+
 import 'package:flutter/material.dart';
 
 class MessageListView extends StatefulWidget {
@@ -21,6 +23,11 @@ class _MessageListViewState extends State<MessageListView> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView();
+    return const Center(
+      child: ChatUIKitMessageListViewBubble(
+        isLeft: false,
+        child: Text('hello!'),
+      ),
+    );
   }
 }

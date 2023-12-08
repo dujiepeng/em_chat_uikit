@@ -27,9 +27,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    isLight = !isLight;
+    // isLight = !isLight;
     ChatUIKitSettings.avatarRadius = CornerRadius.medium;
+    ChatUIKitSettings.scaffoldScaffoldMessengerKey =
+        GlobalKey<ScaffoldMessengerState>();
     return MaterialApp(
+      scaffoldMessengerKey: ChatUIKitSettings.scaffoldScaffoldMessengerKey,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,

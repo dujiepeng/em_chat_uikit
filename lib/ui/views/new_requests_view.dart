@@ -42,13 +42,21 @@ class NewRequestsView extends StatefulWidget {
   State<NewRequestsView> createState() => _NewRequestsViewState();
 }
 
-class _NewRequestsViewState extends State<NewRequestsView> {
+class _NewRequestsViewState extends State<NewRequestsView>
+    with ContactObserver {
   late final NewRequestListViewController controller;
   int? joinedCount;
   @override
   void initState() {
     super.initState();
+    ChatUIKit.instance.addObserver(this);
     controller = widget.controller ?? NewRequestListViewController();
+  }
+
+  @override
+  void dispose() {
+    ChatUIKit.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override

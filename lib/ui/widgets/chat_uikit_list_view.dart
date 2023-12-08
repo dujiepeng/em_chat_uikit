@@ -1,5 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:em_chat_uikit/ui/list_view_items/chat_uikit_alphabetical_list_view_item.dart';
+import 'package:em_chat_uikit/ui/widgets/list_view_items/chat_uikit_alphabetical_list_view_item.dart';
 import 'package:em_chat_uikit/ui/models/alphabetical_item_model.dart';
 
 import 'package:flutter/material.dart';

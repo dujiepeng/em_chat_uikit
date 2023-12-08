@@ -16,13 +16,14 @@ export 'tools/chat_uikit_image_loader.dart';
 export 'universal/enums.dart';
 export 'tools/chat_uikit_helper.dart';
 
-export 'ui/list_view_items/chat_uikit_details_list_view_item.dart';
-export 'ui/list_view_items/chat_uikit_contact_list_view_item.dart';
-export 'ui/list_view_items/chat_uikit_conversation_list_view_item.dart';
-export 'ui/list_view_items/chat_uikit_group_list_view_item.dart';
-export 'ui/list_view_items/chat_uikit_list_view_more_item.dart';
-export 'ui/list_view_items/chat_uikit_new_request_list_view_item.dart';
-export 'ui/list_view_items/chat_uikit_search_list_view_item.dart';
+export 'ui/widgets/list_view_items/chat_uikit_details_list_view_item.dart';
+export 'ui/widgets/list_view_items/chat_uikit_contact_list_view_item.dart';
+export 'ui/widgets/list_view_items/chat_uikit_conversation_list_view_item.dart';
+export 'ui/widgets/list_view_items/chat_uikit_group_list_view_item.dart';
+export 'ui/widgets/list_view_items/chat_uikit_list_view_more_item.dart';
+export 'ui/widgets/list_view_items/chat_uikit_new_request_list_view_item.dart';
+export 'ui/widgets/list_view_items/chat_uikit_search_list_view_item.dart';
+export 'ui/widgets/list_view_items/message_list_view_items/chat_uikit_message_list_view_information_item.dart';
 
 export 'ui/widgets/chat_uikit_app_bar.dart';
 export 'ui/widgets/chat_uikit_avatar.dart';

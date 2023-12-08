@@ -32,17 +32,22 @@ class _MessagesViewState extends State<MessagesView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = ChatUIKitTheme.of(context);
+
     Widget content = MessageListView(
       profile: widget.profile,
       controller: controller,
     );
 
     content = Scaffold(
+      backgroundColor: theme.color.isDark
+          ? theme.color.neutralColor1
+          : theme.color.neutralColor98,
       appBar: widget.appBar ??
           ChatUIKitAppBar(
             title: widget.profile.showName,
           ),
-      body: content,
+      body: SafeArea(child: content),
     );
 
     return content;
