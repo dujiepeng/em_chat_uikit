@@ -38,8 +38,7 @@ class ContactListView extends StatefulWidget {
   State<ContactListView> createState() => _ContactListViewState();
 }
 
-class _ContactListViewState extends State<ContactListView>
-    with ContactObserver {
+class _ContactListViewState extends State<ContactListView> {
   ScrollController scrollController = ScrollController();
   late final ContactListViewController controller;
   bool enableSearchBar = true;
@@ -47,14 +46,13 @@ class _ContactListViewState extends State<ContactListView>
   @override
   void initState() {
     super.initState();
-    ChatUIKit.instance.addObserver(this);
+
     controller = widget.controller ?? ContactListViewController();
     controller.fetchItemList();
   }
 
   @override
   void dispose() {
-    ChatUIKit.instance.removeObserver(this);
     scrollController.dispose();
     super.dispose();
   }
@@ -123,15 +121,5 @@ class _ContactListViewState extends State<ContactListView>
     );
 
     return content;
-  }
-
-  @override
-  void onContactAdded(String userId) {
-    controller.refresh();
-  }
-
-  @override
-  void onContactDeleted(String userId) {
-    controller.refresh();
   }
 }

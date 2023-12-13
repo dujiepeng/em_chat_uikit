@@ -56,7 +56,7 @@ class ContactListViewController with ChatUIKitListViewControllerBase {
   }
 
   @override
-  Future<void> refresh() async {
+  Future<void> reload() async {
     loadingType.value = ChatUIKitListViewType.refresh;
     List<String> items = await ChatUIKit.instance.getAllContacts();
     List<ContactItemModel> tmp = mappers(items);

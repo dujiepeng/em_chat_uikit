@@ -83,7 +83,7 @@ class _SSearchGroupMembersViewState extends State<SearchGroupMembersView> {
       backgroundColor: theme.color.isDark
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
-      appBar: const ChatUIKitAppBar(),
+      appBar: const ChatUIKitAppBar(showBackButton: false),
       body: content,
     );
 

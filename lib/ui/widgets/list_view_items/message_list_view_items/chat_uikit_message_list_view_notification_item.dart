@@ -2,19 +2,19 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class InformationAction {
+class NotificationAction {
   final String text;
 
   final VoidCallback? onTap;
 
-  InformationAction({
+  NotificationAction({
     required this.text,
     this.onTap,
   });
 }
 
-class ChatUIKitMessageListViewInformationItem extends StatelessWidget {
-  const ChatUIKitMessageListViewInformationItem({
+class ChatUIKitMessageListViewNotificationItem extends StatelessWidget {
+  const ChatUIKitMessageListViewNotificationItem({
     required this.infos,
     this.isCenter = true,
     this.textAlign = TextAlign.center,
@@ -22,7 +22,7 @@ class ChatUIKitMessageListViewInformationItem extends StatelessWidget {
     super.key,
   });
 
-  final List<InformationAction> infos;
+  final List<NotificationAction> infos;
   final bool isCenter;
   final TextAlign textAlign;
   final TextStyle? style;

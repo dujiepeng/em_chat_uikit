@@ -62,6 +62,7 @@ class _ConversationsViewState extends State<ConversationsView> {
       appBar: widget.appBar ??
           ChatUIKitAppBar(
             title: 'Chats',
+            showBackButton: false,
             titleTextStyle: TextStyle(
               color: theme.color.isDark
                   ? theme.color.primaryColor6

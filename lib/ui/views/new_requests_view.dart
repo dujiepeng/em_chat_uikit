@@ -43,7 +43,7 @@ class NewRequestsView extends StatefulWidget {
 }
 
 class _NewRequestsViewState extends State<NewRequestsView>
-    with ContactObserver {
+    with ContactObserver, ChatSDKActionEventsObserver {
   late final NewRequestListViewController controller;
   int? joinedCount;
   @override
@@ -115,8 +115,13 @@ class _NewRequestsViewState extends State<NewRequestsView>
       ),
     ).then((value) {
       if (value == true) {
-        controller.refresh();
+        controller.reload();
       }
     });
+  }
+
+  @override
+  void onContactRequestReceived(String userId, String? reason) {
+    controller.reload();
   }
 }

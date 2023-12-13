@@ -303,8 +303,12 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
   }
 
   Widget statusAvatar() {
-    final theme = ChatUIKitTheme.of(context);
-
+    // final theme = ChatUIKitTheme.of(context);
+    return ChatUIKitAvatar(
+      avatarUrl: widget.profile.avatarUrl,
+      size: 100,
+    );
+    /*
     return FutureBuilder(
       future:
           ChatUIKit.instance.fetchPresenceStatus(members: [widget.profile.id]),
@@ -372,9 +376,11 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
             size: 100,
           );
         }
+
         return content;
       },
     );
+    */
   }
 
   void deleteContact() {
@@ -393,7 +399,11 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
           label: '确认',
           onTap: () async {
             Navigator.of(context).pop();
-            ChatUIKit.instance.deleteContact(userId: widget.profile.id);
+            ChatUIKit.instance
+                .deleteContact(userId: widget.profile.id)
+                .then((value) {
+              Navigator.of(context).pop();
+            }).catchError((e) {});
           },
         ),
       ],

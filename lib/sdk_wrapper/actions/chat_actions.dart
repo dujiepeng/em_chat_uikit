@@ -205,22 +205,6 @@ mixin ChatActions on ChatWrapper {
     });
   }
 
-  // Future<CursorResult<Message>> fetchHistoryMessages({
-  //   required String conversationId,
-  //   EMConversationType type = EMConversationType.Chat,
-  //   int pageSize = 20,
-  //   EMSearchDirection direction = EMSearchDirection.Up,
-  //   String? startMsgId,
-  // }) async {
-  //   return Client.getInstance.chatManager.fetchHistoryMessages(
-  //     conversationId: conversationId,
-  //     type: type,
-  //     pageSize: pageSize,
-  //     direction: direction,
-  //     startMsgId: startMsgId ?? '',
-  //   );
-  // }
-
   Future<CursorResult<Message>> fetchHistoryMessages({
     required String conversationId,
     required ConversationType type,
@@ -431,5 +415,23 @@ mixin ChatActions on ChatWrapper {
         message: message,
       );
     });
+  }
+
+  Future<List<Message>> getMessages({
+    required String conversationId,
+    required ConversationType type,
+    SearchDirection direction = SearchDirection.Up,
+    String? startId,
+    int count = 30,
+  }) async {
+    final conversation = await getConversation(
+      conversationId: conversationId,
+      type: type,
+    );
+    return conversation!.loadMessages(
+      startMsgId: startId ?? '',
+      loadCount: count,
+      direction: direction,
+    );
   }
 }

@@ -33,7 +33,7 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
   }
 
   @override
-  Future<void> refresh() async {
+  Future<void> reload() async {
     loadingType.value = ChatUIKitListViewType.refresh;
     List<Conversation> items = await ChatUIKit.instance.getAllConversations();
     List<ConversationItemModel> tmp = await mappers(items);

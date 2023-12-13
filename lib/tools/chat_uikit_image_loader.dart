@@ -13,6 +13,16 @@ class ChatUIKitImageLoader {
     );
   }
 
+  static Widget voice(int frame, {double size = 20, Color? color}) {
+    return Image.asset(
+      'assets/images/voice_$frame.png',
+      package: packageName,
+      width: size,
+      height: size,
+      color: color,
+    );
+  }
+
   static Widget emoji(String imageName, {double size = 36}) {
     String name = imageName.substring(0, imageName.length);
     return Image.asset(
@@ -20,6 +30,16 @@ class ChatUIKitImageLoader {
       package: packageName,
       width: size,
       height: size,
+    );
+  }
+
+  static Widget file({double size = 30, Color? color}) {
+    return Image.asset(
+      'assets/images/file_icon.png',
+      package: packageName,
+      width: size,
+      height: size,
+      color: color,
     );
   }
 

@@ -39,35 +39,3 @@ extension CornerRadiusHelper on CornerRadius {
     return circularRadius;
   }
 }
-
-extension MessageHelper on Message {
-  String showInfo() {
-    String str = '';
-    switch (body.type) {
-      case MessageType.TXT:
-        str = (body as TextMessageBody).content;
-        break;
-      case MessageType.IMAGE:
-        str = '[Image]';
-        break;
-      case MessageType.VIDEO:
-        str = '[Video]';
-        break;
-      case MessageType.VOICE:
-        str = '[Voice]';
-        break;
-      case MessageType.LOCATION:
-        str = '[Location]';
-        break;
-      case MessageType.COMBINE:
-        str = '[Combine]';
-        break;
-      case MessageType.CUSTOM:
-        str = '[Custom]';
-        break;
-      default:
-    }
-
-    return str;
-  }
-}

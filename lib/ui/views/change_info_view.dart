@@ -57,17 +57,14 @@ class _ChangeInfoViewState extends State<ChangeInfoView> {
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 5, 16, 5),
-            child: Text(
-              '取消',
-              style: TextStyle(
-                fontWeight: theme.font.labelMedium.fontWeight,
-                fontSize: theme.font.labelMedium.fontSize,
-                color: theme.color.isDark
-                    ? theme.color.neutralColor95
-                    : theme.color.neutralColor3,
-              ),
+          child: Text(
+            '取消',
+            style: TextStyle(
+              fontWeight: theme.font.labelMedium.fontWeight,
+              fontSize: theme.font.labelMedium.fontSize,
+              color: theme.color.isDark
+                  ? theme.color.neutralColor95
+                  : theme.color.neutralColor3,
             ),
           ),
         ),

@@ -47,7 +47,10 @@ class _MessagesViewState extends State<MessagesView> {
           ChatUIKitAppBar(
             title: widget.profile.showName,
           ),
-      body: SafeArea(child: content),
+      body: SafeArea(
+          child: Padding(
+              padding: const EdgeInsets.only(left: 12, right: 12),
+              child: content)),
     );
 
     return content;

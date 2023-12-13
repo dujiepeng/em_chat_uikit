@@ -3,7 +3,7 @@ import 'package:em_chat_uikit/sdk_wrapper/chat_sdk_wrapper.dart';
 mixin ContactActions on ContactWrapper {
   Future<List<String>> getAllContacts() {
     return checkResult(ChatSDKWrapperActionEvent.getAllContacts, () {
-      return Client.getInstance.contactManager.getAllContactsFromDB();
+      return Client.getInstance.contactManager.getAllContactIds();
     });
   }
 
@@ -34,13 +34,13 @@ mixin ContactActions on ContactWrapper {
 
   Future<List<String>> fetchAllContacts() {
     return checkResult(ChatSDKWrapperActionEvent.fetchAllContacts, () {
-      return Client.getInstance.contactManager.getAllContactsFromServer();
+      return Client.getInstance.contactManager.fetchAllContactIds();
     });
   }
 
   Future<List<String>> fetchAllBlockedContacts() {
     return checkResult(ChatSDKWrapperActionEvent.fetchAllBlockedContacts, () {
-      return Client.getInstance.contactManager.getBlockListFromServer();
+      return Client.getInstance.contactManager.fetchBlockIds();
     });
   }
 

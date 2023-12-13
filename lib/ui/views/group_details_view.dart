@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-const String userGroupName = 'chatUIKit_group_member_nick_name';
+
 
 class GroupDetailsView extends StatefulWidget {
   GroupDetailsView.arguments(

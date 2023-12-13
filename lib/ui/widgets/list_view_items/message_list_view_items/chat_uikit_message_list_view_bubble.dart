@@ -37,7 +37,7 @@ class ChatUIKitMessageListViewBubble extends StatelessWidget {
       content = CustomPaint(
         painter: _BubblePainter(
           color: color ??
-              (isLeft
+              (!isLeft
                   ? (theme.color.isDark
                       ? theme.color.primaryColor6
                       : theme.color.primaryColor5)

@@ -155,18 +155,22 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
     );
   }
 
-  void tapContactInfo(BuildContext context, ContactItemModel info) {
+  void tapContactInfo(BuildContext context, ContactItemModel model) {
     Navigator.of(context).pushNamed(
       ChatUIKitRouteNames.contactDetailsView,
       arguments: ContactDetailsViewArguments(
-        profile: info.profile,
+        profile: model.profile,
         actions: [
           ChatUIKitActionItem(
             title: '发消息',
             icon: 'assets/images/chat.png',
             onTap: (context) {
-              // TODO: 直接跳转到聊天页面
-              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(
+                ChatUIKitRouteNames.messagesView,
+                arguments: MessagesViewArguments(
+                  profile: model.profile,
+                ),
+              );
             },
           ),
         ],
@@ -216,5 +220,17 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
   // 用于更新好友请求未读数
   void onContactRequestReceived(String userId, String? reason) {
     setState(() {});
+  }
+
+  // 用户更新好友请求未读数
+  @override
+  void onContactAdded(String userId) {
+    setState(() {});
+  }
+
+  // 用于更新删除好友后的列表刷新
+  @override
+  void onContactDeleted(String userId) {
+    controller.reload();
   }
 }

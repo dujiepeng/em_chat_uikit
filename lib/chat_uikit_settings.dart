@@ -1,5 +1,4 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:flutter/material.dart';
 
 class ChatUIKitSettings {
   static CornerRadius inputBarRadius = CornerRadius.large;
@@ -14,5 +13,4 @@ class ChatUIKitSettings {
 
   /// 时间显示间隔时长
   static int timeLabelDisplayIntervalDuration = 300;
-  static GlobalKey<ScaffoldMessengerState>? scaffoldScaffoldMessengerKey;
 }

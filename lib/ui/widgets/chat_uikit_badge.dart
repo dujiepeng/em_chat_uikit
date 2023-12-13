@@ -2,8 +2,13 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 class ChatUIKitBadge extends StatelessWidget {
-  const ChatUIKitBadge(this.count,
-      {this.backgroundColor, this.textColor, this.boarderColor, super.key});
+  const ChatUIKitBadge(
+    this.count, {
+    this.backgroundColor,
+    this.textColor,
+    this.boarderColor,
+    super.key,
+  });
 
   final int count;
   final Color? backgroundColor;
