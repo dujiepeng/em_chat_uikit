@@ -1,12 +1,21 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
+enum MessageLastActionType {
+  send,
+  receive,
+  load,
+  none,
+}
+
 class MessageListViewController extends ChangeNotifier {
   final ChatUIKitProfile profile;
   final int pageSize;
   late final ConversationType type;
   bool isEmpty = false;
   String? lastMessageId;
+  bool hasNew = false;
+  MessageLastActionType lastActionType = MessageLastActionType.none;
 
   final List<Message> moreData = [];
   final List<Message> newData = [];
@@ -38,7 +47,9 @@ class MessageListViewController extends ChangeNotifier {
     if (list.isNotEmpty) {
       lastMessageId = list.first.msgId;
       newData.addAll(list.reversed);
+      lastActionType = MessageLastActionType.load;
       notifyListeners();
+      lastActionType = MessageLastActionType.none;
     }
     return list.isNotEmpty;
   }
@@ -51,7 +62,10 @@ class MessageListViewController extends ChangeNotifier {
     );
     final msg = await ChatUIKit.instance.sendMessage(message: message);
     newData.insert(0, msg);
+    hasNew = true;
+    lastActionType = MessageLastActionType.send;
     notifyListeners();
+    lastActionType = MessageLastActionType.none;
   }
 
   ChatType get chatType {

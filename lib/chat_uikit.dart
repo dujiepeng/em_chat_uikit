@@ -42,6 +42,7 @@ export 'ui/widgets/chat_uikit_alphabetical_view.dart';
 export 'ui/widgets/chat_uikit_list_view.dart';
 export 'ui/widgets/chat_uikit_search_view.dart';
 export 'ui/widgets/chat_uikit_input_bar.dart';
+export 'ui/widgets/chat_uikit_message_sliver.dart';
 
 export 'ui/controllers/chat_uikit_list_view_controller_base.dart';
 export 'ui/controllers/conversation_list_view_controller.dart';
