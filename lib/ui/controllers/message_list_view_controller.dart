@@ -1,30 +1,65 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:flutter/material.dart';
 
-class MessageListViewController with ChatObserver {
+class MessageListViewController extends ChangeNotifier {
   final ChatUIKitProfile profile;
   final int pageSize;
-  bool hasMore = false;
-  MessageListViewController({required this.profile, this.pageSize = 30});
+  late final ConversationType type;
+  bool isEmpty = false;
+  String? lastMessageId;
 
-  List<Message> moreData = [];
-  List<Message> newData = [];
+  final List<Message> moreData = [];
+  final List<Message> newData = [];
 
-  Future<void> fetchItemList() async {
+  MessageListViewController({required this.profile, this.pageSize = 20}) {
+    type = () {
+      if (profile.type == ChatUIKitProfileType.groupChat ||
+          profile.type == ChatUIKitProfileType.group) {
+        return ConversationType.GroupChat;
+      } else {
+        return ConversationType.Chat;
+      }
+    }();
+  }
+
+  Future<bool> fetchItemList() async {
+    if (isEmpty) {
+      return false;
+    }
     List<Message> list = await ChatUIKit.instance.getMessages(
       conversationId: profile.id,
-      type: () {
-        if (profile.type == ChatUIKitProfileType.groupChat ||
-            profile.type == ChatUIKitProfileType.group) {
-          return ConversationType.GroupChat;
-        } else {
-          return ConversationType.Chat;
-        }
-      }(),
+      type: type,
       count: pageSize,
+      startId: lastMessageId,
     );
     if (list.length < pageSize) {
-      hasMore = false;
+      isEmpty = true;
     }
-    moreData.addAll(list.reversed);
+    if (list.isNotEmpty) {
+      lastMessageId = list.first.msgId;
+      newData.addAll(list.reversed);
+      notifyListeners();
+    }
+    return list.isNotEmpty;
+  }
+
+  Future<void> sendTextMessage(String text) async {
+    Message message = Message.createTxtSendMessage(
+      targetId: profile.id,
+      chatType: chatType,
+      content: text,
+    );
+    final msg = await ChatUIKit.instance.sendMessage(message: message);
+    newData.insert(0, msg);
+    notifyListeners();
+  }
+
+  ChatType get chatType {
+    if (profile.type == ChatUIKitProfileType.groupChat ||
+        profile.type == ChatUIKitProfileType.group) {
+      return ChatType.GroupChat;
+    } else {
+      return ChatType.Chat;
+    }
   }
 }

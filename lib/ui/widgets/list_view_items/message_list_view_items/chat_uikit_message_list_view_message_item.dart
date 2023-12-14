@@ -91,6 +91,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
       content = Column(
         crossAxisAlignment:
             isLeft ?? left ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
         children: [
           _nickname(theme),
           content,
@@ -109,15 +110,11 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
         avatar,
         const SizedBox(width: 8),
         Expanded(child: content),
+        SizedBox(width: MediaQuery.of(context).size.width / 5 * 1)
       ],
     );
 
-    content = Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        content,
-      ],
-    );
+    content = SizedBox(width: 150, child: content);
 
     content = Container(
       margin: const EdgeInsets.only(top: 16, bottom: 2),
@@ -147,12 +144,9 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
   }
 
   Widget _buildFileMessage(BuildContext context, Message message) {
-    return SizedBox(
-      width: enableAvatar ? 240 : 280,
-      child: ChatUIKitFileMessageWidget(
-        message: message,
-        bubbleStyle: bubbleStyle,
-      ),
+    return ChatUIKitFileMessageWidget(
+      message: message,
+      bubbleStyle: bubbleStyle,
     );
   }
 

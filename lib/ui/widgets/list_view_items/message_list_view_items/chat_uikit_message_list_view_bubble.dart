@@ -62,9 +62,13 @@ class ChatUIKitMessageListViewBubble extends StatelessWidget {
       content = Container(
         decoration: BoxDecoration(
             color: color ??
-                (theme.color.isDark
-                    ? theme.color.primaryColor6
-                    : theme.color.primaryColor5),
+                (!isLeft
+                    ? (theme.color.isDark
+                        ? theme.color.primaryColor6
+                        : theme.color.primaryColor5)
+                    : (theme.color.isDark
+                        ? theme.color.primaryColor2
+                        : theme.color.primaryColor95)),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(isLeft ? 12 : 16),
               topRight: Radius.circular(isLeft ? 16 : 12),

@@ -11,38 +11,39 @@ class MessageListView extends StatefulWidget {
   State<MessageListView> createState() => _MessageListViewState();
 }
 
-class _MessageListViewState extends State<MessageListView> with ChatObserver {
+class _MessageListViewState extends State<MessageListView> {
   late final MessageListViewController controller;
   final ScrollController scrollController = ScrollController();
   final centerKey = const ValueKey('center');
+  bool isFetching = false;
 
   @override
   void initState() {
     super.initState();
-    ChatUIKit.instance.addObserver(this);
+
     controller =
         widget.controller ?? MessageListViewController(profile: widget.profile);
-    scrollController.addListener(() {
-      // TODO 剩余小于500，就拉取新的数据
-      debugPrint(
-          "position:  ${scrollController.position.maxScrollExtent - scrollController.offset}");
-      // debugPrint("max:  ${scrollController.position.maxScrollExtent}");
+    controller.addListener(() {
+      setState(() {});
+      // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      //   if (scrollController.offset == 0) {
+      //     scrollController.jumpTo(0);
+      //   }
+      // });
     });
     fetchMessages();
   }
 
   @override
   void dispose() {
-    ChatUIKit.instance.removeObserver(this);
     super.dispose();
   }
 
   void fetchMessages() async {
+    if (isFetching || controller.isEmpty) return;
+    isFetching = true;
     await controller.fetchItemList();
-    setState(() {});
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      scrollController.jumpTo(0);
-    });
+    isFetching = false;
   }
 
   @override
@@ -51,12 +52,30 @@ class _MessageListViewState extends State<MessageListView> with ChatObserver {
       physics: const AlwaysScrollableScrollPhysics(),
       controller: scrollController,
       reverse: true,
-      center: centerKey,
       slivers: [
-        newDataView(),
-        SliverPadding(padding: EdgeInsets.zero, key: centerKey),
-        loadMoreDataView(),
+        ChatMessageSliver(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return _item(controller.newData[index]);
+            },
+            childCount: controller.newData.length,
+          ),
+        ),
       ],
+    );
+
+    content = NotificationListener(
+      onNotification: (notification) {
+        if (notification is ScrollUpdateNotification) {
+          if (scrollController.position.maxScrollExtent -
+                  scrollController.offset <
+              1500) {
+            fetchMessages();
+          }
+        }
+        return false;
+      },
+      child: content,
     );
 
     content = ScrollConfiguration(
@@ -67,30 +86,9 @@ class _MessageListViewState extends State<MessageListView> with ChatObserver {
     return content;
   }
 
-  Widget loadMoreDataView() {
-    return ChatMessageSliver(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return _item(controller.moreData[index]);
-        },
-        childCount: controller.moreData.length,
-      ),
-    );
-  }
-
-  Widget newDataView() {
-    return ChatMessageSliver(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return _item(controller.newData[index]);
-        },
-        childCount: controller.newData.length,
-      ),
-    );
-  }
-
   Widget _item(Message message) {
     return ChatUIKitMessageListViewMessageItem(
+      // enableAvatar: false,
       onAvatarTap: () {
         debugPrint('onAvatarTap');
       },
