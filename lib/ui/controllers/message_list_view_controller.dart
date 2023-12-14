@@ -8,7 +8,7 @@ enum MessageLastActionType {
   none,
 }
 
-class MessageListViewController extends ChangeNotifier {
+class MessageListViewController extends ChangeNotifier with ChatObserver {
   final ChatUIKitProfile profile;
   final int pageSize;
   late final ConversationType type;
@@ -20,7 +20,8 @@ class MessageListViewController extends ChangeNotifier {
   final List<Message> moreData = [];
   final List<Message> newData = [];
 
-  MessageListViewController({required this.profile, this.pageSize = 20}) {
+  MessageListViewController({required this.profile, this.pageSize = 30}) {
+    ChatUIKit.instance.addObserver(this);
     type = () {
       if (profile.type == ChatUIKitProfileType.groupChat ||
           profile.type == ChatUIKitProfileType.group) {
@@ -29,6 +30,12 @@ class MessageListViewController extends ChangeNotifier {
         return ConversationType.Chat;
       }
     }();
+  }
+
+  @override
+  void dispose() {
+    ChatUIKit.instance.removeObserver(this);
+    super.dispose();
   }
 
   Future<bool> fetchItemList() async {
@@ -66,6 +73,23 @@ class MessageListViewController extends ChangeNotifier {
     lastActionType = MessageLastActionType.send;
     notifyListeners();
     lastActionType = MessageLastActionType.none;
+  }
+
+  @override
+  void onMessagesReceived(List<Message> messages) {
+    List<Message> list = [];
+    for (var element in messages) {
+      if (element.conversationId == profile.id) {
+        list.add(element);
+      }
+    }
+    if (list.isNotEmpty) {
+      newData.insertAll(0, list.reversed);
+      hasNew = true;
+      lastActionType = MessageLastActionType.receive;
+      notifyListeners();
+      lastActionType = MessageLastActionType.none;
+    }
   }
 
   ChatType get chatType {

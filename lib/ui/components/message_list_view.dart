@@ -26,6 +26,10 @@ class _MessageListViewState extends State<MessageListView> {
       if (controller.lastActionType == MessageLastActionType.load) {
         setState(() {});
       }
+      if (controller.lastActionType == MessageLastActionType.receive &&
+          scrollController.offset == 0) {
+        setState(() {});
+      }
       if (controller.lastActionType == MessageLastActionType.send) {
         setState(() {});
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
