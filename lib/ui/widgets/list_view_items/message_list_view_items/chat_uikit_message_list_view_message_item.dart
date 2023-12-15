@@ -6,8 +6,8 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
   const ChatUIKitMessageListViewMessageItem({
     required this.message,
     this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
-    this.enableAvatar = true,
-    this.enableNickname = true,
+    this.showAvatar = true,
+    this.showNickname = true,
     this.messageWidget,
     this.avatarWidget,
     this.nicknameWidget,
@@ -23,8 +23,8 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
 
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
   final Message message;
-  final bool enableAvatar;
-  final bool enableNickname;
+  final bool showAvatar;
+  final bool showNickname;
   final bool? isLeft;
   final Widget? messageWidget;
   final Widget? avatarWidget;
@@ -87,7 +87,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
       child: content,
     );
 
-    if (enableNickname) {
+    if (showNickname) {
       content = Column(
         crossAxisAlignment:
             isLeft ?? left ? CrossAxisAlignment.start : CrossAxisAlignment.end,
@@ -152,7 +152,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
 
   Widget _avatar(ChatUIKitTheme theme) {
     Widget? content;
-    if (!enableAvatar) {
+    if (!showAvatar) {
       content = const SizedBox();
     } else {
       content = avatarWidget;

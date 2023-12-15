@@ -13,7 +13,7 @@ class ChatUIKitImageLoader {
     );
   }
 
-  static Widget voice(int frame, {double size = 20, Color? color}) {
+  static Widget bubbleVoice(int frame, {double size = 20, Color? color}) {
     return Image.asset(
       'assets/images/voice_$frame.png',
       package: packageName,
@@ -93,9 +93,13 @@ class ChatUIKitImageLoader {
     );
   }
 
+  static Widget emojiDelete({double size = 30, Color? color}) {
+    return Icon(Icons.arrow_left, size: size, color: color);
+  }
+
   static Widget textKeyboard({double size = 30, Color? color}) {
     return Image.asset(
-      'assets/images/textKeyboard.png',
+      'assets/images/input_bar_keyboard.png',
       package: packageName,
       width: size,
       height: size,
@@ -103,9 +107,39 @@ class ChatUIKitImageLoader {
     );
   }
 
-  static Widget face({double size = 30, Color? color}) {
+  static Widget voiceKeyboard({double size = 30, Color? color}) {
     return Image.asset(
-      'assets/images/face.png',
+      'assets/images/input_bar_voice.png',
+      package: packageName,
+      width: size,
+      height: size,
+      color: color,
+    );
+  }
+
+  static Widget moreKeyboard({double size = 30, Color? color}) {
+    return Image.asset(
+      'assets/images/input_bar_more.png',
+      package: packageName,
+      width: size,
+      height: size,
+      color: color,
+    );
+  }
+
+  static Widget faceKeyboard({double size = 30, Color? color}) {
+    return Image.asset(
+      'assets/images/input_bar_face.png',
+      package: packageName,
+      width: size,
+      height: size,
+      color: color,
+    );
+  }
+
+  static Widget sendKeyboard({double size = 30, Color? color}) {
+    return Image.asset(
+      'assets/images/input_bar_send.png',
       package: packageName,
       width: size,
       height: size,

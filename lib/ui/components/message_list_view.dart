@@ -3,34 +3,52 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 class MessageListView extends StatefulWidget {
-  const MessageListView({required this.profile, this.controller, super.key});
+  const MessageListView({
+    required this.profile,
+    this.controller,
+    this.onItemLongPress,
+    this.onDoubleTap,
+    this.onItemTap,
+    this.onAvatarTap,
+    this.onNicknameTap,
+    this.showAvatar = true,
+    this.showNickname = true,
+    super.key,
+  });
   final ChatUIKitProfile profile;
   final MessageListViewController? controller;
+  final void Function(Message message)? onItemTap;
+  final void Function(Message message)? onItemLongPress;
+  final void Function(Message message)? onDoubleTap;
+  final void Function(ChatUIKitProfile profile)? onAvatarTap;
+  final void Function(ChatUIKitProfile profile)? onNicknameTap;
+  final bool showAvatar;
+  final bool showNickname;
+
   @override
   State<MessageListView> createState() => _MessageListViewState();
 }
 
 class _MessageListViewState extends State<MessageListView> {
   late final MessageListViewController controller;
-  final ScrollController scrollController = ScrollController();
-  final centerKey = const ValueKey('center');
+  late final ScrollController scrollController;
+
   bool isFetching = false;
 
   @override
   void initState() {
     super.initState();
-
+    scrollController = ScrollController();
     controller =
         widget.controller ?? MessageListViewController(profile: widget.profile);
     controller.addListener(() {
       if (controller.lastActionType == MessageLastActionType.load) {
         setState(() {});
       }
-      if (controller.lastActionType == MessageLastActionType.receive &&
-          scrollController.offset == 0) {
-        setState(() {});
-      }
-      if (controller.lastActionType == MessageLastActionType.send) {
+      debugPrint('notifyListeners run!');
+      if ((controller.lastActionType == MessageLastActionType.receive &&
+              scrollController.offset == 0) ||
+          controller.lastActionType == MessageLastActionType.send) {
         setState(() {});
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           scrollController.animateTo(
@@ -46,6 +64,8 @@ class _MessageListViewState extends State<MessageListView> {
 
   @override
   void dispose() {
+    controller.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -65,6 +85,16 @@ class _MessageListViewState extends State<MessageListView> {
       slivers: [
         ChatMessageSliver(
           delegate: SliverChildBuilderDelegate(
+            findChildIndexCallback: (key) {
+              final ValueKey<String> valueKey = key as ValueKey<String>;
+              int index = controller.newData
+                  .indexWhere((msg) => msg.msgId == valueKey.value);
+
+              return index > -1 ? index : null;
+            },
+            semanticIndexCallback: (widget, localIndex) {
+              return localIndex;
+            },
             (context, index) {
               return _item(controller.newData[index]);
             },
@@ -103,21 +133,23 @@ class _MessageListViewState extends State<MessageListView> {
 
   Widget _item(Message message) {
     return ChatUIKitMessageListViewMessageItem(
-      // enableAvatar: false,
+      key: ValueKey(message.msgId),
+      showAvatar: widget.showAvatar,
+      showNickname: widget.showNickname,
       onAvatarTap: () {
-        debugPrint('onAvatarTap');
+        widget.onAvatarTap?.call(widget.profile);
       },
       onBubbleDoubleTap: () {
-        debugPrint('onBubbleDoubleTap');
+        widget.onDoubleTap?.call(message);
       },
       onBubbleLongPressed: () {
-        debugPrint('onBubbleLongPressed');
+        widget.onItemLongPress?.call(message);
       },
       onBubbleTap: () {
-        debugPrint('onBubbleTap');
+        widget.onItemTap?.call(message);
       },
       onNicknameTap: () {
-        debugPrint('onNicknameTap');
+        widget.onNicknameTap?.call(widget.profile);
       },
       message: message,
     );

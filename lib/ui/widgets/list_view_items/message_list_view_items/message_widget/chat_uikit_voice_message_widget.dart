@@ -79,10 +79,10 @@ class _ChatUIKitVoiceMessageWidgetState
 
     Widget iconWidget;
     if (!controller.isAnimating) {
-      iconWidget = ChatUIKitImageLoader.voice(2, color: iconColor);
+      iconWidget = ChatUIKitImageLoader.bubbleVoice(2, color: iconColor);
     } else {
       iconWidget =
-          ChatUIKitImageLoader.voice(animation.value, color: iconColor);
+          ChatUIKitImageLoader.bubbleVoice(animation.value, color: iconColor);
     }
 
     if (!left) {

@@ -148,7 +148,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               color: theme.color.isDark
-                  ? theme.color.neutralColor2
+                  ? theme.color.neutralColor3
                   : theme.color.neutralColor95,
             ),
             child: Column(

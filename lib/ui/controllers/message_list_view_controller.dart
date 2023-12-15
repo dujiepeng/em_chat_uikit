@@ -17,7 +17,6 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
   bool hasNew = false;
   MessageLastActionType lastActionType = MessageLastActionType.none;
 
-  final List<Message> moreData = [];
   final List<Message> newData = [];
 
   MessageListViewController({required this.profile, this.pageSize = 30}) {
@@ -56,7 +55,6 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
       newData.addAll(list.reversed);
       lastActionType = MessageLastActionType.load;
       notifyListeners();
-      lastActionType = MessageLastActionType.none;
     }
     return list.isNotEmpty;
   }
@@ -72,7 +70,6 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
     hasNew = true;
     lastActionType = MessageLastActionType.send;
     notifyListeners();
-    lastActionType = MessageLastActionType.none;
   }
 
   @override
@@ -88,7 +85,6 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
       hasNew = true;
       lastActionType = MessageLastActionType.receive;
       notifyListeners();
-      lastActionType = MessageLastActionType.none;
     }
   }
 
