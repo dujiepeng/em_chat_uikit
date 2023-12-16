@@ -14,9 +14,14 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     this.onItemLongPress,
     this.onDoubleTap,
     this.onAvatarTap,
+    this.onAvatarLongPressed,
     this.onNicknameTap,
     this.focusNode,
     this.emojiWidget,
+    this.itemBuilder,
+    this.moreActionItems,
+    this.onItemLongPressActions,
+    this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
   });
 
   final ChatUIKitProfile profile;
@@ -29,7 +34,12 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
   final void Function(Message message)? onItemLongPress;
   final void Function(Message message)? onDoubleTap;
   final void Function(ChatUIKitProfile profile)? onAvatarTap;
+  final void Function(ChatUIKitProfile profile)? onAvatarLongPressed;
   final void Function(ChatUIKitProfile profile)? onNicknameTap;
+  final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
+  final List<ChatUIKitBottomSheetItem>? moreActionItems;
+  final List<ChatUIKitBottomSheetItem>? onItemLongPressActions;
+  final MessageItemBuilder? itemBuilder;
   final FocusNode? focusNode;
   final Widget? emojiWidget;
   @override

@@ -1,4 +1,6 @@
 export 'package:chat_uikit_theme/chat_uikit_theme.dart';
+export 'package:path_provider/path_provider.dart';
+export 'package:record/record.dart';
 
 export 'chat_uikit_context.dart';
 export 'chat_uikit_settings.dart';
@@ -43,6 +45,8 @@ export 'ui/widgets/chat_uikit_list_view.dart';
 export 'ui/widgets/chat_uikit_search_view.dart';
 export 'ui/widgets/chat_uikit_input_bar.dart';
 export 'ui/widgets/chat_uikit_message_sliver.dart';
+export 'ui/widgets/chat_uikit_input_emoji.dart';
+export 'ui/widgets/chat_uikit_record_bar.dart';
 
 export 'ui/controllers/chat_uikit_list_view_controller_base.dart';
 export 'ui/controllers/conversation_list_view_controller.dart';

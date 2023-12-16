@@ -110,8 +110,12 @@ class _GroupsViewState extends State<GroupsView> {
             title: '发消息',
             icon: 'assets/images/chat.png',
             onTap: (context) {
-              // TODO: 直接跳转到聊天页面
-              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(
+                ChatUIKitRouteNames.messagesView,
+                arguments: MessagesViewArguments(
+                  profile: model.profile,
+                ),
+              );
             },
           ),
         ],

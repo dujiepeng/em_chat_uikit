@@ -59,19 +59,6 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
     return list.isNotEmpty;
   }
 
-  Future<void> sendTextMessage(String text) async {
-    Message message = Message.createTxtSendMessage(
-      targetId: profile.id,
-      chatType: chatType,
-      content: text,
-    );
-    final msg = await ChatUIKit.instance.sendMessage(message: message);
-    newData.insert(0, msg);
-    hasNew = true;
-    lastActionType = MessageLastActionType.send;
-    notifyListeners();
-  }
-
   @override
   void onMessagesReceived(List<Message> messages) {
     List<Message> list = [];
@@ -88,6 +75,11 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
     }
   }
 
+  void addMessages(List<Message> msgs) {
+    newData.insertAll(0, msgs.reversed);
+    notifyListeners();
+  }
+
   ChatType get chatType {
     if (profile.type == ChatUIKitProfileType.groupChat ||
         profile.type == ChatUIKitProfileType.group) {
@@ -95,5 +87,32 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
     } else {
       return ChatType.Chat;
     }
+  }
+
+  Future<void> sendTextMessage(String text) async {
+    Message message = Message.createTxtSendMessage(
+      targetId: profile.id,
+      chatType: chatType,
+      content: text,
+    );
+    sendMessage(message);
+  }
+
+  Future<void> sendVoiceMessage(ChatUIKitRecordModel model) async {
+    final message = Message.createVoiceSendMessage(
+        targetId: profile.id,
+        chatType: chatType,
+        filePath: model.path,
+        duration: model.duration,
+        displayName: model.displayName);
+    sendMessage(message);
+  }
+
+  Future<void> sendMessage(Message message) async {
+    final msg = await ChatUIKit.instance.sendMessage(message: message);
+    newData.insert(0, msg);
+    hasNew = true;
+    lastActionType = MessageLastActionType.send;
+    notifyListeners();
   }
 }

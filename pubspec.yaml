@@ -15,9 +15,13 @@ dependencies:
   im_flutter_sdk:
     path: ../../../im_flutter_sdk
 
+  record: ^5.0.1
+
   shared_preferences: ^2.2.2
 
   chat_uikit_theme: ^0.0.2
+
+  path_provider: ^2.1.1
 
   username: ^0.2.3
 

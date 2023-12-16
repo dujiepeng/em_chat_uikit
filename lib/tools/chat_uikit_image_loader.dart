@@ -147,6 +147,36 @@ class ChatUIKitImageLoader {
     );
   }
 
+  static Widget voiceDelete({double size = 20, Color? color}) {
+    return Image.asset(
+      'assets/images/record_delete.png',
+      package: packageName,
+      width: size,
+      height: size,
+      color: color,
+    );
+  }
+
+  static Widget voiceSend({double size = 20, Color? color}) {
+    return Image.asset(
+      'assets/images/record_send.png',
+      package: packageName,
+      width: size,
+      height: size,
+      color: color,
+    );
+  }
+
+  static Widget voiceMic({double size = 20, Color? color}) {
+    return Image.asset(
+      'assets/images/record_mic.png',
+      package: packageName,
+      width: size,
+      height: size,
+      color: color,
+    );
+  }
+
   static Widget networkImage({
     String? image,
     Widget? placeholderWidget,

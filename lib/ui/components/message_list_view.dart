@@ -2,6 +2,9 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
+typedef MessageItemBuilder = Widget? Function(
+    ChatUIKitProfile profile, Message message);
+
 class MessageListView extends StatefulWidget {
   const MessageListView({
     required this.profile,
@@ -10,9 +13,12 @@ class MessageListView extends StatefulWidget {
     this.onDoubleTap,
     this.onItemTap,
     this.onAvatarTap,
+    this.onAvatarLongPressed,
     this.onNicknameTap,
     this.showAvatar = true,
     this.showNickname = true,
+    this.itemBuilder,
+    this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
     super.key,
   });
   final ChatUIKitProfile profile;
@@ -21,7 +27,10 @@ class MessageListView extends StatefulWidget {
   final void Function(Message message)? onItemLongPress;
   final void Function(Message message)? onDoubleTap;
   final void Function(ChatUIKitProfile profile)? onAvatarTap;
+  final void Function(ChatUIKitProfile profile)? onAvatarLongPressed;
   final void Function(ChatUIKitProfile profile)? onNicknameTap;
+  final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
+  final MessageItemBuilder? itemBuilder;
   final bool showAvatar;
   final bool showNickname;
 
@@ -132,12 +141,17 @@ class _MessageListViewState extends State<MessageListView> {
   }
 
   Widget _item(Message message) {
-    return ChatUIKitMessageListViewMessageItem(
+    Widget? content = widget.itemBuilder?.call(widget.profile, message);
+    content ??= ChatUIKitMessageListViewMessageItem(
+      bubbleStyle: widget.bubbleStyle,
       key: ValueKey(message.msgId),
       showAvatar: widget.showAvatar,
       showNickname: widget.showNickname,
       onAvatarTap: () {
         widget.onAvatarTap?.call(widget.profile);
+      },
+      onAvatarLongPressed: () {
+        widget.onAvatarLongPressed?.call(widget.profile);
       },
       onBubbleDoubleTap: () {
         widget.onDoubleTap?.call(message);
@@ -153,5 +167,7 @@ class _MessageListViewState extends State<MessageListView> {
       },
       message: message,
     );
+
+    return content;
   }
 }

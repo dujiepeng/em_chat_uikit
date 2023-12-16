@@ -252,7 +252,7 @@ class _ConversationsViewState extends State<ConversationsView> {
   }
 
   void newConversations() async {
-    ChatUIKitProfile? profile = await showModalBottomSheet(
+    showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (context) {
@@ -261,12 +261,16 @@ class _ConversationsViewState extends State<ConversationsView> {
           child: const NewChatView(),
         );
       },
-    );
-
-    if (profile != null) {
-      // TODO: push chat page
-      debugPrint('profile: ${profile.id}');
-    }
+    ).then((profile) {
+      if (profile != null) {
+        Navigator.of(context).pushNamed(
+          ChatUIKitRouteNames.messagesView,
+          arguments: MessagesViewArguments(
+            profile: profile,
+          ),
+        );
+      }
+    });
   }
 
   void addContact() async {

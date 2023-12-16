@@ -12,6 +12,7 @@ class ChatUIKitInputBar extends StatefulWidget {
     this.textCapitalization = TextCapitalization.sentences,
     this.mixHeight = 36,
     this.borderRadius,
+    this.onChanged,
     this.focusNode,
     super.key,
   });
@@ -24,6 +25,7 @@ class ChatUIKitInputBar extends StatefulWidget {
   final TextEditingController? textEditingController;
   final BorderRadiusGeometry? borderRadius;
   final TextCapitalization textCapitalization;
+  final void Function(String input)? onChanged;
   final FocusNode? focusNode;
   final double mixHeight;
 
@@ -90,6 +92,7 @@ class _ChatUIKitInputBarState extends State<ChatUIKitInputBar> {
         borderRadius: widget.borderRadius ?? BorderRadius.circular(4),
       ),
       child: TextField(
+        onChanged: widget.onChanged,
         focusNode: widget.focusNode,
         textCapitalization: widget.textCapitalization,
         maxLines: 4,

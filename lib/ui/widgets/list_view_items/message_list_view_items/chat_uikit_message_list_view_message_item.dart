@@ -13,6 +13,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
     this.nicknameWidget,
     this.onNicknameTap,
     this.onAvatarTap,
+    this.onAvatarLongPressed,
     this.onBubbleTap,
     this.onBubbleLongPressed,
     this.onBubbleDoubleTap,
@@ -32,6 +33,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
   final bool isPlaying;
 
   final VoidCallback? onAvatarTap;
+  final VoidCallback? onAvatarLongPressed;
   final VoidCallback? onNicknameTap;
   final VoidCallback? onBubbleTap;
   final VoidCallback? onBubbleLongPressed;
@@ -161,6 +163,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
 
     content = InkWell(
       onTap: onAvatarTap,
+      onLongPress: onAvatarLongPressed,
       child: content,
     );
 
