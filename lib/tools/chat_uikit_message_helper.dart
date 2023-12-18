@@ -23,6 +23,14 @@ extension MessageHelper on Message {
     return '';
   }
 
+  bool get isEdit {
+    if (bodyType == MessageType.TXT) {
+      if ((body as TextMessageBody).modifyCount == null) return true;
+      return (body as TextMessageBody).modifyCount! > 0;
+    }
+    return false;
+  }
+
   String? get displayName {
     if (bodyType == MessageType.IMAGE) {
       return (body as ImageMessageBody).displayName;
