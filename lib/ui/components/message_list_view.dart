@@ -54,7 +54,7 @@ class _MessageListViewState extends State<MessageListView> {
       if (controller.lastActionType == MessageLastActionType.load) {
         setState(() {});
       }
-      debugPrint('notifyListeners run!');
+
       if ((controller.lastActionType == MessageLastActionType.receive &&
               scrollController.offset == 0) ||
           controller.lastActionType == MessageLastActionType.send) {
@@ -98,11 +98,8 @@ class _MessageListViewState extends State<MessageListView> {
               final ValueKey<String> valueKey = key as ValueKey<String>;
               int index = controller.newData
                   .indexWhere((msg) => msg.msgId == valueKey.value);
-
+              debugPrint(index.toString());
               return index > -1 ? index : null;
-            },
-            semanticIndexCallback: (widget, localIndex) {
-              return localIndex;
             },
             (context, index) {
               return _item(controller.newData[index]);

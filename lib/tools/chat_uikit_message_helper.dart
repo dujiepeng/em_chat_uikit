@@ -123,6 +123,48 @@ extension MessageHelper on Message {
     return 0;
   }
 
+  bool get isCardMessage {
+    if (bodyType == MessageType.CUSTOM) {
+      final customBody = body as CustomMessageBody;
+      if (customBody.event == cardMessageKey) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  String? get cardUserNickname {
+    if (bodyType == MessageType.CUSTOM) {
+      final customBody = body as CustomMessageBody;
+      if (customBody.event == cardMessageKey) {
+        return customBody.params?[cardNickname];
+      }
+    }
+    return null;
+  }
+
+  String? get cardUserAvatar {
+    if (bodyType == MessageType.CUSTOM) {
+      final customBody = body as CustomMessageBody;
+      if (customBody.event == cardMessageKey) {
+        return customBody.params?[cardContactAvatar];
+      }
+    }
+    return null;
+  }
+
+  get cardNickname => null;
+
+  String? get cardUserId {
+    if (bodyType == MessageType.CUSTOM) {
+      final customBody = body as CustomMessageBody;
+      if (customBody.event == cardMessageKey) {
+        return customBody.params?[cardContactUserId];
+      }
+    }
+    return null;
+  }
+
   String showInfo() {
     String str = '';
     switch (body.type) {
@@ -145,7 +187,12 @@ extension MessageHelper on Message {
         str = '[Combine]';
         break;
       case MessageType.CUSTOM:
-        str = '[Custom]';
+        if (isCardMessage) {
+          str = '[Card]';
+        } else {
+          str = '[Custom]';
+        }
+
         break;
       default:
     }

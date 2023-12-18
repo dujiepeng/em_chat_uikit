@@ -1,8 +1,10 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/widgets.dart';
 
-class NewChatViewArguments implements ChatUIKitViewArguments {
-  NewChatViewArguments({
+class SelectContactViewArguments implements ChatUIKitViewArguments {
+  SelectContactViewArguments({
+    this.title,
+    this.backText,
     this.controller,
     this.appBar,
     this.onSearchTap,
@@ -22,6 +24,8 @@ class NewChatViewArguments implements ChatUIKitViewArguments {
       onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
+  final String? backText;
+  final String? title;
 
   @override
   String? attributes;

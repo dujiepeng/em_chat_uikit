@@ -270,7 +270,8 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
 
   Widget _remainingLabel(ChatUIKitTheme theme) {
     Widget content;
-    if (widget.maxDuration - recordCounter <= 10) {
+    if (widget.maxDuration - recordCounter <= 10 &&
+        statusType == ChatUIKitVoiceBarStatusType.recording) {
       content = Text("${widget.maxDuration - recordCounter}'后自动停止",
           style: TextStyle(
             fontWeight: theme.font.bodySmall.fontWeight,
@@ -281,7 +282,6 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
           ));
     } else {
       content = const SizedBox();
-      ;
     }
     return SizedBox(
       height: 16,
@@ -347,7 +347,7 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
           ? theme.color.primaryColor6
           : theme.color.primaryColor5,
       duration: const Duration(milliseconds: 1000),
-      count: 3,
+      count: 10,
       enable: ChatUIKitVoiceBarStatusType.recording == statusType,
       child: content,
     );

@@ -57,9 +57,12 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
       msgWidget = _buildVideoMessage(context, message);
     } else if (message.bodyType == MessageType.FILE) {
       msgWidget = _buildFileMessage(context, message);
-    } else {
-      msgWidget = const SizedBox();
+    } else if (message.bodyType == MessageType.CUSTOM) {
+      if (message.isCardMessage) {
+        msgWidget = _buildCardMessage(context, message);
+      }
     }
+    msgWidget ??= const SizedBox();
 
     Widget content;
 
@@ -97,11 +100,45 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
         children: [
           _nickname(theme),
           content,
+          SizedBox(
+            height: 16,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: isLeft ?? left
+                  ? MainAxisAlignment.start
+                  : MainAxisAlignment.end,
+              textDirection:
+                  isLeft ?? left ? TextDirection.ltr : TextDirection.rtl,
+              children: [
+                const SizedBox(width: arrowWidth),
+                Text(
+                  ChatUIKitTimeFormatter.instance.formatterHandler?.call(
+                        context,
+                        ChatUIKitTimeType.message,
+                        message.serverTime,
+                      ) ??
+                      ChatUIKitTimeTool.getChatTimeStr(message.serverTime),
+                  textDirection:
+                      isLeft ?? left ? TextDirection.ltr : TextDirection.rtl,
+                  style: TextStyle(
+                      fontWeight: theme.font.bodySmall.fontWeight,
+                      fontSize: theme.font.bodySmall.fontSize,
+                      color: theme.color.isDark
+                          ? theme.color.neutralColor5
+                          : theme.color.neutralColor7),
+                ),
+              ],
+            ),
+          ),
         ],
       );
     }
 
     Widget avatar = _avatar(theme);
+    avatar = Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: avatar,
+    );
 
     // TODO: 状态widget
     content = Row(
@@ -150,6 +187,10 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
       message: message,
       bubbleStyle: bubbleStyle,
     );
+  }
+
+  Widget _buildCardMessage(BuildContext context, Message message) {
+    return ChatUIKitCardMessageWidget(message: message);
   }
 
   Widget _avatar(ChatUIKitTheme theme) {

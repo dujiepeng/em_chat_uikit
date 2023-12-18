@@ -2,8 +2,8 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
-class NewChatView extends StatefulWidget {
-  NewChatView.arguments(NewChatViewArguments arguments, {super.key})
+class SelectContactView extends StatefulWidget {
+  SelectContactView.arguments(SelectContactViewArguments arguments, {super.key})
       : listViewItemBuilder = arguments.listViewItemBuilder,
         onSearchTap = arguments.onSearchTap,
         fakeSearchHideText = arguments.fakeSearchHideText,
@@ -11,9 +11,13 @@ class NewChatView extends StatefulWidget {
         onTap = arguments.onTap,
         onLongPress = arguments.onLongPress,
         appBar = arguments.appBar,
-        controller = arguments.controller;
+        controller = arguments.controller,
+        backText = arguments.backText,
+        title = arguments.title;
 
-  const NewChatView({
+  const SelectContactView({
+    this.backText,
+    this.title,
     this.listViewItemBuilder,
     this.onSearchTap,
     this.fakeSearchHideText,
@@ -25,6 +29,8 @@ class NewChatView extends StatefulWidget {
     super.key,
   });
 
+  final String? title;
+  final String? backText;
   final ContactListViewController? controller;
   final ChatUIKitAppBar? appBar;
   final void Function(List<ContactItemModel> data)? onSearchTap;
@@ -37,10 +43,10 @@ class NewChatView extends StatefulWidget {
   final Widget? listViewBackground;
 
   @override
-  State<NewChatView> createState() => _NewChatViewState();
+  State<SelectContactView> createState() => _SelectContactViewState();
 }
 
-class _NewChatViewState extends State<NewChatView> {
+class _SelectContactViewState extends State<SelectContactView> {
   late final ContactListViewController controller;
 
   @override
@@ -59,22 +65,25 @@ class _NewChatViewState extends State<NewChatView> {
           : theme.color.neutralColor98,
       appBar: widget.appBar ??
           ChatUIKitAppBar(
+            title: widget.title,
             showBackButton: true,
-            leading: InkWell(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                '新会话',
-                style: TextStyle(
-                  color: theme.color.isDark
-                      ? theme.color.neutralColor98
-                      : theme.color.neutralColor1,
-                  fontWeight: theme.font.titleMedium.fontWeight,
-                  fontSize: theme.font.titleMedium.fontSize,
-                ),
-              ),
-            ),
+            leading: widget.backText?.isNotEmpty == true
+                ? InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      widget.backText!,
+                      style: TextStyle(
+                        color: theme.color.isDark
+                            ? theme.color.neutralColor98
+                            : theme.color.neutralColor1,
+                        fontWeight: theme.font.titleMedium.fontWeight,
+                        fontSize: theme.font.titleMedium.fontSize,
+                      ),
+                    ),
+                  )
+                : null,
           ),
       body: ContactListView(
         controller: controller,

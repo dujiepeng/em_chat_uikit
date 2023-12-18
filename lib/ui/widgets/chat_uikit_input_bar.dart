@@ -5,7 +5,7 @@ class ChatUIKitInputBar extends StatefulWidget {
   const ChatUIKitInputBar({
     this.leading,
     this.trailing,
-    this.textEditingController,
+    required this.textEditingController,
     this.hintText,
     this.hintTextStyle,
     this.inputTextStyle,
@@ -14,6 +14,7 @@ class ChatUIKitInputBar extends StatefulWidget {
     this.borderRadius,
     this.onChanged,
     this.focusNode,
+    this.autofocus = false,
     super.key,
   });
 
@@ -22,30 +23,38 @@ class ChatUIKitInputBar extends StatefulWidget {
   final String? hintText;
   final TextStyle? hintTextStyle;
   final TextStyle? inputTextStyle;
-  final TextEditingController? textEditingController;
+  final TextEditingController textEditingController;
   final BorderRadiusGeometry? borderRadius;
   final TextCapitalization textCapitalization;
   final void Function(String input)? onChanged;
   final FocusNode? focusNode;
   final double mixHeight;
+  final bool autofocus;
 
   @override
   State<ChatUIKitInputBar> createState() => _ChatUIKitInputBarState();
 }
 
 class _ChatUIKitInputBarState extends State<ChatUIKitInputBar> {
-  late final TextEditingController _textEditingController;
+  TextEditingController? _textEditingController;
 
   @override
   void initState() {
     super.initState();
-    _textEditingController =
-        widget.textEditingController ?? TextEditingController();
+    _textEditingController = widget.textEditingController;
+  }
+
+  @override
+  void didUpdateWidget(covariant ChatUIKitInputBar oldWidget) {
+    if (oldWidget.textEditingController != widget.textEditingController) {
+      _textEditingController?.dispose();
+      _textEditingController = widget.textEditingController;
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
   void dispose() {
-    _textEditingController.dispose();
     super.dispose();
   }
 
@@ -92,6 +101,7 @@ class _ChatUIKitInputBarState extends State<ChatUIKitInputBar> {
         borderRadius: widget.borderRadius ?? BorderRadius.circular(4),
       ),
       child: TextField(
+        autofocus: widget.autofocus,
         onChanged: widget.onChanged,
         focusNode: widget.focusNode,
         textCapitalization: widget.textCapitalization,

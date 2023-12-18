@@ -32,7 +32,8 @@ class ChatUIKitRoute {
       return GroupsView.arguments(arguments as GroupsViewArguments);
     },
     ChatUIKitRouteNames.newChatView: (context, arguments) {
-      return NewChatView.arguments(arguments as NewChatViewArguments);
+      return SelectContactView.arguments(
+          arguments as SelectContactViewArguments);
     },
     ChatUIKitRouteNames.newRequestDetailsView: (context, arguments) {
       return NewRequestDetailsView.arguments(

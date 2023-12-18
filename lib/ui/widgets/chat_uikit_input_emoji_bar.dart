@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 typedef EmojiClick = void Function(String emoji);
 
-class ChatInputEmoji extends StatelessWidget {
-  const ChatInputEmoji({
+class ChatUIKitInputEmojiBar extends StatelessWidget {
+  const ChatUIKitInputEmojiBar({
     this.deleteOnTap,
     this.crossAxisCount = 7,
     this.mainAxisSpacing = 2.0,

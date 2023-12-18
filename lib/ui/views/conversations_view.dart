@@ -258,7 +258,9 @@ class _ConversationsViewState extends State<ConversationsView> {
       builder: (context) {
         return SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.95,
-          child: const NewChatView(),
+          child: const SelectContactView(
+            backText: '新会话',
+          ),
         );
       },
     ).then((profile) {

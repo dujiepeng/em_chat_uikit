@@ -117,6 +117,16 @@ class ChatUIKitImageLoader {
     );
   }
 
+  static Widget messageEdit({double size = 16, Color? color}) {
+    return Image.asset(
+      'assets/images/edit_bar.png',
+      package: packageName,
+      width: size,
+      height: size,
+      color: color,
+    );
+  }
+
   static Widget moreKeyboard({double size = 30, Color? color}) {
     return Image.asset(
       'assets/images/input_bar_more.png',

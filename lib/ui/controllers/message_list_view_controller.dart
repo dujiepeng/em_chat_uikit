@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
@@ -98,6 +100,22 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
     sendMessage(message);
   }
 
+  Future<void> editMessage(Message message, String content) async {
+    TextMessageBody msgBody = TextMessageBody(content: content);
+    try {
+      Message msg = await ChatUIKit.instance.modifyMessage(
+        messageId: message.msgId,
+        msgBody: msgBody,
+      );
+      final index = newData.indexWhere((element) => msg.msgId == element.msgId);
+      if (index != -1) {
+        newData[index] = msg;
+        notifyListeners();
+      }
+      // ignore: empty_catches
+    } catch (e) {}
+  }
+
   Future<void> sendVoiceMessage(ChatUIKitRecordModel model) async {
     final message = Message.createVoiceSendMessage(
         targetId: profile.id,
@@ -105,6 +123,50 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
         filePath: model.path,
         duration: model.duration,
         displayName: model.displayName);
+    sendMessage(message);
+  }
+
+  Future<void> sendImageMessage(String path, {String? name}) async {
+    if (path.isEmpty) {
+      return;
+    }
+    bool hasSize = false;
+    File file = File(path);
+    Image.file(file)
+        .image
+        .resolve(const ImageConfiguration())
+        .addListener(ImageStreamListener((info, synchronousCall) {
+      if (!hasSize) {
+        hasSize = true;
+        Message message = Message.createImageSendMessage(
+          targetId: profile.id,
+          chatType: chatType,
+          filePath: path,
+          width: info.image.width.toDouble(),
+          height: info.image.height.toDouble(),
+          fileSize: file.lengthSync(),
+          displayName: name,
+        );
+        sendMessage(message);
+      }
+    }));
+  }
+
+  Future<void> sendCardMessage(ChatUIKitProfile profile) async {
+    Map<String, String> param = {cardContactUserId: profile.id};
+    if (profile.name != null) {
+      param[cardContactNickname] = profile.name!;
+    }
+    if (profile.avatarUrl != null) {
+      param[cardContactAvatar] = profile.avatarUrl!;
+    }
+
+    final message = Message.createCustomSendMessage(
+      targetId: profile.id,
+      chatType: chatType,
+      event: cardMessageKey,
+      params: param,
+    );
     sendMessage(message);
   }
 
