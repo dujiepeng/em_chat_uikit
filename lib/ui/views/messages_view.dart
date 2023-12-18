@@ -115,7 +115,7 @@ class _MessagesViewState extends State<MessagesView> {
         controller: controller,
         showAvatar: widget.showAvatar,
         showNickname: widget.showNickname,
-        onItemTap: widget.onItemTap,
+        onItemTap: widget.onItemTap ?? bubbleTab,
         onItemLongPress: widget.onItemLongPress ?? onItemLongPress,
         onDoubleTap: widget.onDoubleTap,
         onAvatarTap: widget.onAvatarTap,
@@ -406,6 +406,12 @@ class _MessagesViewState extends State<MessagesView> {
   }
 
   void bubbleTab(Message message) {
+    if (message.bodyType == MessageType.IMAGE) {
+      Navigator.of(context).pushNamed(
+        ChatUIKitRouteNames.imageShowView,
+        arguments: ImageShowViewArguments(message: message),
+      );
+    }
     // TODO:播放音频
     debugPrint('message tapped');
   }

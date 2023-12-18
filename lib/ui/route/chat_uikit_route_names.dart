@@ -17,4 +17,5 @@ class ChatUIKitRouteNames {
   static String groupAddMembersView = '/GroupAddMembersView';
   static String messagesView = '/MessagesView';
   static String conversationsView = '/ConversationsView';
+  static String imageShowView = '/ImageShowView';
 }
