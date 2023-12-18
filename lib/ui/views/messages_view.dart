@@ -77,7 +77,6 @@ class _MessagesViewState extends State<MessagesView> {
   bool showMoreBtn = true;
   late final ImagePicker _picker;
 
-  bool messageEdit = false;
   bool messageEditCanSend = false;
   TextEditingController? editBarTextEditingController;
   Message? editMessage;
@@ -90,7 +89,7 @@ class _MessagesViewState extends State<MessagesView> {
     focusNode = widget.focusNode ?? FocusNode();
     _picker = ImagePicker();
     focusNode.addListener(() {
-      if (messageEdit) return;
+      if (editMessage != null) return;
       if (focusNode.hasFocus) {
         showEmojiBtn = false;
         setState(() {});
@@ -131,8 +130,7 @@ class _MessagesViewState extends State<MessagesView> {
             child: Padding(
                 padding: const EdgeInsets.only(left: 12, right: 12),
                 child: content)),
-        if (messageEdit) editMessageBar(theme),
-        if (!messageEdit) widget.inputBar ?? inputBar(),
+        widget.inputBar ?? inputBar(),
         AnimatedContainer(
           curve: Curves.linearToEaseOut,
           duration: const Duration(milliseconds: 250),
@@ -153,6 +151,36 @@ class _MessagesViewState extends State<MessagesView> {
             title: widget.profile.showName,
           ),
       body: SafeArea(child: content),
+    );
+
+    content = Stack(
+      children: [
+        content,
+        if (editMessage != null)
+          Positioned.fill(
+            child: InkWell(
+              onTap: () {
+                editMessage = null;
+                setState(() {});
+              },
+              child: Opacity(
+                opacity: 0.5,
+                child: Container(color: Colors.black),
+              ),
+            ),
+          ),
+        if (editMessage != null)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: editMessageBar(theme),
+              )
+            ],
+          ),
+      ],
     );
 
     return content;
@@ -177,7 +205,7 @@ class _MessagesViewState extends State<MessagesView> {
             controller.editMessage(editMessage!, text);
             editBarTextEditingController?.clear();
             editMessage = null;
-            messageEdit = false;
+
             setState(() {});
           }
         },
@@ -225,6 +253,8 @@ class _MessagesViewState extends State<MessagesView> {
     content = Column(
       children: [header, content],
     );
+
+    content = SafeArea(child: content);
 
     return content;
   }
@@ -385,7 +415,7 @@ class _MessagesViewState extends State<MessagesView> {
     if (showEmojiBtn) {
       showEmojiBtn = false;
     }
-    messageEdit = true;
+
     editMessage = message;
     editBarTextEditingController =
         TextEditingController(text: editMessage?.textContent ?? "");
