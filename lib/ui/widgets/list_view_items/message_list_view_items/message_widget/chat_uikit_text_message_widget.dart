@@ -36,18 +36,22 @@ class ChatUIKitTextMessageWidget extends StatelessWidget {
 
     if (message.isEdit) {
       content = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        textDirection: left ? TextDirection.ltr : TextDirection.rtl,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           content,
           Text(
             '已编辑',
             style: TextStyle(
-                fontWeight: theme.font.bodyExtraSmall.fontWeight,
-                fontSize: theme.font.bodyExtraSmall.fontSize,
-                color: theme.color.isDark
-                    ? theme.color.neutralSpecialColor3
-                    : theme.color.neutralSpecialColor98),
+              fontWeight: theme.font.bodyExtraSmall.fontWeight,
+              fontSize: theme.font.bodyExtraSmall.fontSize,
+              color: left
+                  ? theme.color.isDark
+                      ? theme.color.neutralSpecialColor7
+                      : theme.color.neutralSpecialColor5
+                  : theme.color.isDark
+                      ? theme.color.neutralSpecialColor3
+                      : theme.color.neutralSpecialColor98,
+            ),
           )
         ],
       );

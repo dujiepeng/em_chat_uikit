@@ -47,6 +47,8 @@ class _ChatUIKitVideoMessageWidgetState
 
   @override
   Widget build(BuildContext context) {
+    final theme = ChatUIKitTheme.of(context);
+
     String? thumbnailLocalPath = message.thumbnailLocalPath;
     double width = message.width;
     double height = message.height;
@@ -106,6 +108,27 @@ class _ChatUIKitVideoMessageWidgetState
         ),
       );
     }
+
+    content = Stack(
+      children: [
+        content,
+        Positioned.fill(
+          child: Align(
+            alignment: Alignment.center,
+            child: IconButton(
+              onPressed: () => download(),
+              icon: Icon(
+                Icons.play_circle_outline,
+                size: 64,
+                color: theme.color.isDark
+                    ? theme.color.neutralColor1
+                    : theme.color.neutralColor98,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
 
     return content;
   }

@@ -25,7 +25,7 @@ extension MessageHelper on Message {
 
   bool get isEdit {
     if (bodyType == MessageType.TXT) {
-      if ((body as TextMessageBody).modifyCount == null) return true;
+      if ((body as TextMessageBody).modifyCount == null) return false;
       return (body as TextMessageBody).modifyCount! > 0;
     }
     return false;
