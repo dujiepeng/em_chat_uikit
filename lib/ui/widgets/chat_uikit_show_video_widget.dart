@@ -29,7 +29,7 @@ class ChatUIKitShowVideoWidget extends StatefulWidget {
 
 class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
     with MessageObserver {
-  late final Message? message;
+  Message? message;
   VideoPlayerController? _controller;
 
   String? localThumbPath;
@@ -43,20 +43,18 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
   @override
   void initState() {
     super.initState();
-    debugPrint('init!');
     ChatUIKit.instance.addObserver(this);
     ChatUIKit.instance
         .loadMessage(messageId: widget.message.msgId)
         .then((value) {
       if (value != null) {
         message = value;
-        checkFile();
+        checkVideoFile();
       }
     });
   }
 
-  void checkFile() async {
-    await Future.delayed(const Duration(milliseconds: 100));
+  void checkVideoFile() async {
     if (message?.localPath?.isNotEmpty == true) {
       File file = File(message!.localPath!);
 
@@ -116,7 +114,7 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
         }
       }
       message = msg;
-      checkFile();
+      checkVideoFile();
     }
   }
 
@@ -127,9 +125,11 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
     _controller?.addListener(() {
       if (mounted) {
         if (_controller?.value.isInitialized == true) {
-          isPlaying = _controller?.value.isPlaying ?? false;
+          if (isPlaying != (_controller?.value.isPlaying ?? false)) {
+            isPlaying = (_controller?.value.isPlaying ?? false);
+            setState(() {});
+          }
         }
-        setState(() {});
       }
     });
   }
@@ -145,8 +145,8 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
           return const SizedBox();
         }
         return SizedBox(
-            width: 100,
-            height: 100,
+            width: 40,
+            height: 40,
             child: CircularProgressIndicator(value: value / 100));
       },
     );

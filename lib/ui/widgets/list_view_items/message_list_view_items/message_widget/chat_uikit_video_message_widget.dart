@@ -83,6 +83,16 @@ class _ChatUIKitVideoMessageWidgetState
       }
     }
 
+    if (maxImageWidth / width > maxImageHeight / height) {
+      double ratio = maxImageWidth / width;
+      width = maxImageWidth;
+      height = height * ratio;
+    } else {
+      double ratio = maxImageHeight / height;
+      height = maxImageHeight;
+      width = width * ratio;
+    }
+
     Widget? content;
     if (thumbnailLocalPath?.isNotEmpty == true) {
       final file = File(thumbnailLocalPath!);
