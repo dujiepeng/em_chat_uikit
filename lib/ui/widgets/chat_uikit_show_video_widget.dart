@@ -87,7 +87,7 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
 
   @override
   void onProgress(String msgId, int progress) {
-    if (message?.msgId == msgId) {
+    if (widget.message.msgId == msgId) {
       if (downloading) {
         _progress.value = progress;
         widget.onProgress?.call(progress);
@@ -97,7 +97,7 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
 
   @override
   void onError(String msgId, Message msg, ChatError error) {
-    if (message?.msgId == msgId) {
+    if (widget.message.msgId == msgId) {
       message = msg;
       widget.onError?.call(error);
     }
@@ -105,7 +105,7 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
 
   @override
   void onSuccess(String msgId, Message msg) {
-    if (message?.msgId == msgId) {
+    if (widget.message.msgId == msgId) {
       if (downloading) {
         if ((msg.body as VideoMessageBody).fileStatus ==
             DownloadStatus.SUCCESS) {

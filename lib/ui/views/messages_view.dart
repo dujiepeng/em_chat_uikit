@@ -398,8 +398,20 @@ class _MessagesViewState extends State<MessagesView> {
         },
       ));
       items.add(ChatUIKitBottomSheetItem.normal(label: '举报'));
-      items.add(ChatUIKitBottomSheetItem.normal(label: '删除'));
-      items.add(ChatUIKitBottomSheetItem.normal(label: '撤回'));
+      items.add(ChatUIKitBottomSheetItem.normal(
+        label: '删除',
+        onTap: () async {
+          Navigator.of(context).pop();
+          deleteMessage(message);
+        },
+      ));
+      items.add(ChatUIKitBottomSheetItem.normal(
+        label: '撤回',
+        onTap: () async {
+          Navigator.of(context).pop();
+          recallMessage(message);
+        },
+      ));
     }
 
     showChatUIKitBottomSheet(context: context, items: items);
@@ -459,6 +471,14 @@ class _MessagesViewState extends State<MessagesView> {
     editBarTextEditingController =
         TextEditingController(text: editMessage?.textContent ?? "");
     setState(() {});
+  }
+
+  void deleteMessage(Message message) {
+    controller.deleteMessage(message.msgId);
+  }
+
+  void recallMessage(Message message) {
+    controller.recallMessage(message.msgId);
   }
 
   void selectImage() async {

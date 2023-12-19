@@ -14,7 +14,7 @@ enum MessageLastActionType {
 class MessageListViewController extends ChangeNotifier with ChatObserver {
   final ChatUIKitProfile profile;
   final int pageSize;
-  late final ConversationType type;
+  late final ConversationType conversationType;
   bool isEmpty = false;
   String? lastMessageId;
   bool hasNew = false;
@@ -24,7 +24,7 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
 
   MessageListViewController({required this.profile, this.pageSize = 30}) {
     ChatUIKit.instance.addObserver(this);
-    type = () {
+    conversationType = () {
       if (profile.type == ChatUIKitProfileType.groupChat ||
           profile.type == ChatUIKitProfileType.group) {
         return ConversationType.GroupChat;
@@ -46,7 +46,7 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
     }
     List<Message> list = await ChatUIKit.instance.getMessages(
       conversationId: profile.id,
-      type: type,
+      type: conversationType,
       count: pageSize,
       startId: lastMessageId,
     );
@@ -113,6 +113,28 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
         newData[index] = msg;
         notifyListeners();
       }
+      // ignore: empty_catches
+    } catch (e) {}
+  }
+
+  Future<void> deleteMessage(String messageId) async {
+    try {
+      await ChatUIKit.instance.deleteLocalMessageById(
+        conversationId: profile.id,
+        type: conversationType,
+        messageId: messageId,
+      );
+      newData.removeWhere((element) => messageId == element.msgId);
+      notifyListeners();
+      // ignore: empty_catches
+    } catch (e) {}
+  }
+
+  Future<void> recallMessage(String messageId) async {
+    try {
+      await ChatUIKit.instance.recallMessage(messageId: messageId);
+      newData.removeWhere((element) => messageId == element.msgId);
+      notifyListeners();
       // ignore: empty_catches
     } catch (e) {}
   }

@@ -25,6 +25,7 @@ enum ChatSDKWrapperActionEvent {
   fetchGroupAckList,
   deleteRemoteConversation,
   deleteLocalMessages,
+  deleteLocalMessageByIds,
   reportMessage,
   addReaction,
   deleteReaction,
@@ -109,4 +110,5 @@ enum ChatSDKWrapperActionEvent {
   unsubscribe,
   fetchSubscribedMembers,
   fetchPresenceStatus,
+  getMessages,
 }

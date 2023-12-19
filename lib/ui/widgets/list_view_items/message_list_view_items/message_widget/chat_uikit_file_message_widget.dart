@@ -38,7 +38,7 @@ class ChatUIKitFileMessageWidget extends StatelessWidget {
           ),
     );
     Widget subTitle = Text(
-      message.fileSize,
+      message.fileSizeStr,
       overflow: TextOverflow.ellipsis,
       style: subTitleStyle ??
           TextStyle(

@@ -8,7 +8,7 @@ class ChatUIKitRouteNames {
   static String groupDetailsView = '/GroupDetailsView';
   static String groupsView = '/GroupsView';
   static String groupMembersView = '/GroupMembersView';
-  static String newChatView = '/NewChatView';
+  static String selectContactsView = '/SelectContactsView';
   static String newRequestDetailsView = '/NewRequestDetailsView';
   static String newRequestsView = '/NewRequestsView';
   static String searchContactsView = '/SearchContactsView';

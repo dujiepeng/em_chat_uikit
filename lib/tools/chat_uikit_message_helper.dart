@@ -53,7 +53,23 @@ extension MessageHelper on Message {
     return 0;
   }
 
-  String get fileSize {
+  int get fileSize {
+    int? length;
+    if (bodyType == MessageType.IMAGE) {
+      length = (body as ImageMessageBody).fileSize;
+    } else if (bodyType == MessageType.VOICE) {
+      length = (body as VoiceMessageBody).fileSize;
+    } else if (bodyType == MessageType.VIDEO) {
+      length = (body as VideoMessageBody).fileSize;
+    } else if (bodyType == MessageType.FILE) {
+      length = (body as FileMessageBody).fileSize;
+    } else {
+      length = 0;
+    }
+    return length!;
+  }
+
+  String get fileSizeStr {
     int? length;
     if (bodyType == MessageType.IMAGE) {
       length = (body as ImageMessageBody).fileSize;

@@ -63,9 +63,52 @@ class _ShowImageViewState extends State<ShowImageView> {
     showChatUIKitBottomSheet(
         context: context,
         items: [
-          ChatUIKitBottomSheetItem.normal(label: '保存', onTap: () async {}),
-          ChatUIKitBottomSheetItem.normal(label: '转发给朋友', onTap: () async {})
+          ChatUIKitBottomSheetItem.normal(
+              label: '保存',
+              onTap: () async {
+                save();
+                Navigator.of(context).pop();
+              }),
+          ChatUIKitBottomSheetItem.normal(
+              label: '转发给朋友',
+              onTap: () async {
+                Navigator.of(context).pop();
+                forward();
+              })
         ],
         cancelTitle: '取消');
+  }
+
+  void save() async {}
+
+  void forward() async {
+    final profile = await Navigator.of(context).pushNamed(
+      ChatUIKitRouteNames.selectContactsView,
+      arguments: SelectContactViewArguments(
+        title: '选择联系人',
+        backText: '取消',
+      ),
+    );
+
+    if (profile != null && profile is ChatUIKitProfile) {
+      Message? targetMsg =
+          await ChatUIKit.instance.loadMessage(messageId: widget.message.msgId);
+      if (targetMsg != null) {
+        final msg = Message.createImageSendMessage(
+          targetId: profile.id,
+          chatType: (profile.type == ChatUIKitProfileType.contact ||
+                  profile.type == ChatUIKitProfileType.contact)
+              ? ChatType.Chat
+              : ChatType.GroupChat,
+          filePath: targetMsg.localPath!,
+          width: targetMsg.width,
+          height: targetMsg.height,
+          displayName: targetMsg.displayName,
+          fileSize: targetMsg.fileSize,
+        );
+
+        ChatUIKit.instance.sendMessage(message: msg);
+      }
+    }
   }
 }

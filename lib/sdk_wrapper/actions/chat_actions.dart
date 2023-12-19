@@ -273,7 +273,7 @@ mixin ChatActions on ChatWrapper {
     });
   }
 
-  Future<void> deleteLocalMessages(int beforeTime) async {
+  Future<void> deleteLocalMessages({required int beforeTime}) async {
     return checkResult(ChatSDKWrapperActionEvent.deleteLocalMessages, () async {
       return Client.getInstance.chatManager.deleteMessagesBefore(
         beforeTime,
@@ -424,14 +424,30 @@ mixin ChatActions on ChatWrapper {
     String? startId,
     int count = 30,
   }) async {
-    final conversation = await getConversation(
-      conversationId: conversationId,
-      type: type,
-    );
-    return conversation!.loadMessages(
-      startMsgId: startId ?? '',
-      loadCount: count,
-      direction: direction,
-    );
+    return checkResult(ChatSDKWrapperActionEvent.getMessages, () async {
+      final conversation = await getConversation(
+        conversationId: conversationId,
+        type: type,
+      );
+      return conversation!.loadMessages(
+        startMsgId: startId ?? '',
+        loadCount: count,
+        direction: direction,
+      );
+    });
+  }
+
+  Future<void> deleteLocalMessageById({
+    required String conversationId,
+    required ConversationType type,
+    required String messageId,
+  }) async {
+    return checkResult(ChatSDKWrapperActionEvent.getMessages, () async {
+      final conversation = await getConversation(
+        conversationId: conversationId,
+        type: type,
+      );
+      return conversation!.deleteMessage(messageId);
+    });
   }
 }
