@@ -52,13 +52,17 @@ class _MessageListViewState extends State<MessageListView> {
         widget.controller ?? MessageListViewController(profile: widget.profile);
     controller.addListener(() {
       if (controller.lastActionType == MessageLastActionType.load) {
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       }
 
       if ((controller.lastActionType == MessageLastActionType.receive &&
               scrollController.offset == 0) ||
           controller.lastActionType == MessageLastActionType.send) {
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           scrollController.animateTo(
             0,
@@ -163,6 +167,18 @@ class _MessageListViewState extends State<MessageListView> {
         widget.onNicknameTap?.call(widget.profile);
       },
       message: message,
+    );
+
+    content = SizedBox(
+      width: MediaQuery.of(context).size.width * 0.8,
+      child: content,
+    );
+
+    content = Align(
+      alignment: message.direction == MessageDirection.SEND
+          ? Alignment.centerRight
+          : Alignment.centerLeft,
+      child: content,
     );
 
     return content;

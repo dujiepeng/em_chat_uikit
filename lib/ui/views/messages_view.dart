@@ -111,18 +111,19 @@ class _MessagesViewState extends State<MessagesView> {
     final theme = ChatUIKitTheme.of(context);
 
     Widget content = MessageListView(
-        profile: widget.profile,
-        controller: controller,
-        showAvatar: widget.showAvatar,
-        showNickname: widget.showNickname,
-        onItemTap: widget.onItemTap ?? bubbleTab,
-        onItemLongPress: widget.onItemLongPress ?? onItemLongPress,
-        onDoubleTap: widget.onDoubleTap,
-        onAvatarTap: widget.onAvatarTap,
-        onAvatarLongPressed: widget.onAvatarLongPress,
-        onNicknameTap: widget.onNicknameTap,
-        bubbleStyle: widget.bubbleStyle,
-        itemBuilder: widget.itemBuilder);
+      profile: widget.profile,
+      controller: controller,
+      showAvatar: widget.showAvatar,
+      showNickname: widget.showNickname,
+      onItemTap: widget.onItemTap ?? bubbleTab,
+      onItemLongPress: widget.onItemLongPress ?? onItemLongPress,
+      onDoubleTap: widget.onDoubleTap,
+      onAvatarTap: widget.onAvatarTap,
+      onAvatarLongPressed: widget.onAvatarLongPress,
+      onNicknameTap: widget.onNicknameTap,
+      bubbleStyle: widget.bubbleStyle,
+      itemBuilder: widget.itemBuilder,
+    );
 
     content = Column(
       children: [
@@ -142,6 +143,10 @@ class _MessagesViewState extends State<MessagesView> {
       ],
     );
 
+    content = SafeArea(
+      child: content,
+    );
+
     content = Scaffold(
       backgroundColor: theme.color.isDark
           ? theme.color.neutralColor1
@@ -150,7 +155,8 @@ class _MessagesViewState extends State<MessagesView> {
           ChatUIKitAppBar(
             title: widget.profile.showName,
           ),
-      body: SafeArea(child: content),
+      // body: content,
+      body: content,
     );
 
     content = Stack(
@@ -473,12 +479,53 @@ class _MessagesViewState extends State<MessagesView> {
     setState(() {});
   }
 
-  void deleteMessage(Message message) {
-    controller.deleteMessage(message.msgId);
+  void deleteMessage(Message message) async {
+    final delete = await showChatUIKitDialog(
+      title: "确认删除这条消息?",
+      content: "删除后，对方依旧可以看到这条消息。",
+      context: context,
+      items: [
+        ChatUIKitDialogItem.cancel(
+          label: '取消',
+          onTap: () async {
+            Navigator.of(context).pop();
+          },
+        ),
+        ChatUIKitDialogItem.confirm(
+          label: '确认',
+          onTap: () async {
+            Navigator.of(context).pop(true);
+          },
+        ),
+      ],
+    );
+    if (delete == true) {
+      controller.deleteMessage(message.msgId);
+    }
   }
 
-  void recallMessage(Message message) {
-    controller.recallMessage(message.msgId);
+  void recallMessage(Message message) async {
+    final recall = await showChatUIKitDialog(
+      title: "确认撤回这条消息?",
+      context: context,
+      items: [
+        ChatUIKitDialogItem.cancel(
+          label: '取消',
+          onTap: () async {
+            Navigator.of(context).pop();
+          },
+        ),
+        ChatUIKitDialogItem.confirm(
+          label: '确认',
+          onTap: () async {
+            Navigator.of(context).pop(true);
+          },
+        ),
+      ],
+    );
+    if (recall == true) {
+      controller.recallMessage(message.msgId);
+    }
   }
 
   void selectImage() async {

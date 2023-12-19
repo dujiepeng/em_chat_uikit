@@ -10,6 +10,7 @@ double maxImageHeight = 300;
 class ChatUIKitImageMessageWidget extends StatefulWidget {
   const ChatUIKitImageMessageWidget({required this.message, super.key});
   final Message message;
+
   @override
   State<ChatUIKitImageMessageWidget> createState() =>
       _ChatUIKitImageMessageWidgetState();
@@ -41,7 +42,8 @@ class _ChatUIKitImageMessageWidgetState
     }
   }
 
-  void onErr(String msgId, int code, String desc) {
+  @override
+  void onError(String msgId, Message message, ChatError error) {
     if (msgId == message.msgId) {
       downloading = false;
       setState(() {});
@@ -50,6 +52,8 @@ class _ChatUIKitImageMessageWidgetState
 
   @override
   Widget build(BuildContext context) {
+    bool left = message.direction == MessageDirection.RECEIVE;
+
     String? localPath = message.localPath;
     String? thumbnailLocalPath = message.thumbnailLocalPath;
     double width = message.width;
@@ -75,7 +79,7 @@ class _ChatUIKitImageMessageWidgetState
     } else if (aspectRatio > 1 && aspectRatio <= 10) {
       if (width > maxImageWidth) {
         width = maxImageWidth;
-        height = width / 10;
+        height = width / aspectRatio;
       }
     } else {
       width = min(width, height * 10);
@@ -83,16 +87,6 @@ class _ChatUIKitImageMessageWidgetState
         width = maxImageWidth;
         height = width / 10;
       }
-    }
-
-    if (maxImageWidth / width > maxImageHeight / height) {
-      double ratio = maxImageWidth / width;
-      width = maxImageWidth;
-      height = height * ratio;
-    } else {
-      double ratio = maxImageHeight / height;
-      height = maxImageHeight;
-      width = width * ratio;
     }
 
     Widget? content;
@@ -104,6 +98,7 @@ class _ChatUIKitImageMessageWidgetState
           file,
           width: width,
           height: height,
+          alignment: left ? Alignment.centerLeft : Alignment.centerRight,
           fit: width > height ? BoxFit.fitHeight : BoxFit.fitWidth,
           filterQuality: FilterQuality.high,
         );
@@ -119,8 +114,9 @@ class _ChatUIKitImageMessageWidgetState
             file,
             width: width,
             height: height,
+            alignment: left ? Alignment.centerLeft : Alignment.centerRight,
             fit: width > height ? BoxFit.fitHeight : BoxFit.fitWidth,
-            filterQuality: FilterQuality.high,
+            filterQuality: FilterQuality.low,
           );
         }
       }
@@ -137,6 +133,14 @@ class _ChatUIKitImageMessageWidgetState
       );
     }
 
+    content = SizedBox(
+      width: width,
+      height: height,
+      child: Container(
+        color: Colors.red,
+        child: content,
+      ),
+    );
     return content;
   }
 

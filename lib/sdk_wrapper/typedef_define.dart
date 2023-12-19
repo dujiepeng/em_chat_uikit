@@ -10,6 +10,7 @@ typedef ContactEventHandler = chat.EMContactEventHandler;
 typedef ConnectionEventHandler = chat.EMConnectionEventHandler;
 typedef MultiDeviceEventHandler = chat.EMMultiDeviceEventHandler;
 typedef Message = chat.EMMessage;
+typedef MessageStatus = chat.MessageStatus;
 typedef MessageDirection = chat.MessageDirection;
 typedef MessageReactionEvent = chat.EMMessageReactionEvent;
 typedef GroupMessageAck = chat.EMGroupMessageAck;

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 class ChatUIKitVideoMessageWidget extends StatefulWidget {
   const ChatUIKitVideoMessageWidget({required this.message, super.key});
   final Message message;
+
   @override
   State<ChatUIKitVideoMessageWidget> createState() =>
       _ChatUIKitVideoMessageWidgetState();
@@ -38,7 +39,8 @@ class _ChatUIKitVideoMessageWidgetState
     }
   }
 
-  void onErr(String msgId, int code, String desc) {
+  @override
+  void onError(String msgId, Message message, ChatError error) {
     if (msgId == message.msgId) {
       downloading = false;
       setState(() {});
@@ -71,10 +73,8 @@ class _ChatUIKitVideoMessageWidgetState
         height = width / aspectRatio;
       }
     } else if (aspectRatio > 1 && aspectRatio <= 10) {
-      if (width > maxImageWidth) {
-        width = maxImageWidth;
-        height = width / 10;
-      }
+      width = maxImageWidth;
+      height = width / aspectRatio;
     } else {
       width = min(width, height * 10);
       if (width > maxImageWidth) {

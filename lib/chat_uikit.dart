@@ -55,6 +55,7 @@ export 'ui/widgets/chat_uikit_input_emoji_bar.dart';
 export 'ui/widgets/chat_uikit_record_bar.dart';
 export 'ui/widgets/chat_uikit_show_image_widget.dart';
 export 'ui/widgets/chat_uikit_show_video_widget.dart';
+export 'ui/widgets/chat_uikit_message_status_widget.dart';
 
 export 'ui/controllers/chat_uikit_list_view_controller_base.dart';
 export 'ui/controllers/conversation_list_view_controller.dart';

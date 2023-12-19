@@ -92,6 +92,33 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
       child: content,
     );
 
+    content = Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        ChatUIKitMessageStatusWidget(
+          size: 16,
+          statusType: () {
+            if (message.status == MessageStatus.CREATE ||
+                message.status == MessageStatus.PROGRESS) {
+              return MessageStatusType.loading;
+            } else if (message.status == MessageStatus.FAIL) {
+              return MessageStatusType.fail;
+            } else {
+              if (message.hasDeliverAck) {
+                return MessageStatusType.deliver;
+              } else if (message.hasReadAck) {
+                return MessageStatusType.read;
+              }
+              return MessageStatusType.succeed;
+            }
+          }(),
+        ),
+        const SizedBox(width: 4),
+        Flexible(flex: 1, fit: FlexFit.loose, child: content),
+      ],
+    );
+
     if (showNickname) {
       content = Column(
         crossAxisAlignment:
@@ -140,8 +167,8 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
       child: avatar,
     );
 
-    // TODO: 状态widget
     content = Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.end,
       textDirection: isLeft ?? left ? TextDirection.ltr : TextDirection.rtl,
       mainAxisSize: MainAxisSize.min,
@@ -149,11 +176,8 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
         avatar,
         const SizedBox(width: 8),
         Expanded(child: content),
-        SizedBox(width: MediaQuery.of(context).size.width / 5 * 1)
       ],
     );
-
-    content = SizedBox(width: 150, child: content);
 
     content = Container(
       margin: const EdgeInsets.only(top: 16, bottom: 2),
