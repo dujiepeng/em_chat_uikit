@@ -26,10 +26,7 @@ class _ShowVideoViewState extends State<ShowVideoView> {
     final theme = ChatUIKitTheme.of(context);
     Widget content = ChatUIKitShowVideoWidget(
       message: widget.message,
-      onImageLongPressed: longPressed,
-      onImageTap: (message) {
-        Navigator.of(context).pop();
-      },
+      onLongPressed: longPressed,
     );
 
     content = Scaffold(

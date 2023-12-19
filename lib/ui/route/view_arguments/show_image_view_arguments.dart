@@ -4,11 +4,13 @@ class ShowImageViewArguments implements ChatUIKitViewArguments {
   ShowImageViewArguments({
     required this.message,
     this.onImageLongPressed,
+    this.onImageTap,
     this.attributes,
   });
 
   final Message message;
   final void Function(Message message)? onImageLongPressed;
+  final void Function(Message message)? onImageTap;
 
   @override
   String? attributes;

@@ -6,16 +6,16 @@ import 'package:flutter/material.dart';
 class ChatUIKitShowImageWidget extends StatefulWidget {
   const ChatUIKitShowImageWidget({
     required this.message,
-    this.onImageLongPressed,
-    this.onImageTap,
+    this.onLongPressed,
+    this.onTap,
     this.onError,
     this.onProgress,
     this.onSuccess,
     super.key,
   });
 
-  final void Function(Message message)? onImageLongPressed;
-  final void Function(Message message)? onImageTap;
+  final void Function(Message message)? onLongPressed;
+  final void Function(Message message)? onTap;
   final void Function(ChatError error)? onError;
   final void Function(int progress)? onProgress;
   final VoidCallback? onSuccess;
@@ -142,13 +142,13 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
 
     content = InkWell(
       onTap: () {
-        if (widget.onImageTap != null) {
-          widget.onImageTap!(message);
+        if (widget.onTap != null) {
+          widget.onTap!(message);
         }
       },
       onLongPress: () {
-        if (widget.onImageLongPressed != null) {
-          widget.onImageLongPressed!(message);
+        if (widget.onLongPressed != null) {
+          widget.onLongPressed!(message);
         }
       },
       child: content,

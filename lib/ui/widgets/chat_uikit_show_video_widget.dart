@@ -6,16 +6,15 @@ import 'package:flutter/material.dart';
 class ChatUIKitShowVideoWidget extends StatefulWidget {
   const ChatUIKitShowVideoWidget({
     required this.message,
-    this.onImageLongPressed,
-    this.onImageTap,
+    this.onLongPressed,
     this.onError,
     this.onProgress,
     this.onSuccess,
     super.key,
   });
 
-  final void Function(Message message)? onImageLongPressed;
-  final void Function(Message message)? onImageTap;
+  final void Function(Message message)? onLongPressed;
+
   final Message message;
 
   final void Function(ChatError error)? onError;
@@ -186,10 +185,10 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
                 setState(() {
                   if (_controller!.value.isPlaying) {
                     _controller?.pause();
-                    isPlaying = false;
+                    // isPlaying = false;
                   } else {
                     _controller?.play();
-                    isPlaying = true;
+                    // isPlaying = true;
                   }
                 });
               },
@@ -218,7 +217,12 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
       children: [
         Positioned.fill(child: thumbWidget()),
         if (_controller?.value.isInitialized == true)
-          Positioned.fill(child: playerWidget()),
+          Positioned.fill(
+            child: InkWell(
+              onLongPress: onLongPressed,
+              child: playerWidget(),
+            ),
+          ),
         Positioned.fill(child: Center(child: loadingWidget())),
       ],
     );
@@ -232,5 +236,10 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
       ],
     );
     return content;
+  }
+
+  void onLongPressed() {
+    _controller?.pause();
+    widget.onLongPressed?.call(message!);
   }
 }

@@ -5,16 +5,19 @@ import 'package:flutter/material.dart';
 class ShowImageView extends StatefulWidget {
   ShowImageView.arguments(ShowImageViewArguments argument, {super.key})
       : message = argument.message,
+        onImageTap = argument.onImageTap,
         onImageLongPressed = argument.onImageLongPressed;
 
   const ShowImageView({
     required this.message,
     this.onImageLongPressed,
+    this.onImageTap,
     super.key,
   });
 
   final Message message;
   final void Function(Message message)? onImageLongPressed;
+  final void Function(Message message)? onImageTap;
 
   @override
   State<ShowImageView> createState() => _ShowImageViewState();
@@ -26,10 +29,11 @@ class _ShowImageViewState extends State<ShowImageView> {
     final theme = ChatUIKitTheme.of(context);
     Widget content = ChatUIKitShowImageWidget(
       message: widget.message,
-      onImageLongPressed: longPressed,
-      onImageTap: (message) {
-        Navigator.of(context).pop();
-      },
+      onLongPressed: longPressed,
+      onTap: widget.onImageTap ??
+          (message) {
+            Navigator.of(context).pop();
+          },
     );
 
     content = Scaffold(
