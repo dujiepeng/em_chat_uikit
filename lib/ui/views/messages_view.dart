@@ -432,11 +432,16 @@ class _MessagesViewState extends State<MessagesView> {
           avatarUrl: avatar,
           name: name,
         );
-        List contacts = await ChatUIKit.instance.getAllContacts();
-        if (contacts.contains(userId)) {
-          pushToContactDetail(profile);
+
+        if (userId == ChatUIKit.instance.currentUserId()) {
+          pushToCurrentUserDetail(profile);
         } else {
-          pushRequestDetail(profile);
+          List contacts = await ChatUIKit.instance.getAllContacts();
+          if (contacts.contains(userId)) {
+            pushToContactDetail(profile);
+          } else {
+            pushRequestDetail(profile);
+          }
         }
       }
     }
@@ -525,6 +530,13 @@ class _MessagesViewState extends State<MessagesView> {
           ),
         );
       },
+    );
+  }
+
+  void pushToCurrentUserDetail(ChatUIKitProfile profile) {
+    Navigator.of(context).pushNamed(
+      ChatUIKitRouteNames.currentUserInfoView,
+      arguments: CurrentUserInfoViewArguments(profile: profile),
     );
   }
 

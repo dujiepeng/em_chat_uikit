@@ -251,10 +251,6 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
     return content;
   }
 
-  void doNotDisturb() {}
-
-  void blockUser() {}
-
   void clearAllHistory() {
     showChatUIKitDialog(
       title: '确认清空聊天记录?',
@@ -308,7 +304,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
       avatarUrl: widget.profile.avatarUrl,
       size: 100,
     );
-    /*
+    /* // 暂时不需要 Presence，等需要再打开
     return FutureBuilder(
       future:
           ChatUIKit.instance.fetchPresenceStatus(members: [widget.profile.id]),

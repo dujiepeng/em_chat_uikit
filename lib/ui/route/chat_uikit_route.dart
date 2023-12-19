@@ -70,7 +70,11 @@ class ChatUIKitRoute {
     },
     ChatUIKitRouteNames.showVideoView: (context, arguments) {
       return ShowVideoView.arguments(arguments as ShowVideoViewArguments);
-    }
+    },
+    ChatUIKitRouteNames.currentUserInfoView: (context, arguments) {
+      return CurrentUserInfoView.arguments(
+          arguments as CurrentUserInfoViewArguments);
+    },
   };
 
   static Route? generateRoute<T extends Object>(RouteSettings settings) {
