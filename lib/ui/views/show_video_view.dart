@@ -2,12 +2,12 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
-class ShowImageView extends StatefulWidget {
-  ShowImageView.arguments(ShowImageViewArguments argument, {super.key})
+class ShowVideoView extends StatefulWidget {
+  ShowVideoView.arguments(ShowVideoViewArguments argument, {super.key})
       : message = argument.message,
         onImageLongPressed = argument.onImageLongPressed;
 
-  const ShowImageView({
+  const ShowVideoView({
     required this.message,
     this.onImageLongPressed,
     super.key,
@@ -17,14 +17,14 @@ class ShowImageView extends StatefulWidget {
   final void Function(Message message)? onImageLongPressed;
 
   @override
-  State<ShowImageView> createState() => _ShowImageViewState();
+  State<ShowVideoView> createState() => _ShowVideoViewState();
 }
 
-class _ShowImageViewState extends State<ShowImageView> {
+class _ShowVideoViewState extends State<ShowVideoView> {
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
-    Widget content = ChatUIKitShowImageWidget(
+    Widget content = ChatUIKitShowVideoWidget(
       message: widget.message,
       onImageLongPressed: longPressed,
       onImageTap: (message) {

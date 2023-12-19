@@ -33,6 +33,7 @@ class ChatUIKitListView extends StatefulWidget {
     this.scrollController,
     this.beforeWidgets,
     this.afterWidgets,
+    this.findChildIndexCallback,
     super.key,
   });
 
@@ -51,6 +52,7 @@ class ChatUIKitListView extends StatefulWidget {
   final ChatUIKitListItemBuilder itemBuilder;
   final List<NeedAlphabeticalWidget>? beforeWidgets;
   final List<NeedAlphabeticalWidget>? afterWidgets;
+  final int? Function(Key)? findChildIndexCallback;
 
   @override
   State<ChatUIKitListView> createState() => _ChatUIKitListViewState();
@@ -156,6 +158,7 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
         if (widget.enableSearchBar)
           SliverList(
             delegate: SliverChildBuilderDelegate(
+              findChildIndexCallback: widget.findChildIndexCallback,
               (context, index) {
                 return fakeSearchBar();
               },

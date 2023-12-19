@@ -405,12 +405,40 @@ class _MessagesViewState extends State<MessagesView> {
     showChatUIKitBottomSheet(context: context, items: items);
   }
 
-  void bubbleTab(Message message) {
+  void bubbleTab(Message message) async {
     if (message.bodyType == MessageType.IMAGE) {
       Navigator.of(context).pushNamed(
         ChatUIKitRouteNames.showImageView,
         arguments: ShowImageViewArguments(message: message),
       );
+    } else if (message.bodyType == MessageType.VIDEO) {
+      Navigator.of(context).pushNamed(
+        ChatUIKitRouteNames.showVideoView,
+        arguments: ShowVideoViewArguments(message: message),
+      );
+    }
+
+    if (message.bodyType == MessageType.CUSTOM && message.isCardMessage) {
+      String? userId =
+          (message.body as CustomMessageBody).params?[cardContactUserId];
+      String avatar =
+          (message.body as CustomMessageBody).params?[cardContactAvatar] ?? '';
+      String name =
+          (message.body as CustomMessageBody).params?[cardContactNickname] ??
+              '';
+      if (userId?.isNotEmpty == true) {
+        ChatUIKitProfile profile = ChatUIKitProfile(
+          id: userId!,
+          avatarUrl: avatar,
+          name: name,
+        );
+        List contacts = await ChatUIKit.instance.getAllContacts();
+        if (contacts.contains(userId)) {
+          pushToContactDetail(profile);
+        } else {
+          pushRequestDetail(profile);
+        }
+      }
     }
     // TODO:播放音频
     debugPrint('message tapped');
@@ -440,7 +468,17 @@ class _MessagesViewState extends State<MessagesView> {
     }
   }
 
-  void selectVideo() {}
+  void selectVideo() async {
+    try {
+      XFile? video = await _picker.pickVideo(source: ImageSource.gallery);
+      if (video != null) {
+        controller.sendVideoMessage(video.path, name: video.name);
+      }
+    } catch (e) {
+      // widget.onError?.call(ChatUIKitError.toChatError(
+      //     ChatUIKitError.noPermission, "no image library permission"));
+    }
+  }
 
   void selectCamera() {}
 
@@ -487,6 +525,36 @@ class _MessagesViewState extends State<MessagesView> {
           ),
         );
       },
+    );
+  }
+
+  void pushToContactDetail(ChatUIKitProfile profile) {
+    Navigator.of(context).pushNamed(
+      ChatUIKitRouteNames.contactDetailsView,
+      arguments: ContactDetailsViewArguments(
+        profile: profile,
+        actions: [
+          ChatUIKitActionItem(
+            title: '发消息',
+            icon: 'assets/images/chat.png',
+            onTap: (context) {
+              Navigator.of(context).pushNamed(
+                ChatUIKitRouteNames.messagesView,
+                arguments: MessagesViewArguments(
+                  profile: profile,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void pushRequestDetail(ChatUIKitProfile profile) {
+    Navigator.of(context).pushNamed(
+      ChatUIKitRouteNames.newRequestDetailsView,
+      arguments: NewRequestDetailsViewArguments(profile: profile),
     );
   }
 }

@@ -19,7 +19,7 @@ class ChatUIKitProfile {
   final ChatUIKitProfileType? type;
   final int updateTime;
 
-  String get showName => name ?? id;
+  String get showName => name?.isNotEmpty == true ? name! : id;
 
   ChatUIKitProfile({
     required this.id,

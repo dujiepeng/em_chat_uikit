@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
@@ -150,6 +151,49 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
         sendMessage(message);
       }
     }));
+  }
+
+  Future<void> sendVideoMessage(
+    String path, {
+    String? name,
+    double? width,
+    double? height,
+    int? duration,
+  }) async {
+    if (path.isEmpty) {
+      return;
+    }
+    final imageData = await VideoThumbnail.thumbnailData(
+      video: path,
+      imageFormat: ImageFormat.JPEG,
+      maxWidth: 200,
+      quality: 80,
+    );
+    if (imageData != null) {
+      final directory = await getApplicationCacheDirectory();
+      String thumbnailPath =
+          '${directory.path}/thumbnail_${Random().nextInt(999999999)}.jpeg';
+      final file = File(thumbnailPath);
+      file.writeAsBytesSync(imageData);
+
+      final videoFile = File(path);
+
+      Image.file(file)
+          .image
+          .resolve(const ImageConfiguration())
+          .addListener(ImageStreamListener((info, synchronousCall) {
+        final msg = Message.createVideoSendMessage(
+          targetId: profile.id,
+          chatType: chatType,
+          filePath: path,
+          thumbnailLocalPath: file.path,
+          width: info.image.width.toDouble(),
+          height: info.image.height.toDouble(),
+          fileSize: videoFile.lengthSync(),
+        );
+        sendMessage(msg);
+      }));
+    }
   }
 
   Future<void> sendCardMessage(ChatUIKitProfile profile) async {

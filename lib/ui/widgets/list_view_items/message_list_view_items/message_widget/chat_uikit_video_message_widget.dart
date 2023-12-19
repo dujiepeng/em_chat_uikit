@@ -115,15 +115,12 @@ class _ChatUIKitVideoMessageWidgetState
         Positioned.fill(
           child: Align(
             alignment: Alignment.center,
-            child: IconButton(
-              onPressed: () => download(),
-              icon: Icon(
-                Icons.play_circle_outline,
-                size: 64,
-                color: theme.color.isDark
-                    ? theme.color.neutralColor1
-                    : theme.color.neutralColor98,
-              ),
+            child: Icon(
+              Icons.play_circle_outline,
+              size: 64,
+              color: theme.color.isDark
+                  ? theme.color.neutralColor1
+                  : theme.color.neutralColor98,
             ),
           ),
         ),
@@ -137,5 +134,6 @@ class _ChatUIKitVideoMessageWidgetState
     if (downloading) return;
     downloading = true;
     ChatUIKit.instance.downloadThumbnail(message: message);
+    setState(() {});
   }
 }

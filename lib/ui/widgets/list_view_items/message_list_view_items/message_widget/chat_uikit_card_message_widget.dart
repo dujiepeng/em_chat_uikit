@@ -12,6 +12,7 @@ class ChatUIKitCardMessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
+    bool left = message.direction == MessageDirection.RECEIVE;
 
     Widget content = Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -31,9 +32,13 @@ class ChatUIKitCardMessageWidget extends StatelessWidget {
             style: TextStyle(
               fontWeight: theme.font.titleMedium.fontWeight,
               fontSize: theme.font.titleMedium.fontSize,
-              color: theme.color.isDark
-                  ? theme.color.neutralColor1
-                  : theme.color.neutralColor98,
+              color: left
+                  ? theme.color.isDark
+                      ? theme.color.neutralColor98
+                      : theme.color.neutralColor1
+                  : theme.color.isDark
+                      ? theme.color.neutralColor1
+                      : theme.color.neutralColor98,
             ),
           ),
         )
@@ -58,9 +63,13 @@ class ChatUIKitCardMessageWidget extends StatelessWidget {
             style: TextStyle(
               fontWeight: theme.font.bodyExtraSmall.fontWeight,
               fontSize: theme.font.bodyExtraSmall.fontSize,
-              color: theme.color.isDark
-                  ? theme.color.neutralSpecialColor3
-                  : theme.color.neutralSpecialColor98,
+              color: left
+                  ? theme.color.isDark
+                      ? theme.color.neutralSpecialColor7
+                      : theme.color.neutralSpecialColor5
+                  : theme.color.isDark
+                      ? theme.color.neutralSpecialColor3
+                      : theme.color.neutralSpecialColor98,
             ),
           ),
         )

@@ -131,12 +131,16 @@ class _ConversationsViewState extends State<ConversationsView> {
   }
 
   void pushToMessagePage(ConversationItemModel model) {
-    Navigator.of(context).pushNamed(
+    Navigator.of(context)
+        .pushNamed(
       ChatUIKitRouteNames.messagesView,
       arguments: MessagesViewArguments(
         profile: model.profile,
       ),
-    );
+    )
+        .then((value) {
+      controller.reload();
+    });
   }
 
   void longPressed(ConversationItemModel model) {
@@ -265,12 +269,14 @@ class _ConversationsViewState extends State<ConversationsView> {
       },
     ).then((profile) {
       if (profile != null) {
-        Navigator.of(context).pushNamed(
-          ChatUIKitRouteNames.messagesView,
-          arguments: MessagesViewArguments(
-            profile: profile,
-          ),
-        );
+        Navigator.of(context)
+            .pushNamed(
+              ChatUIKitRouteNames.messagesView,
+              arguments: MessagesViewArguments(
+                profile: profile,
+              ),
+            )
+            .then((value) {});
       }
     });
   }

@@ -149,18 +149,18 @@ class _NewRequestDetailsViewState extends State<NewRequestDetailsView> {
     return content;
   }
 
-  void addAction() {
+  void addAction() async {
     if (hasSend) return;
     bool needSetState = false;
     try {
       if (widget.isReceivedRequest) {
-        ChatUIKit.instance
+        await ChatUIKit.instance
             .acceptContactRequest(userId: widget.profile.id)
             .then((value) {
           Navigator.of(context).pop();
         });
       } else {
-        ChatUIKit.instance.sendContactRequest(userId: widget.profile.id);
+        await ChatUIKit.instance.sendContactRequest(userId: widget.profile.id);
         needSetState = true;
       }
       if (needSetState) {

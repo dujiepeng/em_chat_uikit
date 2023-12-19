@@ -8,11 +8,18 @@ class ChatUIKitShowImageWidget extends StatefulWidget {
     required this.message,
     this.onImageLongPressed,
     this.onImageTap,
+    this.onError,
+    this.onProgress,
+    this.onSuccess,
     super.key,
   });
 
   final void Function(Message message)? onImageLongPressed;
   final void Function(Message message)? onImageTap;
+  final void Function(ChatError error)? onError;
+  final void Function(int progress)? onProgress;
+  final VoidCallback? onSuccess;
+
   final Message message;
 
   @override
@@ -24,11 +31,11 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
     with MessageObserver {
   late final Message message;
 
-  final ValueNotifier<int> _progress = ValueNotifier(0);
-
   String? localPath;
   String? localThumbPath;
   String? remoteThumbPath;
+
+  final ValueNotifier<int> _progress = ValueNotifier(0);
 
   @override
   void initState() {
@@ -77,6 +84,7 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
 
   @override
   void dispose() {
+    _progress.dispose();
     ChatUIKit.instance.removeObserver(this);
     super.dispose();
   }
@@ -85,6 +93,7 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
   void onProgress(String msgId, int progress) {
     if (message.msgId == msgId) {
       _progress.value = progress;
+      widget.onProgress?.call(progress);
     }
   }
 
@@ -92,6 +101,7 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
   void onError(String msgId, Message msg, ChatError error) {
     if (message.msgId == msgId) {
       message = msg;
+      widget.onError?.call(error);
     }
   }
 
@@ -99,6 +109,7 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
   void onSuccess(String msgId, Message msg) {
     if (message.msgId == msgId) {
       message = msg;
+      widget.onSuccess?.call();
       checkFile();
     }
   }
@@ -141,6 +152,15 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
         }
       },
       child: content,
+    );
+
+    content = Stack(
+      children: [
+        Container(
+          color: Colors.black,
+        ),
+        Positioned.fill(child: content)
+      ],
     );
     return content;
   }

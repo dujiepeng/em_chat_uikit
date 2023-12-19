@@ -28,6 +28,7 @@ typedef ImageMessageBody = chat.EMImageMessageBody;
 typedef VoiceMessageBody = chat.EMVoiceMessageBody;
 typedef FileMessageBody = chat.EMFileMessageBody;
 typedef VideoMessageBody = chat.EMVideoMessageBody;
+typedef DownloadStatus = chat.DownloadStatus;
 typedef CustomMessageBody = chat.EMCustomMessageBody;
 typedef CmdMessageBody = chat.EMCmdMessageBody;
 typedef GroupInfo = chat.EMGroupInfo;

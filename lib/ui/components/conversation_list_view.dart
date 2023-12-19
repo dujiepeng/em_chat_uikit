@@ -106,6 +106,18 @@ class _ConversationListViewState extends State<ConversationListView>
             widget.onSearchTap?.call(list);
           },
           searchHideText: widget.searchHideText,
+          // findChildIndexCallback: (key) {
+          //   final ValueKey<String> valueKey = key as ValueKey<String>;
+          //   int index = controller.list.indexWhere((model) {
+          //     if (model is ConversationItemModel) {
+          //       return model.profile.id == valueKey.value;
+          //     } else {
+          //       return false;
+          //     }
+          //   });
+
+          //   return index > -1 ? index : null;
+          // },
           itemBuilder: (context, model) {
             if (model is ConversationItemModel) {
               Widget? item;
@@ -123,7 +135,10 @@ class _ConversationListViewState extends State<ConversationListView>
                 },
                 child: SizedBox(
                   height: 76,
-                  child: ChatUIKitConversationListViewItem(model),
+                  child: ChatUIKitConversationListViewItem(
+                    model,
+                    key: ValueKey(model.profile.id),
+                  ),
                 ),
               );
 
