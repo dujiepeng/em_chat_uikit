@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/ui/widgets/chat_uikit_reply_bar.dart';
 
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,8 @@ class MessagesView extends StatefulWidget {
         itemBuilder = arguments.itemBuilder,
         onAvatarLongPress = arguments.onAvatarLongPressed,
         moreActionItems = arguments.moreActionItems,
-        onItemLongPressActions = arguments.onItemLongPressActions;
+        onItemLongPressActions = arguments.onItemLongPressActions,
+        replyBuilder = arguments.replyBuilder;
 
   const MessagesView({
     required this.profile,
@@ -43,6 +45,7 @@ class MessagesView extends StatefulWidget {
     this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
     this.onItemLongPressActions,
     this.moreActionItems,
+    this.replyBuilder,
   });
 
   final ChatUIKitProfile profile;
@@ -63,6 +66,7 @@ class MessagesView extends StatefulWidget {
   final List<ChatUIKitBottomSheetItem>? moreActionItems;
   final List<ChatUIKitBottomSheetItem>? onItemLongPressActions;
   final Widget? emojiWidget;
+  final Widget? Function(BuildContext context, Message message)? replyBuilder;
 
   @override
   State<MessagesView> createState() => _MessagesViewState();
@@ -80,6 +84,7 @@ class _MessagesViewState extends State<MessagesView> {
   bool messageEditCanSend = false;
   TextEditingController? editBarTextEditingController;
   Message? editMessage;
+  Message? replyMessage;
 
   @override
   void initState() {
@@ -128,9 +133,12 @@ class _MessagesViewState extends State<MessagesView> {
     content = Column(
       children: [
         Expanded(
-            child: Padding(
-                padding: const EdgeInsets.only(left: 12, right: 12),
-                child: content)),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 12, right: 12),
+            child: content,
+          ),
+        ),
+        if (replyMessage != null) replyMessageBar(theme),
         widget.inputBar ?? inputBar(),
         AnimatedContainer(
           curve: Curves.linearToEaseOut,
@@ -192,6 +200,17 @@ class _MessagesViewState extends State<MessagesView> {
     return content;
   }
 
+  Widget replyMessageBar(ChatUIKitTheme theme) {
+    return widget.replyBuilder?.call(context, replyMessage!) ??
+        ChatUIKitReplyBar(
+          message: replyMessage!,
+          onCancelTap: () {
+            replyMessage = null;
+            setState(() {});
+          },
+        );
+  }
+
   Widget editMessageBar(ChatUIKitTheme theme) {
     Widget content = ChatUIKitInputBar(
       key: const ValueKey('editKey'),
@@ -206,12 +225,12 @@ class _MessagesViewState extends State<MessagesView> {
       textEditingController: editBarTextEditingController!,
       trailing: InkWell(
         onTap: () {
+          if (!messageEditCanSend) return;
           String text = editBarTextEditingController?.text.trim() ?? '';
           if (text.isNotEmpty) {
             controller.editMessage(editMessage!, text);
             editBarTextEditingController?.clear();
             editMessage = null;
-
             setState(() {});
           }
         },
@@ -389,13 +408,26 @@ class _MessagesViewState extends State<MessagesView> {
     );
   }
 
+  void clearAllType() {
+    showEmojiBtn = false;
+    editMessage = null;
+    replyMessage = null;
+    setState(() {});
+  }
+
   void onItemLongPress(Message message) {
     List<ChatUIKitBottomSheetItem>? items = widget.moreActionItems;
 
     if (items == null) {
       items = [];
       items.add(ChatUIKitBottomSheetItem.normal(label: '复制'));
-      items.add(ChatUIKitBottomSheetItem.normal(label: '回复'));
+      items.add(ChatUIKitBottomSheetItem.normal(
+        label: '回复',
+        onTap: () async {
+          Navigator.of(context).pop();
+          replyMessaged(message);
+        },
+      ));
       items.add(ChatUIKitBottomSheetItem.normal(
         label: '编辑',
         onTap: () async {
@@ -468,6 +500,7 @@ class _MessagesViewState extends State<MessagesView> {
   }
 
   void textMessageEdit(Message message) {
+    clearAllType();
     if (message.bodyType != MessageType.TXT) return;
     if (showEmojiBtn) {
       showEmojiBtn = false;
@@ -476,6 +509,12 @@ class _MessagesViewState extends State<MessagesView> {
     editMessage = message;
     editBarTextEditingController =
         TextEditingController(text: editMessage?.textContent ?? "");
+    setState(() {});
+  }
+
+  void replyMessaged(Message message) {
+    clearAllType();
+    replyMessage = message;
     setState(() {});
   }
 

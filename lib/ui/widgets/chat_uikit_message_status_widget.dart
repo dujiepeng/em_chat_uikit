@@ -85,12 +85,13 @@ class ChatUIKitMessageStatusWidget extends StatelessWidget {
   }
 
   Widget _fail(ChatUIKitTheme theme) {
-    return CircularProgressIndicator(
+    return Icon(
+      Icons.error_outline,
+      size: size,
       color: color ??
           (theme.color.isDark
               ? theme.color.neutralColor7
               : theme.color.neutralColor7),
-      strokeWidth: 1.5,
     );
   }
 

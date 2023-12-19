@@ -212,7 +212,6 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("play: $isPlaying");
     Widget content = Stack(
       children: [
         Positioned.fill(child: thumbWidget()),
