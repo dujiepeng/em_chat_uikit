@@ -78,15 +78,15 @@ class WaterRipplePainter extends CustomPainter {
   WaterRipplePainter(
     this.progress, {
     required this.color,
-    this.count = 3,
+    this.count = 2,
     required this.child,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    double width = 96;
+    double width = 100;
     double height = 64;
-    double borderRadius = 34;
+    double borderRadius = 100;
 
     for (int i = count; i >= 0; i--) {
       final double opacity = (1.0 - ((i + progress) / (count + 1)));

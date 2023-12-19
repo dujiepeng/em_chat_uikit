@@ -408,8 +408,8 @@ class _MessagesViewState extends State<MessagesView> {
   void bubbleTab(Message message) {
     if (message.bodyType == MessageType.IMAGE) {
       Navigator.of(context).pushNamed(
-        ChatUIKitRouteNames.imageShowView,
-        arguments: ImageShowViewArguments(message: message),
+        ChatUIKitRouteNames.showImageView,
+        arguments: ShowImageViewArguments(message: message),
       );
     }
     // TODO:播放音频
@@ -453,16 +453,40 @@ class _MessagesViewState extends State<MessagesView> {
       builder: (context) {
         return SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.95,
-          child: const SelectContactView(
+          child: SelectContactView(
             backText: '取消',
             title: '选择联系人',
+            onTap: (context, model) {
+              showChatUIKitDialog(
+                title: '分享联系人',
+                content: '确定分享给${model.showName}给${widget.profile.showName}吗？',
+                context: context,
+                items: [
+                  ChatUIKitDialogItem.cancel(
+                    label: '取消',
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  ChatUIKitDialogItem.confirm(
+                    label: '确认',
+                    onTap: () async {
+                      Navigator.of(context).pop(model);
+                    },
+                  )
+                ],
+              ).then((value) {
+                if (value != null) {
+                  Navigator.of(context).pop();
+                  if (value is ContactItemModel) {
+                    controller.sendCardMessage(value.profile);
+                  }
+                }
+              });
+            },
           ),
         );
       },
-    ).then((profile) {
-      if (profile != null) {
-        controller.sendCardMessage(profile);
-      }
-    });
+    );
   }
 }

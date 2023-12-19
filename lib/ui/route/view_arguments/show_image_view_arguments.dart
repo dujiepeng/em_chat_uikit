@@ -1,7 +1,7 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
-class ImageShowViewArguments implements ChatUIKitViewArguments {
-  ImageShowViewArguments({
+class ShowImageViewArguments implements ChatUIKitViewArguments {
+  ShowImageViewArguments({
     required this.message,
     this.onImageLongPressed,
     this.attributes,

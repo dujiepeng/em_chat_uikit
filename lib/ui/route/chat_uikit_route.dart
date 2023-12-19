@@ -65,8 +65,8 @@ class ChatUIKitRoute {
       return ConversationsView.arguments(
           arguments as ConversationsViewArguments);
     },
-    ChatUIKitRouteNames.imageShowView: (context, arguments) {
-      return ImageShowView.arguments(arguments as ImageShowViewArguments);
+    ChatUIKitRouteNames.showImageView: (context, arguments) {
+      return ShowImageView.arguments(arguments as ShowImageViewArguments);
     },
   };
 

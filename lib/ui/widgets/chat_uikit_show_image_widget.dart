@@ -3,25 +3,25 @@ import 'dart:io';
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
-class ImageShowView extends StatefulWidget {
-  ImageShowView.arguments(ImageShowViewArguments argument, {super.key})
-      : message = argument.message,
-        onImageLongPressed = argument.onImageLongPressed;
-
-  const ImageShowView({
+class ChatUIKitShowImageWidget extends StatefulWidget {
+  const ChatUIKitShowImageWidget({
     required this.message,
     this.onImageLongPressed,
+    this.onImageTap,
     super.key,
   });
 
-  final Message message;
   final void Function(Message message)? onImageLongPressed;
+  final void Function(Message message)? onImageTap;
+  final Message message;
 
   @override
-  State<ImageShowView> createState() => _ImageShowViewState();
+  State<ChatUIKitShowImageWidget> createState() =>
+      _ChatUIKitShowImageWidgetState();
 }
 
-class _ImageShowViewState extends State<ImageShowView> with MessageObserver {
+class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
+    with MessageObserver {
   late final Message message;
 
   final ValueNotifier<int> _progress = ValueNotifier(0);
@@ -105,7 +105,6 @@ class _ImageShowViewState extends State<ImageShowView> with MessageObserver {
 
   @override
   Widget build(BuildContext context) {
-    final theme = ChatUIKitTheme.of(context);
     Widget? content;
     if (localPath?.isNotEmpty == true) {
       content = Image.file(File(localPath!));
@@ -131,55 +130,18 @@ class _ImageShowViewState extends State<ImageShowView> with MessageObserver {
     );
 
     content = InkWell(
+      onTap: () {
+        if (widget.onImageTap != null) {
+          widget.onImageTap!(message);
+        }
+      },
       onLongPress: () {
-        if (widget.onImageLongPressed == null) {
-          longPressed();
-        } else {
-          widget.onImageLongPressed!.call(message);
+        if (widget.onImageLongPressed != null) {
+          widget.onImageLongPressed!(message);
         }
       },
       child: content,
     );
-
-    Widget appBar = Positioned(
-      left: 5,
-      top: 5,
-      child: IconButton(
-        onPressed: () => Navigator.of(context).pop(),
-        icon: Icon(
-          Icons.arrow_back_ios,
-          size: 16,
-          color: theme.color.isDark
-              ? theme.color.neutralColor95
-              : theme.color.neutralColor3,
-        ),
-      ),
-    );
-
-    appBar = SafeArea(child: appBar);
-
-    content = Scaffold(
-      backgroundColor: theme.color.isDark
-          ? theme.color.neutralColor1
-          : theme.color.neutralColor98,
-      body: Stack(
-        children: [
-          content,
-          appBar,
-        ],
-      ),
-    );
-
     return content;
-  }
-
-  void longPressed() {
-    showChatUIKitBottomSheet(
-        context: context,
-        items: [
-          ChatUIKitBottomSheetItem.normal(label: '保存', onTap: () async {}),
-          ChatUIKitBottomSheetItem.normal(label: '转发给朋友', onTap: () async {})
-        ],
-        cancelTitle: '取消');
   }
 }

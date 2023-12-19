@@ -98,7 +98,7 @@ class _MessageListViewState extends State<MessageListView> {
               final ValueKey<String> valueKey = key as ValueKey<String>;
               int index = controller.newData
                   .indexWhere((msg) => msg.msgId == valueKey.value);
-              debugPrint(index.toString());
+
               return index > -1 ? index : null;
             },
             (context, index) {
