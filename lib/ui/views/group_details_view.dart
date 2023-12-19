@@ -5,8 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
-
 class GroupDetailsView extends StatefulWidget {
   GroupDetailsView.arguments(
     GroupDetailsViewArguments arguments, {
@@ -416,77 +414,82 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
   }
 
   Widget statusAvatar() {
-    final theme = ChatUIKitTheme.of(context);
-    return FutureBuilder(
-      future:
-          ChatUIKit.instance.fetchPresenceStatus(members: [widget.profile.id]),
-      builder: (context, snapshot) {
-        if (snapshot.hasData == false) {
-          return ChatUIKitAvatar(
-            avatarUrl: widget.profile.avatarUrl,
-            size: 100,
-          );
-        }
-        Widget content;
-        if (snapshot.data?.isNotEmpty == true) {
-          Presence presence = snapshot.data![0];
-          if (presence.statusDetails?.values.any((element) => element != 0) ==
-              true) {
-            content = Stack(
-              children: [
-                const SizedBox(width: 110, height: 110),
-                ChatUIKitAvatar(
-                  avatarUrl: widget.profile.avatarUrl,
-                  size: 100,
-                ),
-                Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: Container(
-                    width: 15,
-                    height: 20,
-                    color: theme.color.isDark
-                        ? theme.color.primaryColor1
-                        : theme.color.primaryColor98,
-                  ),
-                ),
-                Positioned(
-                  right: 5,
-                  bottom: 10,
-                  child: Container(
-                    width: 22,
-                    height: 22,
-                    decoration: BoxDecoration(
-                      color: theme.color.isDark
-                          ? theme.color.secondaryColor6
-                          : theme.color.secondaryColor5,
-                      border: Border.all(
-                        color: theme.color.isDark
-                            ? theme.color.primaryColor1
-                            : theme.color.primaryColor98,
-                        width: 4,
-                      ),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          } else {
-            content = ChatUIKitAvatar(
-              avatarUrl: widget.profile.avatarUrl,
-              size: 100,
-            );
-          }
-        } else {
-          content = ChatUIKitAvatar(
-            avatarUrl: widget.profile.avatarUrl,
-            size: 100,
-          );
-        }
-        return content;
-      },
+    // 暂时不需要订阅
+    return ChatUIKitAvatar(
+      avatarUrl: widget.profile.avatarUrl,
+      size: 100,
     );
+    // final theme = ChatUIKitTheme.of(context);
+    // return FutureBuilder(
+    //   future:
+    //       ChatUIKit.instance.fetchPresenceStatus(members: [widget.profile.id]),
+    //   builder: (context, snapshot) {
+    //     if (snapshot.hasData == false) {
+    //       return ChatUIKitAvatar(
+    //         avatarUrl: widget.profile.avatarUrl,
+    //         size: 100,
+    //       );
+    //     }
+    //     Widget content;
+    //     if (snapshot.data?.isNotEmpty == true) {
+    //       Presence presence = snapshot.data![0];
+    //       if (presence.statusDetails?.values.any((element) => element != 0) ==
+    //           true) {
+    //         content = Stack(
+    //           children: [
+    //             const SizedBox(width: 110, height: 110),
+    //             ChatUIKitAvatar(
+    //               avatarUrl: widget.profile.avatarUrl,
+    //               size: 100,
+    //             ),
+    //             Positioned(
+    //               right: 0,
+    //               bottom: 0,
+    //               child: Container(
+    //                 width: 15,
+    //                 height: 20,
+    //                 color: theme.color.isDark
+    //                     ? theme.color.primaryColor1
+    //                     : theme.color.primaryColor98,
+    //               ),
+    //             ),
+    //             Positioned(
+    //               right: 5,
+    //               bottom: 10,
+    //               child: Container(
+    //                 width: 22,
+    //                 height: 22,
+    //                 decoration: BoxDecoration(
+    //                   color: theme.color.isDark
+    //                       ? theme.color.secondaryColor6
+    //                       : theme.color.secondaryColor5,
+    //                   border: Border.all(
+    //                     color: theme.color.isDark
+    //                         ? theme.color.primaryColor1
+    //                         : theme.color.primaryColor98,
+    //                     width: 4,
+    //                   ),
+    //                   borderRadius: BorderRadius.circular(15),
+    //                 ),
+    //               ),
+    //             ),
+    //           ],
+    //         );
+    //       } else {
+    //         content = ChatUIKitAvatar(
+    //           avatarUrl: widget.profile.avatarUrl,
+    //           size: 100,
+    //         );
+    //       }
+    //     } else {
+    //       content = ChatUIKitAvatar(
+    //         avatarUrl: widget.profile.avatarUrl,
+    //         size: 100,
+    //       );
+    //     }
+    //     return content;
+    //   },
+    // );
   }
 
   void destroyGroup() {

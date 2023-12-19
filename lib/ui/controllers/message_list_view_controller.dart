@@ -11,7 +11,8 @@ enum MessageLastActionType {
   none,
 }
 
-class MessageListViewController extends ChangeNotifier with ChatObserver {
+class MessageListViewController extends ChangeNotifier
+    with ChatObserver, MessageObserver {
   final ChatUIKitProfile profile;
   final int pageSize;
   late final ConversationType conversationType;
@@ -20,7 +21,7 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
   bool hasNew = false;
   MessageLastActionType lastActionType = MessageLastActionType.none;
 
-  final List<Message> newData = [];
+  final List<Message> msgList = [];
 
   MessageListViewController({required this.profile, this.pageSize = 30}) {
     ChatUIKit.instance.addObserver(this);
@@ -55,7 +56,7 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
     }
     if (list.isNotEmpty) {
       lastMessageId = list.first.msgId;
-      newData.addAll(list.reversed);
+      msgList.addAll(list.reversed);
       lastActionType = MessageLastActionType.load;
       notifyListeners();
     }
@@ -71,15 +72,36 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
       }
     }
     if (list.isNotEmpty) {
-      newData.insertAll(0, list.reversed);
+      msgList.insertAll(0, list.reversed);
       hasNew = true;
       lastActionType = MessageLastActionType.receive;
       notifyListeners();
     }
   }
 
+  @override
+  void onSuccess(String msgId, Message msg) {
+    final index = msgList.indexWhere((element) => element.msgId == msgId);
+    if (index != -1) {
+      msgList[index] = msg;
+      notifyListeners();
+    }
+  }
+
+  @override
+  void onError(String msgId, Message msg, ChatError error) {
+    final index = msgList.indexWhere((element) => element.msgId == msgId);
+    if (index != -1) {
+      msgList[index] = msg;
+      notifyListeners();
+    }
+  }
+
+  @override
+  void onProgress(String msgId, int progress) {}
+
   void addMessages(List<Message> msgs) {
-    newData.insertAll(0, msgs.reversed);
+    msgList.insertAll(0, msgs.reversed);
     notifyListeners();
   }
 
@@ -108,9 +130,9 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
         messageId: message.msgId,
         msgBody: msgBody,
       );
-      final index = newData.indexWhere((element) => msg.msgId == element.msgId);
+      final index = msgList.indexWhere((element) => msg.msgId == element.msgId);
       if (index != -1) {
-        newData[index] = msg;
+        msgList[index] = msg;
         notifyListeners();
       }
       // ignore: empty_catches
@@ -124,7 +146,7 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
         type: conversationType,
         messageId: messageId,
       );
-      newData.removeWhere((element) => messageId == element.msgId);
+      msgList.removeWhere((element) => messageId == element.msgId);
       notifyListeners();
       // ignore: empty_catches
     } catch (e) {}
@@ -133,7 +155,7 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
   Future<void> recallMessage(String messageId) async {
     try {
       await ChatUIKit.instance.recallMessage(messageId: messageId);
-      newData.removeWhere((element) => messageId == element.msgId);
+      msgList.removeWhere((element) => messageId == element.msgId);
       notifyListeners();
       // ignore: empty_catches
     } catch (e) {}
@@ -218,6 +240,21 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
     }
   }
 
+  Future<void> sendFileMessage(
+    String path, {
+    String? name,
+    int? fileSize,
+  }) async {
+    final msg = Message.createFileSendMessage(
+      targetId: profile.id,
+      chatType: chatType,
+      filePath: path,
+      fileSize: fileSize,
+      displayName: name,
+    );
+    sendMessage(msg);
+  }
+
   Future<void> sendCardMessage(ChatUIKitProfile profile) async {
     Map<String, String> param = {cardContactUserId: profile.id};
     if (profile.name != null) {
@@ -238,7 +275,7 @@ class MessageListViewController extends ChangeNotifier with ChatObserver {
 
   Future<void> sendMessage(Message message) async {
     final msg = await ChatUIKit.instance.sendMessage(message: message);
-    newData.insert(0, msg);
+    msgList.insert(0, msg);
     hasNew = true;
     lastActionType = MessageLastActionType.send;
     notifyListeners();

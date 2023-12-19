@@ -136,10 +136,7 @@ class _ChatUIKitImageMessageWidgetState
     content = SizedBox(
       width: width,
       height: height,
-      child: Container(
-        color: Colors.red,
-        child: content,
-      ),
+      child: content,
     );
     return content;
   }

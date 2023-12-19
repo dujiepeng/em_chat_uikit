@@ -4,6 +4,7 @@ export 'package:image_picker/image_picker.dart';
 export 'package:record/record.dart';
 export 'package:video_thumbnail/video_thumbnail.dart';
 export 'package:video_player/video_player.dart';
+export 'package:file_picker/file_picker.dart';
 
 export 'chat_uikit_context.dart';
 export 'chat_uikit_settings.dart';

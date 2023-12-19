@@ -71,7 +71,7 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
                 Navigator.maybePop(context);
               },
               child: Text(
-                '新群组',
+                '移除群成员',
                 style: TextStyle(
                   color: theme.color.isDark
                       ? theme.color.neutralColor98
@@ -152,6 +152,8 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
         },
       ),
     );
+
+    content = SafeArea(child: content);
 
     return content;
   }

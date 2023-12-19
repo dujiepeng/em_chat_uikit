@@ -100,15 +100,15 @@ class _MessageListViewState extends State<MessageListView> {
           delegate: SliverChildBuilderDelegate(
             findChildIndexCallback: (key) {
               final ValueKey<String> valueKey = key as ValueKey<String>;
-              int index = controller.newData
+              int index = controller.msgList
                   .indexWhere((msg) => msg.msgId == valueKey.value);
 
               return index > -1 ? index : null;
             },
             (context, index) {
-              return _item(controller.newData[index]);
+              return _item(controller.msgList[index]);
             },
-            childCount: controller.newData.length,
+            childCount: controller.msgList.length,
           ),
         ),
       ],
@@ -169,8 +169,14 @@ class _MessageListViewState extends State<MessageListView> {
       message: message,
     );
 
+    double zoom = 0.8;
+    if (MediaQuery.of(context).size.width >
+        MediaQuery.of(context).size.height) {
+      zoom = 0.5;
+    }
+
     content = SizedBox(
-      width: MediaQuery.of(context).size.width * 0.8,
+      width: MediaQuery.of(context).size.width * zoom,
       child: content,
     );
 

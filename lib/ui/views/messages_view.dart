@@ -554,7 +554,19 @@ class _MessagesViewState extends State<MessagesView> {
 
   void selectCamera() {}
 
-  void selectFile() {}
+  void selectFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      PlatformFile file = result.files.single;
+      if (file.path?.isNotEmpty == true) {
+        controller.sendFileMessage(
+          file.path!,
+          name: file.name,
+          fileSize: file.size,
+        );
+      }
+    }
+  }
 
   void selectCard() async {
     showModalBottomSheet(

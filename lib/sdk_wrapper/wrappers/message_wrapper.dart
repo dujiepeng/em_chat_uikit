@@ -32,10 +32,10 @@ mixin MessageWrapper on ChatUIKitWrapperBase {
   }
 
   @protected
-  void onError(String msgId, Message message, ChatError error) {
+  void onError(String msgId, Message msg, ChatError error) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       if (observer is MessageObserver) {
-        observer.onError(msgId, message, error);
+        observer.onError(msgId, msg, error);
       }
     }
   }
