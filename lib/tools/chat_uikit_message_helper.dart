@@ -1,5 +1,7 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
+import 'package:flutter/material.dart';
+
 double defaultWidth = 225;
 double defaultHeight = 300;
 
@@ -189,7 +191,7 @@ extension MessageHelper on Message {
     return null;
   }
 
-  String showInfo() {
+  String showInfo({BuildContext? context}) {
     String str = '';
     switch (body.type) {
       case MessageType.TXT:
@@ -210,6 +212,9 @@ extension MessageHelper on Message {
       case MessageType.COMBINE:
         str = '[Combine]';
         break;
+      case MessageType.FILE:
+        str = '[File]';
+        break;
       case MessageType.CUSTOM:
         if (isCardMessage) {
           str = '[Card]';
@@ -222,5 +227,27 @@ extension MessageHelper on Message {
     }
 
     return str;
+  }
+
+  void addQuote(Message message) {
+    attributes ??= {};
+    attributes![quoteKey] = message.toQuote().toJson();
+  }
+
+  QuoteModel toQuote() {
+    return QuoteModel.fromMessage(this);
+  }
+
+  QuoteModel? getQuote() {
+    Map? quoteMap = attributes?[quoteKey];
+    if (quoteMap != null) {
+      return QuoteModel(
+        quoteMap[quoteMsgIdKey],
+        quoteMap[quoteMsgTypeKey],
+        quoteMap[quoteMsgPreviewKey],
+        quoteMap[quoteMsgSenderKey],
+      );
+    }
+    return null;
   }
 }

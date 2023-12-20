@@ -99,7 +99,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
 
     Widget subTitle = showSubTitle
         ? Text(
-            model.lastMessage?.showInfo() ?? '',
+            model.lastMessage?.showInfo(context: context) ?? '',
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: theme.color.isDark

@@ -34,7 +34,7 @@ class _SSearchGroupMembersViewState extends State<SearchGroupMembersView> {
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
-    Widget content = ChatUIKitSearchView(
+    Widget content = ChatUIKitSearchWidget(
       searchHideText: widget.searchHideText,
       list: widget.searchData,
       autoFocus: true,

@@ -7,4 +7,10 @@ const String cardContactNickname = "nickname";
 const String cardContactUserId = "userId";
 const String cardContactAvatar = "avatar";
 
+const String quoteKey = 'msgQuote';
+const String quoteMsgIdKey = 'msgID';
+const String quoteMsgTypeKey = 'msgType';
+const String quoteMsgPreviewKey = 'msgPreview';
+const String quoteMsgSenderKey = 'msgSender';
+
 enum CornerRadius { extraSmall, small, medium, large }

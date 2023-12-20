@@ -19,6 +19,7 @@ class MessageListView extends StatefulWidget {
     this.showNickname = true,
     this.itemBuilder,
     this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
+    this.quoteBuilder,
     super.key,
   });
   final ChatUIKitProfile profile;
@@ -33,6 +34,7 @@ class MessageListView extends StatefulWidget {
   final MessageItemBuilder? itemBuilder;
   final bool showAvatar;
   final bool showNickname;
+  final Widget Function(QuoteModel model)? quoteBuilder;
 
   @override
   State<MessageListView> createState() => _MessageListViewState();
@@ -147,6 +149,7 @@ class _MessageListViewState extends State<MessageListView> {
       bubbleStyle: widget.bubbleStyle,
       key: ValueKey(message.msgId),
       showAvatar: widget.showAvatar,
+      quoteBuilder: widget.quoteBuilder,
       showNickname: widget.showNickname,
       onAvatarTap: () {
         widget.onAvatarTap?.call(widget.profile);

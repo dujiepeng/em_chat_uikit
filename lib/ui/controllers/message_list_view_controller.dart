@@ -114,12 +114,17 @@ class MessageListViewController extends ChangeNotifier
     }
   }
 
-  Future<void> sendTextMessage(String text) async {
+  Future<void> sendTextMessage(String text, {Message? replay}) async {
     Message message = Message.createTxtSendMessage(
       targetId: profile.id,
       chatType: chatType,
       content: text,
     );
+
+    if (replay != null) {
+      message.addQuote(replay);
+    }
+
     sendMessage(message);
   }
 

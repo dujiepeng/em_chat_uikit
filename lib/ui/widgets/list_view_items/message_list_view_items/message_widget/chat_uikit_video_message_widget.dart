@@ -17,6 +17,7 @@ class _ChatUIKitVideoMessageWidgetState
     extends State<ChatUIKitVideoMessageWidget> with MessageObserver {
   late final Message message;
   bool downloading = false;
+  bool downloadError = false;
 
   @override
   void initState() {
@@ -43,6 +44,7 @@ class _ChatUIKitVideoMessageWidgetState
   void onError(String msgId, Message message, ChatError error) {
     if (msgId == message.msgId) {
       downloading = false;
+      downloadError = true;
       setState(() {});
     }
   }
@@ -50,7 +52,7 @@ class _ChatUIKitVideoMessageWidgetState
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
-
+    bool left = message.direction == MessageDirection.RECEIVE;
     String? thumbnailLocalPath = message.thumbnailLocalPath;
     double width = message.width;
     double height = message.height;
@@ -94,16 +96,26 @@ class _ChatUIKitVideoMessageWidgetState
     }
 
     Widget? content;
+
+    if (downloadError) {
+      content = loadError(width, height);
+      return content;
+    }
     if (thumbnailLocalPath?.isNotEmpty == true) {
       final file = File(thumbnailLocalPath!);
       bool exists = file.existsSync();
       if (exists) {
-        content = Image.file(
-          file,
-          width: width,
-          height: height,
+        content = Image(
+          image: ResizeImage(
+            FileImage(file),
+            width: width.toInt(),
+            height: height.toInt(),
+          ),
+          gaplessPlayback: true,
+          excludeFromSemantics: true,
+          alignment: left ? Alignment.centerLeft : Alignment.centerRight,
           fit: width > height ? BoxFit.fitHeight : BoxFit.fitWidth,
-          filterQuality: FilterQuality.high,
+          filterQuality: FilterQuality.low,
         );
       }
     }
@@ -145,5 +157,26 @@ class _ChatUIKitVideoMessageWidgetState
     downloading = true;
     ChatUIKit.instance.downloadThumbnail(message: message);
     setState(() {});
+  }
+
+  Widget loadError(double width, double height) {
+    final theme = ChatUIKitTheme.of(context);
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: theme.color.isDark
+            ? theme.color.neutralColor3
+            : theme.color.neutralColor8,
+      ),
+      child: Center(
+        child: ChatUIKitImageLoader.videoDefault(
+          size: 64,
+          color: theme.color.isDark
+              ? theme.color.neutralColor5
+              : theme.color.neutralColor7,
+        ),
+      ),
+    );
   }
 }

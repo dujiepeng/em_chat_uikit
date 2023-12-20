@@ -19,6 +19,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
     this.onBubbleDoubleTap,
     this.isLeft,
     this.isPlaying = false,
+    this.quoteBuilder,
     super.key,
   });
 
@@ -38,6 +39,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
   final VoidCallback? onBubbleTap;
   final VoidCallback? onBubbleLongPressed;
   final VoidCallback? onBubbleDoubleTap;
+  final Widget Function(QuoteModel model)? quoteBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +82,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
       );
     } else {
       content = ChatUIKitMessageListViewBubble(
+        needSmallCorner: message.getQuote() == null,
         style: bubbleStyle,
         isLeft: isLeft ?? left,
         child: msgWidget,
@@ -128,7 +131,8 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
             isLeft ?? left ? CrossAxisAlignment.start : CrossAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
         children: [
-          _nickname(theme),
+          _nickname(theme, isLeft: isLeft ?? left),
+          quoteWidget(model: message.getQuote(), isLeft: isLeft ?? left),
           content,
           SizedBox(
             height: 16,
@@ -140,7 +144,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
               textDirection:
                   isLeft ?? left ? TextDirection.ltr : TextDirection.rtl,
               children: [
-                const SizedBox(width: arrowWidth),
+                SizedBox(width: getArrowWidth),
                 Text(
                   ChatUIKitTimeFormatter.instance.formatterHandler?.call(
                         context,
@@ -238,12 +242,12 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
     return content;
   }
 
-  Widget _nickname(ChatUIKitTheme theme) {
+  Widget _nickname(ChatUIKitTheme theme, {bool isLeft = false}) {
     Widget content = Text(
       message.nickname ?? message.from ?? '',
       style: TextStyle(
-          fontWeight: theme.font.labelExtraSmall.fontWeight,
-          fontSize: theme.font.labelExtraSmall.fontSize,
+          fontWeight: theme.font.labelSmall.fontWeight,
+          fontSize: theme.font.labelSmall.fontSize,
           color: theme.color.isDark
               ? theme.color.neutralSpecialColor6
               : theme.color.neutralSpecialColor5),
@@ -254,9 +258,35 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
       child: content,
     );
 
-    return Padding(
-      padding: const EdgeInsets.only(left: arrowWidth),
+    content = Padding(
+      padding: EdgeInsets.only(
+        left: isLeft ? getArrowWidth : 0,
+        right: !isLeft ? getArrowWidth : 0,
+      ),
       child: content,
     );
+
+    return content;
   }
+
+  Widget quoteWidget({QuoteModel? model, bool isLeft = false}) {
+    Widget? content;
+    if (model != null) {
+      content = quoteBuilder?.call(model);
+      content = Padding(
+        padding: EdgeInsets.only(
+          left: isLeft ? getArrowWidth : 0,
+          right: !isLeft ? getArrowWidth : 0,
+        ),
+        child: content,
+      );
+    }
+
+    content ??= const SizedBox();
+
+    return content;
+  }
+
+  double get getArrowWidth =>
+      bubbleStyle == ChatUIKitMessageListViewBubbleStyle.arrow ? arrowWidth : 0;
 }

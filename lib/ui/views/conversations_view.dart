@@ -135,6 +135,7 @@ class _ConversationsViewState extends State<ConversationsView> {
         .pushNamed(
       ChatUIKitRouteNames.messagesView,
       arguments: MessagesViewArguments(
+        // bubbleStyle: ChatUIKitMessageListViewBubbleStyle.noArrow,
         profile: model.profile,
       ),
     )

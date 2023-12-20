@@ -62,7 +62,7 @@ class _ContactListViewState extends State<ContactListView> {
     Widget content = ValueListenableBuilder<ChatUIKitListViewType>(
       valueListenable: controller.loadingType,
       builder: (context, type, child) {
-        return ChatUIKitAlphabeticalView(
+        return ChatUIKitAlphabeticalWidget(
           onTapCancel: () {},
           onTap: (context, alphabetical) {},
           beforeWidgets: widget.beforeWidgets,

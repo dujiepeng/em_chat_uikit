@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/ui/widgets/chat_uikit_quote_widget.dart';
 import 'package:em_chat_uikit/ui/widgets/chat_uikit_reply_bar.dart';
 
 import 'package:flutter/material.dart';
@@ -23,7 +24,8 @@ class MessagesView extends StatefulWidget {
         onAvatarLongPress = arguments.onAvatarLongPressed,
         moreActionItems = arguments.moreActionItems,
         onItemLongPressActions = arguments.onItemLongPressActions,
-        replyBuilder = arguments.replyBuilder;
+        replyBarBuilder = arguments.replyBarBuilder,
+        quoteBuilder = arguments.quoteBuilder;
 
   const MessagesView({
     required this.profile,
@@ -45,7 +47,8 @@ class MessagesView extends StatefulWidget {
     this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
     this.onItemLongPressActions,
     this.moreActionItems,
-    this.replyBuilder,
+    this.replyBarBuilder,
+    this.quoteBuilder,
   });
 
   final ChatUIKitProfile profile;
@@ -66,7 +69,9 @@ class MessagesView extends StatefulWidget {
   final List<ChatUIKitBottomSheetItem>? moreActionItems;
   final List<ChatUIKitBottomSheetItem>? onItemLongPressActions;
   final Widget? emojiWidget;
-  final Widget? Function(BuildContext context, Message message)? replyBuilder;
+  final Widget? Function(BuildContext context, Message message)?
+      replyBarBuilder;
+  final Widget Function(QuoteModel model)? quoteBuilder;
 
   @override
   State<MessagesView> createState() => _MessagesViewState();
@@ -116,6 +121,7 @@ class _MessagesViewState extends State<MessagesView> {
     final theme = ChatUIKitTheme.of(context);
 
     Widget content = MessageListView(
+      quoteBuilder: widget.quoteBuilder ?? quoteWidget,
       profile: widget.profile,
       controller: controller,
       showAvatar: widget.showAvatar,
@@ -201,7 +207,7 @@ class _MessagesViewState extends State<MessagesView> {
   }
 
   Widget replyMessageBar(ChatUIKitTheme theme) {
-    return widget.replyBuilder?.call(context, replyMessage!) ??
+    return widget.replyBarBuilder?.call(context, replyMessage!) ??
         ChatUIKitReplyBar(
           message: replyMessage!,
           onCancelTap: () {
@@ -284,6 +290,13 @@ class _MessagesViewState extends State<MessagesView> {
     return content;
   }
 
+  Widget quoteWidget(QuoteModel model) {
+    return ChatUIKitQuoteWidget(
+      model: model,
+      bubbleStyle: widget.bubbleStyle,
+    );
+  }
+
   Widget inputBar() {
     return ChatUIKitInputBar(
       key: const ValueKey('inputKey'),
@@ -333,7 +346,6 @@ class _MessagesViewState extends State<MessagesView> {
             if (showEmojiBtn)
               InkWell(
                 onTap: () {
-                  focusNode.requestFocus();
                   showEmojiBtn = !showEmojiBtn;
                   setState(() {});
                 },
@@ -394,8 +406,11 @@ class _MessagesViewState extends State<MessagesView> {
                 onTap: () {
                   String text = inputBarTextEditingController.text.trim();
                   if (text.isNotEmpty) {
-                    controller.sendTextMessage(text);
+                    controller.sendTextMessage(text, replay: replyMessage);
                     inputBarTextEditingController.clear();
+                    if (replyMessage != null) {
+                      replyMessage = null;
+                    }
                     showMoreBtn = true;
                     setState(() {});
                   }
@@ -514,6 +529,7 @@ class _MessagesViewState extends State<MessagesView> {
 
   void replyMessaged(Message message) {
     clearAllType();
+    focusNode.requestFocus();
     replyMessage = message;
     setState(() {});
   }

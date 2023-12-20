@@ -187,6 +187,26 @@ class ChatUIKitImageLoader {
     );
   }
 
+   static Widget imageDefault({double size = 44, Color? color}) {
+    return Image.asset(
+      'assets/images/image_default.png',
+      package: packageName,
+      width: size,
+      height: size,
+      color: color,
+    );
+  }
+
+    static Widget videoDefault({double size = 44, Color? color}) {
+    return Image.asset(
+      'assets/images/video_default.png',
+      package: packageName,
+      width: size,
+      height: size,
+      color: color,
+    );
+  }
+
   static Widget networkImage({
     String? image,
     Widget? placeholderWidget,

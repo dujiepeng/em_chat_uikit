@@ -22,7 +22,8 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     this.moreActionItems,
     this.onItemLongPressActions,
     this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
-    this.replyBuilder,
+    this.replyBarBuilder,
+    this.quoteBuilder,
   });
 
   final ChatUIKitProfile profile;
@@ -43,7 +44,9 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
   final MessageItemBuilder? itemBuilder;
   final FocusNode? focusNode;
   final Widget? emojiWidget;
-  final Widget? Function(BuildContext context, Message message)? replyBuilder;
+  final Widget? Function(BuildContext context, Message message)?
+      replyBarBuilder;
+  final Widget Function(QuoteModel model)? quoteBuilder;
   @override
   String? attributes;
 }

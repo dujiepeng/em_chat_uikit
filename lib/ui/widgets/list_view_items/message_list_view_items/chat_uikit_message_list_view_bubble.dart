@@ -61,28 +61,22 @@ class ChatUIKitMessageListViewBubble extends StatelessWidget {
     } else {
       content = Container(
         decoration: BoxDecoration(
-            color: color ??
-                (!isLeft
-                    ? (theme.color.isDark
-                        ? theme.color.primaryColor6
-                        : theme.color.primaryColor5)
-                    : (theme.color.isDark
-                        ? theme.color.primaryColor2
-                        : theme.color.primaryColor95)),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(isLeft ? 12 : 16),
-              topRight: Radius.circular(isLeft ? 16 : 12),
-              bottomLeft: Radius.circular(isLeft
-                  ? needSmallCorner
-                      ? 4
-                      : 12
-                  : 16),
-              bottomRight: Radius.circular(isLeft
-                  ? 16
-                  : needSmallCorner
-                      ? 4
-                      : 12),
-            )),
+          color: color ??
+              (!isLeft
+                  ? (theme.color.isDark
+                      ? theme.color.primaryColor6
+                      : theme.color.primaryColor5)
+                  : (theme.color.isDark
+                      ? theme.color.primaryColor2
+                      : theme.color.primaryColor95)),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(isLeft ? (!needSmallCorner ? 4 : 12) : 16),
+            topRight:
+                Radius.circular(!isLeft ? (!needSmallCorner ? 4 : 12) : 16),
+            bottomLeft: Radius.circular(isLeft ? 4 : 16),
+            bottomRight: Radius.circular(!isLeft ? 4 : 16),
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.only(
             left: 12,

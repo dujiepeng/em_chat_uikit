@@ -33,7 +33,7 @@ class _SearchContactsViewState extends State<SearchContactsView> {
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
-    Widget content = ChatUIKitSearchView(
+    Widget content = ChatUIKitSearchWidget(
       searchHideText: widget.searchHideText,
       list: widget.searchData,
       autoFocus: true,

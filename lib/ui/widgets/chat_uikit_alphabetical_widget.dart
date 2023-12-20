@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 const double letterHeight = 16;
 const double letterWidth = 16;
 
-class ChatUIKitAlphabeticalView extends StatefulWidget {
-  const ChatUIKitAlphabeticalView({
+class ChatUIKitAlphabeticalWidget extends StatefulWidget {
+  const ChatUIKitAlphabeticalWidget({
     required this.list,
     required this.scrollController,
     required this.builder,
@@ -49,11 +49,12 @@ class ChatUIKitAlphabeticalView extends StatefulWidget {
   final List<ChatUIKitListItemModelBase> list;
 
   @override
-  State<ChatUIKitAlphabeticalView> createState() =>
-      _ChatUIKitAlphabeticalViewState();
+  State<ChatUIKitAlphabeticalWidget> createState() =>
+      _ChatUIKitAlphabeticalWidgetState();
 }
 
-class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
+class _ChatUIKitAlphabeticalWidgetState
+    extends State<ChatUIKitAlphabeticalWidget> {
   List<String> targets = [];
   String? latestSelected;
   ValueNotifier<int> selectIndex = ValueNotifier(-1);
@@ -88,7 +89,7 @@ class _ChatUIKitAlphabeticalViewState extends State<ChatUIKitAlphabeticalView> {
   }
 
   @override
-  void didUpdateWidget(covariant ChatUIKitAlphabeticalView oldWidget) {
+  void didUpdateWidget(covariant ChatUIKitAlphabeticalWidget oldWidget) {
     widget.scrollController.removeListener(listDidMove);
     widget.scrollController.addListener(listDidMove);
     super.didUpdateWidget(oldWidget);

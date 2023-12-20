@@ -12,8 +12,8 @@ typedef ListViewSearchBuilder = Widget Function(
   List<ChatUIKitListItemModelBase> list,
 );
 
-class ChatUIKitSearchView extends StatefulWidget {
-  const ChatUIKitSearchView({
+class ChatUIKitSearchWidget extends StatefulWidget {
+  const ChatUIKitSearchWidget({
     required this.builder,
     required this.searchHideText,
     required this.list,
@@ -28,10 +28,10 @@ class ChatUIKitSearchView extends StatefulWidget {
   final bool autoFocus;
 
   @override
-  State<ChatUIKitSearchView> createState() => _ChatUIKitSearchViewState();
+  State<ChatUIKitSearchWidget> createState() => _ChatUIKitSearchWidgetState();
 }
 
-class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
+class _ChatUIKitSearchWidgetState extends State<ChatUIKitSearchWidget> {
   late final List<ChatUIKitListItemModelBase> list;
   TextEditingController searchController = TextEditingController();
   bool isSearch = false;
@@ -48,7 +48,7 @@ class _ChatUIKitSearchViewState extends State<ChatUIKitSearchView> {
   }
 
   @override
-  void didUpdateWidget(covariant ChatUIKitSearchView oldWidget) {
+  void didUpdateWidget(covariant ChatUIKitSearchWidget oldWidget) {
     if (widget.list != oldWidget.list) {
       list.clear();
       list.addAll(widget.list);
