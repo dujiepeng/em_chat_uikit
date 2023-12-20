@@ -23,5 +23,6 @@ class CreateGroupViewArguments implements ChatUIKitViewArguments {
   final void Function(ContactItemModel model)? onItemLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
+  @override
   String? attributes;
 }

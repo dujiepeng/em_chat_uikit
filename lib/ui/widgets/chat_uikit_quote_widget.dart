@@ -120,7 +120,6 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
             fontWeight: theme.font.labelSmall.fontWeight,
           ),
         ),
-        const SizedBox(height: 4),
         Text(
           message.textContent,
           overflow: TextOverflow.ellipsis,
@@ -141,6 +140,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
 
   Widget imageWidget(ChatUIKitTheme theme, Message message) {
     Widget content = Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
           width: 16,
@@ -154,9 +154,10 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
           ),
         ),
         const SizedBox(width: 4),
-        Expanded(
+        Flexible(
           child: Text(
             "图片",
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontWeight: theme.font.labelMedium.fontWeight,
               fontSize: theme.font.labelMedium.fontSize,
@@ -165,7 +166,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
                   : theme.color.neutralColor5,
             ),
           ),
-        ),
+        )
       ],
     );
     content = Column(
@@ -181,14 +182,18 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
             fontWeight: theme.font.labelSmall.fontWeight,
           ),
         ),
-        const SizedBox(height: 4),
         content,
       ],
     );
 
     content = Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Expanded(child: content),
+        Flexible(
+          fit: FlexFit.loose,
+          child: content,
+        ),
+        const SizedBox(width: 16),
         Container(
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
@@ -288,6 +293,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
 
   Widget videoWidget(ChatUIKitTheme theme, Message message) {
     Widget content = Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
           width: 16,
@@ -301,7 +307,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
           ),
         ),
         const SizedBox(width: 4),
-        Expanded(
+        Flexible(
           child: Text(
             "视频",
             style: TextStyle(
@@ -328,7 +334,6 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
             fontWeight: theme.font.labelSmall.fontWeight,
           ),
         ),
-        const SizedBox(height: 4),
         content,
       ],
     );
@@ -405,8 +410,13 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
     }();
 
     content = Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Expanded(child: content),
+        Flexible(
+          fit: FlexFit.loose,
+          child: content,
+        ),
+        const SizedBox(width: 16),
         Container(
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
@@ -438,6 +448,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
 
   Widget voiceWidget(ChatUIKitTheme theme, Message message) {
     Widget content = Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
           width: 16,
@@ -448,8 +459,10 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
                   : theme.color.neutralColor5),
         ),
         const SizedBox(width: 4),
-        Expanded(
+        Flexible(
+          fit: FlexFit.loose,
           child: RichText(
+            overflow: TextOverflow.ellipsis,
             text: TextSpan(
               children: [
                 TextSpan(
@@ -483,6 +496,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
       children: [
         Text(
           message.nickname ?? message.from ?? '',
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             color: theme.color.isDark
                 ? theme.color.neutralSpecialColor5
@@ -491,7 +505,6 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
             fontWeight: theme.font.labelSmall.fontWeight,
           ),
         ),
-        const SizedBox(height: 4),
         content,
       ],
     );
@@ -500,6 +513,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
 
   Widget fileWidget(ChatUIKitTheme theme, Message message) {
     Widget content = Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
           width: 16,
@@ -511,33 +525,36 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
                   : theme.color.neutralColor7),
         ),
         const SizedBox(width: 4),
-        Expanded(
-            child: RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: '附件 ',
-                style: TextStyle(
-                  fontWeight: theme.font.labelSmall.fontWeight,
-                  fontSize: theme.font.labelSmall.fontSize,
-                  color: theme.color.isDark
-                      ? theme.color.neutralSpecialColor6
-                      : theme.color.neutralSpecialColor5,
+        Flexible(
+          child: RichText(
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: '附件 ',
+                  style: TextStyle(
+                    fontWeight: theme.font.labelSmall.fontWeight,
+                    fontSize: theme.font.labelSmall.fontSize,
+                    color: theme.color.isDark
+                        ? theme.color.neutralSpecialColor6
+                        : theme.color.neutralSpecialColor5,
+                  ),
                 ),
-              ),
-              TextSpan(
-                text: message.displayName,
-                style: TextStyle(
-                  fontWeight: theme.font.bodySmall.fontWeight,
-                  fontSize: theme.font.bodySmall.fontSize,
-                  color: theme.color.isDark
-                      ? theme.color.neutralSpecialColor6
-                      : theme.color.neutralSpecialColor5,
+                TextSpan(
+                  text: message.displayName,
+                  style: TextStyle(
+                    fontWeight: theme.font.bodySmall.fontWeight,
+                    fontSize: theme.font.bodySmall.fontSize,
+                    color: theme.color.isDark
+                        ? theme.color.neutralSpecialColor6
+                        : theme.color.neutralSpecialColor5,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        )),
+        ),
       ],
     );
     content = Column(
@@ -553,7 +570,6 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
             fontWeight: theme.font.labelSmall.fontWeight,
           ),
         ),
-        const SizedBox(height: 4),
         content,
       ],
     );
@@ -562,7 +578,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
   }
 
   Widget custom(ChatUIKitTheme theme, Message message) {
-    if (model.msgType == MessageType.CUSTOM.toString() &&
+    if (model.msgType == MessageType.CUSTOM.getString &&
         message.isCardMessage) {
       Widget content = Row(
         mainAxisSize: MainAxisSize.min,
@@ -575,7 +591,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
             size: 16,
           ),
           const SizedBox(width: 4),
-          Expanded(
+          Flexible(
             child: RichText(
               text: TextSpan(
                 children: [
@@ -619,7 +635,6 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
               fontWeight: theme.font.labelSmall.fontWeight,
             ),
           ),
-          const SizedBox(height: 4),
           content,
         ],
       );

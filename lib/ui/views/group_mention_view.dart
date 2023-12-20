@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
