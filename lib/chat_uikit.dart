@@ -124,5 +124,6 @@ export 'ui/route/view_arguments/view_arguments_base.dart';
 export 'ui/route/view_arguments/show_image_view_arguments.dart';
 export 'ui/route/view_arguments/show_video_view_arguments.dart';
 export 'ui/route/view_arguments/current_user_info_view_arguments.dart';
+export 'ui/route/view_arguments/create_group_view_arguments.dart';
 
 export 'universal/chat_uikit_action_item.dart';

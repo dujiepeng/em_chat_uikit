@@ -8,7 +8,7 @@ class QuoteModel {
 
   QuoteModel.fromMessage(Message message)
       : msgId = message.msgId,
-        msgType = message.bodyType.toString(),
+        msgType = message.bodyType.getString,
         preview = message.showInfo(),
         sender = message.from!;
 
@@ -51,7 +51,7 @@ extension MessageTypeExt on MessageType {
       case MessageType.CMD:
         return 'cmd';
       default:
-        return 'UNKNOWN';
+        return 'txt';
     }
   }
 }

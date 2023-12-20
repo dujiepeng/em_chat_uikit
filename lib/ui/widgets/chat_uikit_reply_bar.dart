@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
@@ -49,32 +51,10 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
     if (widget.trailing != null) {
       children.add(widget.trailing!);
     } else {
-      if (widget.message.bodyType == MessageType.IMAGE ||
-          widget.message.bodyType == MessageType.VIDEO) {
-        children.add(
-          Container(
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: FadeInImage(
-              width: 36,
-              height: 36,
-              placeholder: const NetworkImage(''),
-              placeholderFit: BoxFit.fill,
-              placeholderErrorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: Colors.red,
-                );
-              },
-              image: NetworkImage(widget.message.thumbnailRemotePath!),
-              fit: BoxFit.fill,
-              imageErrorBuilder: (context, error, stackTrace) {
-                return Container();
-              },
-            ),
-          ),
-        );
+      if (widget.message.bodyType == MessageType.IMAGE) {
+        children.add(_imagePreview());
+      } else if (widget.message.bodyType == MessageType.VIDEO) {
+        children.add(_videoPreview());
       }
       children.add(
         Padding(
@@ -372,5 +352,169 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
       );
     }
     return Container();
+  }
+
+  Widget _imagePreview() {
+    return () {
+      Widget? content;
+      if (widget.message.thumbnailLocalPath?.isNotEmpty == true) {
+        File file = File(widget.message.thumbnailLocalPath!);
+        if (file.existsSync()) {
+          content = Image(
+            image: ResizeImage(
+              FileImage(file),
+              width: 36,
+              height: 36,
+            ),
+            gaplessPlayback: true,
+            fit: BoxFit.fill,
+            filterQuality: FilterQuality.low,
+          );
+        }
+      }
+
+      if (widget.message.thumbnailRemotePath?.isNotEmpty == true &&
+          content == null) {
+        content = Image(
+          image: ResizeImage(
+            NetworkImage(widget.message.thumbnailRemotePath!),
+            width: 36,
+            height: 36,
+          ),
+          gaplessPlayback: true,
+          fit: BoxFit.fill,
+          filterQuality: FilterQuality.low,
+        );
+      }
+
+      if (widget.message.localPath?.isNotEmpty == true && content == null) {
+        File file = File(widget.message.localPath!);
+        if (file.existsSync()) {
+          content = Image(
+            image: ResizeImage(
+              FileImage(file),
+              width: 36,
+              height: 36,
+            ),
+            gaplessPlayback: true,
+            fit: BoxFit.fill,
+            filterQuality: FilterQuality.low,
+          );
+        }
+      }
+
+      final theme = ChatUIKitTheme.of(context);
+      content ??= Center(
+        child: ChatUIKitImageLoader.imageDefault(
+          size: 24,
+          color: theme.color.isDark
+              ? theme.color.neutralColor5
+              : theme.color.neutralColor7,
+        ),
+      );
+
+      content = Container(
+        width: 36,
+        height: 36,
+        decoration: BoxDecoration(
+          color: theme.color.isDark
+              ? theme.color.neutralColor1
+              : theme.color.neutralColor98,
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(
+            width: 1,
+            color: theme.color.isDark
+                ? theme.color.neutralColor3
+                : theme.color.neutralColor8,
+          ),
+        ),
+        foregroundDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(
+            width: 1,
+            color: theme.color.isDark
+                ? theme.color.neutralColor3
+                : theme.color.neutralColor8,
+          ),
+        ),
+        child: content,
+      );
+
+      return content;
+    }();
+  }
+
+  Widget _videoPreview() {
+    return () {
+      Widget? content;
+      if (widget.message.thumbnailLocalPath?.isNotEmpty == true) {
+        File file = File(widget.message.thumbnailLocalPath!);
+        if (file.existsSync()) {
+          content = Image(
+            image: ResizeImage(
+              FileImage(file),
+              width: 36,
+              height: 36,
+            ),
+            gaplessPlayback: true,
+            fit: BoxFit.fill,
+            filterQuality: FilterQuality.low,
+          );
+        }
+      }
+
+      if (widget.message.thumbnailRemotePath?.isNotEmpty == true &&
+          content == null) {
+        content = Image(
+          image: ResizeImage(
+            NetworkImage(widget.message.thumbnailRemotePath!),
+            width: 36,
+            height: 36,
+          ),
+          gaplessPlayback: true,
+          fit: BoxFit.fill,
+          filterQuality: FilterQuality.low,
+        );
+      }
+
+      final theme = ChatUIKitTheme.of(context);
+      content ??= Center(
+        child: ChatUIKitImageLoader.videoDefault(
+          size: 24,
+          color: theme.color.isDark
+              ? theme.color.neutralColor5
+              : theme.color.neutralColor7,
+        ),
+      );
+
+      content = Container(
+        width: 36,
+        height: 36,
+        decoration: BoxDecoration(
+          color: theme.color.isDark
+              ? theme.color.neutralColor1
+              : theme.color.neutralColor98,
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(
+            width: 1,
+            color: theme.color.isDark
+                ? theme.color.neutralColor3
+                : theme.color.neutralColor8,
+          ),
+        ),
+        foregroundDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(
+            width: 1,
+            color: theme.color.isDark
+                ? theme.color.neutralColor3
+                : theme.color.neutralColor8,
+          ),
+        ),
+        child: content,
+      );
+
+      return content;
+    }();
   }
 }

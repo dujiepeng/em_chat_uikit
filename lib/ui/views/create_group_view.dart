@@ -3,6 +3,18 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 class CreateGroupView extends StatefulWidget {
+  CreateGroupView.arguments(
+    CreateGroupViewArguments arguments, {
+    super.key,
+  })  : listViewItemBuilder = arguments.listViewItemBuilder,
+        onSearchTap = arguments.onSearchTap,
+        fakeSearchHideText = arguments.fakeSearchHideText,
+        listViewBackground = arguments.listViewBackground,
+        onItemTap = arguments.onItemTap,
+        onItemLongPress = arguments.onItemLongPress,
+        appBar = arguments.appBar,
+        controller = arguments.controller;
+
   const CreateGroupView({
     this.listViewItemBuilder,
     this.onSearchTap,

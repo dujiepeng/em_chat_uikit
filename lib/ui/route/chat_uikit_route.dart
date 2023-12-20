@@ -75,6 +75,9 @@ class ChatUIKitRoute {
       return CurrentUserInfoView.arguments(
           arguments as CurrentUserInfoViewArguments);
     },
+    ChatUIKitRouteNames.createGroupView: (context, arguments) {
+      return CreateGroupView.arguments(arguments as CreateGroupViewArguments);
+    },
   };
 
   static Route? generateRoute<T extends Object>(RouteSettings settings) {

@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/ui/custom/custom_text_editing_controller.dart';
 import 'package:em_chat_uikit/ui/widgets/chat_uikit_quote_widget.dart';
 import 'package:em_chat_uikit/ui/widgets/chat_uikit_reply_bar.dart';
 
@@ -94,7 +95,7 @@ class _MessagesViewState extends State<MessagesView> {
   @override
   void initState() {
     super.initState();
-    inputBarTextEditingController = TextEditingController();
+    inputBarTextEditingController = CustomTextEditingController();
     controller = MessageListViewController(profile: widget.profile);
     focusNode = widget.focusNode ?? FocusNode();
     _picker = ImagePicker();

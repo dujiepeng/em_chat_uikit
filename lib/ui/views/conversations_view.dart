@@ -329,8 +329,14 @@ class _ConversationsViewState extends State<ConversationsView> {
       }
 
       try {
+        List list = [];
+
+        for (var profile in profiles) {
+          list.add(profile.showName);
+        }
+
         await ChatUIKit.instance.createGroup(
-          groupName: 'groupName',
+          groupName: list.join(','),
           options: GroupOptions(
             maxCount: 2000,
             style: GroupStyle.PrivateMemberCanInvite,

@@ -74,7 +74,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
     return Container(
       decoration: BoxDecoration(
         color: theme.color.isDark
-            ? theme.color.neutralColor3
+            ? theme.color.neutralColor2
             : theme.color.neutralColor95,
         borderRadius: borderRadius,
       ),
@@ -239,7 +239,44 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
                   );
                 }
               }
-              content ??= Container();
+
+              final theme = ChatUIKitTheme.of(context);
+              content ??= Center(
+                child: ChatUIKitImageLoader.imageDefault(
+                  size: 24,
+                  color: theme.color.isDark
+                      ? theme.color.neutralColor5
+                      : theme.color.neutralColor7,
+                ),
+              );
+
+              content = Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: theme.color.isDark
+                      ? theme.color.neutralColor1
+                      : theme.color.neutralColor98,
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(
+                    width: 1,
+                    color: theme.color.isDark
+                        ? theme.color.neutralColor3
+                        : theme.color.neutralColor8,
+                  ),
+                ),
+                foregroundDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(
+                    width: 1,
+                    color: theme.color.isDark
+                        ? theme.color.neutralColor3
+                        : theme.color.neutralColor8,
+                  ),
+                ),
+                child: content,
+              );
+
               return content;
             },
           ),
@@ -295,6 +332,77 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         content,
       ],
     );
+    bool hasLoad = true;
+
+    Widget videoWidget = () {
+      Widget? content;
+      if (message.thumbnailRemotePath?.isNotEmpty == true) {
+        content = Image(
+          gaplessPlayback: true,
+          image: ResizeImage(
+            NetworkImage(message.thumbnailRemotePath!),
+            width: 36,
+            height: 36,
+          ),
+          fit: BoxFit.fill,
+        );
+      }
+
+      if (message.thumbnailLocalPath?.isNotEmpty == true && content == null) {
+        File file = File(message.thumbnailLocalPath!);
+        if (file.existsSync()) {
+          content = Image(
+            gaplessPlayback: true,
+            image: ResizeImage(
+              FileImage(file),
+              width: 36,
+              height: 36,
+            ),
+            fit: BoxFit.fill,
+          );
+        }
+      }
+
+      final theme = ChatUIKitTheme.of(context);
+      content ??= () {
+        hasLoad = false;
+        return Center(
+          child: ChatUIKitImageLoader.videoDefault(
+            size: 24,
+            color: theme.color.isDark
+                ? theme.color.neutralColor5
+                : theme.color.neutralColor7,
+          ),
+        );
+      }();
+      content = Container(
+        width: 36,
+        height: 36,
+        decoration: BoxDecoration(
+          color: theme.color.isDark
+              ? theme.color.neutralColor1
+              : theme.color.neutralColor98,
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(
+            width: 1,
+            color: theme.color.isDark
+                ? theme.color.neutralColor3
+                : theme.color.neutralColor8,
+          ),
+        ),
+        foregroundDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(
+            width: 1,
+            color: theme.color.isDark
+                ? theme.color.neutralColor3
+                : theme.color.neutralColor8,
+          ),
+        ),
+        child: content,
+      );
+      return content;
+    }();
 
     content = Row(
       children: [
@@ -306,53 +414,20 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
           ),
           child: Stack(
             children: [
-              Builder(
-                builder: (context) {
-                  Widget? content;
-                  if (message.thumbnailRemotePath?.isNotEmpty == true) {
-                    content = Image(
-                      gaplessPlayback: true,
-                      image: ResizeImage(
-                        NetworkImage(message.thumbnailRemotePath!),
-                        width: 36,
-                        height: 36,
-                      ),
-                      fit: BoxFit.fill,
-                    );
-                  }
-
-                  if (message.thumbnailLocalPath?.isNotEmpty == true &&
-                      content == null) {
-                    File file = File(message.thumbnailLocalPath!);
-                    if (file.existsSync()) {
-                      content = Image(
-                        gaplessPlayback: true,
-                        image: ResizeImage(
-                          FileImage(file),
-                          width: 36,
-                          height: 36,
-                        ),
-                        fit: BoxFit.fill,
-                      );
-                    }
-                  }
-
-                  content ??= Container();
-                  return content;
-                },
-              ),
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Icon(
-                    Icons.play_circle_outline,
-                    size: 20,
-                    color: theme.color.isDark
-                        ? theme.color.neutralColor1
-                        : theme.color.neutralColor98,
+              videoWidget,
+              if (hasLoad)
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Icon(
+                      Icons.play_circle_outline,
+                      size: 20,
+                      color: theme.color.isDark
+                          ? theme.color.neutralColor1
+                          : theme.color.neutralColor98,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
