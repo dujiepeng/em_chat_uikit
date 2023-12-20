@@ -38,6 +38,8 @@ class MessageListViewController extends ChangeNotifier
   @override
   void dispose() {
     ChatUIKit.instance.removeObserver(this);
+    debugPrintStack(label: "msgListController dispose");
+
     super.dispose();
   }
 

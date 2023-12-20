@@ -8,8 +8,13 @@ double maxImageWidth = 225;
 double maxImageHeight = 300;
 
 class ChatUIKitImageMessageWidget extends StatefulWidget {
-  const ChatUIKitImageMessageWidget({required this.message, super.key});
+  const ChatUIKitImageMessageWidget({
+    required this.message,
+    this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
+    super.key,
+  });
   final Message message;
+  final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
 
   @override
   State<ChatUIKitImageMessageWidget> createState() =>
@@ -54,6 +59,8 @@ class _ChatUIKitImageMessageWidgetState
 
   @override
   Widget build(BuildContext context) {
+    final theme = ChatUIKitTheme.of(context);
+
     bool left = message.direction == MessageDirection.RECEIVE;
 
     String? localPath = message.localPath;
@@ -95,31 +102,9 @@ class _ChatUIKitImageMessageWidgetState
 
     if (downloadError) {
       content = loadError(width, height);
-      return content;
-    }
-
-    if (thumbnailLocalPath?.isNotEmpty == true) {
-      final file = File(thumbnailLocalPath!);
-      bool exists = file.existsSync();
-      if (exists) {
-        content = Image(
-          image: ResizeImage(
-            FileImage(file),
-            width: width.toInt(),
-            height: height.toInt(),
-          ),
-          gaplessPlayback: true,
-          excludeFromSemantics: true,
-          alignment: left ? Alignment.centerLeft : Alignment.centerRight,
-          fit: width > height ? BoxFit.fitHeight : BoxFit.fitWidth,
-          filterQuality: FilterQuality.low,
-        );
-      }
-    }
-
-    if (content == null) {
-      if (localPath?.isNotEmpty == true) {
-        final file = File(localPath!);
+    } else {
+      if (thumbnailLocalPath?.isNotEmpty == true) {
+        final file = File(thumbnailLocalPath!);
         bool exists = file.existsSync();
         if (exists) {
           content = Image(
@@ -129,30 +114,87 @@ class _ChatUIKitImageMessageWidgetState
               height: height.toInt(),
             ),
             gaplessPlayback: true,
+            excludeFromSemantics: true,
             alignment: left ? Alignment.centerLeft : Alignment.centerRight,
             fit: width > height ? BoxFit.fitHeight : BoxFit.fitWidth,
             filterQuality: FilterQuality.low,
           );
         }
       }
-    }
 
-    if (content == null) {
-      download();
+      if (content == null) {
+        if (localPath?.isNotEmpty == true) {
+          final file = File(localPath!);
+          bool exists = file.existsSync();
+          if (exists) {
+            content = Image(
+              image: ResizeImage(
+                FileImage(file),
+                width: width.toInt(),
+                height: height.toInt(),
+              ),
+              gaplessPlayback: true,
+              alignment: left ? Alignment.centerLeft : Alignment.centerRight,
+              fit: width > height ? BoxFit.fitHeight : BoxFit.fitWidth,
+              filterQuality: FilterQuality.low,
+            );
+          }
+        }
+      }
+
+      if (content == null) {
+        download();
+        content = SizedBox(
+          width: width,
+          height: height,
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      }
+
       content = SizedBox(
         width: width,
         height: height,
-        child: const Center(
-          child: CircularProgressIndicator(),
-        ),
+        child: content,
       );
     }
-
-    content = SizedBox(
-      width: width,
-      height: height,
+    content = Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(
+            widget.bubbleStyle == ChatUIKitMessageListViewBubbleStyle.arrow
+                ? 4
+                : 16),
+        border: Border.all(
+          width: 1,
+          color: theme.color.isDark
+              ? downloadError
+                  ? theme.color.neutralColor3
+                  : theme.color.neutralColor2
+              : downloadError
+                  ? theme.color.neutralColor8
+                  : theme.color.neutralColor9,
+        ),
+      ),
+      foregroundDecoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(
+            widget.bubbleStyle == ChatUIKitMessageListViewBubbleStyle.arrow
+                ? 4
+                : 16),
+        border: Border.all(
+          width: 1,
+          color: theme.color.isDark
+              ? downloadError
+                  ? theme.color.neutralColor3
+                  : theme.color.neutralColor2
+              : downloadError
+                  ? theme.color.neutralColor8
+                  : theme.color.neutralColor9,
+        ),
+      ),
       child: content,
     );
+
     return content;
   }
 
@@ -169,8 +211,8 @@ class _ChatUIKitImageMessageWidgetState
       height: height,
       decoration: BoxDecoration(
         color: theme.color.isDark
-            ? theme.color.neutralColor3
-            : theme.color.neutralColor8,
+            ? theme.color.neutralColor2
+            : theme.color.neutralColor9,
       ),
       child: Center(
         child: ChatUIKitImageLoader.imageDefault(

@@ -70,16 +70,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
 
     if (message.bodyType == MessageType.VIDEO ||
         message.bodyType == MessageType.IMAGE) {
-      content = Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(
-              bubbleStyle == ChatUIKitMessageListViewBubbleStyle.arrow
-                  ? 4
-                  : 16),
-        ),
-        child: msgWidget,
-      );
+      content = msgWidget;
     } else {
       content = ChatUIKitMessageListViewBubble(
         needSmallCorner: message.getQuote() == null,

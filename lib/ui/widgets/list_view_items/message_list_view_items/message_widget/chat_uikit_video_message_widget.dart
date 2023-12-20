@@ -5,9 +5,13 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 class ChatUIKitVideoMessageWidget extends StatefulWidget {
-  const ChatUIKitVideoMessageWidget({required this.message, super.key});
+  const ChatUIKitVideoMessageWidget({
+    required this.message,
+    this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
+    super.key,
+  });
   final Message message;
-
+  final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
   @override
   State<ChatUIKitVideoMessageWidget> createState() =>
       _ChatUIKitVideoMessageWidgetState();
@@ -85,68 +89,99 @@ class _ChatUIKitVideoMessageWidgetState
       }
     }
 
-    if (maxImageWidth / width > maxImageHeight / height) {
-      double ratio = maxImageWidth / width;
-      width = maxImageWidth;
-      height = height * ratio;
-    } else {
-      double ratio = maxImageHeight / height;
-      height = maxImageHeight;
-      width = width * ratio;
-    }
-
     Widget? content;
 
     if (downloadError) {
       content = loadError(width, height);
-      return content;
-    }
-    if (thumbnailLocalPath?.isNotEmpty == true) {
-      final file = File(thumbnailLocalPath!);
-      bool exists = file.existsSync();
-      if (exists) {
-        content = Image(
-          image: ResizeImage(
-            FileImage(file),
-            width: width.toInt(),
-            height: height.toInt(),
+    } else {
+      if (thumbnailLocalPath?.isNotEmpty == true) {
+        final file = File(thumbnailLocalPath!);
+        bool exists = file.existsSync();
+        if (exists) {
+          content = Image(
+            image: ResizeImage(
+              FileImage(file),
+              width: width.toInt(),
+              height: height.toInt(),
+            ),
+            gaplessPlayback: true,
+            excludeFromSemantics: true,
+            alignment: left ? Alignment.centerLeft : Alignment.centerRight,
+            fit: width > height ? BoxFit.fitHeight : BoxFit.fitWidth,
+            filterQuality: FilterQuality.low,
+          );
+        }
+      }
+
+      if (content == null) {
+        download();
+        content = SizedBox(
+          width: width,
+          height: height,
+          child: const Center(
+            child: CircularProgressIndicator(),
           ),
-          gaplessPlayback: true,
-          excludeFromSemantics: true,
-          alignment: left ? Alignment.centerLeft : Alignment.centerRight,
-          fit: width > height ? BoxFit.fitHeight : BoxFit.fitWidth,
-          filterQuality: FilterQuality.low,
         );
       }
-    }
 
-    if (content == null) {
-      download();
       content = SizedBox(
         width: width,
         height: height,
-        child: const Center(
-          child: CircularProgressIndicator(),
-        ),
+        child: content,
+      );
+      content = Stack(
+        children: [
+          content,
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.center,
+              child: Icon(
+                Icons.play_circle_outline,
+                size: 64,
+                color: theme.color.isDark
+                    ? theme.color.neutralColor1
+                    : theme.color.neutralColor98,
+              ),
+            ),
+          ),
+        ],
       );
     }
 
-    content = Stack(
-      children: [
-        content,
-        Positioned.fill(
-          child: Align(
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.play_circle_outline,
-              size: 64,
-              color: theme.color.isDark
-                  ? theme.color.neutralColor1
-                  : theme.color.neutralColor98,
-            ),
-          ),
+    content = Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(
+            widget.bubbleStyle == ChatUIKitMessageListViewBubbleStyle.arrow
+                ? 4
+                : 16),
+        border: Border.all(
+          width: 1,
+          color: theme.color.isDark
+              ? downloadError
+                  ? theme.color.neutralColor3
+                  : theme.color.neutralColor2
+              : downloadError
+                  ? theme.color.neutralColor8
+                  : theme.color.neutralColor9,
         ),
-      ],
+      ),
+      foregroundDecoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(
+            widget.bubbleStyle == ChatUIKitMessageListViewBubbleStyle.arrow
+                ? 4
+                : 16),
+        border: Border.all(
+          width: 1,
+          color: theme.color.isDark
+              ? downloadError
+                  ? theme.color.neutralColor3
+                  : theme.color.neutralColor2
+              : downloadError
+                  ? theme.color.neutralColor8
+                  : theme.color.neutralColor9,
+        ),
+      ),
+      child: content,
     );
 
     return content;
@@ -166,8 +201,8 @@ class _ChatUIKitVideoMessageWidgetState
       height: height,
       decoration: BoxDecoration(
         color: theme.color.isDark
-            ? theme.color.neutralColor3
-            : theme.color.neutralColor8,
+            ? theme.color.neutralColor2
+            : theme.color.neutralColor9,
       ),
       child: Center(
         child: ChatUIKitImageLoader.videoDefault(

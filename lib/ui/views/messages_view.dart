@@ -82,7 +82,7 @@ class _MessagesViewState extends State<MessagesView> {
   late final TextEditingController inputBarTextEditingController;
 
   late final FocusNode focusNode;
-  bool showEmojiBtn = false;
+  bool showEmoji = false;
   bool showMoreBtn = true;
   late final ImagePicker _picker;
 
@@ -101,7 +101,7 @@ class _MessagesViewState extends State<MessagesView> {
     focusNode.addListener(() {
       if (editMessage != null) return;
       if (focusNode.hasFocus) {
-        showEmojiBtn = false;
+        showEmoji = false;
         setState(() {});
       }
     });
@@ -136,6 +136,24 @@ class _MessagesViewState extends State<MessagesView> {
       itemBuilder: widget.itemBuilder,
     );
 
+    content = NotificationListener(
+      onNotification: (notification) {
+        if (notification is ScrollUpdateNotification) {
+          if (showEmoji) {
+            showEmoji = false;
+            if (mounted) {
+              setState(() {});
+            }
+          }
+          if (focusNode.hasFocus) {
+            focusNode.unfocus();
+          }
+        }
+        return false;
+      },
+      child: content,
+    );
+
     content = Column(
       children: [
         Expanded(
@@ -149,8 +167,8 @@ class _MessagesViewState extends State<MessagesView> {
         AnimatedContainer(
           curve: Curves.linearToEaseOut,
           duration: const Duration(milliseconds: 250),
-          height: showEmojiBtn ? 230 : 0,
-          child: showEmojiBtn
+          height: showEmoji ? 230 : 0,
+          child: showEmoji
               ? widget.emojiWidget ?? const ChatUIKitInputEmojiBar()
               : const SizedBox(),
         ),
@@ -311,7 +329,7 @@ class _MessagesViewState extends State<MessagesView> {
       leading: InkWell(
         onTap: () async {
           focusNode.unfocus();
-          showEmojiBtn = false;
+          showEmoji = false;
           setState(() {});
           ChatUIKitRecordModel? model = await showChatUIKitRecordBar(
             context: context,
@@ -334,19 +352,19 @@ class _MessagesViewState extends State<MessagesView> {
       trailing: SizedBox(
         child: Row(
           children: [
-            if (!showEmojiBtn)
+            if (!showEmoji)
               InkWell(
                 onTap: () {
                   focusNode.unfocus();
-                  showEmojiBtn = !showEmojiBtn;
+                  showEmoji = !showEmoji;
                   setState(() {});
                 },
                 child: ChatUIKitImageLoader.faceKeyboard(),
               ),
-            if (showEmojiBtn)
+            if (showEmoji)
               InkWell(
                 onTap: () {
-                  showEmojiBtn = !showEmojiBtn;
+                  showEmoji = !showEmoji;
                   setState(() {});
                 },
                 child: ChatUIKitImageLoader.textKeyboard(),
@@ -424,7 +442,7 @@ class _MessagesViewState extends State<MessagesView> {
   }
 
   void clearAllType() {
-    showEmojiBtn = false;
+    showEmoji = false;
     editMessage = null;
     replyMessage = null;
     setState(() {});
@@ -517,9 +535,6 @@ class _MessagesViewState extends State<MessagesView> {
   void textMessageEdit(Message message) {
     clearAllType();
     if (message.bodyType != MessageType.TXT) return;
-    if (showEmojiBtn) {
-      showEmojiBtn = false;
-    }
 
     editMessage = message;
     editBarTextEditingController =
