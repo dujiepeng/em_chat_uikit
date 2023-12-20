@@ -93,8 +93,6 @@ class _GroupChangeOwnerViewState extends State<GroupChangeOwnerView> {
       ),
     );
 
-    content = SafeArea(child: content);
-
     return content;
   }
 

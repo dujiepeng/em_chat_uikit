@@ -142,7 +142,8 @@ class _GroupMembersViewState extends State<GroupMembersView>
               ),
             ),
           ),
-      body: GroupMemberListView(
+      body: SafeArea(
+          child: GroupMemberListView(
         groupId: widget.groupId,
         controller: controller,
         itemBuilder: widget.listViewItemBuilder,
@@ -153,10 +154,8 @@ class _GroupMembersViewState extends State<GroupMembersView>
               onMemberTap(context, model.profile);
             },
         onSearchTap: widget.onSearchTap ?? onSearchTap,
-      ),
+      )),
     );
-
-    content = SafeArea(child: content);
 
     return content;
   }

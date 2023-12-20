@@ -1,10 +1,11 @@
+import 'dart:math';
+
 import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
-class GroupDeleteMembersView extends StatefulWidget {
-  GroupDeleteMembersView.arguments(GroupDeleteMembersViewArguments arguments,
-      {super.key})
+class GroupMentionView extends StatefulWidget {
+  GroupMentionView.arguments(GroupMentionViewArguments arguments, {super.key})
       : listViewItemBuilder = arguments.listViewItemBuilder,
         onSearchTap = arguments.onSearchTap,
         fakeSearchHideText = arguments.fakeSearchHideText,
@@ -15,7 +16,7 @@ class GroupDeleteMembersView extends StatefulWidget {
         controller = arguments.controller,
         groupId = arguments.groupId;
 
-  const GroupDeleteMembersView({
+  const GroupMentionView({
     required this.groupId,
     this.listViewItemBuilder,
     this.onSearchTap,
@@ -41,13 +42,16 @@ class GroupDeleteMembersView extends StatefulWidget {
   final Widget? listViewBackground;
 
   @override
-  State<GroupDeleteMembersView> createState() => _GroupDeleteMembersViewState();
+  State<GroupMentionView> createState() => _GroupMentionViewState();
 }
 
-class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
+class _GroupMentionViewState extends State<GroupMentionView> {
   final ValueNotifier<List<ChatUIKitProfile>> selectedProfiles =
       ValueNotifier<List<ChatUIKitProfile>>([]);
   late final GroupMemberListViewController controller;
+
+  bool enableMulti = false;
+
   @override
   void initState() {
     super.initState();
@@ -71,7 +75,7 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
                 Navigator.maybePop(context);
               },
               child: Text(
-                '移除群成员',
+                '@提及',
                 style: TextStyle(
                   color: theme.color.isDark
                       ? theme.color.neutralColor98
@@ -83,10 +87,15 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
             ),
             trailing: InkWell(
               onTap: () {
-                if (selectedProfiles.value.isEmpty) {
-                  return;
+                if (enableMulti) {
+                  if (selectedProfiles.value.isEmpty) {
+                    return;
+                  }
+                  Navigator.of(context).pop(selectedProfiles.value);
+                } else {
+                  enableMulti = true;
+                  setState(() {});
                 }
-                Navigator.of(context).pop(selectedProfiles.value);
               },
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(24, 5, 24, 5),
@@ -94,7 +103,9 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
                   valueListenable: selectedProfiles,
                   builder: (context, value, child) {
                     return Text(
-                      value.isEmpty ? '删除' : '删除(${value.length})',
+                      !enableMulti
+                          ? '多选'
+                          : '确认(${selectedProfiles.value.length})',
                       style: TextStyle(
                         color: theme.color.isDark
                             ? theme.color.primaryColor6
@@ -112,37 +123,62 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
         valueListenable: selectedProfiles,
         builder: (context, value, child) {
           return GroupMemberListView(
+            beforeWidgets: enableMulti
+                ? []
+                : [
+                    ChatUIKitListViewMoreItem(
+                      title: '新请求',
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          ChatUIKitRouteNames.newRequestsView,
+                          arguments: NewRequestsViewArguments(),
+                        );
+                      },
+                      trailing: Padding(
+                        padding: const EdgeInsets.only(right: 5),
+                        child: ChatUIKitBadge(
+                            ChatUIKitContext.instance.requestList().length),
+                      ),
+                    ),
+                  ],
             groupId: widget.groupId,
             controller: controller,
             itemBuilder: widget.listViewItemBuilder ??
                 (context, model) {
                   return InkWell(
                     onTap: () {
-                      tapContactInfo(model.profile);
+                      if (enableMulti) {
+                        tapContactInfo(model.profile);
+                      } else {
+                        Navigator.of(context).pop(model.profile);
+                      }
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 19.5, right: 15.5),
-                      child: Row(
-                        children: [
-                          value.contains(model.profile)
-                              ? Icon(
-                                  Icons.check_box,
-                                  size: 21,
-                                  color: theme.color.isDark
-                                      ? theme.color.primaryColor6
-                                      : theme.color.primaryColor5,
-                                )
-                              : Icon(
-                                  Icons.check_box_outline_blank,
-                                  size: 21,
-                                  color: theme.color.isDark
-                                      ? theme.color.neutralColor4
-                                      : theme.color.neutralColor7,
-                                ),
-                          ChatUIKitContactListViewItem(model)
-                        ],
-                      ),
-                    ),
+                    child: enableMulti
+                        ? Padding(
+                            padding:
+                                const EdgeInsets.only(left: 19.5, right: 15.5),
+                            child: Row(
+                              children: [
+                                value.contains(model.profile)
+                                    ? Icon(
+                                        Icons.check_box,
+                                        size: 21,
+                                        color: theme.color.isDark
+                                            ? theme.color.primaryColor6
+                                            : theme.color.primaryColor5,
+                                      )
+                                    : Icon(
+                                        Icons.check_box_outline_blank,
+                                        size: 21,
+                                        color: theme.color.isDark
+                                            ? theme.color.neutralColor4
+                                            : theme.color.neutralColor7,
+                                      ),
+                                ChatUIKitContactListViewItem(model)
+                              ],
+                            ),
+                          )
+                        : ChatUIKitContactListViewItem(model),
                   );
                 },
             searchHideText: widget.fakeSearchHideText,

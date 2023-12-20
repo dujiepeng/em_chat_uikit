@@ -80,7 +80,7 @@ class MessagesView extends StatefulWidget {
 
 class _MessagesViewState extends State<MessagesView> {
   late final MessageListViewController controller;
-  late final TextEditingController inputBarTextEditingController;
+  late final CustomTextEditingController inputBarTextEditingController;
 
   late final FocusNode focusNode;
   bool showEmoji = false;
@@ -96,6 +96,11 @@ class _MessagesViewState extends State<MessagesView> {
   void initState() {
     super.initState();
     inputBarTextEditingController = CustomTextEditingController();
+    inputBarTextEditingController.addListener(() {
+      if (inputBarTextEditingController.lastNeedMention) {
+        needMention();
+      }
+    });
     controller = MessageListViewController(profile: widget.profile);
     focusNode = widget.focusNode ?? FocusNode();
     _picker = ImagePicker();
@@ -104,6 +109,18 @@ class _MessagesViewState extends State<MessagesView> {
       if (focusNode.hasFocus) {
         showEmoji = false;
         setState(() {});
+      }
+    });
+  }
+
+  void needMention() {
+    clearAllType();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (controller.conversationType == ConversationType.GroupChat) {
+        Navigator.of(context).pushNamed(
+          ChatUIKitRouteNames.groupMentionView,
+          arguments: GroupMentionViewArguments(groupId: controller.profile.id),
+        );
       }
     });
   }
@@ -118,7 +135,6 @@ class _MessagesViewState extends State<MessagesView> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('MessagesView build');
     final theme = ChatUIKitTheme.of(context);
 
     Widget content = MessageListView(
@@ -303,8 +319,6 @@ class _MessagesViewState extends State<MessagesView> {
     content = Column(
       children: [header, content],
     );
-
-    content = SafeArea(child: content);
 
     return content;
   }

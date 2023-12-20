@@ -85,10 +85,8 @@ class _SearchContactsViewState extends State<SearchContactsView> {
       appBar: const ChatUIKitAppBar(
         showBackButton: false,
       ),
-      body: content,
+      body: SafeArea(child: content),
     );
-
-    // content = SafeArea(child: content);
 
     return content;
   }

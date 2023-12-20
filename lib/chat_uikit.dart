@@ -101,6 +101,7 @@ export 'ui/views/search_group_members_view.dart';
 export 'ui/views/show_image_view.dart';
 export 'ui/views/show_video_view.dart';
 export 'ui/views/current_user_info_view.dart';
+export 'ui/views/group_mention_view.dart';
 
 export 'ui/route/chat_uikit_route.dart';
 export 'ui/route/chat_uikit_route_names.dart';
@@ -125,5 +126,6 @@ export 'ui/route/view_arguments/show_image_view_arguments.dart';
 export 'ui/route/view_arguments/show_video_view_arguments.dart';
 export 'ui/route/view_arguments/current_user_info_view_arguments.dart';
 export 'ui/route/view_arguments/create_group_view_arguments.dart';
+export 'ui/route/view_arguments/group_mention_view_arguments.dart';
 
 export 'universal/chat_uikit_action_item.dart';

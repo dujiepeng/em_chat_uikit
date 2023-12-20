@@ -148,8 +148,6 @@ class _ChangeInfoViewState extends State<ChangeInfoView> {
       ),
     );
 
-    content = SafeArea(child: content);
-
     return content;
   }
 }

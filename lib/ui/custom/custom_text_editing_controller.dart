@@ -2,10 +2,12 @@ import 'package:flutter/widgets.dart';
 
 class CustomTextEditingController extends TextEditingController {
   final List<String> _userIds = [];
+  bool lastNeedMention = false;
+  int lastAtCount = 0;
 
-  int atCount = 0;
-
-  CustomTextEditingController({String? text}) : super(text: text);
+  CustomTextEditingController({
+    String? text,
+  }) : super(text: text);
 
   void addUserIds(String userId) {
     _userIds.add(userId);
@@ -16,15 +18,20 @@ class CustomTextEditingController extends TextEditingController {
   }
 
   @override
+  set value(TextEditingValue newValue) {
+    final currentCount =
+        newValue.text.split('').where((element) => element == "@").length;
+    lastNeedMention = currentCount == lastAtCount + 1;
+    lastAtCount = currentCount;
+    super.value = newValue;
+  }
+
+  @override
   TextSpan buildTextSpan({
     required BuildContext context,
     TextStyle? style,
     required bool withComposing,
   }) {
-    final currentCount =
-        text.split('').where((element) => element == "@").length;
-    if (currentCount == atCount + 1) {}
-
-    return TextSpan(text: text);
+    return TextSpan(text: text, style: style);
   }
 }

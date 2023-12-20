@@ -183,8 +183,6 @@ class _GroupAddMembersViewState extends State<GroupAddMembersView> {
       ),
     );
 
-    content = SafeArea(child: content);
-
     return content;
   }
 
