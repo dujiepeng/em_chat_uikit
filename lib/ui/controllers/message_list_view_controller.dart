@@ -66,6 +66,20 @@ class MessageListViewController extends ChangeNotifier
   }
 
   @override
+  void onMessageContentChanged(
+    Message message,
+    String operatorId,
+    int operationTime,
+  ) {
+    final index =
+        msgList.indexWhere((element) => element.msgId == message.msgId);
+    if (index != -1) {
+      msgList[index] = message;
+      notifyListeners();
+    }
+  }
+
+  @override
   void onMessagesReceived(List<Message> messages) {
     List<Message> list = [];
     for (var element in messages) {
@@ -286,5 +300,15 @@ class MessageListViewController extends ChangeNotifier
     hasNew = true;
     lastActionType = MessageLastActionType.send;
     notifyListeners();
+  }
+
+// support single chat.
+  void sendConversationsReadAck() {
+    if (conversationType == ConversationType.Chat) {
+      try {
+        ChatUIKit.instance.sendConversationReadAck(conversationId: profile.id);
+        // ignore: empty_catches
+      } catch (e) {}
+    }
   }
 }

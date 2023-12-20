@@ -83,7 +83,8 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         if (message == null) {
           return _emptyWidget(theme);
         }
-        MessageType type = MessageType.values[model.msgType];
+
+        MessageType type = model.msgType.getMessageType;
 
         switch (type) {
           case MessageType.TXT:
@@ -486,7 +487,8 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
   }
 
   Widget custom(ChatUIKitTheme theme, Message message) {
-    if (model.msgType == MessageType.CUSTOM.index && message.isCardMessage) {
+    if (model.msgType == MessageType.CUSTOM.toString() &&
+        message.isCardMessage) {
       Widget content = Row(
         mainAxisSize: MainAxisSize.min,
         children: [
