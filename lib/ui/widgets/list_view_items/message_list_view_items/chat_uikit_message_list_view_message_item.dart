@@ -20,6 +20,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
     this.isLeft,
     this.isPlaying = false,
     this.quoteBuilder,
+    this.onErrorTap,
     super.key,
   });
 
@@ -40,6 +41,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
   final VoidCallback? onBubbleLongPressed;
   final VoidCallback? onBubbleDoubleTap;
   final Widget Function(QuoteModel model)? quoteBuilder;
+  final VoidCallback? onErrorTap;
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +95,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
         textDirection: isLeft ?? left ? TextDirection.rtl : TextDirection.ltr,
         children: [
           ChatUIKitMessageStatusWidget(
+            onErrorTap: onErrorTap,
             size: 16,
             statusType: () {
               if (message.status == MessageStatus.CREATE ||

@@ -171,6 +171,7 @@ class _MessagesViewState extends State<MessagesView> {
       bubbleStyle: widget.bubbleStyle,
       itemBuilder: widget.itemBuilder,
       alertItemBuilder: widget.alertItemBuilder ?? alertItem,
+      onErrorTap: onErrorTap,
     );
 
     content = NotificationListener(
@@ -643,6 +644,10 @@ class _MessagesViewState extends State<MessagesView> {
         pushNextPage(profile);
       }
     }
+  }
+
+  void onErrorTap(Message message) {
+    controller.resendMessage(message);
   }
 
   void textMessageEdit(Message message) {

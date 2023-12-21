@@ -299,6 +299,15 @@ class MessageListViewController extends ChangeNotifier
     notifyListeners();
   }
 
+  Future<void> resendMessage(Message message) async {
+    msgList.removeWhere((element) => element.msgId == message.msgId);
+    final msg = await ChatUIKit.instance.sendMessage(message: message);
+    msgList.insert(0, msg);
+    hasNew = true;
+    lastActionType = MessageLastActionType.send;
+    notifyListeners();
+  }
+
 // support single chat.
   void sendConversationsReadAck() {
     if (conversationType == ConversationType.Chat) {

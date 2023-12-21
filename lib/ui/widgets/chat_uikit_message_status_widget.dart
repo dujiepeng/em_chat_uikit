@@ -13,11 +13,13 @@ class ChatUIKitMessageStatusWidget extends StatelessWidget {
   final MessageStatusType statusType;
   final Color? color;
   final double size;
+  final VoidCallback? onErrorTap;
 
   const ChatUIKitMessageStatusWidget({
     required this.statusType,
     this.color,
     this.size = 14,
+    this.onErrorTap,
     super.key,
   });
 
@@ -85,13 +87,16 @@ class ChatUIKitMessageStatusWidget extends StatelessWidget {
   }
 
   Widget _fail(ChatUIKitTheme theme) {
-    return Icon(
-      Icons.error_outline,
-      size: size,
-      color: color ??
-          (theme.color.isDark
-              ? theme.color.neutralColor7
-              : theme.color.neutralColor7),
+    return InkWell(
+      onTap: onErrorTap,
+      child: Icon(
+        Icons.error_outline,
+        size: size,
+        color: color ??
+            (theme.color.isDark
+                ? theme.color.neutralColor7
+                : theme.color.neutralColor7),
+      ),
     );
   }
 

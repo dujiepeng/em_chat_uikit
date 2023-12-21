@@ -49,7 +49,7 @@ class _ChatUIKitImageMessageWidgetState
   }
 
   @override
-  void onError(String msgId, Message message, ChatError error) {
+  void onError(String msgId, Message msg, ChatError error) {
     if (msgId == message.msgId) {
       downloading = false;
       downloadError = true;
