@@ -84,7 +84,7 @@ class ChatUIKitRoute {
     ChatUIKitRouteNames.reportMessageView: ((context, arguments) {
       return ReportMessageView.arguments(
           arguments as ReportMessageViewArguments);
-    })
+    }),
   };
 
   static Route? generateRoute<T extends Object>(RouteSettings settings) {

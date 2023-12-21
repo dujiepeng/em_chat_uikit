@@ -20,7 +20,7 @@ class GroupItemModel with ChatUIKitListItemModelBase, NeedSearch {
   }
 
   static GroupItemModel fromGroup(Group group) {
-    ChatUIKitProfile profile = ChatUIKitProfile.group(
+    ChatUIKitProfile profile = ChatUIKitProfile.groupMember(
       id: group.groupId,
       name: group.name,
     );

@@ -22,7 +22,7 @@ class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
     int unreadCount = await conversation.unreadCount();
     Message? lastMessage = await conversation.latestMessage();
     ChatUIKitProfileType type = conversation.type == ConversationType.Chat
-        ? ChatUIKitProfileType.chat
+        ? ChatUIKitProfileType.singleChat
         : ChatUIKitProfileType.groupChat;
 
     ChatUIKitProfile profile =

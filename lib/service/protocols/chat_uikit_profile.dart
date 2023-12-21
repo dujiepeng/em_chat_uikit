@@ -1,6 +1,6 @@
 enum ChatUIKitProfileType {
   /// Profile type for chat
-  chat,
+  singleChat,
 
   /// Profile type for groupChat
   groupChat,
@@ -9,7 +9,7 @@ enum ChatUIKitProfileType {
   contact,
 
   /// Profile type for group
-  group,
+  groupMember,
 }
 
 class ChatUIKitProfile {
@@ -51,7 +51,7 @@ class ChatUIKitProfile {
           type: ChatUIKitProfileType.groupChat,
         );
 
-  ChatUIKitProfile.group({
+  ChatUIKitProfile.groupMember({
     required String id,
     String? name,
     String? avatarUrl,
@@ -59,10 +59,10 @@ class ChatUIKitProfile {
           id: id,
           name: name,
           avatarUrl: avatarUrl,
-          type: ChatUIKitProfileType.group,
+          type: ChatUIKitProfileType.groupMember,
         );
 
-  ChatUIKitProfile.chat({
+  ChatUIKitProfile.singleChat({
     required String id,
     String? name,
     String? avatarUrl,
@@ -70,7 +70,7 @@ class ChatUIKitProfile {
           id: id,
           name: name,
           avatarUrl: avatarUrl,
-          type: ChatUIKitProfileType.chat,
+          type: ChatUIKitProfileType.singleChat,
         );
 
   ChatUIKitProfile copy({

@@ -36,9 +36,9 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
   final void Function(Message message)? onItemTap;
   final void Function(Message message)? onItemLongPress;
   final void Function(Message message)? onDoubleTap;
-  final void Function(ChatUIKitProfile profile)? onAvatarTap;
-  final void Function(ChatUIKitProfile profile)? onAvatarLongPressed;
-  final void Function(ChatUIKitProfile profile)? onNicknameTap;
+  final void Function(Message message)? onAvatarTap;
+  final void Function(Message message)? onAvatarLongPressed;
+  final void Function(Message message)? onNicknameTap;
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
   final List<ChatUIKitBottomSheetItem>? moreActionItems;
   final List<ChatUIKitBottomSheetItem>? onItemLongPressActions;

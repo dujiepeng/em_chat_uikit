@@ -27,7 +27,7 @@ class MessageListViewController extends ChangeNotifier
     ChatUIKit.instance.addObserver(this);
     conversationType = () {
       if (profile.type == ChatUIKitProfileType.groupChat ||
-          profile.type == ChatUIKitProfileType.group) {
+          profile.type == ChatUIKitProfileType.groupMember) {
         return ConversationType.GroupChat;
       } else {
         return ConversationType.Chat;
@@ -123,7 +123,7 @@ class MessageListViewController extends ChangeNotifier
 
   ChatType get chatType {
     if (profile.type == ChatUIKitProfileType.groupChat ||
-        profile.type == ChatUIKitProfileType.group) {
+        profile.type == ChatUIKitProfileType.groupMember) {
       return ChatType.GroupChat;
     } else {
       return ChatType.Chat;

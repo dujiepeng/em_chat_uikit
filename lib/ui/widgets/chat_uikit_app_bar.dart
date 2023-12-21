@@ -145,6 +145,7 @@ class _ChatUIKitAppBarState extends State<ChatUIKitAppBar> {
 
     if (leadingWidgets.isNotEmpty) {
       leading = Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: leadingWidgets,
       );
@@ -155,7 +156,7 @@ class _ChatUIKitAppBarState extends State<ChatUIKitAppBar> {
       middle: middle,
       trailing: widget.trailing,
       centerMiddle: widget.centerTitle,
-      middleSpacing: NavigationToolbar.kMiddleSpacing,
+      middleSpacing: 0,
     );
 
     content = SafeArea(

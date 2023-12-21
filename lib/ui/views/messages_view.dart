@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit/tools/chat_uikit_insert_message_tool.dart';
 import 'package:em_chat_uikit/ui/custom/custom_text_editing_controller.dart';
@@ -35,7 +36,6 @@ class MessagesView extends StatefulWidget {
     this.appBar,
     this.inputBar,
     this.controller,
-    super.key,
     this.showAvatar = true,
     this.showNickname = true,
     this.onItemTap,
@@ -53,6 +53,7 @@ class MessagesView extends StatefulWidget {
     this.moreActionItems,
     this.replyBarBuilder,
     this.quoteBuilder,
+    super.key,
   });
 
   final ChatUIKitProfile profile;
@@ -64,9 +65,9 @@ class MessagesView extends StatefulWidget {
   final void Function(Message message)? onItemTap;
   final void Function(Message message)? onItemLongPress;
   final void Function(Message message)? onDoubleTap;
-  final void Function(ChatUIKitProfile profile)? onAvatarTap;
-  final void Function(ChatUIKitProfile profile)? onAvatarLongPress;
-  final void Function(ChatUIKitProfile profile)? onNicknameTap;
+  final void Function(Message message)? onAvatarTap;
+  final void Function(Message message)? onAvatarLongPress;
+  final void Function(Message message)? onNicknameTap;
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
   final MessageItemBuilder? itemBuilder;
   final MessageItemBuilder? alertItemBuilder;
@@ -91,10 +92,14 @@ class _MessagesViewState extends State<MessagesView> {
   bool showMoreBtn = true;
   late final ImagePicker _picker;
 
+  late final AudioPlayer _player;
+
   bool messageEditCanSend = false;
   TextEditingController? editBarTextEditingController;
   Message? editMessage;
   Message? replyMessage;
+
+  Message? _playingMessage;
 
   @override
   void initState() {
@@ -108,6 +113,7 @@ class _MessagesViewState extends State<MessagesView> {
     controller = MessageListViewController(profile: widget.profile);
     focusNode = widget.focusNode ?? FocusNode();
     _picker = ImagePicker();
+    _player = AudioPlayer();
     focusNode.addListener(() {
       if (editMessage != null) return;
       if (focusNode.hasFocus) {
@@ -141,6 +147,7 @@ class _MessagesViewState extends State<MessagesView> {
   void dispose() {
     editBarTextEditingController?.dispose();
     inputBarTextEditingController.dispose();
+    _player.dispose();
     focusNode.dispose();
     super.dispose();
   }
@@ -148,7 +155,7 @@ class _MessagesViewState extends State<MessagesView> {
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
-    controller.markAllMessageAsRead();
+
     Widget content = MessageListView(
       quoteBuilder: widget.quoteBuilder ?? quoteWidget,
       profile: widget.profile,
@@ -158,7 +165,7 @@ class _MessagesViewState extends State<MessagesView> {
       onItemTap: widget.onItemTap ?? bubbleTab,
       onItemLongPress: widget.onItemLongPress ?? onItemLongPress,
       onDoubleTap: widget.onDoubleTap,
-      onAvatarTap: widget.onAvatarTap,
+      onAvatarTap: widget.onAvatarTap ?? avatarTap,
       onAvatarLongPressed: widget.onAvatarLongPress,
       onNicknameTap: widget.onNicknameTap,
       bubbleStyle: widget.bubbleStyle,
@@ -218,7 +225,7 @@ class _MessagesViewState extends State<MessagesView> {
             title: widget.profile.showName,
             leading: InkWell(
               onTap: () {
-                popToInfoPage();
+                pushNextPage(widget.profile);
               },
               child: ChatUIKitAvatar(
                 avatarUrl: widget.profile.avatarUrl,
@@ -264,13 +271,11 @@ class _MessagesViewState extends State<MessagesView> {
 
   Widget alertItem(
     BuildContext context,
-    ChatUIKitProfile profile,
     Message message,
   ) {
     if (message.isTimeMessageAlert) {
       Widget? content = widget.alertItemBuilder?.call(
         context,
-        widget.profile,
         message,
       );
       content ??= ChatUIKitMessageListViewAlertItem(
@@ -287,7 +292,6 @@ class _MessagesViewState extends State<MessagesView> {
       Map<String, String>? map = (message.body as CustomMessageBody).params;
       Widget? content = widget.alertItemBuilder?.call(
         context,
-        widget.profile,
         message,
       );
       content ??= ChatUIKitMessageListViewAlertItem(
@@ -302,7 +306,6 @@ class _MessagesViewState extends State<MessagesView> {
       Map<String, String>? map = (message.body as CustomMessageBody).params;
       Widget? content = widget.alertItemBuilder?.call(
         context,
-        widget.profile,
         message,
       );
       content ??= ChatUIKitMessageListViewAlertItem(
@@ -310,14 +313,17 @@ class _MessagesViewState extends State<MessagesView> {
           MessageAlertAction(
             text: map?[alertCreateGroupMessageOwnerKey] ?? '',
             onTap: () {
-              // pushToCurrentUserDetail(profile);
+              ChatUIKitProfile profile = ChatUIKitProvider.instance
+                  .groupMemberProfile(message.conversationId!,
+                      map![alertCreateGroupMessageOwnerKey]!);
+              pushNextPage(profile);
             },
           ),
           MessageAlertAction(text: ' 创建群组 '),
           MessageAlertAction(
             text: map?[alertCreateGroupMessageGroupNameKey] ?? '',
             onTap: () {
-              popToInfoPage();
+              pushNextPage(widget.profile);
             },
           ),
         ],
@@ -438,10 +444,10 @@ class _MessagesViewState extends State<MessagesView> {
             statusChangeCallback: (type, duration, path) {
               if (type == ChatUIKitVoiceBarStatusType.playing) {
                 // 播放录音
-                debugPrint('播放录音');
+                previewVoice(true, path: path);
               } else if (type == ChatUIKitVoiceBarStatusType.ready) {
                 // 停止播放
-                debugPrint('停止播放');
+                previewVoice(false);
               }
             },
           );
@@ -597,40 +603,11 @@ class _MessagesViewState extends State<MessagesView> {
     showChatUIKitBottomSheet(context: context, items: items);
   }
 
-  void popToInfoPage() {
-    if (controller.conversationType == ConversationType.GroupChat) {
-      Navigator.of(context).pushNamed(
-        ChatUIKitRouteNames.groupDetailsView,
-        arguments: GroupDetailsViewArguments(
-          profile: widget.profile,
-          actions: [
-            ChatUIKitActionItem(
-              title: '发消息',
-              icon: 'assets/images/chat.png',
-              onTap: (context) {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ),
-      );
-    } else {
-      Navigator.of(context).pushNamed(
-        ChatUIKitRouteNames.contactDetailsView,
-        arguments: ContactDetailsViewArguments(
-          profile: widget.profile,
-          actions: [
-            ChatUIKitActionItem(
-              title: '发消息',
-              icon: 'assets/images/chat.png',
-              onTap: (context) {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ),
-      );
-    }
+  void avatarTap(Message message) async {
+    ChatUIKitProfile profile = ChatUIKitProvider.instance.conversationProfile(
+        message.from!, ConversationType.values[message.chatType.index]);
+
+    pushNextPage(profile);
   }
 
   void bubbleTab(Message message) async {
@@ -646,6 +623,9 @@ class _MessagesViewState extends State<MessagesView> {
       );
     }
 
+    // TODO:播放音频
+    if (message.bodyType == MessageType.VOICE) {}
+
     if (message.bodyType == MessageType.CUSTOM && message.isCardMessage) {
       String? userId =
           (message.body as CustomMessageBody).params?[cardContactUserId];
@@ -660,21 +640,9 @@ class _MessagesViewState extends State<MessagesView> {
           avatarUrl: avatar,
           name: name,
         );
-
-        if (userId == ChatUIKit.instance.currentUserId()) {
-          pushToCurrentUserDetail(profile);
-        } else {
-          List contacts = await ChatUIKit.instance.getAllContacts();
-          if (contacts.contains(userId)) {
-            pushToContactDetail(profile);
-          } else {
-            pushRequestDetail(profile);
-          }
-        }
+        pushNextPage(profile);
       }
     }
-    // TODO:播放音频
-    debugPrint('message tapped');
   }
 
   void textMessageEdit(Message message) {
@@ -840,14 +808,118 @@ class _MessagesViewState extends State<MessagesView> {
     );
   }
 
-  void pushToCurrentUserDetail(ChatUIKitProfile profile) {
+  void previewVoice(bool play, {String? path}) async {
+    if (_playingMessage != null) {
+      _playingMessage = null;
+      setState(() {});
+    }
+    await _player.stop();
+
+    if (play && path?.isNotEmpty == true) {
+      await _player.play(DeviceFileSource(path!));
+    } else {
+      await _player.stop();
+    }
+  }
+
+  void reportMessage(Message message) {
+    Navigator.of(context).pushNamed(
+      ChatUIKitRouteNames.reportMessageView,
+      arguments: ReportMessageViewArguments(
+        messageId: message.msgId,
+        reportReasons: [
+          '不受欢迎的商业内容或垃圾内容',
+          '色情或露骨内容,',
+          '虐待儿童',
+          '仇恨言论或过于写实的暴力内容',
+          '宣扬恐怖主义',
+          '骚扰或欺凌',
+          '自杀或自残',
+          '虚假信息',
+          '其他'
+        ],
+      ),
+    );
+  }
+
+  void pushNextPage(ChatUIKitProfile profile) async {
+    // 如果是自己
+    if (profile.id == ChatUIKit.instance.currentUserId()) {
+      pushToCurrentUser(profile);
+    }
+    // 如果是当前聊天对象
+    else if (controller.profile.id == profile.id) {
+      // 当前聊天对象是群聊
+      if (controller.conversationType == ConversationType.GroupChat) {
+        pushToGroupInfo(profile);
+      }
+      // 当前聊天对象，是单聊
+      else {
+        pushCurrentChatter(profile);
+      }
+    }
+    // 以上都不是时，检查通讯录
+    else {
+      List<String> contacts = await ChatUIKit.instance.getAllContacts();
+      // 是好友，不是当前聊天对象，跳转到好友页面，并可以发消息
+      if (contacts.contains(profile.id)) {
+        pushNewContactDetail(profile);
+      }
+      // 不是好友，跳转到添加好友页面
+      else {
+        pushRequestDetail(profile);
+      }
+    }
+  }
+
+// 处理点击自己头像和点击自己名片
+  void pushToCurrentUser(ChatUIKitProfile profile) {
     Navigator.of(context).pushNamed(
       ChatUIKitRouteNames.currentUserInfoView,
       arguments: CurrentUserInfoViewArguments(profile: profile),
     );
   }
 
-  void pushToContactDetail(ChatUIKitProfile profile) {
+  // 处理当前聊天对象，点击appBar头像，点击对方消息头像，点击名片
+  void pushCurrentChatter(ChatUIKitProfile profile) {
+    Navigator.of(context).pushNamed(
+      ChatUIKitRouteNames.contactDetailsView,
+      arguments: ContactDetailsViewArguments(
+        profile: widget.profile,
+        actions: [
+          ChatUIKitActionItem(
+            title: '发消息',
+            icon: 'assets/images/chat.png',
+            onTap: (context) {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 处理当前聊天对象是群时
+  void pushToGroupInfo(ChatUIKitProfile profile) {
+    Navigator.of(context).pushNamed(
+      ChatUIKitRouteNames.groupDetailsView,
+      arguments: GroupDetailsViewArguments(
+        profile: widget.profile,
+        actions: [
+          ChatUIKitActionItem(
+            title: '发消息',
+            icon: 'assets/images/chat.png',
+            onTap: (context) {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 处理不是当前聊天对象的好友
+  void pushNewContactDetail(ChatUIKitProfile profile) {
     Navigator.of(context).pushNamed(
       ChatUIKitRouteNames.contactDetailsView,
       arguments: ContactDetailsViewArguments(
@@ -856,7 +928,7 @@ class _MessagesViewState extends State<MessagesView> {
           ChatUIKitActionItem(
             title: '发消息',
             icon: 'assets/images/chat.png',
-            onTap: (context) {
+            onTap: (ctx) {
               Navigator.of(context).pushNamed(
                 ChatUIKitRouteNames.messagesView,
                 arguments: MessagesViewArguments(
@@ -870,28 +942,11 @@ class _MessagesViewState extends State<MessagesView> {
     );
   }
 
+  // 处理名片信息非好友
   void pushRequestDetail(ChatUIKitProfile profile) {
     Navigator.of(context).pushNamed(
       ChatUIKitRouteNames.newRequestDetailsView,
       arguments: NewRequestDetailsViewArguments(profile: profile),
     );
-  }
-
-  void reportMessage(Message message) {
-    Navigator.of(context).pushNamed(ChatUIKitRouteNames.reportMessageView,
-        arguments: ReportMessageViewArguments(
-          messageId: message.msgId,
-          reportReasons: [
-            '不受欢迎的商业内容或垃圾内容',
-            '色情或露骨内容,',
-            '虐待儿童',
-            '仇恨言论或过于写实的暴力内容',
-            '宣扬恐怖主义',
-            '骚扰或欺凌',
-            '自杀或自残',
-            '虚假信息',
-            '其他'
-          ],
-        ));
   }
 }

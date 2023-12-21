@@ -24,7 +24,7 @@ class GroupDetailsView extends StatefulWidget {
 class _GroupDetailsViewState extends State<GroupDetailsView>
     with GroupObserver {
   ValueNotifier<bool> isNotDisturb = ValueNotifier<bool>(false);
-  ValueNotifier<int> memberCount = ValueNotifier<int>(0);
+  int memberCount = 0;
   Group? group;
   late final List<ChatUIKitActionItem>? actions;
   @override
@@ -38,6 +38,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     actions = widget.actions;
     fetchInfo();
     fetchGroup();
+    fetchMembersAttrs();
   }
 
   @override
@@ -48,12 +49,16 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
 
   @override
   void onMemberJoinedFromGroup(String groupId, String member) {
-    memberCount.value = memberCount.value + 1;
+    if (groupId == widget.profile.id) {
+      memberCount += 1;
+    }
   }
 
   @override
   void onMemberExitedFromGroup(String groupId, String member) {
-    memberCount.value = memberCount.value - 1;
+    if (groupId == widget.profile.id) {
+      memberCount -= 1;
+    }
   }
 
   void fetchGroup() async {
@@ -61,8 +66,8 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
       group = await ChatUIKit.instance.getGroup(groupId: widget.profile.id);
       group ??=
           await ChatUIKit.instance.fetchGroupInfo(groupId: widget.profile.id);
-      debugPrint(group?.memberCount.toString());
-      memberCount.value = group?.memberCount ?? 0;
+      memberCount = group?.memberCount ?? 0;
+      setState(() {});
       // ignore: empty_catches
     } catch (e) {}
   }
@@ -73,6 +78,13 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     Map<String, ChatSilentModeResult> map = await ChatUIKit.instance
         .fetchSilentModel(conversations: [conversation]);
     isNotDisturb.value = map.values.first.remindType != ChatPushRemindType.ALL;
+  }
+
+  void fetchMembersAttrs() async {
+    // TODO 缓存用户属性
+    await ChatUIKit.instance.fetchGroupMemberAttributes(
+      groupId: widget.profile.id,
+    );
   }
 
   @override
@@ -199,16 +211,21 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  action.title,
-                  style: TextStyle(
-                    fontSize: theme.font.bodySmall.fontSize,
-                    fontWeight: theme.font.bodySmall.fontWeight,
-                    color: theme.color.isDark
-                        ? theme.color.primaryColor6
-                        : theme.color.primaryColor5,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Text(
+                    action.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: theme.font.bodySmall.fontSize,
+                      fontWeight: theme.font.bodySmall.fontWeight,
+                      color: theme.color.isDark
+                          ? theme.color.primaryColor6
+                          : theme.color.primaryColor5,
+                    ),
                   ),
-                ),
+                )
               ],
             ),
           ),
@@ -260,25 +277,22 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ValueListenableBuilder(
-                    valueListenable: memberCount,
-                    builder: (context, value, child) {
-                      if (memberCount.value == 0) {
-                        return const SizedBox();
-                      } else {
-                        return Text(
-                          '${memberCount.value}人',
-                          style: TextStyle(
-                            color: theme.color.isDark
-                                ? theme.color.neutralColor6
-                                : theme.color.neutralColor5,
-                            fontSize: theme.font.labelLarge.fontSize,
-                            fontWeight: theme.font.labelLarge.fontWeight,
-                          ),
-                        );
-                      }
-                    },
-                  ),
+                  () {
+                    if (memberCount == 0) {
+                      return const SizedBox();
+                    } else {
+                      return Text(
+                        '$memberCount人',
+                        style: TextStyle(
+                          color: theme.color.isDark
+                              ? theme.color.neutralColor6
+                              : theme.color.neutralColor5,
+                          fontSize: theme.font.labelLarge.fontSize,
+                          fontWeight: theme.font.labelLarge.fontWeight,
+                        ),
+                      );
+                    }
+                  }(),
                   Icon(
                     Icons.arrow_forward_ios,
                     color: theme.color.isDark
@@ -293,7 +307,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         ),
         InkWell(
           onTap: () {
-            changeInfo('我在本群的昵称', hint: '请输入');
+            changeGroupNickname();
           },
           child: ChatUIKitDetailsListViewItem(
             title: '我在本群昵称',
@@ -343,81 +357,88 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
           onTap: clearAllHistory,
           child: const ChatUIKitDetailsListViewItem(title: '清空聊天记录'),
         ),
-        Container(height: 20),
-        InkWell(
-          onTap: () {
-            changeInfo('修改群名称', hint: '请输入');
-          },
-          child: ChatUIKitDetailsListViewItem(
-            title: '群名称',
-            trailing: SizedBox(
-              width: 100,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: Text(
-                      group?.name ?? "",
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: TextStyle(
-                        color: theme.color.isDark
-                            ? theme.color.neutralColor6
-                            : theme.color.neutralColor5,
-                        fontSize: theme.font.labelLarge.fontSize,
-                        fontWeight: theme.font.labelLarge.fontWeight,
+        if (group?.permissionType == GroupPermissionType.Owner) ...[
+          Container(height: 20),
+          InkWell(
+            onTap: () {
+              changeGroupName();
+            },
+            child: ChatUIKitDetailsListViewItem(
+              title: '群名称',
+              trailing: SizedBox(
+                width: 100,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        group?.name ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          color: theme.color.isDark
+                              ? theme.color.neutralColor6
+                              : theme.color.neutralColor5,
+                          fontSize: theme.font.labelLarge.fontSize,
+                          fontWeight: theme.font.labelLarge.fontWeight,
+                        ),
                       ),
                     ),
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: theme.color.isDark
-                        ? theme.color.neutralColor5
-                        : theme.color.neutralColor7,
-                    size: 18,
-                  )
-                ],
+                    const SizedBox(width: 2),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: theme.color.isDark
+                          ? theme.color.neutralColor5
+                          : theme.color.neutralColor7,
+                      size: 18,
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        InkWell(
-          onTap: () {
-            changeInfo('修改群描述', hint: '请输入');
-          },
-          child: ChatUIKitDetailsListViewItem(
-            title: '群描述',
-            trailing: SizedBox(
-              width: 100,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: Text(
-                      group?.description ?? "",
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: TextStyle(
-                        color: theme.color.isDark
-                            ? theme.color.neutralColor6
-                            : theme.color.neutralColor5,
-                        fontSize: theme.font.labelLarge.fontSize,
-                        fontWeight: theme.font.labelLarge.fontWeight,
+          InkWell(
+            onTap: () {
+              changeGroupDesc();
+            },
+            child: ChatUIKitDetailsListViewItem(
+              title: '群描述',
+              trailing: SizedBox(
+                width: 100,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        group?.description ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        maxLines: 1,
+                        style: TextStyle(
+                          color: theme.color.isDark
+                              ? theme.color.neutralColor6
+                              : theme.color.neutralColor5,
+                          fontSize: theme.font.labelLarge.fontSize,
+                          fontWeight: theme.font.labelLarge.fontWeight,
+                        ),
                       ),
                     ),
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: theme.color.isDark
-                        ? theme.color.neutralColor5
-                        : theme.color.neutralColor7,
-                    size: 18,
-                  )
-                ],
+                    const SizedBox(width: 2),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: theme.color.isDark
+                          ? theme.color.neutralColor5
+                          : theme.color.neutralColor7,
+                      size: 18,
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-        ),
+        ]
       ],
     );
 
@@ -632,12 +653,12 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     );
   }
 
-  void changeInfo(String title, {String? hint}) {
+  void changeGroupNickname() {
     Navigator.of(context)
         .pushNamed(ChatUIKitRouteNames.changeInfoView,
             arguments: ChangeInfoViewArguments(
-                title: title,
-                hint: hint,
+                title: '我在本群的昵称',
+                maxLength: 32,
                 inputTextCallback: () async {
                   if (group?.groupId != null) {
                     Map<String, String> map = await ChatUIKit.instance
@@ -651,15 +672,75 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         .then((value) {
       if (value != null) {
         if (value is String) {
+          ChatUIKit.instance.setGroupMemberAttributes(
+              groupId: group!.groupId,
+              userId: ChatUIKit.instance.currentUserId(),
+              attributes: {userGroupName: value}).then((_) {
+            fetchMembersAttrs();
+          }).catchError(
+            (e) {
+              debugPrint(e.toString());
+            },
+          );
+        }
+      }
+    });
+  }
+
+  void changeGroupName() {
+    Navigator.of(context)
+        .pushNamed(ChatUIKitRouteNames.changeInfoView,
+            arguments: ChangeInfoViewArguments(
+                title: '修改群名称',
+                maxLength: 32,
+                inputTextCallback: () async {
+                  if (group?.groupId != null) {
+                    return group!.name ?? '';
+                  }
+                  return null;
+                }))
+        .then((value) {
+      if (value != null) {
+        if (value is String) {
           ChatUIKit.instance
-              .setGroupMemberAttributes(
-                  groupId: group!.groupId,
-                  userId: ChatUIKit.instance.currentUserId(),
-                  attributes: {userGroupName: value})
-              .then((_) {})
-              .catchError((e) {
-                debugPrint(e.toString());
-              });
+              .changeGroupName(groupId: group!.groupId, name: value)
+              .then((_) {
+            fetchGroup();
+          }).catchError((e) {
+            debugPrint(e.toString());
+          });
+        }
+      }
+    });
+  }
+
+  void changeGroupDesc() {
+    Navigator.of(context)
+        .pushNamed(
+      ChatUIKitRouteNames.changeInfoView,
+      arguments: ChangeInfoViewArguments(
+        title: '修改群描述',
+        maxLength: 512,
+        inputTextCallback: () async {
+          if (group?.groupId != null) {
+            if (group?.groupId != null) {
+              return group!.description ?? '';
+            }
+          }
+          return null;
+        },
+      ),
+    )
+        .then((value) {
+      if (value != null) {
+        if (value is String) {
+          ChatUIKit.instance
+              .changeGroupDescription(groupId: group!.groupId, desc: value)
+              .then((_) {
+            fetchGroup();
+          }).catchError((e) {
+            debugPrint(e.toString());
+          });
         }
       }
     });

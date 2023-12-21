@@ -9,7 +9,7 @@ export 'package:file_picker/file_picker.dart';
 export 'chat_uikit_context.dart';
 export 'chat_uikit_settings.dart';
 
-export 'provider/profile.dart';
+export 'provider/chat_uikit_provider.dart';
 
 export 'sdk_wrapper/chat_sdk_wrapper.dart';
 

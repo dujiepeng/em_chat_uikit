@@ -334,7 +334,7 @@ class _ConversationsViewState extends State<ConversationsView> {
           await ChatUIKitInsertMessageTool.insertCreateGroupMessage(
             group: group,
           );
-          pushNewConversation(ChatUIKitProfile.group(
+          pushNewConversation(ChatUIKitProfile.groupMember(
             id: group.groupId,
             name: group.name,
           ));

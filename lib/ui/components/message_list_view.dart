@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 typedef MessageItemBuilder = Widget? Function(
   BuildContext context,
-  ChatUIKitProfile profile,
   Message message,
 );
 
@@ -31,9 +30,9 @@ class MessageListView extends StatefulWidget {
   final void Function(Message message)? onItemTap;
   final void Function(Message message)? onItemLongPress;
   final void Function(Message message)? onDoubleTap;
-  final void Function(ChatUIKitProfile profile)? onAvatarTap;
-  final void Function(ChatUIKitProfile profile)? onAvatarLongPressed;
-  final void Function(ChatUIKitProfile profile)? onNicknameTap;
+  final void Function(Message message)? onAvatarTap;
+  final void Function(Message message)? onAvatarLongPressed;
+  final void Function(Message message)? onNicknameTap;
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
   final MessageItemBuilder? itemBuilder;
   final MessageItemBuilder? alertItemBuilder;
@@ -152,7 +151,6 @@ class _MessageListViewState extends State<MessageListView> {
     if (message.isTimeMessageAlert) {
       Widget? content = widget.alertItemBuilder?.call(
         context,
-        widget.profile,
         message,
       );
       content ??= ChatUIKitMessageListViewAlertItem(
@@ -169,7 +167,6 @@ class _MessageListViewState extends State<MessageListView> {
       Map<String, String>? map = (message.body as CustomMessageBody).params;
       Widget? content = widget.alertItemBuilder?.call(
         context,
-        widget.profile,
         message,
       );
       content ??= ChatUIKitMessageListViewAlertItem(
@@ -184,7 +181,6 @@ class _MessageListViewState extends State<MessageListView> {
       Map<String, String>? map = (message.body as CustomMessageBody).params;
       Widget? content = widget.alertItemBuilder?.call(
         context,
-        widget.profile,
         message,
       );
       content ??= ChatUIKitMessageListViewAlertItem(
@@ -198,8 +194,7 @@ class _MessageListViewState extends State<MessageListView> {
       return content;
     }
 
-    Widget? content =
-        widget.itemBuilder?.call(context, widget.profile, message);
+    Widget? content = widget.itemBuilder?.call(context, message);
     content ??= ChatUIKitMessageListViewMessageItem(
       bubbleStyle: widget.bubbleStyle,
       key: ValueKey(message.msgId),
@@ -207,10 +202,10 @@ class _MessageListViewState extends State<MessageListView> {
       quoteBuilder: widget.quoteBuilder,
       showNickname: widget.showNickname,
       onAvatarTap: () {
-        widget.onAvatarTap?.call(widget.profile);
+        widget.onAvatarTap?.call(message);
       },
       onAvatarLongPressed: () {
-        widget.onAvatarLongPressed?.call(widget.profile);
+        widget.onAvatarLongPressed?.call(message);
       },
       onBubbleDoubleTap: () {
         widget.onDoubleTap?.call(message);
@@ -222,7 +217,7 @@ class _MessageListViewState extends State<MessageListView> {
         widget.onItemTap?.call(message);
       },
       onNicknameTap: () {
-        widget.onNicknameTap?.call(widget.profile);
+        widget.onNicknameTap?.call(message);
       },
       message: message,
     );

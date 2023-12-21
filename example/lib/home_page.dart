@@ -40,12 +40,12 @@ class _HomePageState extends State<HomePage>
     super.build(context);
     final theme = ChatUIKitTheme.of(context);
     Widget content = Scaffold(
-      resizeToAvoidBottomInset: false,
       body: IndexedStack(
         index: _currentIndex,
         children: _pages(context),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        elevation: 1,
         selectedLabelStyle: TextStyle(
           fontSize: ChatUIKitTheme.of(context).font.labelExtraSmall.fontSize,
           fontWeight:
