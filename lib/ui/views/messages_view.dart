@@ -211,6 +211,14 @@ class _MessagesViewState extends State<MessagesView> {
       appBar: widget.appBar ??
           ChatUIKitAppBar(
             title: widget.profile.showName,
+            leading: InkWell(
+              onTap: () {
+                popToInfoPage();
+              },
+              child: ChatUIKitAvatar(
+                avatarUrl: widget.profile.avatarUrl,
+              ),
+            ),
           ),
       // body: content,
       body: content,
@@ -509,6 +517,42 @@ class _MessagesViewState extends State<MessagesView> {
     }
 
     showChatUIKitBottomSheet(context: context, items: items);
+  }
+
+  void popToInfoPage() {
+    if (controller.conversationType == ConversationType.GroupChat) {
+      Navigator.of(context).pushNamed(
+        ChatUIKitRouteNames.groupDetailsView,
+        arguments: GroupDetailsViewArguments(
+          profile: widget.profile,
+          actions: [
+            ChatUIKitActionItem(
+              title: '发消息',
+              icon: 'assets/images/chat.png',
+              onTap: (context) {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+    } else {
+      Navigator.of(context).pushNamed(
+        ChatUIKitRouteNames.contactDetailsView,
+        arguments: ContactDetailsViewArguments(
+          profile: widget.profile,
+          actions: [
+            ChatUIKitActionItem(
+              title: '发消息',
+              icon: 'assets/images/chat.png',
+              onTap: (context) {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   void bubbleTab(Message message) async {
