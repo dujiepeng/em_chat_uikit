@@ -70,7 +70,7 @@ class _GroupMentionViewState extends State<GroupMentionView> {
             showBackButton: true,
             leading: InkWell(
               onTap: () {
-                Navigator.maybePop(context);
+                Navigator.of(context).pop();
               },
               child: Text(
                 '@提及',
@@ -83,62 +83,29 @@ class _GroupMentionViewState extends State<GroupMentionView> {
                 ),
               ),
             ),
-            trailing: InkWell(
-              onTap: () {
-                if (enableMulti) {
-                  if (selectedProfiles.value.isEmpty) {
-                    return;
-                  }
-                  Navigator.of(context).pop(selectedProfiles.value);
-                } else {
-                  enableMulti = true;
-                  setState(() {});
-                }
-              },
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(24, 5, 24, 5),
-                child: ValueListenableBuilder(
-                  valueListenable: selectedProfiles,
-                  builder: (context, value, child) {
-                    return Text(
-                      !enableMulti
-                          ? '多选'
-                          : '确认(${selectedProfiles.value.length})',
-                      style: TextStyle(
-                        color: theme.color.isDark
-                            ? theme.color.primaryColor6
-                            : theme.color.primaryColor5,
-                        fontWeight: theme.font.labelMedium.fontWeight,
-                        fontSize: theme.font.labelMedium.fontSize,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
           ),
       body: ValueListenableBuilder(
         valueListenable: selectedProfiles,
         builder: (context, value, child) {
           return GroupMemberListView(
-            beforeWidgets: enableMulti
-                ? []
-                : [
-                    ChatUIKitListViewMoreItem(
-                      title: '新请求',
-                      onTap: () {
-                        Navigator.of(context).pushNamed(
-                          ChatUIKitRouteNames.newRequestsView,
-                          arguments: NewRequestsViewArguments(),
-                        );
-                      },
-                      trailing: Padding(
-                        padding: const EdgeInsets.only(right: 5),
-                        child: ChatUIKitBadge(
-                            ChatUIKitContext.instance.requestList().length),
-                      ),
-                    ),
-                  ],
+            // beforeWidgets: enableMulti
+            //     ? []
+            //     : [
+            //         ChatUIKitListViewMoreItem(
+            //           title: '所有人',
+            //           onTap: () {
+            //             Navigator.of(context).pushNamed(
+            //               ChatUIKitRouteNames.newRequestsView,
+            //               arguments: NewRequestsViewArguments(),
+            //             );
+            //           },
+            //           trailing: Padding(
+            //             padding: const EdgeInsets.only(right: 5),
+            //             child: ChatUIKitBadge(
+            //                 ChatUIKitContext.instance.requestList().length),
+            //           ),
+            //         ),
+            //       ],
             groupId: widget.groupId,
             controller: controller,
             itemBuilder: widget.listViewItemBuilder ??

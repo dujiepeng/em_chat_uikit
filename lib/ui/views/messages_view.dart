@@ -115,14 +115,22 @@ class _MessagesViewState extends State<MessagesView> {
 
   void needMention() {
     clearAllType();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (controller.conversationType == ConversationType.GroupChat) {
-        Navigator.of(context).pushNamed(
-          ChatUIKitRouteNames.groupMentionView,
-          arguments: GroupMentionViewArguments(groupId: controller.profile.id),
-        );
-      }
-    });
+    if (controller.conversationType == ConversationType.GroupChat) {
+      Navigator.of(context)
+          .pushNamed(
+        ChatUIKitRouteNames.groupMentionView,
+        arguments: GroupMentionViewArguments(groupId: controller.profile.id),
+      )
+          .then((value) {
+        if (value != null) {
+          if (value == true) {
+            inputBarTextEditingController.mentionAll = true;
+          } else if (value is ChatUIKitProfile) {
+            inputBarTextEditingController.addUser(value);
+          }
+        }
+      });
+    }
   }
 
   @override

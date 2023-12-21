@@ -19,6 +19,7 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
           !ChatUIKitContext.instance.isConversationLoadFinished()) {
         items = await fetchConversations();
       }
+      items = await clearEmpty(items);
       List<ConversationItemModel> tmp = await mappers(items);
       list.clear();
       list.addAll(tmp);
@@ -36,6 +37,7 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
   Future<void> reload() async {
     loadingType.value = ChatUIKitListViewType.refresh;
     List<Conversation> items = await ChatUIKit.instance.getAllConversations();
+    items = await clearEmpty(items);
     List<ConversationItemModel> tmp = await mappers(items);
     list.clear();
     list.addAll(tmp);
@@ -50,6 +52,17 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
   Future<List<ChatUIKitListItemModelBase>> fetchMoreItemList() async {
     List<ChatUIKitListItemModelBase> list = [];
     return list;
+  }
+
+  Future<List<Conversation>> clearEmpty(List<Conversation> list) async {
+    List<Conversation> tmp = [];
+    for (var item in list) {
+      final latest = await item.latestMessage();
+      if (latest != null) {
+        tmp.add(item);
+      }
+    }
+    return tmp;
   }
 
   bool hasFetchPinned = false;
