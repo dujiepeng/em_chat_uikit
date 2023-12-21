@@ -125,10 +125,14 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
       ChatUIKitListViewMoreItem(
         title: '群聊',
         onTap: () {
-          Navigator.of(context).pushNamed(
+          Navigator.of(context)
+              .pushNamed(
             ChatUIKitRouteNames.groupsView,
             arguments: GroupsViewArguments(),
-          );
+          )
+              .then((value) {
+            ChatUIKit.instance.onConversationsUpdate();
+          });
         },
       ),
     ];
@@ -156,7 +160,8 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
   }
 
   void tapContactInfo(BuildContext context, ContactItemModel model) {
-    Navigator.of(context).pushNamed(
+    Navigator.of(context)
+        .pushNamed(
       ChatUIKitRouteNames.contactDetailsView,
       arguments: ContactDetailsViewArguments(
         profile: model.profile,
@@ -175,6 +180,11 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
           ),
         ],
       ),
+    )
+        .then(
+      (value) {
+        ChatUIKit.instance.onConversationsUpdate();
+      },
     );
   }
 

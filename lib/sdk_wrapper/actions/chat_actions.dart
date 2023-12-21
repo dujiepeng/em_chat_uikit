@@ -131,6 +131,18 @@ mixin ChatActions on ChatWrapper {
     });
   }
 
+  Future<void> insertMessage({required Message message}) async {
+    return checkResult(ChatSDKWrapperActionEvent.importMessages, () async {
+      Conversation? conversation =
+          await Client.getInstance.chatManager.getConversation(
+        message.conversationId ?? message.from!,
+        type: ConversationType.values[message.chatType.index],
+        createIfNeed: true,
+      );
+      await conversation!.insertMessage(message);
+    });
+  }
+
   Future<void> downloadAttachment({required Message message}) async {
     return checkResult(ChatSDKWrapperActionEvent.downloadAttachment, () async {
       return Client.getInstance.chatManager.downloadAttachment(message);
@@ -425,11 +437,11 @@ mixin ChatActions on ChatWrapper {
     int count = 30,
   }) async {
     return checkResult(ChatSDKWrapperActionEvent.getMessages, () async {
-      final conversation = await getConversation(
+      final conversation = await createConversation(
         conversationId: conversationId,
         type: type,
       );
-      return conversation!.loadMessages(
+      return conversation.loadMessages(
         startMsgId: startId ?? '',
         loadCount: count,
         direction: direction,

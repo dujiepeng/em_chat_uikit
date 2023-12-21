@@ -123,6 +123,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         Text(
           message.textContent,
           overflow: TextOverflow.ellipsis,
+          
           maxLines: 2,
           style: TextStyle(
             color: theme.color.isDark
@@ -158,6 +159,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
           child: Text(
             "图片",
             overflow: TextOverflow.ellipsis,
+            maxLines: 1,
             style: TextStyle(
               fontWeight: theme.font.labelMedium.fontWeight,
               fontSize: theme.font.labelMedium.fontSize,
@@ -463,6 +465,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
           fit: FlexFit.loose,
           child: RichText(
             overflow: TextOverflow.ellipsis,
+            maxLines: 1,
             text: TextSpan(
               children: [
                 TextSpan(
@@ -497,6 +500,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         Text(
           message.nickname ?? message.from ?? '',
           overflow: TextOverflow.ellipsis,
+          maxLines: 1,
           style: TextStyle(
             color: theme.color.isDark
                 ? theme.color.neutralSpecialColor5

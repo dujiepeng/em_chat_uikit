@@ -29,6 +29,7 @@ class ChatUIKitCardMessageWidget extends StatelessWidget {
           child: Text(
             message.cardUserNickname ?? message.cardUserId!,
             overflow: TextOverflow.ellipsis,
+            maxLines: 1,
             style: TextStyle(
               fontWeight: theme.font.titleMedium.fontWeight,
               fontSize: theme.font.titleMedium.fontSize,

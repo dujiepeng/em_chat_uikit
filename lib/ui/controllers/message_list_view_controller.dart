@@ -174,12 +174,9 @@ class MessageListViewController extends ChangeNotifier
   }
 
   Future<void> recallMessage(String messageId) async {
-    try {
-      await ChatUIKit.instance.recallMessage(messageId: messageId);
-      msgList.removeWhere((element) => messageId == element.msgId);
-      notifyListeners();
-      // ignore: empty_catches
-    } catch (e) {}
+    await ChatUIKit.instance.recallMessage(messageId: messageId);
+    msgList.removeWhere((element) => messageId == element.msgId);
+    notifyListeners();
   }
 
   Future<void> sendVoiceMessage(ChatUIKitRecordModel model) async {
@@ -310,5 +307,9 @@ class MessageListViewController extends ChangeNotifier
         // ignore: empty_catches
       } catch (e) {}
     }
+  }
+
+  void markAllMessageAsRead() {
+    ChatUIKit.instance.markConversationAsRead(conversationId: profile.id);
   }
 }

@@ -19,6 +19,7 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     this.focusNode,
     this.emojiWidget,
     this.itemBuilder,
+    this.alertItemBuilder,
     this.moreActionItems,
     this.onItemLongPressActions,
     this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
@@ -42,6 +43,7 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
   final List<ChatUIKitBottomSheetItem>? moreActionItems;
   final List<ChatUIKitBottomSheetItem>? onItemLongPressActions;
   final MessageItemBuilder? itemBuilder;
+  final MessageItemBuilder? alertItemBuilder;
   final FocusNode? focusNode;
   final Widget? emojiWidget;
   final Widget? Function(BuildContext context, Message message)?

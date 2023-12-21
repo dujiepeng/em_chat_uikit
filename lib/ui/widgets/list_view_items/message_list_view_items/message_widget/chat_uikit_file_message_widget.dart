@@ -24,6 +24,7 @@ class ChatUIKitFileMessageWidget extends StatelessWidget {
     Widget title = Text(
       message.displayName ?? '',
       overflow: TextOverflow.ellipsis,
+      maxLines: 1,
       style: titleStyle ??
           TextStyle(
             fontWeight: theme.font.titleMedium.fontWeight,
@@ -40,6 +41,7 @@ class ChatUIKitFileMessageWidget extends StatelessWidget {
     Widget subTitle = Text(
       message.fileSizeStr,
       overflow: TextOverflow.ellipsis,
+      maxLines: 1,
       style: subTitleStyle ??
           TextStyle(
             fontWeight: theme.font.bodyMedium.fontWeight,

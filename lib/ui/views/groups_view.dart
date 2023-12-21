@@ -127,7 +127,7 @@ class _GroupsViewState extends State<GroupsView> {
           return element is GroupItemModel &&
               element.profile.id == model.profile.id;
         });
-        controller.reload();
+        controller.refresh();
       }
     });
   }

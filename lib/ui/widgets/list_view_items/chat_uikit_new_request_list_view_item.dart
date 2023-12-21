@@ -26,12 +26,14 @@ class ChatUIKitNewRequestListViewItem extends StatelessWidget {
     Widget name = Text(
       model.showName,
       overflow: TextOverflow.ellipsis,
+      maxLines: 1,
       style: normalStyle,
     );
 
     Widget reason = Text(
       model.reason?.isNotEmpty == true ? model.reason! : '请求添加您为好友',
       overflow: TextOverflow.ellipsis,
+      maxLines: 1,
       style: TextStyle(
         color: theme.color.isDark
             ? theme.color.neutralColor6

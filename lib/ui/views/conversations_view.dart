@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/tools/chat_uikit_insert_message_tool.dart';
 
 import 'package:flutter/material.dart';
 
@@ -270,14 +271,7 @@ class _ConversationsViewState extends State<ConversationsView> {
       },
     ).then((profile) {
       if (profile != null) {
-        Navigator.of(context)
-            .pushNamed(
-              ChatUIKitRouteNames.messagesView,
-              arguments: MessagesViewArguments(
-                profile: profile,
-              ),
-            )
-            .then((value) {});
+        pushNewConversation(profile);
       }
     });
   }
@@ -311,40 +305,56 @@ class _ConversationsViewState extends State<ConversationsView> {
   }
 
   void newGroup() async {
-    List<ChatUIKitProfile>? profiles = await showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return SizedBox(
-          height: MediaQuery.sizeOf(context).height * 0.95,
-          child: const CreateGroupView(),
-        );
-      },
+    final profiles = await Navigator.of(context).pushNamed(
+      ChatUIKitRouteNames.createGroupView,
+      arguments: CreateGroupViewArguments(),
     );
 
-    if (profiles?.isNotEmpty == true) {
-      List<String> userIds = [];
-      for (var item in profiles!) {
-        userIds.add(item.id);
-      }
-
-      try {
-        List list = [];
-
-        for (var profile in profiles) {
-          list.add(profile.showName);
+    if (profiles is List<ChatUIKitProfile>) {
+      if (profiles.isNotEmpty == true) {
+        List<String> userIds = [];
+        for (var item in profiles) {
+          userIds.add(item.id);
         }
 
-        await ChatUIKit.instance.createGroup(
-          groupName: list.join(','),
-          options: GroupOptions(
-            maxCount: 2000,
-            style: GroupStyle.PrivateMemberCanInvite,
-          ),
-          inviteMembers: userIds,
-        );
-        // ignore: empty_catches
-      } catch (e) {}
+        try {
+          List list = [];
+          for (var profile in profiles) {
+            list.add(profile.showName);
+          }
+          Group group = await ChatUIKit.instance.createGroup(
+            groupName: list.join(','),
+            options: GroupOptions(
+              maxCount: 2000,
+              style: GroupStyle.PrivateMemberCanInvite,
+            ),
+            inviteMembers: userIds,
+          );
+
+          await ChatUIKitInsertMessageTool.insertCreateGroupMessage(
+            group: group,
+          );
+          pushNewConversation(ChatUIKitProfile.group(
+            id: group.groupId,
+            name: group.name,
+          ));
+        } catch (e) {
+          debugPrint('err: $e');
+        }
+      }
     }
+  }
+
+  void pushNewConversation(ChatUIKitProfile profile) {
+    Navigator.of(context)
+        .pushNamed(
+      ChatUIKitRouteNames.messagesView,
+      arguments: MessagesViewArguments(
+        profile: profile,
+      ),
+    )
+        .then((value) {
+      controller.reload();
+    });
   }
 }

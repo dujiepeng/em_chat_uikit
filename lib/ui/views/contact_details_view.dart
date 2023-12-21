@@ -76,6 +76,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
     Widget name = Text(
       widget.profile.showName,
       overflow: TextOverflow.ellipsis,
+      maxLines: 1,
       style: TextStyle(
         fontSize: theme.font.headlineLarge.fontSize,
         fontWeight: theme.font.headlineLarge.fontWeight,
@@ -88,6 +89,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
     Widget easeId = Text(
       '环信ID: ${widget.profile.id}',
       overflow: TextOverflow.ellipsis,
+      maxLines: 1,
       style: TextStyle(
         fontSize: theme.font.bodySmall.fontSize,
         fontWeight: theme.font.bodySmall.fontWeight,

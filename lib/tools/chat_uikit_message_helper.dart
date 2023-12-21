@@ -229,6 +229,34 @@ extension MessageHelper on Message {
     return str;
   }
 
+  bool get isTimeMessageAlert {
+    if (bodyType == MessageType.CUSTOM) {
+      if ((body as CustomMessageBody).event == alertTimeMessageEventKey) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool get isCreateGroupAlert {
+    if (bodyType == MessageType.CUSTOM) {
+      if ((body as CustomMessageBody).event ==
+          alertCreateGroupMessageEventKey) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool get isRecallAlert {
+    if (bodyType == MessageType.CUSTOM) {
+      if ((body as CustomMessageBody).event == alertRecallNameKey) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   void addQuote(Message message) {
     attributes ??= {};
     attributes![quoteKey] = message.toQuote().toJson();

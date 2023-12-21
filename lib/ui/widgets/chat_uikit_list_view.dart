@@ -250,6 +250,7 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
                         : ChatUIKitTheme.of(context).color.neutralColor6,
                   ),
                   overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 )
               ],
             ),

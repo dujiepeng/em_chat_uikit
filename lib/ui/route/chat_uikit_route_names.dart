@@ -21,4 +21,5 @@ class ChatUIKitRouteNames {
   static String showVideoView = '/ShowVideoView';
   static String currentUserInfoView = '/CurrentUserInfoView';
   static String groupMentionView = '/GroupMentionView';
+  static String reportMessageView = '/ReportMessageView';
 }

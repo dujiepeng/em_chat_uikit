@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/tools/chat_uikit_insert_message_tool.dart';
 import 'package:em_chat_uikit/ui/custom/custom_text_editing_controller.dart';
 import 'package:em_chat_uikit/ui/widgets/chat_uikit_quote_widget.dart';
 import 'package:em_chat_uikit/ui/widgets/chat_uikit_reply_bar.dart';
@@ -22,6 +23,7 @@ class MessagesView extends StatefulWidget {
         bubbleStyle = arguments.bubbleStyle,
         emojiWidget = arguments.emojiWidget,
         itemBuilder = arguments.itemBuilder,
+        alertItemBuilder = arguments.alertItemBuilder,
         onAvatarLongPress = arguments.onAvatarLongPressed,
         moreActionItems = arguments.moreActionItems,
         onItemLongPressActions = arguments.onItemLongPressActions,
@@ -45,6 +47,7 @@ class MessagesView extends StatefulWidget {
     this.focusNode,
     this.emojiWidget,
     this.itemBuilder,
+    this.alertItemBuilder,
     this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
     this.onItemLongPressActions,
     this.moreActionItems,
@@ -66,6 +69,7 @@ class MessagesView extends StatefulWidget {
   final void Function(ChatUIKitProfile profile)? onNicknameTap;
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
   final MessageItemBuilder? itemBuilder;
+  final MessageItemBuilder? alertItemBuilder;
   final FocusNode? focusNode;
   final List<ChatUIKitBottomSheetItem>? moreActionItems;
   final List<ChatUIKitBottomSheetItem>? onItemLongPressActions;
@@ -144,7 +148,7 @@ class _MessagesViewState extends State<MessagesView> {
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
-
+    controller.markAllMessageAsRead();
     Widget content = MessageListView(
       quoteBuilder: widget.quoteBuilder ?? quoteWidget,
       profile: widget.profile,
@@ -159,6 +163,7 @@ class _MessagesViewState extends State<MessagesView> {
       onNicknameTap: widget.onNicknameTap,
       bubbleStyle: widget.bubbleStyle,
       itemBuilder: widget.itemBuilder,
+      alertItemBuilder: widget.alertItemBuilder ?? alertItem,
     );
 
     content = NotificationListener(
@@ -255,6 +260,72 @@ class _MessagesViewState extends State<MessagesView> {
     );
 
     return content;
+  }
+
+  Widget alertItem(
+    BuildContext context,
+    ChatUIKitProfile profile,
+    Message message,
+  ) {
+    if (message.isTimeMessageAlert) {
+      Widget? content = widget.alertItemBuilder?.call(
+        context,
+        widget.profile,
+        message,
+      );
+      content ??= ChatUIKitMessageListViewAlertItem(
+        infos: [
+          MessageAlertAction(
+            text: ChatUIKitTimeTool.getChatTimeStr(message.serverTime),
+          )
+        ],
+      );
+      return content;
+    }
+
+    if (message.isRecallAlert) {
+      Map<String, String>? map = (message.body as CustomMessageBody).params;
+      Widget? content = widget.alertItemBuilder?.call(
+        context,
+        widget.profile,
+        message,
+      );
+      content ??= ChatUIKitMessageListViewAlertItem(
+        infos: [
+          MessageAlertAction(text: map?[alertRecallNameKey] ?? '撤回一条消息'),
+        ],
+      );
+      return content;
+    }
+
+    if (message.isCreateGroupAlert) {
+      Map<String, String>? map = (message.body as CustomMessageBody).params;
+      Widget? content = widget.alertItemBuilder?.call(
+        context,
+        widget.profile,
+        message,
+      );
+      content ??= ChatUIKitMessageListViewAlertItem(
+        infos: [
+          MessageAlertAction(
+            text: map?[alertCreateGroupMessageOwnerKey] ?? '',
+            onTap: () {
+              // pushToCurrentUserDetail(profile);
+            },
+          ),
+          MessageAlertAction(text: ' 创建群组 '),
+          MessageAlertAction(
+            text: map?[alertCreateGroupMessageGroupNameKey] ?? '',
+            onTap: () {
+              popToInfoPage();
+            },
+          ),
+        ],
+      );
+      return content;
+    }
+
+    return const SizedBox();
   }
 
   Widget replyMessageBar(ChatUIKitTheme theme) {
@@ -480,6 +551,7 @@ class _MessagesViewState extends State<MessagesView> {
   }
 
   void onItemLongPress(Message message) {
+    clearAllType();
     List<ChatUIKitBottomSheetItem>? items = widget.moreActionItems;
 
     if (items == null) {
@@ -499,7 +571,13 @@ class _MessagesViewState extends State<MessagesView> {
           textMessageEdit(message);
         },
       ));
-      items.add(ChatUIKitBottomSheetItem.normal(label: '举报'));
+      items.add(ChatUIKitBottomSheetItem.normal(
+        label: '举报',
+        onTap: () async {
+          Navigator.of(context).pop();
+          reportMessage(message);
+        },
+      ));
       items.add(ChatUIKitBottomSheetItem.normal(
         label: '删除',
         onTap: () async {
@@ -661,7 +739,15 @@ class _MessagesViewState extends State<MessagesView> {
       ],
     );
     if (recall == true) {
-      controller.recallMessage(message.msgId);
+      try {
+        ChatUIKitInsertMessageTool.insertRecallMessage(
+          messageId: message.msgId,
+          conversationId: controller.profile.id,
+          type: controller.conversationType,
+        );
+        controller.recallMessage(message.msgId);
+        // ignore: empty_catches
+      } catch (e) {}
     }
   }
 
@@ -689,7 +775,12 @@ class _MessagesViewState extends State<MessagesView> {
     }
   }
 
-  void selectCamera() {}
+  void selectCamera() async {
+    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+    if (photo != null) {
+      controller.sendImageMessage(photo.path, name: photo.name);
+    }
+  }
 
   void selectFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -784,5 +875,23 @@ class _MessagesViewState extends State<MessagesView> {
       ChatUIKitRouteNames.newRequestDetailsView,
       arguments: NewRequestDetailsViewArguments(profile: profile),
     );
+  }
+
+  void reportMessage(Message message) {
+    Navigator.of(context).pushNamed(ChatUIKitRouteNames.reportMessageView,
+        arguments: ReportMessageViewArguments(
+          messageId: message.msgId,
+          reportReasons: [
+            '不受欢迎的商业内容或垃圾内容',
+            '色情或露骨内容,',
+            '虐待儿童',
+            '仇恨言论或过于写实的暴力内容',
+            '宣扬恐怖主义',
+            '骚扰或欺凌',
+            '自杀或自残',
+            '虚假信息',
+            '其他'
+          ],
+        ));
   }
 }

@@ -13,4 +13,12 @@ const String quoteMsgTypeKey = 'msgType';
 const String quoteMsgPreviewKey = 'msgPreview';
 const String quoteMsgSenderKey = 'msgSender';
 
+const String alertTimeMessageEventKey = 'timeMessage';
+const String alertCreateGroupMessageEventKey =
+    'alertCreateGroupMessageEventKey';
+const String alertCreateGroupMessageOwnerKey = 'owner';
+const String alertCreateGroupMessageGroupNameKey = 'groupName';
+const String alertRecallNameKey = 'alertRecallNameKey';
+
+
 enum CornerRadius { extraSmall, small, medium, large }

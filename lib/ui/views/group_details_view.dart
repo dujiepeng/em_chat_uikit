@@ -108,6 +108,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     Widget name = Text(
       widget.profile.showName,
       overflow: TextOverflow.ellipsis,
+      maxLines: 1,
       style: TextStyle(
         fontSize: theme.font.headlineLarge.fontSize,
         fontWeight: theme.font.headlineLarge.fontWeight,
@@ -120,6 +121,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     Widget easeId = Text(
       '环信ID: ${widget.profile.id}',
       overflow: TextOverflow.ellipsis,
+      maxLines: 1,
       style: TextStyle(
         fontSize: theme.font.bodySmall.fontSize,
         fontWeight: theme.font.bodySmall.fontWeight,
@@ -340,6 +342,81 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         InkWell(
           onTap: clearAllHistory,
           child: const ChatUIKitDetailsListViewItem(title: '清空聊天记录'),
+        ),
+        Container(height: 20),
+        InkWell(
+          onTap: () {
+            changeInfo('修改群名称', hint: '请输入');
+          },
+          child: ChatUIKitDetailsListViewItem(
+            title: '群名称',
+            trailing: SizedBox(
+              width: 100,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Text(
+                      group?.name ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: theme.color.isDark
+                            ? theme.color.neutralColor6
+                            : theme.color.neutralColor5,
+                        fontSize: theme.font.labelLarge.fontSize,
+                        fontWeight: theme.font.labelLarge.fontWeight,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    color: theme.color.isDark
+                        ? theme.color.neutralColor5
+                        : theme.color.neutralColor7,
+                    size: 18,
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            changeInfo('修改群描述', hint: '请输入');
+          },
+          child: ChatUIKitDetailsListViewItem(
+            title: '群描述',
+            trailing: SizedBox(
+              width: 100,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Text(
+                      group?.description ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: theme.color.isDark
+                            ? theme.color.neutralColor6
+                            : theme.color.neutralColor5,
+                        fontSize: theme.font.labelLarge.fontSize,
+                        fontWeight: theme.font.labelLarge.fontWeight,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    color: theme.color.isDark
+                        ? theme.color.neutralColor5
+                        : theme.color.neutralColor7,
+                    size: 18,
+                  )
+                ],
+              ),
+            ),
+          ),
         ),
       ],
     );
@@ -567,7 +644,6 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
                         .fetchGroupMemberAttributes(
                             groupId: group!.groupId,
                             userId: ChatUIKit.instance.currentUserId());
-
                     return map[userGroupName];
                   }
                   return null;

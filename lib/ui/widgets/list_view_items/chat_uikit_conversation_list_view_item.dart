@@ -39,6 +39,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
         ? Text(
             model.showName,
             overflow: TextOverflow.ellipsis,
+            maxLines: 1,
             style: TextStyle(
               color: theme.color.isDark
                   ? theme.color.neutralColor98
@@ -101,6 +102,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
         ? Text(
             model.lastMessage?.showInfo(context: context) ?? '',
             overflow: TextOverflow.ellipsis,
+            maxLines: 1,
             style: TextStyle(
               color: theme.color.isDark
                   ? theme.color.neutralColor6

@@ -3,7 +3,10 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 typedef MessageItemBuilder = Widget? Function(
-    ChatUIKitProfile profile, Message message);
+  BuildContext context,
+  ChatUIKitProfile profile,
+  Message message,
+);
 
 class MessageListView extends StatefulWidget {
   const MessageListView({
@@ -18,6 +21,7 @@ class MessageListView extends StatefulWidget {
     this.showAvatar = true,
     this.showNickname = true,
     this.itemBuilder,
+    this.alertItemBuilder,
     this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
     this.quoteBuilder,
     super.key,
@@ -32,6 +36,7 @@ class MessageListView extends StatefulWidget {
   final void Function(ChatUIKitProfile profile)? onNicknameTap;
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
   final MessageItemBuilder? itemBuilder;
+  final MessageItemBuilder? alertItemBuilder;
   final bool showAvatar;
   final bool showNickname;
   final Widget Function(QuoteModel model)? quoteBuilder;
@@ -144,7 +149,57 @@ class _MessageListViewState extends State<MessageListView> {
   }
 
   Widget _item(Message message) {
-    Widget? content = widget.itemBuilder?.call(widget.profile, message);
+    if (message.isTimeMessageAlert) {
+      Widget? content = widget.alertItemBuilder?.call(
+        context,
+        widget.profile,
+        message,
+      );
+      content ??= ChatUIKitMessageListViewAlertItem(
+        infos: [
+          MessageAlertAction(
+            text: ChatUIKitTimeTool.getChatTimeStr(message.serverTime),
+          )
+        ],
+      );
+      return content;
+    }
+
+    if (message.isRecallAlert) {
+      Map<String, String>? map = (message.body as CustomMessageBody).params;
+      Widget? content = widget.alertItemBuilder?.call(
+        context,
+        widget.profile,
+        message,
+      );
+      content ??= ChatUIKitMessageListViewAlertItem(
+        infos: [
+          MessageAlertAction(text: map?[alertRecallNameKey] ?? '撤回一条消息'),
+        ],
+      );
+      return content;
+    }
+
+    if (message.isCreateGroupAlert) {
+      Map<String, String>? map = (message.body as CustomMessageBody).params;
+      Widget? content = widget.alertItemBuilder?.call(
+        context,
+        widget.profile,
+        message,
+      );
+      content ??= ChatUIKitMessageListViewAlertItem(
+        infos: [
+          MessageAlertAction(text: map?[alertCreateGroupMessageOwnerKey] ?? ''),
+          MessageAlertAction(text: ' 创建群组 '),
+          MessageAlertAction(
+              text: map?[alertCreateGroupMessageGroupNameKey] ?? ''),
+        ],
+      );
+      return content;
+    }
+
+    Widget? content =
+        widget.itemBuilder?.call(context, widget.profile, message);
     content ??= ChatUIKitMessageListViewMessageItem(
       bubbleStyle: widget.bubbleStyle,
       key: ValueKey(message.msgId),
