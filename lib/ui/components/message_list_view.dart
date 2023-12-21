@@ -81,6 +81,7 @@ class _MessageListViewState extends State<MessageListView> {
       }
     });
     fetchMessages();
+    controller.sendConversationsReadAck();
   }
 
   @override
@@ -146,10 +147,19 @@ class _MessageListViewState extends State<MessageListView> {
       child: content,
     );
 
+    content = WillPopScope(
+      child: content,
+      onWillPop: () async {
+        controller.markAllMessageAsRead();
+        return true;
+      },
+    );
+
     return content;
   }
 
   Widget _item(Message message) {
+    controller.sendMessageReadAck(message);
     if (message.isTimeMessageAlert) {
       Widget? content = widget.alertItemBuilder?.call(
         context,

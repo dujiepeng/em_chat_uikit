@@ -96,6 +96,42 @@ class MessageListViewController extends ChangeNotifier
   }
 
   @override
+  void onConversationRead(String from, String to) {
+    debugPrint("onConversationRead");
+    if (from == profile.id) {
+      for (var element in msgList) {
+        element.hasReadAck = true;
+      }
+      notifyListeners();
+    }
+  }
+
+  @override
+  void onMessagesRead(List<Message> messages) {
+    List<Message> list = msgList
+        .where((element1) => messages
+            .where((element2) => element1.msgId == element2.msgId)
+            .isNotEmpty)
+        .toList();
+    if (list.isNotEmpty) {
+      for (var element in list) {
+        element.hasReadAck = true;
+      }
+      notifyListeners();
+    }
+  }
+
+  @override
+  void onMessagesDelivered(List<Message> messages) {
+    debugPrint("onMessagesDelivered");
+  }
+
+  @override
+  void onMessagesRecalled(List<Message> messages) {
+    debugPrint("onMessagesRecalled");
+  }
+
+  @override
   void onSuccess(String msgId, Message msg) {
     final index = msgList.indexWhere((element) => element.msgId == msgId);
     if (index != -1) {
@@ -309,16 +345,38 @@ class MessageListViewController extends ChangeNotifier
   }
 
 // support single chat.
-  void sendConversationsReadAck() {
+  Future<void> sendConversationsReadAck() async {
+    await markAllMessageAsRead();
     if (conversationType == ConversationType.Chat) {
       try {
-        ChatUIKit.instance.sendConversationReadAck(conversationId: profile.id);
+        await ChatUIKit.instance
+            .sendConversationReadAck(conversationId: profile.id);
+        for (var element in msgList) {
+          element.hasReadAck = true;
+        }
+        // 因为已读状态是对方看的，所以这个时候不需要刷新ui
+        // notifyListeners();
         // ignore: empty_catches
       } catch (e) {}
     }
   }
 
-  void markAllMessageAsRead() {
-    ChatUIKit.instance.markConversationAsRead(conversationId: profile.id);
+  Future<void> sendMessageReadAck(Message message) async {
+    if (message.chatType == ChatType.Chat &&
+        message.direction == MessageDirection.RECEIVE &&
+        message.hasReadAck == false) {
+      try {
+        debugPrint("send read ack");
+        await ChatUIKit.instance.sendMessageReadAck(message: message);
+        message.hasReadAck = true;
+        // 因为已读状态是对方看的，所以这个时候不需要刷新ui
+        // notifyListeners();
+        // ignore: empty_catches
+      } catch (e) {}
+    }
+  }
+
+  Future<void> markAllMessageAsRead() async {
+    await ChatUIKit.instance.markConversationAsRead(conversationId: profile.id);
   }
 }
