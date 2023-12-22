@@ -445,11 +445,14 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
           "${DateTime.now().millisecondsSinceEpoch.toString()}.${extensionName()}";
       await _audioRecorder.start(widget.recordConfig,
           path: "${_directory.path}/$fileName");
+
+      startRecordTimer();
+      statusType = ChatUIKitVoiceBarStatusType.recording;
+      widget.statusChangeCallback?.call(statusType, 0, null);
+      setState(() {});
+    }else {
+      // TODO: show permission error.
     }
-    startRecordTimer();
-    statusType = ChatUIKitVoiceBarStatusType.recording;
-    widget.statusChangeCallback?.call(statusType, 0, null);
-    setState(() {});
   }
 
   Future<void> stopRecord() async {

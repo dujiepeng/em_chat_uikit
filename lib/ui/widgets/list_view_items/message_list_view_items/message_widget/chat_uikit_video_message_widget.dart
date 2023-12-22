@@ -149,6 +149,7 @@ class _ChatUIKitVideoMessageWidgetState
     }
 
     content = Container(
+      clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(
             widget.bubbleStyle == ChatUIKitMessageListViewBubbleStyle.arrow

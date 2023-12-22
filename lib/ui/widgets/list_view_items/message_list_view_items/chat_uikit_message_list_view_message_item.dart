@@ -193,7 +193,8 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
   }
 
   Widget _buildImageMessage(BuildContext context, Message message) {
-    return ChatUIKitImageMessageWidget(message: message);
+    return ChatUIKitImageMessageWidget(
+        message: message, bubbleStyle: bubbleStyle);
   }
 
   Widget _buildVoiceMessage(BuildContext context, Message message) {
@@ -204,7 +205,8 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
   }
 
   Widget _buildVideoMessage(BuildContext context, Message message) {
-    return ChatUIKitVideoMessageWidget(message: message);
+    return ChatUIKitVideoMessageWidget(
+        message: message, bubbleStyle: bubbleStyle);
   }
 
   Widget _buildFileMessage(BuildContext context, Message message) {

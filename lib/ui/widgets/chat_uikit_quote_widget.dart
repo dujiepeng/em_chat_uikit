@@ -25,30 +25,19 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
   void initState() {
     super.initState();
     model = widget.model;
+    loadMessage();
+  }
+
+  void loadMessage() async {
+    message =
+        await ChatUIKit.instance.loadMessage(messageId: widget.model.msgId);
+    fetched = true;
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    if (fetched == false) {
-      ChatUIKit.instance
-          .loadMessage(messageId: widget.model.msgId)
-          .then((value) {
-        fetched = true;
-        message = value;
-        setState(() {});
-      });
-    }
-    Widget content = FutureBuilder(
-      future: ChatUIKit.instance.loadMessage(messageId: model.msgId),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return _buildContext(context, message: snapshot.data);
-        } else {
-          return _buildContext(context);
-        }
-      },
-    );
-
+    Widget content = _buildContext(context, message: message);
     content = Padding(
       padding: const EdgeInsets.only(bottom: 2),
       child: content,
@@ -145,13 +134,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         SizedBox(
           width: 16,
           height: 16,
-          child: Icon(
-            Icons.image_outlined,
-            size: 16,
-            color: theme.color.isDark
-                ? theme.color.neutralColor6
-                : theme.color.neutralColor5,
-          ),
+          child: ChatUIKitImageLoader.imageDefault(size: 16),
         ),
         const SizedBox(width: 4),
         Flexible(

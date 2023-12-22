@@ -59,23 +59,23 @@ class _ShowVideoViewState extends State<ShowVideoView> {
   }
 
   void longPressed(Message message) {
-    // showChatUIKitBottomSheet(
-    //     context: context,
-    //     items: [
-    //       ChatUIKitBottomSheetItem.normal(
-    //           label: '保存',
-    //           onTap: () async {
-    //             save();
-    //             Navigator.of(context).pop();
-    //           }),
-    //       ChatUIKitBottomSheetItem.normal(
-    //           label: '转发给朋友',
-    //           onTap: () async {
-    //             Navigator.of(context).pop();
-    //             forward();
-    //           })
-    //     ],
-    //     cancelTitle: '取消');
+    showChatUIKitBottomSheet(
+        context: context,
+        items: [
+          ChatUIKitBottomSheetItem.normal(
+              label: '保存',
+              onTap: () async {
+                save();
+                Navigator.of(context).pop();
+              }),
+          ChatUIKitBottomSheetItem.normal(
+              label: '转发给朋友',
+              onTap: () async {
+                Navigator.of(context).pop();
+                forward();
+              })
+        ],
+        cancelTitle: '取消');
   }
 
   void save() async {}

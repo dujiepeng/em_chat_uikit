@@ -174,9 +174,11 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
         children: [
           () {
             if (_controller?.value.isInitialized == true) {
-              return AspectRatio(
+              Widget content = AspectRatio(
                   aspectRatio: _controller!.value.aspectRatio,
                   child: VideoPlayer(_controller!));
+
+              return content;
             } else {
               return const SizedBox();
             }
@@ -187,10 +189,8 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
                 setState(() {
                   if (_controller!.value.isPlaying) {
                     _controller?.pause();
-                    // isPlaying = false;
                   } else {
                     _controller?.play();
-                    // isPlaying = true;
                   }
                 });
               },
@@ -229,14 +229,6 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
       ],
     );
 
-    // content = Stack(
-    //   children: [
-    //     Container(
-    //       color: Colors.black,
-    //     ),
-    //     Positioned.fill(child: content)
-    //   ],
-    // );
     return content;
   }
 
