@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit/ui/custom/custom_text_editing_controller.dart';
@@ -888,8 +890,15 @@ class _MessagesViewState extends State<MessagesView> {
       await stopVoice();
     } else {
       await stopVoice();
-      _playingMessage = message;
-      await playVoice(message.localPath!);
+
+      File file = File(message.localPath!);
+      if (!file.existsSync()) {
+        await controller.downloadMessage(message);
+        // TODO 添加uikit action回调
+      } else {
+        _playingMessage = message;
+        await playVoice(message.localPath!);
+      }
     }
     setState(() {});
   }
@@ -906,6 +915,7 @@ class _MessagesViewState extends State<MessagesView> {
     if (_player.state == PlayerState.playing) {
       await _player.stop();
     }
+
     await _player.play(DeviceFileSource(path));
     _player.onPlayerComplete.first.whenComplete(() async {
       _playingMessage = null;

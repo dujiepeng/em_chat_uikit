@@ -145,8 +145,11 @@ class ChatSDKWrapper extends ChatUIKitWrapperBase
     required String userId,
     required String password,
   }) async {
-    await Client.getInstance.loginWithPassword(userId, password);
-    Client.getInstance.startCallback();
+    return checkResult(ChatSDKWrapperActionEvent.acceptContactRequest,
+        () async {
+      await Client.getInstance.loginWithPassword(userId, password);
+      await Client.getInstance.startCallback();
+    });
   }
 
   Future<void> logout() async {

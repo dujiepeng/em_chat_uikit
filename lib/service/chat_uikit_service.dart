@@ -36,8 +36,12 @@ class ChatUIKit extends ChatSDKWrapper
     required String userId,
     required String password,
   }) async {
-    await super.login(userId: userId, password: password);
-    ChatUIKitContext.instance.currentUserId = userId;
+    try {
+      await super.login(userId: userId, password: password);
+      ChatUIKitContext.instance.currentUserId = userId;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   int contactRequestCount() {

@@ -398,4 +398,8 @@ class MessageListViewController extends ChangeNotifier
   Future<void> markAllMessageAsRead() async {
     await ChatUIKit.instance.markConversationAsRead(conversationId: profile.id);
   }
+
+  Future<void> downloadMessage(Message message) async {
+    ChatUIKit.instance.downloadAttachment(message: message);
+  }
 }
