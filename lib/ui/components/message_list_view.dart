@@ -183,7 +183,10 @@ class _MessageListViewState extends State<MessageListView> {
       );
       content ??= ChatUIKitMessageListViewAlertItem(
         infos: [
-          MessageAlertAction(text: map?[alertRecallNameKey] ?? '撤回一条消息'),
+          MessageAlertAction(
+              text: map?[alertRecallNameKey]?.isNotEmpty == true
+                  ? map![alertRecallNameKey]!
+                  : '撤回一条消息'),
         ],
       );
       return content;

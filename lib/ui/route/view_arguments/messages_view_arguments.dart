@@ -25,6 +25,7 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
     this.replyBarBuilder,
     this.quoteBuilder,
+    this.onErrorTap,
   });
 
   final ChatUIKitProfile profile;
@@ -49,6 +50,7 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
   final Widget? Function(BuildContext context, Message message)?
       replyBarBuilder;
   final Widget Function(QuoteModel model)? quoteBuilder;
+  final void Function(Message message)? onErrorTap;
   @override
   String? attributes;
 }

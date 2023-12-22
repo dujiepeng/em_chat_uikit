@@ -1,5 +1,4 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:em_chat_uikit/tools/chat_uikit_insert_message_tool.dart';
 
 import 'package:flutter/material.dart';
 

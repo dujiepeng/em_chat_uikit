@@ -1,6 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:em_chat_uikit/tools/chat_uikit_insert_message_tool.dart';
 import 'package:em_chat_uikit/ui/custom/custom_text_editing_controller.dart';
 import 'package:em_chat_uikit/ui/widgets/chat_uikit_quote_widget.dart';
 import 'package:em_chat_uikit/ui/widgets/chat_uikit_reply_bar.dart';
@@ -29,7 +28,8 @@ class MessagesView extends StatefulWidget {
         moreActionItems = arguments.moreActionItems,
         onItemLongPressActions = arguments.onItemLongPressActions,
         replyBarBuilder = arguments.replyBarBuilder,
-        quoteBuilder = arguments.quoteBuilder;
+        quoteBuilder = arguments.quoteBuilder,
+        onErrorTap = arguments.onErrorTap;
 
   const MessagesView({
     required this.profile,
@@ -53,6 +53,7 @@ class MessagesView extends StatefulWidget {
     this.moreActionItems,
     this.replyBarBuilder,
     this.quoteBuilder,
+    this.onErrorTap,
     super.key,
   });
 
@@ -78,6 +79,7 @@ class MessagesView extends StatefulWidget {
   final Widget? Function(BuildContext context, Message message)?
       replyBarBuilder;
   final Widget Function(QuoteModel model)? quoteBuilder;
+  final void Function(Message message)? onErrorTap;
 
   @override
   State<MessagesView> createState() => _MessagesViewState();
@@ -169,9 +171,9 @@ class _MessagesViewState extends State<MessagesView> {
       onAvatarLongPressed: widget.onAvatarLongPress,
       onNicknameTap: widget.onNicknameTap,
       bubbleStyle: widget.bubbleStyle,
-      itemBuilder: widget.itemBuilder,
+      itemBuilder: widget.itemBuilder ?? voiceItemBuilder,
       alertItemBuilder: widget.alertItemBuilder ?? alertItem,
-      onErrorTap: onErrorTap,
+      onErrorTap: widget.onErrorTap ?? onErrorTap,
     );
 
     content = NotificationListener(
@@ -265,6 +267,77 @@ class _MessagesViewState extends State<MessagesView> {
             ],
           ),
       ],
+    );
+
+    return content;
+  }
+
+  Widget? voiceItemBuilder(BuildContext context, Message message) {
+    if (message.bodyType != MessageType.VOICE) return null;
+
+    Widget content = ChatUIKitMessageListViewMessageItem(
+      isPlaying: _playingMessage?.msgId == message.msgId,
+      onErrorTap: () {
+        if (widget.onErrorTap == null) {
+          onErrorTap(message);
+        } else {
+          widget.onErrorTap!.call(message);
+        }
+      },
+      bubbleStyle: widget.bubbleStyle,
+      key: ValueKey(message.msgId),
+      showAvatar: widget.showAvatar,
+      quoteBuilder: widget.quoteBuilder,
+      showNickname: widget.showNickname,
+      onAvatarTap: () {
+        if (widget.onAvatarTap == null) {
+          avatarTap(message);
+        } else {
+          widget.onAvatarTap!.call(message);
+        }
+      },
+      onAvatarLongPressed: () {
+        widget.onAvatarLongPress?.call(message);
+      },
+      onBubbleDoubleTap: () {
+        widget.onDoubleTap?.call(message);
+      },
+      onBubbleLongPressed: () {
+        if (widget.onItemLongPress == null) {
+          onItemLongPress(message);
+        } else {
+          widget.onItemLongPress!.call(message);
+        }
+      },
+      onBubbleTap: () {
+        if (widget.onItemTap == null) {
+          bubbleTab(message);
+        } else {
+          widget.onItemTap!.call(message);
+        }
+      },
+      onNicknameTap: () {
+        widget.onNicknameTap?.call(message);
+      },
+      message: message,
+    );
+
+    double zoom = 0.8;
+    if (MediaQuery.of(context).size.width >
+        MediaQuery.of(context).size.height) {
+      zoom = 0.5;
+    }
+
+    content = SizedBox(
+      width: MediaQuery.of(context).size.width * zoom,
+      child: content,
+    );
+
+    content = Align(
+      alignment: message.direction == MessageDirection.SEND
+          ? Alignment.centerRight
+          : Alignment.centerLeft,
+      child: content,
     );
 
     return content;
@@ -624,8 +697,9 @@ class _MessagesViewState extends State<MessagesView> {
       );
     }
 
-    // TODO:播放音频
-    if (message.bodyType == MessageType.VOICE) {}
+    if (message.bodyType == MessageType.VOICE) {
+      playVoiceMessage(message);
+    }
 
     if (message.bodyType == MessageType.CUSTOM && message.isCardMessage) {
       String? userId =
@@ -713,12 +787,7 @@ class _MessagesViewState extends State<MessagesView> {
     );
     if (recall == true) {
       try {
-        ChatUIKitInsertMessageTool.insertRecallMessage(
-          messageId: message.msgId,
-          conversationId: controller.profile.id,
-          type: controller.conversationType,
-        );
-        controller.recallMessage(message.msgId);
+        controller.recallMessage(message);
         // ignore: empty_catches
       } catch (e) {}
     }
@@ -813,17 +882,41 @@ class _MessagesViewState extends State<MessagesView> {
     );
   }
 
-  void previewVoice(bool play, {String? path}) async {
-    if (_playingMessage != null) {
+  Future<void> playVoiceMessage(Message message) async {
+    if (_playingMessage?.msgId == message.msgId) {
+      _playingMessage = null;
+      await stopVoice();
+    } else {
+      await stopVoice();
+      _playingMessage = message;
+      await playVoice(message.localPath!);
+    }
+    setState(() {});
+  }
+
+  Future<void> previewVoice(bool play, {String? path}) async {
+    if (play) {
+      await playVoice(path!);
+    } else {
+      await stopVoice();
+    }
+  }
+
+  Future<void> playVoice(String path) async {
+    if (_player.state == PlayerState.playing) {
+      await _player.stop();
+    }
+    await _player.play(DeviceFileSource(path));
+    _player.onPlayerComplete.first.whenComplete(() async {
       _playingMessage = null;
       setState(() {});
-    }
-    await _player.stop();
+    }).onError((error, stackTrace) {});
+  }
 
-    if (play && path?.isNotEmpty == true) {
-      await _player.play(DeviceFileSource(path!));
-    } else {
+  Future<void> stopVoice() async {
+    if (_player.state == PlayerState.playing) {
       await _player.stop();
+      _playingMessage = null;
     }
   }
 

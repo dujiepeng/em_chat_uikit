@@ -22,6 +22,7 @@ export 'tools/chat_uikit_image_loader.dart';
 export 'tools/chat_uikit_message_helper.dart';
 export 'tools/chat_uikit_file_size_tool.dart';
 export 'tools/chat_uikit_time_tool.dart';
+export 'tools/chat_uikit_insert_message_tool.dart';
 
 export 'universal/chat_uikit_time_formatter.dart';
 export 'universal/defines.dart';

@@ -36,13 +36,13 @@ class ChatUIKitInsertMessageTool {
     await ChatUIKit.instance.insertMessage(message: alertMsg);
   }
 
-  static insertRecallMessage({
+  static Message insertRecallMessage({
     required String conversationId,
     required ConversationType type,
     required String messageId,
     String? info,
     int? timestamp,
-  }) async {
+  }) {
     int time = timestamp ?? DateTime.now().millisecondsSinceEpoch - 1;
 
     Message alertMsg = Message.createCustomSendMessage(
@@ -58,6 +58,7 @@ class ChatUIKitInsertMessageTool {
     alertMsg.localTime = time + 1;
     alertMsg.status = MessageStatus.SUCCESS;
 
-    await ChatUIKit.instance.insertMessage(message: alertMsg);
+    ChatUIKit.instance.insertMessage(message: alertMsg);
+    return alertMsg;
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:em_chat_uikit/chat_uikit.dart';
+
 import 'package:flutter/material.dart';
 
 enum MessageLastActionType {
@@ -38,7 +39,7 @@ class MessageListViewController extends ChangeNotifier
   @override
   void dispose() {
     ChatUIKit.instance.removeObserver(this);
-    debugPrintStack(label: "msgListController dispose");
+    // debugPrintStack(label: "msgListController dispose");
 
     super.dispose();
   }
@@ -209,10 +210,18 @@ class MessageListViewController extends ChangeNotifier
     } catch (e) {}
   }
 
-  Future<void> recallMessage(String messageId) async {
-    await ChatUIKit.instance.recallMessage(messageId: messageId);
-    msgList.removeWhere((element) => messageId == element.msgId);
-    notifyListeners();
+  Future<void> recallMessage(Message message) async {
+    int index = msgList.indexWhere((element) => message.msgId == element.msgId);
+    if (index != -1) {
+      await ChatUIKit.instance.recallMessage(messageId: message.msgId);
+      Message recallMsg = ChatUIKitInsertMessageTool.insertRecallMessage(
+          conversationId: profile.id,
+          type: conversationType,
+          messageId: message.msgId,
+          info: '撤回一条消息');
+      msgList[index] = recallMsg;
+      notifyListeners();
+    }
   }
 
   Future<void> sendVoiceMessage(ChatUIKitRecordModel model) async {
@@ -349,15 +358,25 @@ class MessageListViewController extends ChangeNotifier
     await markAllMessageAsRead();
     if (conversationType == ConversationType.Chat) {
       try {
-        await ChatUIKit.instance
-            .sendConversationReadAck(conversationId: profile.id);
-        for (var element in msgList) {
-          element.hasReadAck = true;
+        final conv = await ChatUIKit.instance.getConversation(
+          conversationId: profile.id,
+          type: conversationType,
+        );
+        int unreadCount = await conv?.unreadCount() ?? 0;
+        if (unreadCount > 0) {
+          await ChatUIKit.instance
+              .sendConversationReadAck(conversationId: profile.id);
+          for (var element in msgList) {
+            element.hasReadAck = true;
+          }
         }
+
         // 因为已读状态是对方看的，所以这个时候不需要刷新ui
         // notifyListeners();
         // ignore: empty_catches
-      } catch (e) {}
+      } catch (e) {
+        debugPrint('sendConversationsReadAck: $e');
+      }
     }
   }
 
