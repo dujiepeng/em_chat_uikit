@@ -120,14 +120,28 @@ class _ConversationsViewState extends State<ConversationsView> {
       builder: (context) {
         return SearchContactsView(
           onTap: (ctx, profile) {
-            Navigator.of(ctx).pop();
+            Navigator.of(ctx).pop(profile);
             debugPrint('onTap: ${profile.id}');
           },
           searchHideText: '搜索',
           searchData: list,
         );
       },
-    );
+    ).then((value) {
+      if (value != null && value is ChatUIKitProfile) {
+        Navigator.of(context)
+            .pushNamed(
+          ChatUIKitRouteNames.messagesView,
+          arguments: MessagesViewArguments(
+            bubbleStyle: ChatUIKitMessageListViewBubbleStyle.noArrow,
+            profile: value,
+          ),
+        )
+            .then((value) {
+          controller.reload();
+        });
+      }
+    });
   }
 
   void pushToMessagePage(ConversationItemModel model) {
@@ -135,7 +149,7 @@ class _ConversationsViewState extends State<ConversationsView> {
         .pushNamed(
       ChatUIKitRouteNames.messagesView,
       arguments: MessagesViewArguments(
-        // bubbleStyle: ChatUIKitMessageListViewBubbleStyle.noArrow,
+        bubbleStyle: ChatUIKitMessageListViewBubbleStyle.noArrow,
         profile: model.profile,
       ),
     )

@@ -123,7 +123,6 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         Text(
           message.textContent,
           overflow: TextOverflow.ellipsis,
-          
           maxLines: 2,
           style: TextStyle(
             color: theme.color.isDark
@@ -300,12 +299,11 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         SizedBox(
           width: 16,
           height: 16,
-          child: Icon(
-            Icons.image_outlined,
+          child: ChatUIKitImageLoader.videoDefault(
             size: 16,
             color: theme.color.isDark
-                ? theme.color.neutralColor6
-                : theme.color.neutralColor5,
+                ? theme.color.neutralColor5
+                : theme.color.neutralColor7,
           ),
         ),
         const SizedBox(width: 4),
@@ -343,19 +341,8 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
 
     Widget videoWidget = () {
       Widget? content;
-      if (message.thumbnailRemotePath?.isNotEmpty == true) {
-        content = Image(
-          gaplessPlayback: true,
-          image: ResizeImage(
-            NetworkImage(message.thumbnailRemotePath!),
-            width: 36,
-            height: 36,
-          ),
-          fit: BoxFit.fill,
-        );
-      }
 
-      if (message.thumbnailLocalPath?.isNotEmpty == true && content == null) {
+      if (message.thumbnailLocalPath?.isNotEmpty == true) {
         File file = File(message.thumbnailLocalPath!);
         if (file.existsSync()) {
           content = Image(
@@ -368,6 +355,18 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
             fit: BoxFit.fill,
           );
         }
+      }
+
+      if (message.thumbnailRemotePath?.isNotEmpty == true && content == null) {
+        content = Image(
+          gaplessPlayback: true,
+          image: ResizeImage(
+            NetworkImage(message.thumbnailRemotePath!),
+            width: 36,
+            height: 36,
+          ),
+          fit: BoxFit.fill,
+        );
       }
 
       final theme = ChatUIKitTheme.of(context);

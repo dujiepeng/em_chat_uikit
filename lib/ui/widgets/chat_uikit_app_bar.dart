@@ -15,6 +15,7 @@ class ChatUIKitAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.onBackButtonPressed,
     this.centerTitle = true,
     this.systemOverlayStyle,
+    this.backgroundColor,
     super.key,
   });
 
@@ -28,6 +29,7 @@ class ChatUIKitAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Widget? leading;
   final Widget? trailing;
   final bool centerTitle;
+  final Color? backgroundColor;
   final SystemUiOverlayStyle? systemOverlayStyle;
 
   @override

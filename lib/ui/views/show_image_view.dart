@@ -37,9 +37,7 @@ class _ShowImageViewState extends State<ShowImageView> {
     );
 
     content = Scaffold(
-      backgroundColor: theme.color.isDark
-          ? theme.color.neutralColor1
-          : theme.color.neutralColor98,
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
           content,
@@ -50,8 +48,20 @@ class _ShowImageViewState extends State<ShowImageView> {
     content = Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color.fromARGB(120, 0, 0, 0),
         elevation: 0.0,
+        leading: InkWell(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            margin: const EdgeInsets.only(left: 10),
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: theme.color.neutralColor95,
+            ),
+          ),
+        ),
       ),
       body: content,
     );
@@ -60,23 +70,23 @@ class _ShowImageViewState extends State<ShowImageView> {
   }
 
   void longPressed(Message message) {
-    showChatUIKitBottomSheet(
-        context: context,
-        items: [
-          ChatUIKitBottomSheetItem.normal(
-              label: '保存',
-              onTap: () async {
-                save();
-                Navigator.of(context).pop();
-              }),
-          ChatUIKitBottomSheetItem.normal(
-              label: '转发给朋友',
-              onTap: () async {
-                Navigator.of(context).pop();
-                forward();
-              })
-        ],
-        cancelTitle: '取消');
+    // showChatUIKitBottomSheet(
+    //     context: context,
+    //     items: [
+    //       ChatUIKitBottomSheetItem.normal(
+    //           label: '保存',
+    //           onTap: () async {
+    //             save();
+    //             Navigator.of(context).pop();
+    //           }),
+    //       ChatUIKitBottomSheetItem.normal(
+    //           label: '转发给朋友',
+    //           onTap: () async {
+    //             Navigator.of(context).pop();
+    //             forward();
+    //           })
+    //     ],
+    //     cancelTitle: '取消');
   }
 
   void save() async {}

@@ -26,19 +26,20 @@ class _ChatUIKitAvatarState extends State<ChatUIKitAvatar> {
   @override
   Widget build(BuildContext context) {
     Widget content = Container(
-      width: widget.size,
-      height: widget.size,
-      clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
-        color: Colors.red,
-        borderRadius: BorderRadius.circular(
-          CornerRadiusHelper.avatarRadius(
-            widget.size,
-            cornerRadius: widget.cornerRadius,
+        width: widget.size,
+        height: widget.size,
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(
+            CornerRadiusHelper.avatarRadius(
+              widget.size,
+              cornerRadius: widget.cornerRadius,
+            ),
           ),
         ),
-      ),
-    );
+        child: ChatUIKitImageLoader.defaultAvatar(
+          size: widget.size,
+        ));
     return content;
   }
 }

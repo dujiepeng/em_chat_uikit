@@ -10,6 +10,7 @@ class ChatUIKitShowVideoWidget extends StatefulWidget {
     this.onError,
     this.onProgress,
     this.onSuccess,
+    this.playIcon,
     super.key,
   });
 
@@ -19,6 +20,7 @@ class ChatUIKitShowVideoWidget extends StatefulWidget {
 
   final void Function(ChatError error)? onError;
   final void Function(int progress)? onProgress;
+  final Widget? playIcon;
   final VoidCallback? onSuccess;
 
   @override
@@ -195,13 +197,14 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
               child: isPlaying
                   ? const SizedBox()
                   : Center(
-                      child: Icon(
-                        Icons.play_circle_outline,
-                        size: 70,
-                        color: theme.color.isDark
-                            ? theme.color.neutralColor2
-                            : theme.color.neutralColor95,
-                      ),
+                      child: widget.playIcon ??
+                          Icon(
+                            Icons.play_circle_outline,
+                            size: 70,
+                            color: theme.color.isDark
+                                ? theme.color.neutralColor2
+                                : theme.color.neutralColor95,
+                          ),
                     ),
             ),
           ),
@@ -226,14 +229,14 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
       ],
     );
 
-    content = Stack(
-      children: [
-        Container(
-          color: Colors.black,
-        ),
-        Positioned.fill(child: content)
-      ],
-    );
+    // content = Stack(
+    //   children: [
+    //     Container(
+    //       color: Colors.black,
+    //     ),
+    //     Positioned.fill(child: content)
+    //   ],
+    // );
     return content;
   }
 

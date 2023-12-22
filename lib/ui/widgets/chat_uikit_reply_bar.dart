@@ -163,13 +163,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
         SizedBox(
           width: 16,
           height: 16,
-          child: Icon(
-            Icons.image_outlined,
-            size: 16,
-            color: theme.color.isDark
-                ? theme.color.neutralColor5
-                : theme.color.neutralColor6,
-          ),
+          child: ChatUIKitImageLoader.imageDefault(size: 16),
         ),
         const SizedBox(width: 4),
         Expanded(
@@ -194,13 +188,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
         SizedBox(
           width: 16,
           height: 16,
-          child: Icon(
-            Icons.image_outlined,
-            size: 16,
-            color: theme.color.isDark
-                ? theme.color.neutralColor5
-                : theme.color.neutralColor6,
-          ),
+          child: ChatUIKitImageLoader.videoDefault(size: 16),
         ),
         const SizedBox(width: 4),
         Expanded(
@@ -445,6 +433,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
   }
 
   Widget _videoPreview() {
+    final theme = ChatUIKitTheme.of(context);
     return () {
       Widget? content;
       if (widget.message.thumbnailLocalPath?.isNotEmpty == true) {
@@ -477,7 +466,23 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
         );
       }
 
-      final theme = ChatUIKitTheme.of(context);
+      if (content != null) {
+        content = Stack(
+          children: [
+            content,
+            Center(
+              child: Icon(
+                Icons.play_circle_outline,
+                size: 20,
+                color: theme.color.isDark
+                    ? theme.color.neutralColor1
+                    : theme.color.neutralColor98,
+              ),
+            ),
+          ],
+        );
+      }
+
       content ??= Center(
         child: ChatUIKitImageLoader.videoDefault(
           size: 24,

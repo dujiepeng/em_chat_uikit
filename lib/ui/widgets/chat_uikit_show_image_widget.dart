@@ -154,14 +154,6 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
       child: content,
     );
 
-    content = Stack(
-      children: [
-        Container(
-          color: Colors.black,
-        ),
-        Positioned.fill(child: content)
-      ],
-    );
     return content;
   }
 }
