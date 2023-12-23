@@ -346,8 +346,8 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
       color: theme.color.isDark
           ? theme.color.primaryColor6
           : theme.color.primaryColor5,
-      duration: const Duration(milliseconds: 1000),
-      count: 7,
+      duration: const Duration(milliseconds: 1500),
+      count: 5,
       enable: ChatUIKitVoiceBarStatusType.recording == statusType,
       child: content,
     );

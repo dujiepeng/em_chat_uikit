@@ -32,6 +32,8 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
     assert(widget.actions.length <= 5,
         'The number of actions in the list cannot exceed 5');
     actions = widget.actions;
+    isNotDisturb.value =
+        ChatUIKitContext.instance.conversationIsMute(widget.profile.id);
     fetchInfo();
   }
 

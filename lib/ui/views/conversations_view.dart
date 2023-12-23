@@ -156,7 +156,7 @@ class _ConversationsViewState extends State<ConversationsView> {
     });
   }
 
-  void longPressed(ConversationItemModel model) {
+  void longPressed(ConversationItemModel model) async {
     showChatUIKitBottomSheet(
       cancelTitle: '取消',
       context: context,

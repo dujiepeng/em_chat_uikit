@@ -16,6 +16,35 @@ mixin ChatUIKitNotificationActions on ChatSDKWrapper {
   }
 
   @override
+  Future<Map<String, ChatSilentModeResult>> fetchSilentModel({
+    required List<Conversation> conversations,
+  }) async {
+    Map<String, ChatSilentModeResult> map =
+        await super.fetchSilentModel(conversations: conversations);
+
+    for (var conversationId in map.keys) {
+      ChatUIKitContext.instance.addConversationMute({conversationId: 1});
+    }
+
+    List<ChatSilentModeResult> list = map.values
+        .where((element) => element.remindType == ChatPushRemindType.ALL)
+        .toList();
+
+    List<String> needClearIds = list.map((e) => e.conversationId).toList();
+    ChatUIKitContext.instance.deleteConversationMute(needClearIds);
+
+    list = map.values
+        .where((element) => element.remindType != ChatPushRemindType.ALL)
+        .toList();
+
+    List<String> needAddIds = list.map((e) => e.conversationId).toList();
+    Map<String, int> addMap = {for (var index in needAddIds) index: 1};
+
+    ChatUIKitContext.instance.addConversationMute(addMap);
+    return map;
+  }
+
+  @override
   Future<void> clearSilentMode({
     required String conversationId,
     required ConversationType type,

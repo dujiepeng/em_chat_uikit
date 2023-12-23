@@ -34,8 +34,9 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         'The number of actions in the list cannot exceed 5');
 
     ChatUIKit.instance.addObserver(this);
-
     actions = widget.actions;
+    isNotDisturb.value =
+        ChatUIKitContext.instance.conversationIsMute(widget.profile.id);
     fetchInfo();
     fetchGroup();
     fetchMembersAttrs();

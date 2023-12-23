@@ -100,7 +100,20 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
 
     Widget subTitle = showSubTitle
         ? Text(
-            model.lastMessage?.showInfo(context: context) ?? '',
+            () {
+              String str = '';
+              if (model.profile.type == ChatUIKitProfileType.groupChat) {
+                str += model.lastMessage?.nickname ??
+                    model.lastMessage?.from ??
+                    "";
+                if (str.isNotEmpty) {
+                  str = "$str: ";
+                }
+              }
+
+              str += model.lastMessage?.showInfo(context: context) ?? '';
+              return str;
+            }(),
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
             style: TextStyle(
