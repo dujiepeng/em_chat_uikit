@@ -70,6 +70,9 @@ class _ChangeInfoViewState extends State<ChangeInfoView> {
                 : theme.color.neutralColor95,
           ),
           child: TextField(
+            keyboardAppearance: ChatUIKitTheme.of(context).color.isDark
+                ? Brightness.dark
+                : Brightness.light,
             maxLines: 4,
             minLines: 1,
             buildCounter: (

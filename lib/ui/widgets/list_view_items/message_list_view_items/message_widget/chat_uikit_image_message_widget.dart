@@ -217,7 +217,8 @@ class _ChatUIKitImageMessageWidgetState
       ),
       child: Center(
         child: ChatUIKitImageLoader.imageDefault(
-          size: 64,
+          width: 64,
+          height: 64,
           color: theme.color.isDark
               ? theme.color.neutralColor5
               : theme.color.neutralColor7,

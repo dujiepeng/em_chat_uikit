@@ -238,7 +238,8 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ChatUIKitImageLoader.search(
-                  size: 22,
+                  width: 22,
+                  height: 22,
                   color: ChatUIKitTheme.of(context).color.neutralColor3,
                 ),
                 const SizedBox(width: 4),

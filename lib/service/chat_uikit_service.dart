@@ -22,11 +22,13 @@ class ChatUIKit extends ChatSDKWrapper
     required String appkey,
     bool autoLogin = true,
     bool debugMode = false,
+    bool requireDeliveryAck = false,
   }) async {
     await super.init(
       appkey: appkey,
       autoLogin: autoLogin,
       debugMode: debugMode,
+      requireDeliveryAck: requireDeliveryAck,
     );
     ChatUIKitContext.instance.currentUserId = currentUserId();
   }

@@ -57,7 +57,8 @@ class ChatUIKitFileMessageWidget extends StatelessWidget {
     );
 
     Widget fileIcon = ChatUIKitImageLoader.file(
-        size: 32,
+        width: 32,
+        height: 32,
         color: theme.color.isDark
             ? theme.color.neutralColor6
             : theme.color.neutralColor7);

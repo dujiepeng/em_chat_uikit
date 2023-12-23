@@ -163,7 +163,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
         SizedBox(
           width: 16,
           height: 16,
-          child: ChatUIKitImageLoader.imageDefault(size: 16),
+          child: ChatUIKitImageLoader.imageDefault(width: 16, height: 16),
         ),
         const SizedBox(width: 4),
         Expanded(
@@ -188,7 +188,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
         SizedBox(
           width: 16,
           height: 16,
-          child: ChatUIKitImageLoader.videoDefault(size: 16),
+          child: ChatUIKitImageLoader.videoDefault(width: 16, height: 16),
         ),
         const SizedBox(width: 4),
         Expanded(
@@ -258,7 +258,8 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
           width: 16,
           height: 16,
           child: ChatUIKitImageLoader.file(
-              size: 32,
+              width: 32,
+              height: 32,
               color: theme.color.isDark
                   ? theme.color.neutralColor6
                   : theme.color.neutralColor7),
@@ -394,7 +395,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
       final theme = ChatUIKitTheme.of(context);
       content ??= Center(
         child: ChatUIKitImageLoader.imageDefault(
-          size: 24,
+          width: 24,height: 24,
           color: theme.color.isDark
               ? theme.color.neutralColor5
               : theme.color.neutralColor7,
@@ -485,7 +486,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
 
       content ??= Center(
         child: ChatUIKitImageLoader.videoDefault(
-          size: 24,
+          width: 24,height: 24,
           color: theme.color.isDark
               ? theme.color.neutralColor5
               : theme.color.neutralColor7,

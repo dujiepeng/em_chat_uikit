@@ -5,6 +5,7 @@ export 'package:record/record.dart';
 export 'package:video_thumbnail/video_thumbnail.dart';
 export 'package:video_player/video_player.dart';
 export 'package:file_picker/file_picker.dart';
+export 'package:audioplayers/audioplayers.dart';
 
 export 'chat_uikit_context.dart';
 export 'chat_uikit_settings.dart';
@@ -26,6 +27,8 @@ export 'tools/chat_uikit_insert_message_tool.dart';
 
 export 'universal/chat_uikit_time_formatter.dart';
 export 'universal/defines.dart';
+
+export 'ui/custom/custom_text_editing_controller.dart';
 
 export 'ui/widgets/list_view_items/chat_uikit_details_list_view_item.dart';
 export 'ui/widgets/list_view_items/chat_uikit_contact_list_view_item.dart';
@@ -59,6 +62,8 @@ export 'ui/widgets/chat_uikit_show_image_widget.dart';
 export 'ui/widgets/chat_uikit_show_video_widget.dart';
 export 'ui/widgets/chat_uikit_message_status_widget.dart';
 export 'ui/widgets/chat_uikit_button.dart';
+export 'ui/widgets/chat_uikit_quote_widget.dart';
+export 'ui/widgets/chat_uikit_reply_bar.dart';
 
 export 'ui/controllers/chat_uikit_list_view_controller_base.dart';
 export 'ui/controllers/conversation_list_view_controller.dart';

@@ -108,6 +108,21 @@ class MessageListViewController extends ChangeNotifier
   }
 
   @override
+  void onMessagesDelivered(List<Message> messages) {
+    List<Message> list = msgList
+        .where((element1) => messages
+            .where((element2) => element1.msgId == element2.msgId)
+            .isNotEmpty)
+        .toList();
+    if (list.isNotEmpty) {
+      for (var element in list) {
+        element.hasDeliverAck = true;
+      }
+      notifyListeners();
+    }
+  }
+
+  @override
   void onMessagesRead(List<Message> messages) {
     List<Message> list = msgList
         .where((element1) => messages
@@ -120,11 +135,6 @@ class MessageListViewController extends ChangeNotifier
       }
       notifyListeners();
     }
-  }
-
-  @override
-  void onMessagesDelivered(List<Message> messages) {
-    debugPrint("onMessagesDelivered");
   }
 
   @override
@@ -318,13 +328,13 @@ class MessageListViewController extends ChangeNotifier
     sendMessage(msg);
   }
 
-  Future<void> sendCardMessage(ChatUIKitProfile profile) async {
-    Map<String, String> param = {cardContactUserId: profile.id};
+  Future<void> sendCardMessage(ChatUIKitProfile cardProfile) async {
+    Map<String, String> param = {cardContactUserId: cardProfile.id};
     if (profile.name != null) {
-      param[cardContactNickname] = profile.name!;
+      param[cardContactNickname] = cardProfile.name!;
     }
     if (profile.avatarUrl != null) {
-      param[cardContactAvatar] = profile.avatarUrl!;
+      param[cardContactAvatar] = cardProfile.avatarUrl!;
     }
 
     final message = Message.createCustomSendMessage(

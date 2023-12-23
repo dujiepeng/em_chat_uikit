@@ -101,6 +101,9 @@ class _ChatUIKitInputBarState extends State<ChatUIKitInputBar> {
         borderRadius: widget.borderRadius ?? BorderRadius.circular(4),
       ),
       child: TextField(
+        keyboardAppearance: ChatUIKitTheme.of(context).color.isDark
+            ? Brightness.dark
+            : Brightness.light,
         autofocus: widget.autofocus,
         onChanged: widget.onChanged,
         focusNode: widget.focusNode,

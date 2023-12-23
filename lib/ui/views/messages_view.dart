@@ -1,10 +1,6 @@
 import 'dart:io';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:em_chat_uikit/ui/custom/custom_text_editing_controller.dart';
-import 'package:em_chat_uikit/ui/widgets/chat_uikit_quote_widget.dart';
-import 'package:em_chat_uikit/ui/widgets/chat_uikit_reply_bar.dart';
 
 import 'package:flutter/material.dart';
 
@@ -557,6 +553,7 @@ class _MessagesViewState extends State<MessagesView> {
             if (showMoreBtn)
               InkWell(
                 onTap: () {
+                  clearAllType();
                   List<ChatUIKitBottomSheetItem>? items =
                       widget.moreActionItems;
 
@@ -629,6 +626,7 @@ class _MessagesViewState extends State<MessagesView> {
     showEmoji = false;
     editMessage = null;
     replyMessage = null;
+    focusNode.unfocus();
     setState(() {});
   }
 
@@ -890,7 +888,6 @@ class _MessagesViewState extends State<MessagesView> {
       await stopVoice();
     } else {
       await stopVoice();
-
       File file = File(message.localPath!);
       if (!file.existsSync()) {
         await controller.downloadMessage(message);
@@ -951,6 +948,8 @@ class _MessagesViewState extends State<MessagesView> {
   }
 
   void pushNextPage(ChatUIKitProfile profile) async {
+    clearAllType();
+
     // 如果是自己
     if (profile.id == ChatUIKit.instance.currentUserId()) {
       pushToCurrentUser(profile);

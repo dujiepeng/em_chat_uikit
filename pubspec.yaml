@@ -15,7 +15,7 @@ dependencies:
   im_flutter_sdk:
     path: ../../../im_flutter_sdk
 
-  record: ^5.0.1
+  record: ^5.0.4
 
   shared_preferences: ^2.2.2
 

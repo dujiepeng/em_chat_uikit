@@ -236,6 +236,7 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
   @override
   void onContactAdded(String userId) {
     setState(() {});
+    controller.reload();
   }
 
   // 用于更新删除好友后的列表刷新

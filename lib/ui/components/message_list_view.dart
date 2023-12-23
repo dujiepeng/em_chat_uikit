@@ -126,7 +126,7 @@ class _MessageListViewState extends State<MessageListView> {
     content = NotificationListener(
       onNotification: (notification) {
         if (notification is ScrollUpdateNotification) {
-          if (controller.hasNew && scrollController.offset == 0) {
+          if (controller.hasNew && scrollController.offset < 20) {
             controller.hasNew = false;
             setState(() {});
           }

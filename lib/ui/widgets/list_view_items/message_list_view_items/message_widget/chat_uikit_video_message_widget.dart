@@ -207,7 +207,8 @@ class _ChatUIKitVideoMessageWidgetState
       ),
       child: Center(
         child: ChatUIKitImageLoader.videoDefault(
-          size: 64,
+          width: 64,
+          height: 64,
           color: theme.color.isDark
               ? theme.color.neutralColor5
               : theme.color.neutralColor7,

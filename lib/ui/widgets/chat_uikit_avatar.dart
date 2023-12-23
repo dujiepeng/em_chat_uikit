@@ -38,7 +38,8 @@ class _ChatUIKitAvatarState extends State<ChatUIKitAvatar> {
           ),
         ),
         child: ChatUIKitImageLoader.defaultAvatar(
-          size: widget.size,
+          height: widget.size,
+          width: widget.size,
         ));
     return content;
   }

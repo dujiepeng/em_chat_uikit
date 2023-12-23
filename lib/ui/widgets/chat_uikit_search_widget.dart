@@ -121,12 +121,16 @@ class _ChatUIKitSearchWidgetState extends State<ChatUIKitSearchWidget> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ChatUIKitImageLoader.search(
-                      size: 22,
+                      width: 22, height: 24,
                       color: ChatUIKitTheme.of(context).color.neutralColor3,
                     ),
                     const SizedBox(width: 6),
                     Expanded(
                       child: TextField(
+                        keyboardAppearance:
+                            ChatUIKitTheme.of(context).color.isDark
+                                ? Brightness.dark
+                                : Brightness.light,
                         autofocus: true,
                         style: TextStyle(
                             fontWeight: theme.font.bodyLarge.fontWeight,
@@ -232,7 +236,8 @@ class _ChatUIKitSearchWidgetState extends State<ChatUIKitSearchWidget> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ChatUIKitImageLoader.search(
-                  size: 22,
+                  width: 22,
+                  height: 22,
                   color: ChatUIKitTheme.of(context).color.neutralColor3,
                 ),
                 const SizedBox(width: 4),

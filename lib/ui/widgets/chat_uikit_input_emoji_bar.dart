@@ -108,7 +108,7 @@ class ChatExpression extends StatelessWidget {
     //   emoji,
     //   style: const TextStyle(fontSize: 30),
     // );
-    Widget icon = ChatUIKitImageLoader.emoji(emojiImage, size: 36);
+    Widget icon = ChatUIKitImageLoader.emoji(emojiImage, width: 36, height: 36);
     return TextButton(
       style: ButtonStyle(
         padding: MaterialStateProperty.all(

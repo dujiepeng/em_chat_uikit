@@ -33,7 +33,8 @@ class _ContactPageState extends State<ContactPage>
     if (event == ChatSDKWrapperActionEvent.acceptContactRequest ||
         event == ChatSDKWrapperActionEvent.fetchGroupMemberAttributes ||
         event == ChatSDKWrapperActionEvent.setGroupMemberAttributes ||
-        event == ChatSDKWrapperActionEvent.sendContactRequest) {
+        event == ChatSDKWrapperActionEvent.sendContactRequest ||
+        event == ChatSDKWrapperActionEvent.changeGroupOwner) {
       EasyLoading.show();
     }
   }
@@ -43,7 +44,8 @@ class _ContactPageState extends State<ContactPage>
     if (event == ChatSDKWrapperActionEvent.acceptContactRequest ||
         event == ChatSDKWrapperActionEvent.fetchGroupMemberAttributes ||
         event == ChatSDKWrapperActionEvent.setGroupMemberAttributes ||
-        event == ChatSDKWrapperActionEvent.sendContactRequest) {
+        event == ChatSDKWrapperActionEvent.sendContactRequest ||
+        event == ChatSDKWrapperActionEvent.changeGroupOwner) {
       EasyLoading.dismiss();
     }
   }

@@ -134,7 +134,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         SizedBox(
           width: 16,
           height: 16,
-          child: ChatUIKitImageLoader.imageDefault(size: 16),
+          child: ChatUIKitImageLoader.imageDefault(width: 16, height: 16),
         ),
         const SizedBox(width: 4),
         Flexible(
@@ -232,7 +232,8 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
               final theme = ChatUIKitTheme.of(context);
               content ??= Center(
                 child: ChatUIKitImageLoader.imageDefault(
-                  size: 24,
+                  width: 24,
+                  height: 24,
                   color: theme.color.isDark
                       ? theme.color.neutralColor5
                       : theme.color.neutralColor7,
@@ -283,7 +284,8 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
           width: 16,
           height: 16,
           child: ChatUIKitImageLoader.videoDefault(
-            size: 16,
+            width: 16,
+            height: 16,
             color: theme.color.isDark
                 ? theme.color.neutralColor5
                 : theme.color.neutralColor7,
@@ -357,7 +359,8 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         hasLoad = false;
         return Center(
           child: ChatUIKitImageLoader.videoDefault(
-            size: 24,
+            width: 24,
+            height: 24,
             color: theme.color.isDark
                 ? theme.color.neutralColor5
                 : theme.color.neutralColor7,
@@ -505,7 +508,8 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
           width: 16,
           height: 16,
           child: ChatUIKitImageLoader.file(
-              size: 32,
+              width: 32,
+              height: 32,
               color: theme.color.isDark
                   ? theme.color.neutralColor6
                   : theme.color.neutralColor7),

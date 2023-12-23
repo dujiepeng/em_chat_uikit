@@ -265,6 +265,10 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 14, right: 14),
                       child: TextField(
+                        keyboardAppearance:
+                            ChatUIKitTheme.of(context).color.isDark
+                                ? Brightness.dark
+                                : Brightness.light,
                         style: TextStyle(
                             fontWeight: themeFont.bodyLarge.fontWeight,
                             fontSize: themeFont.bodyLarge.fontSize,

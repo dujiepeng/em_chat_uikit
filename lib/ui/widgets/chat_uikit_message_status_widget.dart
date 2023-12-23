@@ -57,21 +57,21 @@ class ChatUIKitMessageStatusWidget extends StatelessWidget {
       child: CircularProgressIndicator(
         color: color ??
             (theme.color.isDark
-                ? theme.color.neutralColor7
+                ? theme.color.neutralColor6
                 : theme.color.neutralColor7),
         strokeWidth: 1.5,
       ),
     );
   }
 
-  Widget _read(ChatUIKitTheme theme) {
+  Widget _deliver(ChatUIKitTheme theme) {
     return Icon(
       Icons.done_all,
       size: size,
       color: color ??
           (theme.color.isDark
-              ? theme.color.neutralColor7
-              : theme.color.secondaryColor4),
+              ? theme.color.neutralColor6
+              : theme.color.neutralColor7),
     );
   }
 
@@ -81,8 +81,19 @@ class ChatUIKitMessageStatusWidget extends StatelessWidget {
       size: size,
       color: color ??
           (theme.color.isDark
-              ? theme.color.neutralColor7
+              ? theme.color.neutralColor6
               : theme.color.neutralColor7),
+    );
+  }
+
+  Widget _read(ChatUIKitTheme theme) {
+    return Icon(
+      Icons.done_all,
+      size: size,
+      color: color ??
+          (theme.color.isDark
+              ? theme.color.secondaryColor5
+              : theme.color.secondaryColor4),
     );
   }
 
@@ -94,20 +105,9 @@ class ChatUIKitMessageStatusWidget extends StatelessWidget {
         size: size,
         color: color ??
             (theme.color.isDark
-                ? theme.color.neutralColor7
-                : theme.color.neutralColor7),
+                ? theme.color.errorColor6
+                : theme.color.errorColor5),
       ),
-    );
-  }
-
-  Widget _deliver(ChatUIKitTheme theme) {
-    return Icon(
-      Icons.done_all,
-      size: size,
-      color: color ??
-          (theme.color.isDark
-              ? theme.color.neutralColor7
-              : theme.color.neutralColor7),
     );
   }
 }

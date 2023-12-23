@@ -130,13 +130,14 @@ class ChatSDKWrapper extends ChatUIKitWrapperBase
     required String appkey,
     bool autoLogin = true,
     bool debugMode = false,
+    bool requireDeliveryAck = false,
   }) async {
     WidgetsFlutterBinding.ensureInitialized();
     final options = Options(
-      appKey: appkey,
-      autoLogin: autoLogin,
-      debugMode: debugMode,
-    );
+        appKey: appkey,
+        autoLogin: autoLogin,
+        debugMode: debugMode,
+        requireDeliveryAck: requireDeliveryAck);
     await Client.getInstance.init(options);
     Client.getInstance.startCallback();
   }

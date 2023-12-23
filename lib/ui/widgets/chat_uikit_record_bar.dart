@@ -450,7 +450,7 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
       statusType = ChatUIKitVoiceBarStatusType.recording;
       widget.statusChangeCallback?.call(statusType, 0, null);
       setState(() {});
-    }else {
+    } else {
       // TODO: show permission error.
     }
   }
