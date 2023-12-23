@@ -344,7 +344,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
                   } else {
                     await ChatUIKit.instance.clearSilentMode(
                         conversationId: widget.profile.id,
-                        type: ConversationType.Chat);
+                        type: ConversationType.GroupChat);
                   }
                   setState(() {
                     isNotDisturb.value = value;

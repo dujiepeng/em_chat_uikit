@@ -22,10 +22,6 @@ mixin ChatUIKitNotificationActions on ChatSDKWrapper {
     Map<String, ChatSilentModeResult> map =
         await super.fetchSilentModel(conversations: conversations);
 
-    for (var conversationId in map.keys) {
-      ChatUIKitContext.instance.addConversationMute({conversationId: 1});
-    }
-
     List<ChatSilentModeResult> list = map.values
         .where((element) => element.remindType == ChatPushRemindType.ALL)
         .toList();
