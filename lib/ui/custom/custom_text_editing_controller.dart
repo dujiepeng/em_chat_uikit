@@ -2,11 +2,12 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/widgets.dart';
 
 class CustomTextEditingController extends TextEditingController {
-  final List<MentionModel> _mentionList = [];
-  bool mentionAll = false;
+  final List<MentionModel> mentionList = [];
+
   bool needMention = false;
   int lastAtCount = 0;
   bool willChange = false;
+  bool isAtAll = false;
 
   final TextStyle? mentionStyle;
 
@@ -18,18 +19,30 @@ class CustomTextEditingController extends TextEditingController {
   void addUser(ChatUIKitProfile profile) {
     String addText = '${profile.showName} '; // 在nickname后面添加空格
     int cursorOffset = value.selection.baseOffset + addText.length;
-    final mention = MentionModel(
-      profile,
-      value.selection.baseOffset - 1, // 因为前面已经有了@字符，所以此处-1
-      addText.length + 1, // 因为前面已经有了@字符，所以此处 +1 ，example：'@du001 '
-    );
-    _mentionList.add(mention);
+    final mention = MentionModel(profile);
+    mentionList.add(mention);
     value = TextEditingValue(
       text: text.substring(0, value.selection.baseOffset) +
           addText +
           text.substring(value.selection.baseOffset),
       selection: TextSelection.collapsed(offset: cursorOffset),
     );
+  }
+
+  void atAll() {
+    isAtAll = true;
+    String addText = 'All ';
+    int cursorOffset = value.selection.baseOffset + addText.length;
+    value = TextEditingValue(
+      text: text.substring(0, value.selection.baseOffset) +
+          addText +
+          text.substring(value.selection.baseOffset),
+      selection: TextSelection.collapsed(offset: cursorOffset),
+    );
+  }
+
+  List<ChatUIKitProfile> getMentionList() {
+    return mentionList.map((e) => e.profile).toList();
   }
 
   @override
@@ -45,16 +58,20 @@ class CustomTextEditingController extends TextEditingController {
     lastAtCount = currentCount;
     return newValue;
   }
+
+  void clearMentions() {
+    mentionList.clear();
+    needMention = false;
+    lastAtCount = 0;
+    willChange = false;
+    isAtAll = false;
+  }
 }
 
 class MentionModel {
   final ChatUIKitProfile profile;
-  final int start;
-  final int length;
 
   MentionModel(
     this.profile,
-    this.start,
-    this.length,
   );
 }

@@ -177,12 +177,36 @@ class MessageListViewController extends ChangeNotifier
     }
   }
 
-  Future<void> sendTextMessage(String text, {Message? replay}) async {
+  Future<void> sendTextMessage(
+    String text, {
+    Message? replay,
+    dynamic mention,
+  }) async {
     Message message = Message.createTxtSendMessage(
       targetId: profile.id,
       chatType: chatType,
       content: text,
     );
+
+    if (mention != null) {
+      Map<String, dynamic> mentionExt = {};
+      if (mention is bool && mention == true) {
+        mentionExt[mentionAllKey] = mentionAllValue;
+      } else if (mention is List<String>) {
+        List<String> mentionList = [];
+        for (var userId in mention) {
+          {
+            mentionList.add(userId);
+          }
+        }
+        if (mentionList.isNotEmpty) {
+          mentionExt[mentionUserKey] = mentionList;
+        }
+      }
+      if (mentionExt.isNotEmpty) {
+        message.attributes = mentionExt;
+      }
+    }
 
     if (replay != null) {
       message.addQuote(replay);

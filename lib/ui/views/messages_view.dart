@@ -136,7 +136,7 @@ class _MessagesViewState extends State<MessagesView> {
           .then((value) {
         if (value != null) {
           if (value == true) {
-            inputBarTextEditingController.mentionAll = true;
+            inputBarTextEditingController.atAll();
           } else if (value is ChatUIKitProfile) {
             inputBarTextEditingController.addUser(value);
           }
@@ -607,7 +607,30 @@ class _MessagesViewState extends State<MessagesView> {
                 onTap: () {
                   String text = inputBarTextEditingController.text.trim();
                   if (text.isNotEmpty) {
-                    controller.sendTextMessage(text, replay: replyMessage);
+                    dynamic mention;
+                    if (inputBarTextEditingController.isAtAll &&
+                        text.contains("@All")) {
+                      mention = true;
+                    }
+
+                    if (inputBarTextEditingController.mentionList.isNotEmpty) {
+                      List<String> mentionList = [];
+                      List<ChatUIKitProfile> list =
+                          inputBarTextEditingController.getMentionList();
+                      for (var element in list) {
+                        if (text.contains('@${element.showName}')) {
+                          mentionList.add(element.id);
+                        }
+                      }
+                      mention = mentionList;
+                    }
+
+                    controller.sendTextMessage(
+                      text,
+                      replay: replyMessage,
+                      mention: mention,
+                    );
+                    inputBarTextEditingController.clearMentions();
                     inputBarTextEditingController.clear();
                     if (replyMessage != null) {
                       replyMessage = null;

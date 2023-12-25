@@ -20,5 +20,8 @@ const String alertCreateGroupMessageOwnerKey = 'owner';
 const String alertCreateGroupMessageGroupNameKey = 'groupName';
 const String alertRecallNameKey = 'alertRecallNameKey';
 
+const String mentionAllKey = 'em_at_list';
+const String mentionAllValue = 'ALL';
+const String mentionUserKey = 'em_at_list';
 
 enum CornerRadius { extraSmall, small, medium, large }
