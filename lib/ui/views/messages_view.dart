@@ -106,8 +106,10 @@ class _MessagesViewState extends State<MessagesView> {
     super.initState();
     inputBarTextEditingController = CustomTextEditingController();
     inputBarTextEditingController.addListener(() {
-      if (inputBarTextEditingController.lastNeedMention) {
-        needMention();
+      if (inputBarTextEditingController.needMention) {
+        if (widget.profile.type == ChatUIKitProfileType.groupChat) {
+          needMention();
+        }
       }
     });
     controller = MessageListViewController(profile: widget.profile);
@@ -124,7 +126,7 @@ class _MessagesViewState extends State<MessagesView> {
   }
 
   void needMention() {
-    clearAllType();
+    // clearAllType();
     if (controller.conversationType == ConversationType.GroupChat) {
       Navigator.of(context)
           .pushNamed(

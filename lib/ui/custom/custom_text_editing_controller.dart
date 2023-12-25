@@ -3,26 +3,27 @@ import 'package:flutter/widgets.dart';
 
 class CustomTextEditingController extends TextEditingController {
   final List<MentionModel> _mentionList = [];
-  final bool enableMention;
   bool mentionAll = false;
-  bool lastNeedMention = false;
+  bool needMention = false;
   int lastAtCount = 0;
+  bool willChange = false;
 
   final TextStyle? mentionStyle;
 
   CustomTextEditingController({
     String? text,
-    this.enableMention = false,
     this.mentionStyle,
   }) : super(text: text);
 
   void addUser(ChatUIKitProfile profile) {
-    String addText = profile.showName;
-
+    String addText = '${profile.showName} '; // 在nickname后面添加空格
     int cursorOffset = value.selection.baseOffset + addText.length;
-
-    _mentionList.add(MentionModel(profile));
-
+    final mention = MentionModel(
+      profile,
+      value.selection.baseOffset - 1, // 因为前面已经有了@字符，所以此处-1
+      addText.length + 1, // 因为前面已经有了@字符，所以此处 +1 ，example：'@du001 '
+    );
+    _mentionList.add(mention);
     value = TextEditingValue(
       text: text.substring(0, value.selection.baseOffset) +
           addText +
@@ -33,98 +34,82 @@ class CustomTextEditingController extends TextEditingController {
 
   @override
   set value(TextEditingValue newValue) {
-    if (!enableMention) {
-      super.value = newValue;
-    }
-
-    final currentCount =
-        newValue.text.split('').where((element) => element == "@").length;
-    lastNeedMention = currentCount == lastAtCount + 1;
-    lastAtCount = currentCount;
-    // Ensure the cursor position is correct
-    if (newValue.selection.start > newValue.text.length) {
-      newValue = newValue.copyWith(
-        selection: TextSelection.collapsed(offset: newValue.text.length),
-      );
-    }
-
-    // Remove mention models if the corresponding mention is deleted
-    final removedMentions = _mentionList.where((mention) {
-      // List<String> newMentions = newValue.text.split('@');
-      // List<String> oldMentions = value.text.split('@');
-      // 算法有问题，如果元数据中有重复的名字，会导致删除不了
-      final ret = !newValue.text.contains('@${mention.profile.showName}');
-      return ret;
-    }).toList();
-
-    _mentionList.removeWhere((mention) => removedMentions.contains(mention));
-
-    if (removedMentions.length == 1) {
-      String str = newValue.text.substring(0, newValue.selection.baseOffset);
-      int index = str.lastIndexOf('@');
-      if (index != -1) {
-        newValue = TextEditingValue(
-          text: value.text.substring(0, index) +
-              value.text.substring(
-                  index + removedMentions[0].profile.showName.length + 1),
-          selection: TextSelection.collapsed(offset: index),
-        );
-      }
-    }
-
+    newValue = mentionFilter(newValue);
     super.value = newValue;
   }
 
-  @override
-  TextSpan buildTextSpan({
-    required BuildContext context,
-    TextStyle? style,
-    required bool withComposing,
-  }) {
-    if (!enableMention) {
-      super.buildTextSpan(context: context, withComposing: withComposing);
-    }
+  TextEditingValue mentionFilter(TextEditingValue newValue) {
+    // 通过判断@的个数来判断是否需要触发@的逻辑
+    final currentCount =
+        newValue.text.split('').where((element) => element == "@").length;
+    needMention = currentCount == lastAtCount + 1;
 
-    List<String> list = text.split('@');
+    // 判断@是否被删除。
+    // 正常删除状态，可以通过extentOffset获取删除的值
+    List<MentionModel> needRemove = [];
 
-    List<InlineSpan> children = [];
-
-    for (var txt in list) {
-      bool isMentioned = false; // Flag to check if txt is mentioned
-
-      for (var model in _mentionList) {
-        if (txt.startsWith(model.profile.showName)) {
-          String mentionText = txt.substring(0, model.profile.showName.length);
-          children.add(
-            TextSpan(text: '@$mentionText', style: mentionStyle ?? style),
-          );
-          String lessText = txt.substring(model.profile.showName.length);
-          if (lessText.isNotEmpty == true) {
-            children.add(
-              TextSpan(text: lessText, style: style),
-            );
-          }
-          isMentioned = true; // Set flag to true if txt is mentioned
-          break; // Exit the loop if txt is mentioned
+    if (willChange) {
+      List<String> newMentions = newValue.text.split('@');
+      List<String> oldMentions = text.split('@');
+      // 获取删除的@的index
+      List<int> removeIndex = [];
+      for (int i = 0; i < oldMentions.length; i++) {
+        if (newMentions.length > i && oldMentions[i] != newMentions[i]) {
+          removeIndex.add(i);
         }
       }
 
-      if (!isMentioned) {
-        children.add(TextSpan(text: txt, style: style));
+      for (var model in _mentionList) {
+        if (model.start < value.selection.extentOffset &&
+            model.start + model.length >= value.selection.extentOffset) {
+          needRemove.add(model);
+          String str = value.text.substring(0, value.selection.extentOffset);
+          int index = str.lastIndexOf('@');
+          if (index != -1) {
+            newValue = TextEditingValue(
+              text: text.substring(0, index) +
+                  text.substring(index + model.length),
+              selection: TextSelection.collapsed(offset: model.start),
+            );
+          }
+          break;
+        }
       }
     }
-    return TextSpan(children: children, style: style);
+    _mentionList.removeWhere((element) => needRemove.contains(element));
+
+    lastAtCount = currentCount;
+
+    // willChange = newValue.selection.isCollapsed == false;
+    willChange = newValue.selection.isCollapsed == false &&
+        newValue.selection.start + 1 == newValue.selection.end;
+
+    return newValue;
   }
+
+  // @override
+  // set selection(TextSelection newSelection) {
+  //   // 过滤@ 情况，不允许光标移动到@数据之间
+  //   TextSelection selection = newSelection;
+  //   for (var model in _mentionList) {
+  //     if (model.start < selection.baseOffset &&
+  //         model.start + model.length >= selection.baseOffset) {
+  //       selection = TextSelection.collapsed(offset: model.start);
+  //       break;
+  //     }
+  //   }
+  //   super.selection = selection;
+  // }
 }
 
 class MentionModel {
   final ChatUIKitProfile profile;
-  // final int location;
-  // final int length;
+  final int start;
+  final int length;
 
   MentionModel(
     this.profile,
-    // this.location,
-    // this.length,
+    this.start,
+    this.length,
   );
 }
