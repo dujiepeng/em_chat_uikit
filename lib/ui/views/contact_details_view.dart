@@ -8,16 +8,19 @@ class ContactDetailsView extends StatefulWidget {
   ContactDetailsView.arguments(ContactDetailsViewArguments arguments,
       {super.key})
       : actions = arguments.actions,
-        profile = arguments.profile;
+        profile = arguments.profile,
+        onMessageDidClear = arguments.onMessageDidClear;
 
   const ContactDetailsView({
     required this.profile,
     required this.actions,
+    this.onMessageDidClear,
     super.key,
   });
 
   final ChatUIKitProfile profile;
   final List<ChatUIKitActionItem> actions;
+  final VoidCallback? onMessageDidClear;
   @override
   State<ContactDetailsView> createState() => _ContactDetailsViewState();
 }
@@ -255,8 +258,8 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
     return content;
   }
 
-  void clearAllHistory() {
-    showChatUIKitDialog(
+  void clearAllHistory() async {
+    final ret = await showChatUIKitDialog(
       title: '确认清空聊天记录?',
       content: '清空聊天记录后，你将无法查看与该联系人的聊天记录。',
       context: context,
@@ -270,16 +273,18 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
         ChatUIKitDialogItem.confirm(
           label: '确认',
           onTap: () async {
-            Navigator.of(context).pop();
-            Conversation conversation = await ChatUIKit.instance
-                .createConversation(
-                    conversationId: widget.profile.id,
-                    type: ConversationType.Chat);
-            await conversation.deleteAllMessages();
+            Navigator.of(context).pop(true);
           },
         ),
       ],
     );
+
+    if (ret == true) {
+      Conversation conversation = await ChatUIKit.instance.createConversation(
+          conversationId: widget.profile.id, type: ConversationType.Chat);
+      await conversation.deleteAllMessages();
+      widget.onMessageDidClear?.call();
+    }
   }
 
   void showBottom() async {

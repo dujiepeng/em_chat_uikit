@@ -24,6 +24,13 @@ class MessageListViewController extends ChangeNotifier
 
   final List<Message> msgList = [];
 
+  void clearMessages() {
+    msgList.clear();
+    lastActionType = MessageLastActionType.none;
+    hasNew = false;
+    lastMessageId = null;
+  }
+
   MessageListViewController({required this.profile, this.pageSize = 30}) {
     ChatUIKit.instance.addObserver(this);
     conversationType = () {

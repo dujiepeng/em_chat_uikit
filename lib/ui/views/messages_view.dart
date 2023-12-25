@@ -1019,6 +1019,11 @@ class _MessagesViewState extends State<MessagesView> {
     Navigator.of(context).pushNamed(
       ChatUIKitRouteNames.contactDetailsView,
       arguments: ContactDetailsViewArguments(
+        onMessageDidClear: () {
+          replyMessage = null;
+          controller.clearMessages();
+          setState(() {});
+        },
         profile: widget.profile,
         actions: [
           ChatUIKitActionItem(
