@@ -89,6 +89,7 @@ class MessageListViewController extends ChangeNotifier
       }
     }
     if (list.isNotEmpty) {
+      _clearMention(list);
       msgList.insertAll(0, list.reversed);
       hasNew = true;
       lastActionType = MessageLastActionType.receive;
@@ -168,6 +169,16 @@ class MessageListViewController extends ChangeNotifier
     notifyListeners();
   }
 
+  Future<void> _clearMention(List<Message> msgs) async {
+    if (profile.type == ChatUIKitProfileType.groupChat ||
+        profile.type == ChatUIKitProfileType.groupMember) {
+      return;
+    }
+    if (msgs.any((element) => element.hasMention)) {
+      clearMentionIfNeed();
+    }
+  }
+
   ChatType get chatType {
     if (profile.type == ChatUIKitProfileType.groupChat ||
         profile.type == ChatUIKitProfileType.groupMember) {
@@ -191,7 +202,7 @@ class MessageListViewController extends ChangeNotifier
     if (mention != null) {
       Map<String, dynamic> mentionExt = {};
       if (mention is bool && mention == true) {
-        mentionExt[mentionAllKey] = mentionAllValue;
+        mentionExt[mentionKey] = mentionAllValue;
       } else if (mention is List<String>) {
         List<String> mentionList = [];
         for (var userId in mention) {
@@ -200,7 +211,7 @@ class MessageListViewController extends ChangeNotifier
           }
         }
         if (mentionList.isNotEmpty) {
-          mentionExt[mentionUserKey] = mentionList;
+          mentionExt[mentionKey] = mentionList;
         }
       }
       if (mentionExt.isNotEmpty) {
@@ -385,6 +396,19 @@ class MessageListViewController extends ChangeNotifier
     hasNew = true;
     lastActionType = MessageLastActionType.send;
     notifyListeners();
+  }
+
+  Future<void> clearMentionIfNeed() async {
+    if (profile.type == ChatUIKitProfileType.groupChat ||
+        profile.type == ChatUIKitProfileType.groupMember) {
+      Conversation? conv = await ChatUIKit.instance.getConversation(
+        conversationId: profile.id,
+        type: ConversationType.GroupChat,
+      );
+      if (conv != null) {
+        conv.removeMention();
+      }
+    }
   }
 
 // support single chat.

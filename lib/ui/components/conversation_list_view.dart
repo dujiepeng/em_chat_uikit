@@ -60,7 +60,16 @@ class _ConversationListViewState extends State<ConversationListView>
   }
 
   @override
-  void onMessagesReceived(List<Message> messages) {
+  void onMessagesReceived(List<Message> messages) async {
+    for (var msg in messages) {
+      if (msg.hasMention) {
+        Conversation? conversation = await ChatUIKit.instance.getConversation(
+          conversationId: msg.conversationId!,
+          type: ConversationType.values[msg.chatType.index],
+        );
+        await conversation?.addMention();
+      }
+    }
     controller.reload();
   }
 

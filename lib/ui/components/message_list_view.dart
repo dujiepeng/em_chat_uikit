@@ -82,6 +82,7 @@ class _MessageListViewState extends State<MessageListView> {
     });
     fetchMessages();
     controller.sendConversationsReadAck();
+    controller.clearMentionIfNeed();
   }
 
   @override

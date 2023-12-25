@@ -229,6 +229,28 @@ extension MessageHelper on Message {
     return str;
   }
 
+  bool get hasMention {
+    bool ret = false;
+    if (attributes == null) {
+      ret = false;
+    }
+    if (attributes?[mentionKey] == null) {
+      ret = false;
+    }
+    if (attributes?[mentionKey] is List) {
+      List mentionList = attributes?[mentionKey];
+      if (mentionList.isNotEmpty) {
+        ret = mentionList.contains(ChatUIKit.instance.currentUserId());
+      }
+    } else if (attributes?[mentionKey] is String) {
+      if (attributes?[mentionKey] == mentionAllValue) {
+        ret = true;
+      }
+    }
+
+    return ret;
+  }
+
   bool get isTimeMessageAlert {
     if (bodyType == MessageType.CUSTOM) {
       if ((body as CustomMessageBody).event == alertTimeMessageEventKey) {

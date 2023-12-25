@@ -99,29 +99,34 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
     );
 
     Widget subTitle = showSubTitle
-        ? Text(
-            () {
-              String str = '';
-              if (model.profile.type == ChatUIKitProfileType.groupChat) {
-                str += model.lastMessage?.nickname ??
-                    model.lastMessage?.from ??
-                    "";
-                if (str.isNotEmpty) {
-                  str = "$str: ";
-                }
-              }
-
-              str += model.lastMessage?.showInfo(context: context) ?? '';
-              return str;
-            }(),
+        ? RichText(
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
-            style: TextStyle(
-              color: theme.color.isDark
-                  ? theme.color.neutralColor6
-                  : theme.color.neutralColor5,
-              fontSize: theme.font.labelMedium.fontSize,
-              fontWeight: theme.font.labelMedium.fontWeight,
+            text: TextSpan(
+              style: TextStyle(
+                color: theme.color.isDark
+                    ? theme.color.neutralColor6
+                    : theme.color.neutralColor5,
+                fontSize: theme.font.labelMedium.fontSize,
+                fontWeight: theme.font.labelMedium.fontWeight,
+              ),
+              children: [
+                if (model.hasMention) const TextSpan(text: '[有人@我]'),
+                TextSpan(text: () {
+                  String str = '';
+                  if (model.profile.type == ChatUIKitProfileType.groupChat) {
+                    str += model.lastMessage?.nickname ??
+                        model.lastMessage?.from ??
+                        "";
+                    if (str.isNotEmpty) {
+                      str = "$str: ";
+                    }
+                  }
+
+                  str += model.lastMessage?.showInfo(context: context) ?? '';
+                  return str;
+                }())
+              ],
             ),
           )
         : const SizedBox();

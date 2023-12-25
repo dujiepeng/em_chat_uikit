@@ -121,18 +121,21 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
 
   Future<void> updateController(File file) async {
     if (_controller != null) return;
-    _controller = VideoPlayerController.file(file);
-    await _controller?.initialize();
-    _controller?.addListener(() {
-      if (mounted) {
-        if (_controller?.value.isInitialized == true) {
-          if (isPlaying != (_controller?.value.isPlaying ?? false)) {
-            isPlaying = (_controller?.value.isPlaying ?? false);
-            setState(() {});
+    try {
+      _controller = VideoPlayerController.file(file);
+      await _controller?.initialize();
+      _controller?.addListener(() {
+        if (mounted) {
+          if (_controller?.value.isInitialized == true) {
+            if (isPlaying != (_controller?.value.isPlaying ?? false)) {
+              isPlaying = (_controller?.value.isPlaying ?? false);
+              setState(() {});
+            }
           }
         }
-      }
-    });
+      });
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   Widget loadingWidget() {

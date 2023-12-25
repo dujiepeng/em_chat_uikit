@@ -5,6 +5,7 @@ class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
   final int unreadCount;
   final bool pinned;
   final bool noDisturb;
+  final bool hasMention;
   @override
   ChatUIKitProfile profile;
 
@@ -14,6 +15,7 @@ class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
     this.unreadCount = 0,
     this.noDisturb = false,
     this.pinned = false,
+    this.hasMention = false,
   });
 
   static Future<ConversationItemModel> fromConversation(
@@ -27,7 +29,10 @@ class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
 
     ChatUIKitProfile profile =
         ChatUIKitContext.instance.conversationsCache[conversation.id] ??
-            ChatUIKitProfile(id: conversation.id, type: type);
+            ChatUIKitProfile(
+              id: conversation.id,
+              type: type,
+            );
 
     ConversationItemModel info = ConversationItemModel(
       profile: profile,
@@ -35,6 +40,7 @@ class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
       lastMessage: lastMessage,
       pinned: conversation.isPinned,
       noDisturb: ChatUIKitContext.instance.conversationIsMute(conversation.id),
+      hasMention: conversation.ext?[hasMentionKey] == hasMentionValue,
     );
     return info;
   }

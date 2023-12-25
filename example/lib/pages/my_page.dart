@@ -11,37 +11,40 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              showChatUIKitDialog(
-                title: 'Logout',
-                context: context,
-                items: [
-                  ChatUIKitDialogItem.cancel(
-                    label: 'CANCEL',
-                    onTap: () async {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  ChatUIKitDialogItem.confirm(
-                    label: 'LOGOUT',
-                    onTap: () async {
-                      Navigator.of(context).pop();
-                      ChatUIKit.instance.logout().then((value) {
-                        Navigator.of(context).popAndPushNamed('/login');
-                      });
-                    },
-                  ),
-                ],
-              );
-            },
-            child: const Text('Logout'),
-          ),
-        ],
+    return Scaffold(
+      appBar: AppBar(title: Text(ChatUIKit.instance.currentUserId() ?? "")),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                showChatUIKitDialog(
+                  title: 'Logout',
+                  context: context,
+                  items: [
+                    ChatUIKitDialogItem.cancel(
+                      label: 'CANCEL',
+                      onTap: () async {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    ChatUIKitDialogItem.confirm(
+                      label: 'LOGOUT',
+                      onTap: () async {
+                        Navigator.of(context).pop();
+                        ChatUIKit.instance.logout().then((value) {
+                          Navigator.of(context).popAndPushNamed('/login');
+                        });
+                      },
+                    ),
+                  ],
+                );
+              },
+              child: const Text('Logout'),
+            ),
+          ],
+        ),
       ),
     );
   }

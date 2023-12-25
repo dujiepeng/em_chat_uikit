@@ -704,7 +704,9 @@ class _MessagesViewState extends State<MessagesView> {
 
   void avatarTap(Message message) async {
     ChatUIKitProfile profile = ChatUIKitProvider.instance.conversationProfile(
-        message.from!, ConversationType.values[message.chatType.index]);
+      message.from!,
+      ConversationType.values[message.chatType.index],
+    );
 
     pushNextPage(profile);
   }
