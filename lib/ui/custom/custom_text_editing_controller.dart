@@ -39,67 +39,12 @@ class CustomTextEditingController extends TextEditingController {
   }
 
   TextEditingValue mentionFilter(TextEditingValue newValue) {
-    // 通过判断@的个数来判断是否需要触发@的逻辑
     final currentCount =
         newValue.text.split('').where((element) => element == "@").length;
     needMention = currentCount == lastAtCount + 1;
-
-    // 判断@是否被删除。
-    // 正常删除状态，可以通过extentOffset获取删除的值
-    List<MentionModel> needRemove = [];
-
-    if (willChange) {
-      List<String> newMentions = newValue.text.split('@');
-      List<String> oldMentions = text.split('@');
-      // 获取删除的@的index
-      List<int> removeIndex = [];
-      for (int i = 0; i < oldMentions.length; i++) {
-        if (newMentions.length > i && oldMentions[i] != newMentions[i]) {
-          removeIndex.add(i);
-        }
-      }
-
-      for (var model in _mentionList) {
-        if (model.start < value.selection.extentOffset &&
-            model.start + model.length >= value.selection.extentOffset) {
-          needRemove.add(model);
-          String str = value.text.substring(0, value.selection.extentOffset);
-          int index = str.lastIndexOf('@');
-          if (index != -1) {
-            newValue = TextEditingValue(
-              text: text.substring(0, index) +
-                  text.substring(index + model.length),
-              selection: TextSelection.collapsed(offset: model.start),
-            );
-          }
-          break;
-        }
-      }
-    }
-    _mentionList.removeWhere((element) => needRemove.contains(element));
-
     lastAtCount = currentCount;
-
-    // willChange = newValue.selection.isCollapsed == false;
-    willChange = newValue.selection.isCollapsed == false &&
-        newValue.selection.start + 1 == newValue.selection.end;
-
     return newValue;
   }
-
-  // @override
-  // set selection(TextSelection newSelection) {
-  //   // 过滤@ 情况，不允许光标移动到@数据之间
-  //   TextSelection selection = newSelection;
-  //   for (var model in _mentionList) {
-  //     if (model.start < selection.baseOffset &&
-  //         model.start + model.length >= selection.baseOffset) {
-  //       selection = TextSelection.collapsed(offset: model.start);
-  //       break;
-  //     }
-  //   }
-  //   super.selection = selection;
-  // }
 }
 
 class MentionModel {
