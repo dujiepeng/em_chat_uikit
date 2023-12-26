@@ -12,7 +12,8 @@ class ChatUIKitSettings {
   static String? conversationListMuteImage;
 
   /// 时间显示间隔时长
-  static int recallTime = 120;
+  static int recallExpandTime = 120;
+
   static List<String> reportReason = [
     '不受欢迎的商业内容或垃圾内容',
     '色情或露骨内容,',

@@ -100,7 +100,7 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
           hasMore = false;
         }
       } catch (e) {
-        debugPrint(e.toString());
+        debugPrint('fetchConversations: $e');
       }
     }
 
@@ -121,7 +121,7 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
         map.map((key, value) => MapEntry(key, 1)),
       );
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint('updateMuteType: $e');
     }
   }
 

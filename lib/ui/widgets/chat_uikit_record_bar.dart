@@ -5,6 +5,21 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit/ui/widgets/chat_uikit_water_ripple.dart';
 import 'package:flutter/material.dart';
 
+class ChatUIKitRecordConfig {
+  const ChatUIKitRecordConfig({
+    this.encoder = AudioEncoder.aacLc,
+    this.bitRate = 128000,
+    this.samplingRate = 44100,
+    this.numChannels = 2,
+  });
+
+  // only support accLc, aacEld, aacHe, amrNb, amrWb, opus, pcm8bit, pcm16bit
+  final AudioEncoder encoder;
+  final int bitRate;
+  final int samplingRate;
+  final int numChannels;
+}
+
 class ChatUIKitRecordModel {
   final int duration;
   final String path;
@@ -25,7 +40,7 @@ typedef ChatUIKitRecordChangedCallback = void Function(
 
 Future<T?> showChatUIKitRecordBar<T>({
   required BuildContext context,
-  RecordConfig recordConfig = const RecordConfig(),
+  ChatUIKitRecordConfig recordConfig = const ChatUIKitRecordConfig(),
   Color? backgroundColor,
   bool enableRadius = false,
   int maxDuration = 30,
@@ -76,7 +91,7 @@ class ChatUIKitRecordBar extends StatefulWidget {
     this.backgroundColor,
     this.enableRadius = false,
     this.statusChangeCallback,
-    this.recordConfig = const RecordConfig(),
+    this.recordConfig = const ChatUIKitRecordConfig(),
     this.sendIcon,
     this.deleteIcon,
     this.micIcon,
@@ -95,7 +110,7 @@ class ChatUIKitRecordBar extends StatefulWidget {
   final bool enableRadius;
 
   final ChatUIKitRecordChangedCallback? statusChangeCallback;
-  final RecordConfig recordConfig;
+  final ChatUIKitRecordConfig recordConfig;
   final Widget? deleteIcon;
   final Widget? micIcon;
   final Widget? sendIcon;
@@ -114,7 +129,7 @@ class ChatUIKitRecordBar extends StatefulWidget {
 }
 
 class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
-  late final AudioRecorder _audioRecorder;
+  late final Record _audioRecorder;
   bool voiceShow = false;
   bool isClose = false;
   late final Directory _directory;
@@ -129,7 +144,7 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
   @override
   void initState() {
     super.initState();
-    _audioRecorder = AudioRecorder();
+    _audioRecorder = Record();
     getTemporaryDirectory().then((value) => _directory = value);
   }
 
@@ -443,8 +458,12 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
     if (await _audioRecorder.hasPermission()) {
       fileName =
           "${DateTime.now().millisecondsSinceEpoch.toString()}.${extensionName()}";
-      await _audioRecorder.start(widget.recordConfig,
-          path: "${_directory.path}/$fileName");
+      await _audioRecorder.start(
+        path: "${_directory.path}/$fileName",
+        bitRate: widget.recordConfig.bitRate,
+        samplingRate: widget.recordConfig.samplingRate,
+        numChannels: widget.recordConfig.numChannels,
+      );
 
       startRecordTimer();
       statusType = ChatUIKitVoiceBarStatusType.recording;
@@ -522,13 +541,10 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
   String extensionName() {
     switch (widget.recordConfig.encoder) {
       case AudioEncoder.aacLc:
-        return 'aac';
       case AudioEncoder.aacEld:
-        return 'aac';
       case AudioEncoder.aacHe:
         return 'aac';
       case AudioEncoder.amrNb:
-        return 'amr';
       case AudioEncoder.amrWb:
         return 'amr';
       case AudioEncoder.opus:
@@ -537,8 +553,8 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
         return 'flac';
       case AudioEncoder.wav:
         return 'wav';
-      case AudioEncoder.pcm16bits:
-        return 'pcm';
+      default:
+        return '';
     }
   }
 }

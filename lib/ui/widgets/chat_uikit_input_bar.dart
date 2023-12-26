@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/ui/custom/chat_uikit_emoji_formatter.dart';
 import 'package:flutter/material.dart';
 
 class ChatUIKitInputBar extends StatefulWidget {
@@ -110,6 +111,7 @@ class _ChatUIKitInputBarState extends State<ChatUIKitInputBar> {
         textCapitalization: widget.textCapitalization,
         maxLines: 4,
         minLines: 1,
+        inputFormatters: [ChatUIKitEmojiFormatter()],
         style: widget.inputTextStyle ??
             TextStyle(
               color: theme.color.isDark

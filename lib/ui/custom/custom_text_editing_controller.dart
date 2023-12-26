@@ -1,6 +1,8 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/widgets.dart';
 
+RegExp emojiExp = RegExp(r"\[.{1,4}?\]");
+
 class CustomTextEditingController extends TextEditingController {
   final List<MentionModel> mentionList = [];
 
@@ -43,6 +45,25 @@ class CustomTextEditingController extends TextEditingController {
 
   List<ChatUIKitProfile> getMentionList() {
     return mentionList.map((e) => e.profile).toList();
+  }
+
+  @override
+  TextSpan buildTextSpan({
+    required BuildContext context,
+    TextStyle? style,
+    required bool withComposing,
+  }) {
+    List<RegExpMatch> list = emojiExp.allMatches(text).toList();
+    for (var match in list) {
+      String emojiStr = text.substring(match.start, match.end);
+      debugPrint(emojiStr);
+    }
+
+    return super.buildTextSpan(
+      context: context,
+      style: style,
+      withComposing: withComposing,
+    );
   }
 
   @override

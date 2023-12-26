@@ -120,7 +120,6 @@ class _ConversationsViewState extends State<ConversationsView> {
         return SearchContactsView(
           onTap: (ctx, profile) {
             Navigator.of(ctx).pop(profile);
-            debugPrint('onTap: ${profile.id}');
           },
           searchHideText: '搜索',
           searchData: list,

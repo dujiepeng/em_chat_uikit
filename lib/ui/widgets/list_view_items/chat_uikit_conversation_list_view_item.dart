@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class ChatUIKitConversationListViewItem extends StatelessWidget {
   const ChatUIKitConversationListViewItem(
-    this.model, {
+    this.info, {
     this.showAvatar,
     this.showNewMessageTime = true,
     this.showTitle = true,
@@ -13,7 +13,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
     super.key,
   });
 
-  final ConversationInfo model;
+  final ConversationInfo info;
   final bool? showAvatar;
   final bool showNewMessageTime;
   final bool showTitle;
@@ -29,7 +29,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
         ? Container(
             margin: const EdgeInsets.only(right: 12),
             child: ChatUIKitAvatar(
-              avatarUrl: model.avatarUrl,
+              avatarUrl: info.avatarUrl,
               size: 40,
             ),
           )
@@ -37,7 +37,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
 
     Widget title = showTitle
         ? Text(
-            model.showName,
+            info.showName,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
             style: TextStyle(
@@ -50,7 +50,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
           )
         : const SizedBox();
 
-    Widget muteType = showNoDisturb && model.noDisturb
+    Widget muteType = showNoDisturb && info.noDisturb
         ? Container(
             width: 20,
             height: 20,
@@ -65,20 +65,19 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
           )
         : const SizedBox();
 
-    Widget timeLabel =
-        showNewMessageTime && model.lastMessage?.serverTime != null
-            ? Text(
-                ChatUIKitTimeTool.getChatTimeStr(
-                    model.lastMessage?.serverTime ?? 0),
-                style: TextStyle(
-                  color: theme.color.isDark
-                      ? theme.color.neutralColor6
-                      : theme.color.neutralColor5,
-                  fontSize: theme.font.bodySmall.fontSize,
-                  fontWeight: theme.font.bodySmall.fontWeight,
-                ),
-              )
-            : const SizedBox();
+    Widget timeLabel = showNewMessageTime &&
+            info.lastMessage?.serverTime != null
+        ? Text(
+            ChatUIKitTimeTool.getChatTimeStr(info.lastMessage?.serverTime ?? 0),
+            style: TextStyle(
+              color: theme.color.isDark
+                  ? theme.color.neutralColor6
+                  : theme.color.neutralColor5,
+              fontSize: theme.font.bodySmall.fontSize,
+              fontWeight: theme.font.bodySmall.fontWeight,
+            ),
+          )
+        : const SizedBox();
 
     Widget titleRow = Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -111,19 +110,19 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
                 fontWeight: theme.font.labelMedium.fontWeight,
               ),
               children: [
-                if (model.hasMention) const TextSpan(text: '[有人@我]'),
+                if (info.hasMention) const TextSpan(text: '[有人@我]'),
                 TextSpan(text: () {
                   String str = '';
-                  if (model.profile.type == ChatUIKitProfileType.groupChat) {
-                    str += model.lastMessage?.nickname ??
-                        model.lastMessage?.from ??
+                  if (info.profile.type == ChatUIKitProfileType.groupChat) {
+                    str += info.lastMessage?.nickname ??
+                        info.lastMessage?.from ??
                         "";
                     if (str.isNotEmpty) {
                       str = "$str: ";
                     }
                   }
 
-                  str += model.lastMessage?.showInfo(context: context) ?? '';
+                  str += info.lastMessage?.showInfo(context: context) ?? '';
                   return str;
                 }())
               ],
@@ -132,8 +131,8 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
         : const SizedBox();
 
     Widget unreadCount;
-    if (model.noDisturb) {
-      unreadCount = showUnreadCount && model.unreadCount > 0
+    if (info.noDisturb) {
+      unreadCount = showUnreadCount && info.unreadCount > 0
           ? Container(
               width: 8,
               height: 8,
@@ -147,7 +146,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
             )
           : const SizedBox();
     } else {
-      unreadCount = showUnreadCount && model.unreadCount > 0
+      unreadCount = showUnreadCount && info.unreadCount > 0
           ? Container(
               padding: const EdgeInsets.fromLTRB(4, 1, 4, 1),
               constraints: const BoxConstraints(
@@ -160,7 +159,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
-                model.unreadCount > 99 ? '99+' : model.unreadCount.toString(),
+                info.unreadCount > 99 ? '99+' : info.unreadCount.toString(),
                 style: TextStyle(
                   color: theme.color.isDark
                       ? theme.color.neutralColor1
@@ -190,7 +189,6 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               titleRow,
-              const SizedBox(height: 2),
               subTitleRow,
             ],
           ),
@@ -199,7 +197,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
     );
     content = Container(
       padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
-      color: model.pinned
+      color: info.pinned
           ? (theme.color.isDark
               ? theme.color.neutralColor2
               : theme.color.neutralColor9)

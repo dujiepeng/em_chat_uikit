@@ -113,6 +113,11 @@ class _MessagesViewState extends State<MessagesView> {
     super.initState();
     inputBarTextEditingController = CustomTextEditingController();
     inputBarTextEditingController.addListener(() {
+      if (showMoreBtn !=
+          !inputBarTextEditingController.text.trim().isNotEmpty) {
+        showMoreBtn = !inputBarTextEditingController.text.trim().isNotEmpty;
+        setState(() {});
+      }
       if (inputBarTextEditingController.needMention) {
         if (widget.profile.type == ChatUIKitProfileType.groupChat) {
           needMention();
@@ -218,7 +223,42 @@ class _MessagesViewState extends State<MessagesView> {
           duration: const Duration(milliseconds: 250),
           height: showEmoji ? 230 : 0,
           child: showEmoji
-              ? widget.emojiWidget ?? const ChatUIKitInputEmojiBar()
+              ? widget.emojiWidget ??
+                  ChatUIKitInputEmojiBar(
+                    deleteOnTap: () {
+                      inputBarTextEditingController
+                        ..text = inputBarTextEditingController.text.characters
+                            .skipLast(1)
+                            .toString()
+                        ..selection = TextSelection.fromPosition(
+                          TextPosition(
+                            offset: inputBarTextEditingController.text.length,
+                          ),
+                        );
+                    },
+                    emojiClicked: (emoji) {
+                      TextEditingValue value =
+                          inputBarTextEditingController.value;
+                      int current = value.selection.baseOffset;
+                      if (current < 0) current = 0;
+                      if (current > value.text.length) {
+                        current = value.text.length;
+                      }
+                      String text = value.text;
+                      text = text.substring(0, current) +
+                          emoji +
+                          text.substring(current);
+                      inputBarTextEditingController.value = value.copyWith(
+                        text: text,
+                        selection: TextSelection.fromPosition(
+                          TextPosition(
+                            affinity: TextAffinity.downstream,
+                            offset: current + 2,
+                          ),
+                        ),
+                      );
+                    },
+                  )
               : const SizedBox(),
         ),
       ],
@@ -509,12 +549,6 @@ class _MessagesViewState extends State<MessagesView> {
   Widget inputBar() {
     return ChatUIKitInputBar(
       key: const ValueKey('inputKey'),
-      onChanged: (input) {
-        if (showMoreBtn != !input.trim().isNotEmpty) {
-          showMoreBtn = !input.trim().isNotEmpty;
-          setState(() {});
-        }
-      },
       focusNode: focusNode,
       textEditingController: inputBarTextEditingController,
       leading: InkWell(
@@ -715,7 +749,7 @@ class _MessagesViewState extends State<MessagesView> {
       if (message.direction == MessageDirection.SEND &&
           message.serverTime >=
               DateTime.now().millisecondsSinceEpoch -
-                  ChatUIKitSettings.recallTime * 1000) {
+                  ChatUIKitSettings.recallExpandTime * 1000) {
         items.add(ChatUIKitBottomSheetItem.normal(
           label: '撤回',
           onTap: () async {
@@ -948,8 +982,13 @@ class _MessagesViewState extends State<MessagesView> {
         // TODO 添加uikit action回调
       } else {
         if (message.localPath?.endsWith('aac') == true) {
-          _playingMessage = message;
-          await playVoice(message.localPath!);
+          try {
+            await playVoice(message.localPath!);
+            _playingMessage = message;
+            // ignore: empty_catches
+          } catch (e) {
+            debugPrint('playVoice: $e');
+          }
         } else {
           _playingMessage = null;
           //TODO: 提示格式不支持
