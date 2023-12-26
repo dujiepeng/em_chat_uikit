@@ -24,7 +24,7 @@ class ReportMessageView extends StatefulWidget {
 }
 
 class _ReportMessageViewState extends State<ReportMessageView> {
-  int selectedIndex = 1;
+  int selectedIndex = -1;
 
   final scrollController = ScrollController();
 
@@ -100,7 +100,12 @@ class _ReportMessageViewState extends State<ReportMessageView> {
                   fontWeight: theme.font.headlineSmall.fontWeight,
                   fontSize: theme.font.headlineSmall.fontSize,
                   onTap: () {
-                    Navigator.of(context).pop();
+                    if (selectedIndex == -1) {
+                      Navigator.of(context).pop();
+                    } else {
+                      Navigator.of(context)
+                          .pop(ChatUIKitSettings.reportReason[selectedIndex]);
+                    }
                   },
                 ),
               ),

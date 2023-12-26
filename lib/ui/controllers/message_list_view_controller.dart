@@ -265,15 +265,32 @@ class MessageListViewController extends ChangeNotifier
   Future<void> recallMessage(Message message) async {
     int index = msgList.indexWhere((element) => message.msgId == element.msgId);
     if (index != -1) {
-      await ChatUIKit.instance.recallMessage(messageId: message.msgId);
-      Message recallMsg = ChatUIKitInsertMessageTool.insertRecallMessage(
-          conversationId: profile.id,
-          type: conversationType,
-          messageId: message.msgId,
-          info: '撤回一条消息');
-      msgList[index] = recallMsg;
-      notifyListeners();
+      try {
+        await ChatUIKit.instance.recallMessage(messageId: message.msgId);
+        Message recallMsg = ChatUIKitInsertMessageTool.insertRecallMessage(
+            conversationId: profile.id,
+            type: conversationType,
+            messageId: message.msgId,
+            info: '撤回一条消息');
+        msgList[index] = recallMsg;
+        notifyListeners();
+        // ignore: empty_catches
+      } catch (e) {}
     }
+  }
+
+  Future<void> reportMessage({
+    required Message message,
+    required String tag,
+  }) async {
+    try {
+      ChatUIKit.instance.reportMessage(
+        messageId: message.msgId,
+        tag: tag,
+        reason: '',
+      );
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   Future<void> sendVoiceMessage(ChatUIKitRecordModel model) async {

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class MessagesView extends StatefulWidget {
   MessagesView.arguments(MessagesViewArguments arguments, {super.key})
@@ -661,7 +662,15 @@ class _MessagesViewState extends State<MessagesView> {
 
     if (items == null) {
       items = [];
-      items.add(ChatUIKitBottomSheetItem.normal(label: '复制'));
+      if (message.bodyType == MessageType.TXT) {
+        items.add(ChatUIKitBottomSheetItem.normal(
+          label: '复制',
+          onTap: () async {
+            Clipboard.setData(ClipboardData(text: message.textContent));
+          },
+        ));
+      }
+
       items.add(ChatUIKitBottomSheetItem.normal(
         label: '回复',
         onTap: () async {
@@ -669,13 +678,17 @@ class _MessagesViewState extends State<MessagesView> {
           replyMessaged(message);
         },
       ));
-      items.add(ChatUIKitBottomSheetItem.normal(
-        label: '编辑',
-        onTap: () async {
-          Navigator.of(context).pop();
-          textMessageEdit(message);
-        },
-      ));
+      if (message.bodyType == MessageType.TXT &&
+          message.direction == MessageDirection.SEND) {
+        items.add(ChatUIKitBottomSheetItem.normal(
+          label: '编辑',
+          onTap: () async {
+            Navigator.of(context).pop();
+            textMessageEdit(message);
+          },
+        ));
+      }
+
       items.add(ChatUIKitBottomSheetItem.normal(
         label: '举报',
         onTap: () async {
@@ -690,13 +703,19 @@ class _MessagesViewState extends State<MessagesView> {
           deleteMessage(message);
         },
       ));
-      items.add(ChatUIKitBottomSheetItem.normal(
-        label: '撤回',
-        onTap: () async {
-          Navigator.of(context).pop();
-          recallMessage(message);
-        },
-      ));
+
+      if (message.direction == MessageDirection.SEND &&
+          message.serverTime >=
+              DateTime.now().millisecondsSinceEpoch -
+                  ChatUIKitSettings.recallTime * 1000) {
+        items.add(ChatUIKitBottomSheetItem.normal(
+          label: '撤回',
+          onTap: () async {
+            Navigator.of(context).pop();
+            recallMessage(message);
+          },
+        ));
+      }
     }
 
     showChatUIKitBottomSheet(context: context, items: items);
@@ -920,8 +939,14 @@ class _MessagesViewState extends State<MessagesView> {
         await controller.downloadMessage(message);
         // TODO 添加uikit action回调
       } else {
-        _playingMessage = message;
-        await playVoice(message.localPath!);
+        if (message.localPath?.endsWith('aac') == true) {
+          _playingMessage = message;
+          await playVoice(message.localPath!);
+        } else {
+          _playingMessage = null;
+          //TODO: 提示格式不支持
+          debugPrint('格式不支持');
+        }
       }
     }
     setState(() {});
@@ -954,24 +979,20 @@ class _MessagesViewState extends State<MessagesView> {
     }
   }
 
-  void reportMessage(Message message) {
-    Navigator.of(context).pushNamed(
+  void reportMessage(Message message) async {
+    final reportReason = await Navigator.of(context).pushNamed(
       ChatUIKitRouteNames.reportMessageView,
       arguments: ReportMessageViewArguments(
         messageId: message.msgId,
-        reportReasons: [
-          '不受欢迎的商业内容或垃圾内容',
-          '色情或露骨内容,',
-          '虐待儿童',
-          '仇恨言论或过于写实的暴力内容',
-          '宣扬恐怖主义',
-          '骚扰或欺凌',
-          '自杀或自残',
-          '虚假信息',
-          '其他'
-        ],
+        reportReasons: ChatUIKitSettings.reportReason,
       ),
     );
+    if (reportReason != null) {
+      if (reportReason is String) {
+        controller.reportMessage(
+            message: message, tag: reportReason.toString());
+      }
+    }
   }
 
   void pushNextPage(ChatUIKitProfile profile) async {
