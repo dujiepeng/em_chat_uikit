@@ -97,7 +97,7 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
           searchHideText: widget.fakeSearchHideText,
           background: widget.listViewBackground,
           onTap: widget.onTap ?? tapContactInfo,
-          onLongPress: widget.onLongPress ?? longContactInfo,
+          onLongPress: widget.onLongPress,
           onSearchTap: widget.onSearchTap ?? onSearchTap,
           errorMessage: widget.loadErrorMessage,
         ),
@@ -150,7 +150,6 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
         return SearchContactsView(
           onTap: (ctx, profile) {
             Navigator.of(ctx).pop();
-            debugPrint('onTap: ${profile.id}');
           },
           searchHideText: '搜索联系人',
           searchData: list,
@@ -186,10 +185,6 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
         ChatUIKit.instance.onConversationsUpdate();
       },
     );
-  }
-
-  void longContactInfo(BuildContext context, ContactItemModel info) {
-    debugPrint('longContactInfo');
   }
 
   void addContact() async {

@@ -3,7 +3,7 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 typedef ChatUIKitConversationItemBuilder = Widget Function(
-    BuildContext context, ConversationItemModel model);
+    BuildContext context, ConversationInfo model);
 
 class ConversationListView extends StatefulWidget {
   const ConversationListView({
@@ -22,11 +22,10 @@ class ConversationListView extends StatefulWidget {
     super.key,
   });
 
-  final void Function(List<ConversationItemModel> data)? onSearchTap;
+  final void Function(List<ConversationInfo> data)? onSearchTap;
   final ChatUIKitConversationItemBuilder? itemBuilder;
-  final void Function(BuildContext context, ConversationItemModel model)? onTap;
-  final void Function(BuildContext context, ConversationItemModel model)?
-      onLongPress;
+  final void Function(BuildContext context, ConversationInfo info)? onTap;
+  final void Function(BuildContext context, ConversationInfo info)? onLongPress;
   final List<NeedAlphabeticalWidget>? beforeWidgets;
   final List<NeedAlphabeticalWidget>? afterWidgets;
 
@@ -106,9 +105,9 @@ class _ConversationListViewState extends State<ConversationListView>
           afterWidgets: widget.afterWidgets,
           background: widget.background,
           onSearchTap: (data) {
-            List<ConversationItemModel> list = [];
+            List<ConversationInfo> list = [];
             for (var item in data) {
-              if (item is ConversationItemModel) {
+              if (item is ConversationInfo) {
                 list.add(item);
               }
             }
@@ -117,9 +116,9 @@ class _ConversationListViewState extends State<ConversationListView>
           searchHideText: widget.searchHideText,
           findChildIndexCallback: (key) {
             final ValueKey<String> valueKey = key as ValueKey<String>;
-            int index = controller.list.indexWhere((model) {
-              if (model is ConversationItemModel) {
-                return model.profile.id == valueKey.value;
+            int index = controller.list.indexWhere((info) {
+              if (info is ConversationInfo) {
+                return info.profile.id == valueKey.value;
               } else {
                 return false;
               }
@@ -128,7 +127,7 @@ class _ConversationListViewState extends State<ConversationListView>
             return index > -1 ? index : null;
           },
           itemBuilder: (context, model) {
-            if (model is ConversationItemModel) {
+            if (model is ConversationInfo) {
               Widget? item;
               if (widget.itemBuilder != null) {
                 item = widget.itemBuilder!(context, model);

@@ -20,7 +20,7 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
         items = await fetchConversations();
       }
       items = await clearEmpty(items);
-      List<ConversationItemModel> tmp = await mappers(items);
+      List<ConversationInfo> tmp = await mappers(items);
       list.clear();
       list.addAll(tmp);
       if (list.isEmpty) {
@@ -38,7 +38,7 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
     loadingType.value = ChatUIKitListViewType.refresh;
     List<Conversation> items = await ChatUIKit.instance.getAllConversations();
     items = await clearEmpty(items);
-    List<ConversationItemModel> tmp = await mappers(items);
+    List<ConversationInfo> tmp = await mappers(items);
     list.clear();
     list.addAll(tmp);
     if (list.isEmpty) {
@@ -125,12 +125,11 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
     }
   }
 
-  Future<List<ConversationItemModel>> mappers(
+  Future<List<ConversationInfo>> mappers(
       List<Conversation> conversations) async {
-    List<ConversationItemModel> list = [];
+    List<ConversationInfo> list = [];
     for (var item in conversations) {
-      ConversationItemModel info =
-          await ConversationItemModel.fromConversation(item);
+      ConversationInfo info = await ConversationInfo.fromConversation(item);
       list.add(info);
     }
     return list;

@@ -2,6 +2,17 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
+typedef MessageItemBubbleBuilder = Widget? Function(
+  BuildContext context,
+  Widget child,
+  Message message,
+);
+
+typedef MessageBubbleContentBuilder = Widget? Function(
+  BuildContext context,
+  Message message,
+);
+
 class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
   const ChatUIKitMessageListViewMessageItem({
     required this.message,
@@ -21,6 +32,8 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
     this.isPlaying = false,
     this.quoteBuilder,
     this.onErrorTap,
+    this.bubbleBuilder,
+    this.bubbleContentBuilder,
     super.key,
   });
 
@@ -42,6 +55,8 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
   final VoidCallback? onBubbleDoubleTap;
   final Widget Function(QuoteModel model)? quoteBuilder;
   final VoidCallback? onErrorTap;
+  final MessageItemBubbleBuilder? bubbleBuilder;
+  final MessageBubbleContentBuilder? bubbleContentBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -72,14 +87,15 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
 
     if (message.bodyType == MessageType.VIDEO ||
         message.bodyType == MessageType.IMAGE) {
-      content = msgWidget;
+      content = bubbleBuilder?.call(context, msgWidget, message) ?? msgWidget;
     } else {
-      content = ChatUIKitMessageListViewBubble(
-        needSmallCorner: message.getQuote() == null,
-        style: bubbleStyle,
-        isLeft: isLeft ?? left,
-        child: msgWidget,
-      );
+      content = bubbleBuilder?.call(context, msgWidget, message) ??
+          ChatUIKitMessageListViewBubble(
+            needSmallCorner: message.getQuote() == null,
+            style: bubbleStyle,
+            isLeft: isLeft ?? left,
+            child: msgWidget,
+          );
     }
     content = InkWell(
       onTap: onBubbleTap,
@@ -189,35 +205,39 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
   }
 
   Widget _buildTextMessage(BuildContext context, Message message) {
-    return ChatUIKitTextMessageWidget(message: message);
+    return bubbleContentBuilder?.call(context, message) ??
+        ChatUIKitTextMessageWidget(message: message);
   }
 
   Widget _buildImageMessage(BuildContext context, Message message) {
-    return ChatUIKitImageMessageWidget(
-        message: message, bubbleStyle: bubbleStyle);
+    return bubbleContentBuilder?.call(context, message) ??
+        ChatUIKitImageMessageWidget(message: message, bubbleStyle: bubbleStyle);
   }
 
   Widget _buildVoiceMessage(BuildContext context, Message message) {
-    return ChatUIKitVoiceMessageWidget(
-      message: message,
-      playing: isPlaying,
-    );
+    return bubbleContentBuilder?.call(context, message) ??
+        ChatUIKitVoiceMessageWidget(
+          message: message,
+          playing: isPlaying,
+        );
   }
 
   Widget _buildVideoMessage(BuildContext context, Message message) {
-    return ChatUIKitVideoMessageWidget(
-        message: message, bubbleStyle: bubbleStyle);
+    return bubbleContentBuilder?.call(context, message) ??
+        ChatUIKitVideoMessageWidget(message: message, bubbleStyle: bubbleStyle);
   }
 
   Widget _buildFileMessage(BuildContext context, Message message) {
-    return ChatUIKitFileMessageWidget(
-      message: message,
-      bubbleStyle: bubbleStyle,
-    );
+    return bubbleContentBuilder?.call(context, message) ??
+        ChatUIKitFileMessageWidget(
+          message: message,
+          bubbleStyle: bubbleStyle,
+        );
   }
 
   Widget _buildCardMessage(BuildContext context, Message message) {
-    return ChatUIKitCardMessageWidget(message: message);
+    return bubbleContentBuilder?.call(context, message) ??
+        ChatUIKitCardMessageWidget(message: message);
   }
 
   Widget _avatar(ChatUIKitTheme theme) {

@@ -18,12 +18,12 @@ class ConversationsViewArguments implements ChatUIKitViewArguments {
 
   final ConversationListViewController? controller;
   final ChatUIKitAppBar? appBar;
-  final void Function(List<ConversationItemModel> data)? onSearchTap;
+  final void Function(List<ConversationInfo> data)? onSearchTap;
   final List<NeedAlphabeticalWidget>? beforeWidgets;
   final List<NeedAlphabeticalWidget>? afterWidgets;
   final ChatUIKitListItemBuilder? listViewItemBuilder;
-  final void Function(BuildContext context, ConversationItemModel model)? onTap;
-  final void Function(BuildContext context, ConversationItemModel model)?
+  final void Function(BuildContext context, ConversationInfo model)? onTap;
+  final void Function(BuildContext context, ConversationInfo model)?
       onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;

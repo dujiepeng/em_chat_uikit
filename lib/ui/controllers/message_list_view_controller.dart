@@ -106,7 +106,6 @@ class MessageListViewController extends ChangeNotifier
 
   @override
   void onConversationRead(String from, String to) {
-    debugPrint("onConversationRead");
     if (from == profile.id) {
       for (var element in msgList) {
         element.hasReadAck = true;
@@ -147,7 +146,7 @@ class MessageListViewController extends ChangeNotifier
 
   @override
   void onMessagesRecalled(List<Message> messages) {
-    debugPrint("onMessagesRecalled");
+    // TODO: 删除消息插入
   }
 
   @override
@@ -467,7 +466,6 @@ class MessageListViewController extends ChangeNotifier
         message.direction == MessageDirection.RECEIVE &&
         message.hasReadAck == false) {
       try {
-        debugPrint("send read ack");
         await ChatUIKit.instance.sendMessageReadAck(message: message);
         message.hasReadAck = true;
         // 因为已读状态是对方看的，所以这个时候不需要刷新ui

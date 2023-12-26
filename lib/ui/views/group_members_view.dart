@@ -88,7 +88,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
       group = await ChatUIKit.instance.getGroup(groupId: widget.groupId);
       group ??=
           await ChatUIKit.instance.fetchGroupInfo(groupId: widget.groupId);
-      debugPrint(group?.memberCount.toString());
+
       memberCount.value = group?.memberCount ?? 0;
       // ignore: empty_catches
     } catch (e) {}

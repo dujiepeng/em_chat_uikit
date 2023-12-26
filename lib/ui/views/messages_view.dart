@@ -28,7 +28,9 @@ class MessagesView extends StatefulWidget {
         onItemLongPressActions = arguments.onItemLongPressActions,
         replyBarBuilder = arguments.replyBarBuilder,
         quoteBuilder = arguments.quoteBuilder,
-        onErrorTap = arguments.onErrorTap;
+        onErrorTap = arguments.onErrorTap,
+        bubbleBuilder = arguments.bubbleBuilder,
+        bubbleContentBuilder = arguments.bubbleContentBuilder;
 
   const MessagesView({
     required this.profile,
@@ -53,6 +55,8 @@ class MessagesView extends StatefulWidget {
     this.replyBarBuilder,
     this.quoteBuilder,
     this.onErrorTap,
+    this.bubbleBuilder,
+    this.bubbleContentBuilder,
     super.key,
   });
 
@@ -79,6 +83,8 @@ class MessagesView extends StatefulWidget {
       replyBarBuilder;
   final Widget Function(QuoteModel model)? quoteBuilder;
   final void Function(Message message)? onErrorTap;
+  final MessageItemBubbleBuilder? bubbleBuilder;
+  final MessageBubbleContentBuilder? bubbleContentBuilder;
 
   @override
   State<MessagesView> createState() => _MessagesViewState();
@@ -160,6 +166,8 @@ class _MessagesViewState extends State<MessagesView> {
     final theme = ChatUIKitTheme.of(context);
 
     Widget content = MessageListView(
+      bubbleContentBuilder: widget.bubbleContentBuilder,
+      bubbleBuilder: widget.bubbleBuilder,
       quoteBuilder: widget.quoteBuilder ?? quoteWidget,
       profile: widget.profile,
       controller: controller,

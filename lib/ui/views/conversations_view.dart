@@ -31,13 +31,12 @@ class ConversationsView extends StatefulWidget {
 
   final ConversationListViewController? controller;
   final ChatUIKitAppBar? appBar;
-  final void Function(List<ConversationItemModel> data)? onSearchTap;
+  final void Function(List<ConversationInfo> data)? onSearchTap;
   final List<NeedAlphabeticalWidget>? beforeWidgets;
   final List<NeedAlphabeticalWidget>? afterWidgets;
   final ChatUIKitListItemBuilder? listViewItemBuilder;
-  final void Function(BuildContext context, ConversationItemModel model)? onTap;
-  final void Function(BuildContext context, ConversationItemModel model)?
-      onLongPress;
+  final void Function(BuildContext context, ConversationInfo info)? onTap;
+  final void Function(BuildContext context, ConversationInfo info)? onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   @override
@@ -94,12 +93,12 @@ class _ConversationsViewState extends State<ConversationsView> {
           searchHideText: widget.fakeSearchHideText,
           background: widget.listViewBackground,
           onTap: widget.onTap ??
-              (BuildContext context, ConversationItemModel model) {
-                pushToMessagePage(model);
+              (BuildContext context, ConversationInfo info) {
+                pushToMessagePage(info);
               },
           onLongPress: widget.onLongPress ??
-              (BuildContext context, ConversationItemModel model) {
-                longPressed(model);
+              (BuildContext context, ConversationInfo info) {
+                longPressed(info);
               },
           onSearchTap: widget.onSearchTap ?? onSearchTap,
         ),
@@ -109,7 +108,7 @@ class _ConversationsViewState extends State<ConversationsView> {
     return content;
   }
 
-  void onSearchTap(List<ConversationItemModel> data) {
+  void onSearchTap(List<ConversationInfo> data) {
     List<NeedSearch> list = [];
     for (var item in data) {
       list.add(item);
@@ -143,12 +142,12 @@ class _ConversationsViewState extends State<ConversationsView> {
     });
   }
 
-  void pushToMessagePage(ConversationItemModel model) {
+  void pushToMessagePage(ConversationInfo info) {
     Navigator.of(context)
         .pushNamed(
       ChatUIKitRouteNames.messagesView,
       arguments: MessagesViewArguments(
-        profile: model.profile,
+        profile: info.profile,
       ),
     )
         .then((value) {
@@ -156,21 +155,21 @@ class _ConversationsViewState extends State<ConversationsView> {
     });
   }
 
-  void longPressed(ConversationItemModel model) async {
+  void longPressed(ConversationInfo info) async {
     showChatUIKitBottomSheet(
       cancelTitle: '取消',
       context: context,
       items: [
         ChatUIKitBottomSheetItem.normal(
-          label: model.noDisturb ? '取消静音' : '静音',
+          label: info.noDisturb ? '取消静音' : '静音',
           onTap: () async {
-            final type = model.profile.type == ChatUIKitProfileType.groupChat
+            final type = info.profile.type == ChatUIKitProfileType.groupChat
                 ? ConversationType.GroupChat
                 : ConversationType.Chat;
 
-            if (model.noDisturb) {
+            if (info.noDisturb) {
               ChatUIKit.instance.clearSilentMode(
-                conversationId: model.profile.id,
+                conversationId: info.profile.id,
                 type: type,
               );
             } else {
@@ -178,7 +177,7 @@ class _ConversationsViewState extends State<ConversationsView> {
                   ChatPushRemindType.MENTION_ONLY);
               ChatUIKit.instance.setSilentMode(
                 param: param,
-                conversationId: model.profile.id,
+                conversationId: info.profile.id,
                 type: type,
               );
             }
@@ -187,21 +186,21 @@ class _ConversationsViewState extends State<ConversationsView> {
           },
         ),
         ChatUIKitBottomSheetItem.normal(
-          label: model.pinned ? '取消置顶' : '置顶',
+          label: info.pinned ? '取消置顶' : '置顶',
           onTap: () async {
             ChatUIKit.instance.pinConversation(
-              conversationId: model.profile.id,
-              isPinned: !model.pinned,
+              conversationId: info.profile.id,
+              isPinned: !info.pinned,
             );
             Navigator.of(context).pop();
           },
         ),
-        if (model.unreadCount > 0)
+        if (info.unreadCount > 0)
           ChatUIKitBottomSheetItem.normal(
             label: '标记已读',
             onTap: () async {
               ChatUIKit.instance.markConversationAsRead(
-                conversationId: model.profile.id,
+                conversationId: info.profile.id,
               );
               Navigator.of(context).pop();
             },
@@ -210,7 +209,7 @@ class _ConversationsViewState extends State<ConversationsView> {
           label: '删除会话',
           onTap: () async {
             ChatUIKit.instance.deleteLocalConversation(
-              conversationId: model.profile.id,
+              conversationId: info.profile.id,
             );
             Navigator.of(context).pop();
           },

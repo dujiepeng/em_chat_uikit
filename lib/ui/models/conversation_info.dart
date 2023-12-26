@@ -1,6 +1,6 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
-class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
+class ConversationInfo with ChatUIKitListItemModelBase, NeedSearch {
   final Message? lastMessage;
   final int unreadCount;
   final bool pinned;
@@ -9,7 +9,7 @@ class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
   @override
   ChatUIKitProfile profile;
 
-  ConversationItemModel({
+  ConversationInfo({
     required this.profile,
     this.lastMessage,
     this.unreadCount = 0,
@@ -18,7 +18,7 @@ class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
     this.hasMention = false,
   });
 
-  static Future<ConversationItemModel> fromConversation(
+  static Future<ConversationInfo> fromConversation(
     Conversation conversation,
   ) async {
     int unreadCount = await conversation.unreadCount();
@@ -34,7 +34,7 @@ class ConversationItemModel with ChatUIKitListItemModelBase, NeedSearch {
               type: type,
             );
 
-    ConversationItemModel info = ConversationItemModel(
+    ConversationInfo info = ConversationInfo(
       profile: profile,
       unreadCount: unreadCount,
       lastMessage: lastMessage,

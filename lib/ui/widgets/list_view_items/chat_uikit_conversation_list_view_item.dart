@@ -13,7 +13,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
     super.key,
   });
 
-  final ConversationItemModel model;
+  final ConversationInfo model;
   final bool? showAvatar;
   final bool showNewMessageTime;
   final bool showTitle;
