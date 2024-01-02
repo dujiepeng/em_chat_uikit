@@ -117,19 +117,35 @@ class ChatUIKitImageLoader {
     );
   }
 
-  static Widget emojiDelete({double size = 30, Color? color}) {
-    return Icon(Icons.arrow_left, size: size, color: color);
+  static Widget emojiDelete({double size = 20, Color? color}) {
+    return Icon(
+      Icons.arrow_back,
+      size: size,
+      color: color,
+      weight: 3,
+    );
   }
 
   static Widget textKeyboard(
       {double width = 30, double height = 30, Color? color}) {
+    // return Image(
+    //   filterQuality: FilterQuality.high,
+    //   gaplessPlayback: true,
+    //   image: ResizeImage(
+    //     const AssetImage('assets/images/input_bar_keyboard.png',
+    //         package: packageName),
+    //     width: width.toInt(),
+    //     height: height.toInt(),
+    //   ),
+    //   fit: BoxFit.fill,
+    // );
+
     return Image(
-      gaplessPlayback: true,
-      image: ResizeImage(
-        const AssetImage('assets/images/input_bar_keyboard.png',
-            package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
+      width: width,
+      height: height,
+      image: const AssetImage(
+        'assets/images/input_bar_keyboard.png',
+        package: packageName,
       ),
       fit: BoxFit.fill,
     );
@@ -137,15 +153,25 @@ class ChatUIKitImageLoader {
 
   static Widget voiceKeyboard(
       {double width = 30, double height = 30, Color? color}) {
+    // return Image(
+    //   gaplessPlayback: true,
+    //   image: ResizeImage(
+    //     const AssetImage('assets/images/input_bar_voice.png',
+    //         package: packageName),
+    //     width: width.toInt(),
+    //     height: height.toInt(),
+    //   ),
+    //   fit: BoxFit.fill,
+    // );
+
     return Image(
-      gaplessPlayback: true,
-      image: ResizeImage(
-        const AssetImage('assets/images/input_bar_voice.png',
-            package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
+      width: width,
+      height: height,
+      image: const AssetImage(
+        'assets/images/input_bar_voice.png',
+        package: packageName,
       ),
-      fit: BoxFit.fill,
+      // fit: BoxFit.fill,
     );
   }
 
@@ -164,29 +190,45 @@ class ChatUIKitImageLoader {
 
   static Widget moreKeyboard(
       {double width = 30, double height = 30, Color? color}) {
+    // return Image(
+    //   gaplessPlayback: true,
+    //   image: ResizeImage(
+    //     const AssetImage('assets/images/input_bar_more.png',
+    //         package: packageName),
+    //     width: width.toInt(),
+    //     height: height.toInt(),
+    //   ),
+    //   fit: BoxFit.fill,
+    // );
     return Image(
+      width: width,
+      height: height,
       gaplessPlayback: true,
-      image: ResizeImage(
-        const AssetImage('assets/images/input_bar_more.png',
-            package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
-      fit: BoxFit.fill,
+      image: const AssetImage('assets/images/input_bar_more.png',
+          package: packageName),
+      // fit: BoxFit.fill,
     );
   }
 
   static Widget faceKeyboard(
       {double width = 30, double height = 30, Color? color}) {
+    // return Image(
+    //   gaplessPlayback: true,
+    //   image: ResizeImage(
+    //     const AssetImage('assets/images/input_bar_face.png',
+    //         package: packageName),
+    //     width: width.toInt(),
+    //     height: height.toInt(),
+    //   ),
+    //   fit: BoxFit.fill,
+    // );
     return Image(
+      width: width,
+      height: height,
       gaplessPlayback: true,
-      image: ResizeImage(
-        const AssetImage('assets/images/input_bar_face.png',
-            package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
-      fit: BoxFit.fill,
+      image: const AssetImage('assets/images/input_bar_face.png',
+          package: packageName),
+      // fit: BoxFit.fill,
     );
   }
 

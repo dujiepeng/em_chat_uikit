@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit/ui/custom/chat_uikit_emoji_data.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -226,37 +227,15 @@ class _MessagesViewState extends State<MessagesView> {
               ? widget.emojiWidget ??
                   ChatUIKitInputEmojiBar(
                     deleteOnTap: () {
-                      inputBarTextEditingController
-                        ..text = inputBarTextEditingController.text.characters
-                            .skipLast(1)
-                            .toString()
-                        ..selection = TextSelection.fromPosition(
-                          TextPosition(
-                            offset: inputBarTextEditingController.text.length,
-                          ),
-                        );
+                      inputBarTextEditingController.deleteTextOnCursor();
                     },
                     emojiClicked: (emoji) {
-                      TextEditingValue value =
-                          inputBarTextEditingController.value;
-                      int current = value.selection.baseOffset;
-                      if (current < 0) current = 0;
-                      if (current > value.text.length) {
-                        current = value.text.length;
+                      final index = ChatUIKitEmojiData.emojiImagePaths
+                          .indexWhere((element) => element == emoji);
+                      if (index != -1) {
+                        inputBarTextEditingController
+                            .addText(ChatUIKitEmojiData.emojiList[index]);
                       }
-                      String text = value.text;
-                      text = text.substring(0, current) +
-                          emoji +
-                          text.substring(current);
-                      inputBarTextEditingController.value = value.copyWith(
-                        text: text,
-                        selection: TextSelection.fromPosition(
-                          TextPosition(
-                            affinity: TextAffinity.downstream,
-                            offset: current + 2,
-                          ),
-                        ),
-                      );
                     },
                   )
               : const SizedBox(),

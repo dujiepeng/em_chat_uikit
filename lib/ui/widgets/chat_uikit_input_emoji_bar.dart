@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 typedef EmojiClick = void Function(String emoji);
 
 class ChatUIKitInputEmojiBar extends StatelessWidget {
-  final int crossAxisCount;
+  final double maxCrossAxisExtent;
 
   final double mainAxisSpacing;
 
@@ -21,9 +21,9 @@ class ChatUIKitInputEmojiBar extends StatelessWidget {
 
   const ChatUIKitInputEmojiBar({
     super.key,
-    this.crossAxisCount = 8,
-    this.mainAxisSpacing = 2.0,
-    this.crossAxisSpacing = 2.0,
+    this.maxCrossAxisExtent = 36,
+    this.mainAxisSpacing = 19.0,
+    this.crossAxisSpacing = 19.0,
     this.childAspectRatio = 1.0,
     this.bigSizeRatio = 0.0,
     this.emojiClicked,
@@ -34,10 +34,12 @@ class ChatUIKitInputEmojiBar extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget content = GridView.custom(
       padding: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 60),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: crossAxisCount,
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: maxCrossAxisExtent,
         mainAxisSpacing: mainAxisSpacing,
         crossAxisSpacing: crossAxisSpacing,
+        childAspectRatio: childAspectRatio,
+        mainAxisExtent: maxCrossAxisExtent,
       ),
       childrenDelegate: SliverChildBuilderDelegate(
         (context, position) {
@@ -52,15 +54,14 @@ class ChatUIKitInputEmojiBar extends StatelessWidget {
         content,
         Positioned(
           right: 20,
-          width: 36,
           bottom: 20,
+          width: 36,
           height: 36,
           child: InkWell(
             onTap: () {
               deleteOnTap?.call();
             },
             child: Container(
-              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 boxShadow: ChatUIKitTheme.of(context).color.isDark
                     ? ChatUIKitShadow.darkSmall
@@ -71,7 +72,7 @@ class ChatUIKitInputEmojiBar extends StatelessWidget {
                     : ChatUIKitTheme.of(context).color.neutralColor98),
               ),
               child: ChatUIKitImageLoader.emojiDelete(
-                size: 40,
+                size: 20,
                 color: (ChatUIKitTheme.of(context).color.isDark
                     ? ChatUIKitTheme.of(context).color.neutralColor98
                     : ChatUIKitTheme.of(context).color.neutralColor3),
@@ -86,20 +87,20 @@ class ChatUIKitInputEmojiBar extends StatelessWidget {
   }
 
   _getEmojiItemContainer(int index) {
-    var emoji = ChatUIKitEmojiData.emojiList[index];
+    var emoji = ChatUIKitEmojiData.emojiImagePaths[index];
     return ChatExpression(emoji, bigSizeRatio, emojiClicked);
   }
 }
 
 class ChatExpression extends StatelessWidget {
-  final String emoji;
+  final String emojiName;
 
   final double bigSizeRatio;
 
   final EmojiClick? emojiClicked;
 
   const ChatExpression(
-    this.emoji,
+    this.emojiName,
     this.bigSizeRatio,
     this.emojiClicked, {
     super.key,
@@ -107,18 +108,15 @@ class ChatExpression extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget icon = Text(
-      emoji,
-      style: const TextStyle(fontSize: 30),
+    Widget icon = Image.asset(
+      emojiName,
+      package: ChatUIKitEmojiData.packageName,
+      width: 32,
+      height: 32,
     );
-    return TextButton(
-      style: ButtonStyle(
-        padding: MaterialStateProperty.all(
-          EdgeInsets.all(bigSizeRatio),
-        ),
-      ),
-      onPressed: () {
-        emojiClicked?.call(emoji);
+    return InkWell(
+      onTap: () {
+        emojiClicked?.call(emojiName);
       },
       child: icon,
     );
