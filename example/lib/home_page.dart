@@ -33,11 +33,25 @@ class _HomePageState extends State<HomePage>
 
   void _contactsHandler(
     List<ChatUIKitProfile> profiles,
-  ) {}
+  ) {
+    debugPrint('contactsHandler: ${profiles.length}');
+    List<ChatUIKitProfile> list = [];
+    for (var i = 0; i < profiles.length; i++) {
+      list.add(profiles[i].copy(name: '${profiles[i].id}_nick'));
+    }
+    ChatUIKitProvider.instance.addContactProfiles(list);
+  }
 
   void _conversationsHandler(
     List<ChatUIKitProfile> profiles,
-  ) {}
+  ) {
+    debugPrint('_conversationsHandler: ${profiles.length}');
+    List<ChatUIKitProfile> list = [];
+    for (var i = 0; i < profiles.length; i++) {
+      list.add(profiles[i].copy(name: '${profiles[i].id}_nick'));
+    }
+    ChatUIKitProvider.instance.addConversationProfiles(list);
+  }
 
   void _groupMembersHandler(
     String groupId,

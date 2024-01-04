@@ -17,15 +17,24 @@ class _ConversationPageState extends State<ConversationPage> {
   @override
   Widget build(BuildContext context) {
     Widget content = const ConversationsView(
-      enableAppBar: false,
-    );
+        // enableAppBar: false,
+        );
 
-    content = Scaffold(
-      appBar: AppBar(
-        title: const Text('会话'),
-      ),
-      body: content,
-    );
+    // content = Scaffold(
+    //   appBar: AppBar(
+    //     title: const Text('会话'),
+    //     actions: [
+    //       TextButton(
+    //           onPressed: () {
+    //             ChatUIKitProvider.instance.addConversationProfiles([
+    //               ChatUIKitProfile(id: 'zd2', name: '张东2'),
+    //             ]);
+    //           },
+    //           child: const Text('action'))
+    //     ],
+    //   ),
+    //   body: content,
+    // );
 
     return content;
   }

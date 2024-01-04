@@ -64,6 +64,8 @@ class _ChatUIKitAppBarState extends State<ChatUIKitAppBar> {
     if (widget.title?.isNotEmpty == true) {
       title = Text(
         widget.title!,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
         style: widget.titleTextStyle ??
             TextStyle(
               fontSize: theme.font.titleMedium.fontSize,
@@ -89,6 +91,8 @@ class _ChatUIKitAppBarState extends State<ChatUIKitAppBar> {
     if (widget.subTitle?.isNotEmpty == true) {
       subTitle = Text(
         widget.subTitle!,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
         style: widget.subTitleTextStyle ??
             TextStyle(
               fontSize: theme.font.bodyExtraSmall.fontSize,
@@ -109,6 +113,11 @@ class _ChatUIKitAppBarState extends State<ChatUIKitAppBar> {
         title ?? const SizedBox(),
         subTitle ?? const SizedBox(),
       ],
+    );
+
+    middle = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: middle,
     );
 
     Widget? leading;
