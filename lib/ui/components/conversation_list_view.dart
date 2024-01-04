@@ -41,13 +41,14 @@ class ConversationListView extends StatefulWidget {
 }
 
 class _ConversationListViewState extends State<ConversationListView>
-    with ChatObserver, MultiObserver {
+    with ChatObserver, MultiObserver, ChatUIKitProviderObserver {
   late ConversationListViewController controller;
   bool enableSearchBar = true;
   @override
   void initState() {
     super.initState();
     ChatUIKit.instance.addObserver(this);
+    ChatUIKitProvider.instance.addObserver(this);
     controller = widget.controller ?? ConversationListViewController();
     controller.fetchItemList();
   }
@@ -55,7 +56,15 @@ class _ConversationListViewState extends State<ConversationListView>
   @override
   void dispose() {
     ChatUIKit.instance.removeObserver(this);
+    ChatUIKitProvider.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void onConversationProfilesUpdate(
+    Map<String, ChatUIKitProfile> map,
+  ) {
+    controller.reload();
   }
 
   @override

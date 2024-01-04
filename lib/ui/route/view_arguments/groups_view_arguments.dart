@@ -12,6 +12,7 @@ class GroupsViewArguments implements ChatUIKitViewArguments {
     this.fakeSearchHideText,
     this.listViewBackground,
     this.loadErrorMessage,
+    this.enableAppBar = true,
     this.attributes,
   });
   final GroupListViewController? controller;
@@ -23,6 +24,7 @@ class GroupsViewArguments implements ChatUIKitViewArguments {
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
+  final bool enableAppBar;
 
   @override
   String? attributes;

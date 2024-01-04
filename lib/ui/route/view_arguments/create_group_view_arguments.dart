@@ -11,6 +11,7 @@ class CreateGroupViewArguments implements ChatUIKitViewArguments {
     this.onItemLongPress,
     this.appBar,
     this.controller,
+    this.enableAppBar = true,
     this.attributes,
   });
 
@@ -23,6 +24,7 @@ class CreateGroupViewArguments implements ChatUIKitViewArguments {
   final void Function(ContactItemModel model)? onItemLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
+  final bool enableAppBar;
   @override
   String? attributes;
 }

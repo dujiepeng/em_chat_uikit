@@ -37,24 +37,35 @@ class ChatUIKitInputBar extends StatefulWidget {
 
 class _ChatUIKitInputBarState extends State<ChatUIKitInputBar> {
   TextEditingController? _textEditingController;
+  ScrollController? _scrollController;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     _textEditingController = widget.textEditingController;
+    _textEditingController!.addListener(textFieldOnChange);
+  }
+
+  void textFieldOnChange() {
+    _scrollController!.jumpTo(_scrollController!.position.maxScrollExtent);
   }
 
   @override
   void didUpdateWidget(covariant ChatUIKitInputBar oldWidget) {
     if (oldWidget.textEditingController != widget.textEditingController) {
+      _scrollController?.dispose();
+      _scrollController = ScrollController();
       _textEditingController?.dispose();
       _textEditingController = widget.textEditingController;
+      _textEditingController!.addListener(textFieldOnChange);
     }
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void dispose() {
+    _scrollController?.dispose();
     super.dispose();
   }
 
@@ -101,6 +112,7 @@ class _ChatUIKitInputBarState extends State<ChatUIKitInputBar> {
         borderRadius: widget.borderRadius ?? BorderRadius.circular(4),
       ),
       child: TextField(
+        scrollController: _scrollController,
         keyboardAppearance: ChatUIKitTheme.of(context).color.isDark
             ? Brightness.dark
             : Brightness.light,

@@ -9,6 +9,8 @@ class SearchContactsView extends StatefulWidget {
   })  : searchData = arguments.searchData,
         searchHideText = arguments.searchHideText,
         itemBuilder = arguments.itemBuilder,
+        enableAppBar = arguments.enableAppBar,
+        appBar = arguments.appBar,
         onTap = arguments.onTap;
 
   const SearchContactsView({
@@ -16,6 +18,8 @@ class SearchContactsView extends StatefulWidget {
     required this.searchHideText,
     this.itemBuilder,
     this.onTap,
+    this.enableAppBar = true,
+    this.appBar,
     super.key,
   });
 
@@ -24,6 +28,8 @@ class SearchContactsView extends StatefulWidget {
   final void Function(BuildContext context, ChatUIKitProfile profile)? onTap;
   final Widget Function(BuildContext context, ChatUIKitProfile profile,
       String? searchKeyword)? itemBuilder;
+  final ChatUIKitAppBar? appBar;
+  final bool enableAppBar;
 
   @override
   State<SearchContactsView> createState() => _SearchContactsViewState();
@@ -82,9 +88,12 @@ class _SearchContactsViewState extends State<SearchContactsView> {
       backgroundColor: theme.color.isDark
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
-      appBar: const ChatUIKitAppBar(
-        showBackButton: false,
-      ),
+      appBar: !widget.enableAppBar
+          ? null
+          : widget.appBar ??
+              const ChatUIKitAppBar(
+                showBackButton: false,
+              ),
       body: SafeArea(child: content),
     );
 

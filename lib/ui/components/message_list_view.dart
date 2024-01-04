@@ -1,5 +1,6 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
+
 import 'package:flutter/material.dart';
 
 typedef MessageItemBuilder = Widget? Function(
@@ -126,6 +127,11 @@ class _MessageListViewState extends State<MessageListView> {
           ),
         ),
       ],
+    );
+
+    content = MessageListShareUserData(
+      data: controller.userMap,
+      child: content,
     );
 
     content = NotificationListener(
@@ -268,3 +274,4 @@ class _MessageListViewState extends State<MessageListView> {
     return content;
   }
 }
+

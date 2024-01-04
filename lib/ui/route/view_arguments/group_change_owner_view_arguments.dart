@@ -13,6 +13,7 @@ class GroupChangeOwnerViewArguments implements ChatUIKitViewArguments {
     this.appBar,
     this.controller,
     this.loadErrorMessage,
+    this.enableAppBar = true,
     this.attributes,
   });
 
@@ -28,6 +29,7 @@ class GroupChangeOwnerViewArguments implements ChatUIKitViewArguments {
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
+  final bool enableAppBar;
 
   @override
   String? attributes;

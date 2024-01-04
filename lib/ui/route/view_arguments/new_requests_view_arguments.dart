@@ -12,6 +12,7 @@ class NewRequestsViewArguments implements ChatUIKitViewArguments {
     this.fakeSearchHideText,
     this.listViewBackground,
     this.loadErrorMessage,
+    this.enableAppBar = true,
     this.attributes,
   });
 
@@ -25,6 +26,7 @@ class NewRequestsViewArguments implements ChatUIKitViewArguments {
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
+  final bool enableAppBar;
 
   @override
   String? attributes;

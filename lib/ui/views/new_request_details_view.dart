@@ -86,11 +86,7 @@ class _NewRequestDetailsViewState extends State<NewRequestDetailsView> {
         InkWell(
           onTap: () {
             Clipboard.setData(ClipboardData(text: widget.profile.id));
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('复制成功'),
-              ),
-            );
+            ChatUIKit.instance.sendChatUIKitEvent(ChatUIKitEvent.userIdCopied);
           },
           child: Icon(
             Icons.file_copy_sharp,
@@ -162,8 +158,12 @@ class _NewRequestDetailsViewState extends State<NewRequestDetailsView> {
           Navigator.of(context).pop();
         });
       } else {
-        await ChatUIKit.instance.sendContactRequest(userId: widget.profile.id);
-        needSetState = true;
+        try {
+          await ChatUIKit.instance
+              .sendContactRequest(userId: widget.profile.id);
+          needSetState = true;
+          // ignore: empty_catches
+        } catch (e) {}
       }
       if (needSetState) {
         setState(() {

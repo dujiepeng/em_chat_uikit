@@ -12,8 +12,9 @@ class GroupAddMembersViewArguments implements ChatUIKitViewArguments {
     this.onLongPress,
     this.fakeSearchHideText,
     this.listViewBackground,
-    this.attributes,
     this.inGroupMembers,
+    this.enableAppBar = true,
+    this.attributes,
   });
 
   final String groupId;
@@ -28,6 +29,7 @@ class GroupAddMembersViewArguments implements ChatUIKitViewArguments {
       onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
+  final bool enableAppBar;
 
   @override
   String? attributes;

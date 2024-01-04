@@ -14,6 +14,7 @@ class GroupMembersView extends StatefulWidget {
         appBar = arguments.appBar,
         controller = arguments.controller,
         loadErrorMessage = arguments.loadErrorMessage,
+        enableAppBar = arguments.enableAppBar,
         enableMemberOperation = arguments.enableMemberOperation,
         super(key: key);
 
@@ -29,6 +30,7 @@ class GroupMembersView extends StatefulWidget {
     this.controller,
     this.loadErrorMessage,
     this.enableMemberOperation = false,
+    this.enableAppBar = true,
     super.key,
   });
 
@@ -46,6 +48,7 @@ class GroupMembersView extends StatefulWidget {
   final Widget? listViewBackground;
   final String? loadErrorMessage;
   final bool enableMemberOperation;
+  final bool enableAppBar;
 
   @override
   State<GroupMembersView> createState() => _GroupMembersViewState();
@@ -102,46 +105,48 @@ class _GroupMembersViewState extends State<GroupMembersView>
       backgroundColor: theme.color.isDark
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
-      appBar: widget.appBar ??
-          ChatUIKitAppBar(
-            showBackButton: true,
-            trailing: widget.enableMemberOperation
-                ? actionsWidget()
-                : const SizedBox(),
-            leading: InkWell(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              child: ValueListenableBuilder(
-                valueListenable: memberCount,
-                builder: (context, value, child) {
-                  if (memberCount.value == 0) {
-                    return Text(
-                      '群成员',
-                      style: TextStyle(
-                        color: theme.color.isDark
-                            ? theme.color.neutralColor98
-                            : theme.color.neutralColor1,
-                        fontWeight: theme.font.titleMedium.fontWeight,
-                        fontSize: theme.font.titleMedium.fontSize,
-                      ),
-                    );
-                  } else {
-                    return Text(
-                      '群成员(${memberCount.value})',
-                      style: TextStyle(
-                        color: theme.color.isDark
-                            ? theme.color.neutralColor98
-                            : theme.color.neutralColor1,
-                        fontWeight: theme.font.titleMedium.fontWeight,
-                        fontSize: theme.font.titleMedium.fontSize,
-                      ),
-                    );
-                  }
-                },
+      appBar: !widget.enableAppBar
+          ? null
+          : widget.appBar ??
+              ChatUIKitAppBar(
+                showBackButton: true,
+                trailing: widget.enableMemberOperation
+                    ? actionsWidget()
+                    : const SizedBox(),
+                leading: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: ValueListenableBuilder(
+                    valueListenable: memberCount,
+                    builder: (context, value, child) {
+                      if (memberCount.value == 0) {
+                        return Text(
+                          '群成员',
+                          style: TextStyle(
+                            color: theme.color.isDark
+                                ? theme.color.neutralColor98
+                                : theme.color.neutralColor1,
+                            fontWeight: theme.font.titleMedium.fontWeight,
+                            fontSize: theme.font.titleMedium.fontSize,
+                          ),
+                        );
+                      } else {
+                        return Text(
+                          '群成员(${memberCount.value})',
+                          style: TextStyle(
+                            color: theme.color.isDark
+                                ? theme.color.neutralColor98
+                                : theme.color.neutralColor1,
+                            fontWeight: theme.font.titleMedium.fontWeight,
+                            fontSize: theme.font.titleMedium.fontSize,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
               ),
-            ),
-          ),
       body: SafeArea(
           child: GroupMemberListView(
         groupId: widget.groupId,
@@ -198,12 +203,26 @@ class _GroupMembersViewState extends State<GroupMembersView>
   }
 
   void onMemberTap(BuildContext context, ChatUIKitProfile profile) async {
+    // 如果是自己
+    if (profile.id == ChatUIKit.instance.currentUserId()) {
+      pushToCurrentUser(profile);
+      return;
+    }
+
     List<String> contacts = await ChatUIKit.instance.getAllContacts();
     if (contacts.contains(profile.id)) {
       pushContactDetails(profile);
     } else {
       pushNewRequestDetails(profile);
     }
+  }
+
+  // 处理点击自己头像和点击自己名片
+  void pushToCurrentUser(ChatUIKitProfile profile) {
+    Navigator.of(context).pushNamed(
+      ChatUIKitRouteNames.currentUserInfoView,
+      arguments: CurrentUserInfoViewArguments(profile: profile),
+    );
   }
 
   void pushContactDetails(ChatUIKitProfile profile) {

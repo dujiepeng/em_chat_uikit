@@ -10,12 +10,21 @@ class GroupDetailsView extends StatefulWidget {
     GroupDetailsViewArguments arguments, {
     super.key,
   })  : profile = arguments.profile,
+        appBar = arguments.appBar,
+        enableAppBar = arguments.enableAppBar,
         actions = arguments.actions;
 
-  const GroupDetailsView(
-      {required this.profile, required this.actions, super.key});
+  const GroupDetailsView({
+    required this.profile,
+    required this.actions,
+    this.appBar,
+    this.enableAppBar = true,
+    super.key,
+  });
   final List<ChatUIKitActionItem> actions;
   final ChatUIKitProfile profile;
+  final ChatUIKitAppBar? appBar;
+  final bool enableAppBar;
 
   @override
   State<GroupDetailsView> createState() => _GroupDetailsViewState();
@@ -39,7 +48,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         ChatUIKitContext.instance.conversationIsMute(widget.profile.id);
     fetchInfo();
     fetchGroup();
-    fetchMembersAttrs();
+    // fetchMembersAttrs();
   }
 
   @override
@@ -81,13 +90,13 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     isNotDisturb.value = map.values.first.remindType != ChatPushRemindType.ALL;
   }
 
+/*
   void fetchMembersAttrs() async {
-    // TODO 缓存用户属性
     await ChatUIKit.instance.fetchGroupMemberAttributes(
       groupId: widget.profile.id,
     );
   }
-
+*/
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
@@ -96,19 +105,22 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         backgroundColor: theme.color.isDark
             ? theme.color.neutralColor1
             : theme.color.neutralColor98,
-        appBar: ChatUIKitAppBar(
-          showBackButton: true,
-          trailing: IconButton(
-            iconSize: 24,
-            color: theme.color.isDark
-                ? theme.color.neutralColor95
-                : theme.color.neutralColor3,
-            icon: const Icon(Icons.more_vert),
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            onPressed: showBottom,
-          ),
-        ),
+        appBar: !widget.enableAppBar
+            ? null
+            : widget.appBar ??
+                ChatUIKitAppBar(
+                  showBackButton: true,
+                  trailing: IconButton(
+                    iconSize: 24,
+                    color: theme.color.isDark
+                        ? theme.color.neutralColor95
+                        : theme.color.neutralColor3,
+                    icon: const Icon(Icons.more_vert),
+                    highlightColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    onPressed: showBottom,
+                  ),
+                ),
         body: _buildContent());
 
     return content;
@@ -152,11 +164,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         InkWell(
           onTap: () {
             Clipboard.setData(ClipboardData(text: widget.profile.id));
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('复制成功'),
-              ),
-            );
+            ChatUIKit.instance.sendChatUIKitEvent(ChatUIKitEvent.groupIdCopied);
           },
           child: Icon(
             Icons.file_copy_sharp,
@@ -306,21 +314,21 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
             ),
           ),
         ),
-        InkWell(
-          onTap: () {
-            changeGroupNickname();
-          },
-          child: ChatUIKitDetailsListViewItem(
-            title: '我在本群昵称',
-            trailing: Icon(
-              Icons.arrow_forward_ios,
-              color: theme.color.isDark
-                  ? theme.color.neutralColor5
-                  : theme.color.neutralColor7,
-              size: 18,
-            ),
-          ),
-        ),
+        // InkWell(
+        //   onTap: () {
+        //     changeGroupNickname();
+        //   },
+        //   child: ChatUIKitDetailsListViewItem(
+        //     title: '我在本群昵称',
+        //     trailing: Icon(
+        //       Icons.arrow_forward_ios,
+        //       color: theme.color.isDark
+        //           ? theme.color.neutralColor5
+        //           : theme.color.neutralColor7,
+        //       size: 18,
+        //     ),
+        //   ),
+        // ),
         ChatUIKitDetailsListViewItem(
           title: '消息免打扰',
           trailing: ValueListenableBuilder(
@@ -677,7 +685,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
               groupId: group!.groupId,
               userId: ChatUIKit.instance.currentUserId(),
               attributes: {userGroupName: value}).then((_) {
-            fetchMembersAttrs();
+            // fetchMembersAttrs();
           }).catchError(
             (e) {
               debugPrint(e.toString());

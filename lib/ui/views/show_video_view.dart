@@ -6,18 +6,24 @@ class ShowVideoView extends StatefulWidget {
   ShowVideoView.arguments(ShowVideoViewArguments argument, {super.key})
       : message = argument.message,
         onImageLongPressed = argument.onImageLongPressed,
+        appBar = argument.appBar,
+        enableAppBar = argument.enableAppBar,
         playIcon = argument.playIcon;
 
   const ShowVideoView({
     required this.message,
     this.onImageLongPressed,
     this.playIcon,
+    this.appBar,
+    this.enableAppBar = true,
     super.key,
   });
 
   final Message message;
   final void Function(Message message)? onImageLongPressed;
   final Widget? playIcon;
+  final AppBar? appBar;
+  final bool enableAppBar;
 
   @override
   State<ShowVideoView> createState() => _ShowVideoViewState();
@@ -36,22 +42,25 @@ class _ShowVideoViewState extends State<ShowVideoView> {
     content = Scaffold(
       backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(120, 0, 0, 0),
-        elevation: 0.0,
-        leading: InkWell(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: Container(
-            margin: const EdgeInsets.only(left: 10),
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: theme.color.neutralColor95,
-            ),
-          ),
-        ),
-      ),
+      appBar: !widget.enableAppBar
+          ? null
+          : widget.appBar ??
+              AppBar(
+                backgroundColor: const Color.fromARGB(120, 0, 0, 0),
+                elevation: 0.0,
+                leading: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 10),
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: theme.color.neutralColor95,
+                    ),
+                  ),
+                ),
+              ),
       body: content,
     );
 

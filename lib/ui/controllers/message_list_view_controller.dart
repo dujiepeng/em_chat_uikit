@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:em_chat_uikit/chat_uikit.dart';
-
 import 'package:flutter/material.dart';
 
 enum MessageLastActionType {
@@ -23,6 +22,7 @@ class MessageListViewController extends ChangeNotifier
   MessageLastActionType lastActionType = MessageLastActionType.none;
 
   final List<Message> msgList = [];
+  final Map<String, UserData> userMap = {};
 
   void clearMessages() {
     msgList.clear();
@@ -93,6 +93,10 @@ class MessageListViewController extends ChangeNotifier
     for (var element in messages) {
       if (element.conversationId == profile.id) {
         list.add(element);
+        userMap[element.from!] = UserData(
+          nickname: element.nickname,
+          avatarUrl: element.avatarUrl,
+        );
       }
     }
     if (list.isNotEmpty) {
@@ -294,11 +298,12 @@ class MessageListViewController extends ChangeNotifier
 
   Future<void> sendVoiceMessage(ChatUIKitRecordModel model) async {
     final message = Message.createVoiceSendMessage(
-        targetId: profile.id,
-        chatType: chatType,
-        filePath: model.path,
-        duration: model.duration,
-        displayName: model.displayName);
+      targetId: profile.id,
+      chatType: chatType,
+      filePath: model.path,
+      duration: model.duration,
+      displayName: model.displayName,
+    );
     sendMessage(message);
   }
 

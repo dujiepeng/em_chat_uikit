@@ -7,6 +7,8 @@ class SearchContactsViewArguments implements ChatUIKitViewArguments {
     required this.searchHideText,
     this.onTap,
     this.itemBuilder,
+    this.appBar,
+    this.enableAppBar = true,
     this.attributes,
   });
 
@@ -15,6 +17,8 @@ class SearchContactsViewArguments implements ChatUIKitViewArguments {
   final void Function(BuildContext context, ChatUIKitProfile profile)? onTap;
   final Widget Function(BuildContext context, ChatUIKitProfile profile,
       String? searchKeyword)? itemBuilder;
+  final ChatUIKitAppBar? appBar;
+  final bool enableAppBar;
   @override
   String? attributes;
 }

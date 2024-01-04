@@ -14,6 +14,7 @@ class GroupChangeOwnerView extends StatefulWidget {
         onItemLongPress = arguments.onItemLongPress,
         appBar = arguments.appBar,
         controller = arguments.controller,
+        enableAppBar = arguments.enableAppBar,
         loadErrorMessage = arguments.loadErrorMessage;
 
   const GroupChangeOwnerView({
@@ -27,6 +28,7 @@ class GroupChangeOwnerView extends StatefulWidget {
     this.appBar,
     this.controller,
     this.loadErrorMessage,
+    this.enableAppBar = true,
     super.key,
   });
 
@@ -42,7 +44,7 @@ class GroupChangeOwnerView extends StatefulWidget {
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
-
+  final bool enableAppBar;
   @override
   State<GroupChangeOwnerView> createState() => _GroupChangeOwnerViewState();
 }
@@ -65,24 +67,26 @@ class _GroupChangeOwnerViewState extends State<GroupChangeOwnerView> {
       backgroundColor: theme.color.isDark
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
-      appBar: widget.appBar ??
-          ChatUIKitAppBar(
-              showBackButton: true,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.maybePop(context);
-                },
-                child: Text(
-                  '选择新群主',
-                  style: TextStyle(
-                    color: theme.color.isDark
-                        ? theme.color.neutralColor98
-                        : theme.color.neutralColor1,
-                    fontWeight: theme.font.titleMedium.fontWeight,
-                    fontSize: theme.font.titleMedium.fontSize,
-                  ),
-                ),
-              )),
+      appBar: !widget.enableAppBar
+          ? null
+          : widget.appBar ??
+              ChatUIKitAppBar(
+                  showBackButton: true,
+                  leading: InkWell(
+                    onTap: () {
+                      Navigator.maybePop(context);
+                    },
+                    child: Text(
+                      '选择新群主',
+                      style: TextStyle(
+                        color: theme.color.isDark
+                            ? theme.color.neutralColor98
+                            : theme.color.neutralColor1,
+                        fontWeight: theme.font.titleMedium.fontWeight,
+                        fontSize: theme.font.titleMedium.fontSize,
+                      ),
+                    ),
+                  )),
       body: GroupMemberListView(
         groupId: widget.groupId,
         controller: controller,
@@ -120,7 +124,7 @@ class _GroupChangeOwnerViewState extends State<GroupChangeOwnerView> {
       try {
         await ChatUIKit.instance.changeGroupOwner(
             groupId: widget.groupId, newOwner: model.profile.id);
-      // ignore: empty_catches
+        // ignore: empty_catches
       } catch (e) {}
     }
   }

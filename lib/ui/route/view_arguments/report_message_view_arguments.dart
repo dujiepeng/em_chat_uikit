@@ -5,11 +5,13 @@ class ReportMessageViewArguments implements ChatUIKitViewArguments {
     required this.messageId,
     required this.reportReasons,
     this.appBar,
+    this.enableAppBar = true,
     this.attributes,
   });
   final String messageId;
   final List<String> reportReasons;
   final ChatUIKitAppBar? appBar;
+  final bool enableAppBar;
 
   @override
   String? attributes;

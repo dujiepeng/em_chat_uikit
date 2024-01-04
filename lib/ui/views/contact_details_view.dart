@@ -9,43 +9,93 @@ class ContactDetailsView extends StatefulWidget {
       {super.key})
       : actions = arguments.actions,
         profile = arguments.profile,
-        onMessageDidClear = arguments.onMessageDidClear;
+        onMessageDidClear = arguments.onMessageDidClear,
+        enableAppBar = arguments.enableAppBar,
+        appBar = arguments.appBar;
 
   const ContactDetailsView({
     required this.profile,
     required this.actions,
     this.onMessageDidClear,
+    this.appBar,
+    this.enableAppBar = true,
     super.key,
   });
 
   final ChatUIKitProfile profile;
   final List<ChatUIKitActionItem> actions;
   final VoidCallback? onMessageDidClear;
+  final ChatUIKitAppBar? appBar;
+  final bool enableAppBar;
   @override
   State<ContactDetailsView> createState() => _ContactDetailsViewState();
 }
 
-class _ContactDetailsViewState extends State<ContactDetailsView> {
+class _ContactDetailsViewState extends State<ContactDetailsView>
+    with ChatUIKitProviderObserver {
   ValueNotifier<bool> isNotDisturb = ValueNotifier<bool>(false);
-
+  ChatUIKitProfile? profile;
   late final List<ChatUIKitActionItem>? actions;
   @override
   void initState() {
     super.initState();
     assert(widget.actions.length <= 5,
         'The number of actions in the list cannot exceed 5');
+    profile = widget.profile;
     actions = widget.actions;
+    ChatUIKitProvider.instance.addObserver(this);
     isNotDisturb.value =
-        ChatUIKitContext.instance.conversationIsMute(widget.profile.id);
+        ChatUIKitContext.instance.conversationIsMute(profile!.id);
     fetchInfo();
   }
 
   void fetchInfo() async {
     Conversation conversation = await ChatUIKit.instance.createConversation(
-        conversationId: widget.profile.id, type: ConversationType.Chat);
+        conversationId: profile!.id, type: ConversationType.Chat);
     Map<String, ChatSilentModeResult> map = await ChatUIKit.instance
         .fetchSilentModel(conversations: [conversation]);
     isNotDisturb.value = map.values.first.remindType != ChatPushRemindType.ALL;
+  }
+
+  @override
+  void dispose() {
+    ChatUIKitProvider.instance.removeObserver(this);
+    isNotDisturb.dispose();
+    super.dispose();
+  }
+
+  @override
+  void onContactProfilesUpdate(
+    Map<String, ChatUIKitProfile> map,
+  ) {
+    if (map.keys.contains(profile?.id)) {
+      setState(() {
+        profile = map[profile?.id];
+      });
+    }
+  }
+
+  @override
+  void onConversationProfilesUpdate(
+    Map<String, ChatUIKitProfile> map,
+  ) {
+    if (map.keys.contains(profile?.id)) {
+      setState(() {
+        profile = map[profile?.id];
+      });
+    }
+  }
+
+  @override
+  void onGroupMemberProfilesUpdate(
+    String groupId,
+    Map<String, ChatUIKitProfile> map,
+  ) {
+    if (map.keys.contains(profile?.id)) {
+      setState(() {
+        profile = map[profile?.id];
+      });
+    }
   }
 
   @override
@@ -56,19 +106,22 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
         backgroundColor: theme.color.isDark
             ? theme.color.neutralColor1
             : theme.color.neutralColor98,
-        appBar: ChatUIKitAppBar(
-          showBackButton: true,
-          trailing: IconButton(
-            iconSize: 24,
-            color: theme.color.isDark
-                ? theme.color.neutralColor95
-                : theme.color.neutralColor3,
-            icon: const Icon(Icons.more_vert),
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            onPressed: showBottom,
-          ),
-        ),
+        appBar: !widget.enableAppBar
+            ? null
+            : widget.appBar ??
+                ChatUIKitAppBar(
+                  showBackButton: true,
+                  trailing: IconButton(
+                    iconSize: 24,
+                    color: theme.color.isDark
+                        ? theme.color.neutralColor95
+                        : theme.color.neutralColor3,
+                    icon: const Icon(Icons.more_vert),
+                    highlightColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    onPressed: showBottom,
+                  ),
+                ),
         body: _buildContent());
 
     return content;
@@ -79,7 +132,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
     Widget avatar = statusAvatar();
 
     Widget name = Text(
-      widget.profile.showName,
+      profile!.showName,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
       style: TextStyle(
@@ -92,7 +145,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
     );
 
     Widget easeId = Text(
-      '环信ID: ${widget.profile.id}',
+      '环信ID: ${profile!.id}',
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
       style: TextStyle(
@@ -111,12 +164,8 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
         const SizedBox(width: 2),
         InkWell(
           onTap: () {
-            Clipboard.setData(ClipboardData(text: widget.profile.id));
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('复制成功'),
-              ),
-            );
+            Clipboard.setData(ClipboardData(text: profile!.id));
+            ChatUIKit.instance.sendChatUIKitEvent(ChatUIKitEvent.userIdCopied);
           },
           child: Icon(
             Icons.file_copy_sharp,
@@ -231,13 +280,13 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
                 onChanged: (value) async {
                   if (value == true) {
                     await ChatUIKit.instance.setSilentMode(
-                        conversationId: widget.profile.id,
+                        conversationId: profile!.id,
                         type: ConversationType.Chat,
                         param: ChatSilentModeParam.remindType(
                             ChatPushRemindType.MENTION_ONLY));
                   } else {
                     await ChatUIKit.instance.clearSilentMode(
-                        conversationId: widget.profile.id,
+                        conversationId: profile!.id,
                         type: ConversationType.Chat);
                   }
                   setState(() {
@@ -281,7 +330,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
 
     if (ret == true) {
       Conversation conversation = await ChatUIKit.instance.createConversation(
-          conversationId: widget.profile.id, type: ConversationType.Chat);
+          conversationId: profile!.id, type: ConversationType.Chat);
       await conversation.deleteAllMessages();
       widget.onMessageDidClear?.call();
     }
@@ -310,17 +359,17 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
   Widget statusAvatar() {
     // final theme = ChatUIKitTheme.of(context);
     return ChatUIKitAvatar(
-      avatarUrl: widget.profile.avatarUrl,
+      avatarUrl: profile!.avatarUrl,
       size: 100,
     );
     /* // 暂时不需要 Presence，等需要再打开
     return FutureBuilder(
       future:
-          ChatUIKit.instance.fetchPresenceStatus(members: [widget.profile.id]),
+          ChatUIKit.instance.fetchPresenceStatus(members: [profile!.id]),
       builder: (context, snapshot) {
         if (snapshot.hasData == false) {
           return ChatUIKitAvatar(
-            avatarUrl: widget.profile.avatarUrl,
+            avatarUrl: profile!.avatarUrl,
             size: 100,
           );
         }
@@ -333,7 +382,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
               children: [
                 const SizedBox(width: 110, height: 110),
                 ChatUIKitAvatar(
-                  avatarUrl: widget.profile.avatarUrl,
+                  avatarUrl: profile!.avatarUrl,
                   size: 100,
                 ),
                 Positioned(
@@ -371,13 +420,13 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
             );
           } else {
             content = ChatUIKitAvatar(
-              avatarUrl: widget.profile.avatarUrl,
+              avatarUrl: profile!.avatarUrl,
               size: 100,
             );
           }
         } else {
           content = ChatUIKitAvatar(
-            avatarUrl: widget.profile.avatarUrl,
+            avatarUrl: profile!.avatarUrl,
             size: 100,
           );
         }
@@ -391,7 +440,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
   void deleteContact() {
     showChatUIKitDialog(
       title: '确认删除联系人?',
-      content: '确认删除${widget.profile.showName}同时删除与该联系人的聊天记录。',
+      content: '确认删除${profile!.showName}同时删除与该联系人的聊天记录。',
       context: context,
       items: [
         ChatUIKitDialogItem.cancel(
@@ -404,9 +453,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
           label: '确认',
           onTap: () async {
             Navigator.of(context).pop();
-            ChatUIKit.instance
-                .deleteContact(userId: widget.profile.id)
-                .then((value) {
+            ChatUIKit.instance.deleteContact(userId: profile!.id).then((value) {
               Navigator.of(context).pop();
             }).catchError((e) {});
           },

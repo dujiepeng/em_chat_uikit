@@ -7,12 +7,15 @@ class ContactDetailsViewArguments implements ChatUIKitViewArguments {
     required this.actions,
     this.onMessageDidClear,
     this.attributes,
+    this.enableAppBar = true,
+    this.appBar,
   });
 
   final ChatUIKitProfile profile;
   final List<ChatUIKitActionItem> actions;
   final VoidCallback? onMessageDidClear;
-
+  final bool enableAppBar;
+  final ChatUIKitAppBar? appBar;
   @override
   String? attributes;
 }

@@ -3,6 +3,7 @@ import 'package:em_chat_uikit_example/pages/contact_page.dart';
 import 'package:em_chat_uikit_example/pages/conversation_page.dart';
 import 'package:em_chat_uikit_example/pages/my_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,14 +17,32 @@ class _HomePageState extends State<HomePage>
         AutomaticKeepAliveClientMixin,
         ChatObserver,
         ContactObserver,
-        ChatSDKActionEventsObserver {
+        ChatSDKActionEventsObserver,
+        ChatUIKitEventsObservers {
   int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
     ChatUIKit.instance.addObserver(this);
+
+    ChatUIKitProvider.instance.contactsHandler = _contactsHandler;
+    ChatUIKitProvider.instance.conversationsHandler = _conversationsHandler;
+    ChatUIKitProvider.instance.groupMembersHandler = _groupMembersHandler;
   }
+
+  void _contactsHandler(
+    List<ChatUIKitProfile> profiles,
+  ) {}
+
+  void _conversationsHandler(
+    List<ChatUIKitProfile> profiles,
+  ) {}
+
+  void _groupMembersHandler(
+    String groupId,
+    List<ChatUIKitProfile> profiles,
+  ) {}
 
   @override
   void dispose() {
@@ -32,7 +51,11 @@ class _HomePageState extends State<HomePage>
   }
 
   List<Widget> _pages(BuildContext context) {
-    return [const ConversationPage(), const ContactPage(), const MyPage()];
+    return [
+      const ConversationPage(),
+      const ContactPage(),
+      const MyPage(),
+    ];
   }
 
   @override
@@ -129,6 +152,22 @@ class _HomePageState extends State<HomePage>
   bool get wantKeepAlive => true;
 
   @override
+  void onChatUIKitEventsReceived(ChatUIKitEvent events) {
+    if (events == ChatUIKitEvent.groupIdCopied ||
+        events == ChatUIKitEvent.userIdCopied) {
+      EasyLoading.showSuccess('复制成功');
+    } else if (events == ChatUIKitEvent.messageDownloading) {
+      EasyLoading.showInfo('下载中');
+    } else if (events == ChatUIKitEvent.noCameraPermission ||
+        events == ChatUIKitEvent.noRecordPermission ||
+        events == ChatUIKitEvent.noStoragePermission) {
+      EasyLoading.showError('权限不足');
+    } else if (events == ChatUIKitEvent.voiceTypeNotSupported) {
+      EasyLoading.showError('语音格式不支持');
+    }
+  }
+
+  @override
   // 用于刷新消息未读数
   void onMessagesReceived(List<Message> messages) {
     setState(() {});
@@ -145,7 +184,9 @@ class _HomePageState extends State<HomePage>
   void onEventEnd(ChatSDKWrapperActionEvent event) {
     if (event == ChatSDKWrapperActionEvent.acceptContactRequest ||
         event == ChatSDKWrapperActionEvent.declineContactRequest ||
-        event == ChatSDKWrapperActionEvent.markConversationAsRead) {
+        event == ChatSDKWrapperActionEvent.markConversationAsRead ||
+        event == ChatSDKWrapperActionEvent.setSilentMode ||
+        event == ChatSDKWrapperActionEvent.clearSilentMode) {
       setState(() {});
     }
   }

@@ -13,7 +13,8 @@ class ConversationsView extends StatefulWidget {
         onTap = arguments.onTap,
         onLongPress = arguments.onLongPress,
         appBar = arguments.appBar,
-        controller = arguments.controller;
+        controller = arguments.controller,
+        enableAppBar = arguments.enableAppBar;
 
   const ConversationsView({
     this.listViewItemBuilder,
@@ -26,6 +27,7 @@ class ConversationsView extends StatefulWidget {
     this.onLongPress,
     this.appBar,
     this.controller,
+    this.enableAppBar = true,
     super.key,
   });
 
@@ -39,16 +41,32 @@ class ConversationsView extends StatefulWidget {
   final void Function(BuildContext context, ConversationInfo info)? onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
+  final bool enableAppBar;
   @override
   State<ConversationsView> createState() => _ConversationsViewState();
 }
 
-class _ConversationsViewState extends State<ConversationsView> {
+class _ConversationsViewState extends State<ConversationsView>
+    with ChatUIKitProviderObserver {
   late ConversationListViewController controller;
   @override
   void initState() {
     super.initState();
     controller = widget.controller ?? ConversationListViewController();
+    ChatUIKitProvider.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    ChatUIKitProvider.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void onConversationProfilesUpdate(
+    Map<String, ChatUIKitProfile> map,
+  ) {
+    controller.reload();
   }
 
   @override
@@ -58,32 +76,34 @@ class _ConversationsViewState extends State<ConversationsView> {
       backgroundColor: theme.color.isDark
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
-      appBar: widget.appBar ??
-          ChatUIKitAppBar(
-            title: 'Chats',
-            showBackButton: false,
-            titleTextStyle: TextStyle(
-              color: theme.color.isDark
-                  ? theme.color.primaryColor6
-                  : theme.color.primaryColor5,
-              fontSize: theme.font.titleLarge.fontSize,
-              fontWeight: FontWeight.w900,
-            ),
-            leading: Container(
-              margin: const EdgeInsets.fromLTRB(12, 6, 12, 6),
-              child: const ChatUIKitAvatar(size: 32),
-            ),
-            trailing: IconButton(
-              iconSize: 24,
-              color: theme.color.isDark
-                  ? theme.color.neutralColor95
-                  : theme.color.neutralColor3,
-              icon: const Icon(Icons.add_circle_outline),
-              highlightColor: Colors.transparent,
-              splashColor: Colors.transparent,
-              onPressed: showMoreInfo,
-            ),
-          ),
+      appBar: !widget.enableAppBar
+          ? null
+          : widget.appBar ??
+              ChatUIKitAppBar(
+                title: 'Chats',
+                showBackButton: false,
+                titleTextStyle: TextStyle(
+                  color: theme.color.isDark
+                      ? theme.color.primaryColor6
+                      : theme.color.primaryColor5,
+                  fontSize: theme.font.titleLarge.fontSize,
+                  fontWeight: FontWeight.w900,
+                ),
+                leading: Container(
+                  margin: const EdgeInsets.fromLTRB(12, 6, 12, 6),
+                  child: const ChatUIKitAvatar(size: 32),
+                ),
+                trailing: IconButton(
+                  iconSize: 24,
+                  color: theme.color.isDark
+                      ? theme.color.neutralColor95
+                      : theme.color.neutralColor3,
+                  icon: const Icon(Icons.add_circle_outline),
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  onPressed: showMoreInfo,
+                ),
+              ),
       body: SafeArea(
         child: ConversationListView(
           controller: controller,
@@ -309,7 +329,10 @@ class _ConversationsViewState extends State<ConversationsView> {
     );
 
     if (userId?.isNotEmpty == true) {
-      ChatUIKit.instance.sendContactRequest(userId: userId!);
+      try {
+        await ChatUIKit.instance.sendContactRequest(userId: userId!);
+        // ignore: empty_catches
+      } catch (e) {}
     }
   }
 

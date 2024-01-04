@@ -14,6 +14,7 @@ class ContactsView extends StatefulWidget {
         onLongPress = arguments.onLongPress,
         appBar = arguments.appBar,
         controller = arguments.controller,
+        enableAppBar = arguments.enableAppBar,
         loadErrorMessage = arguments.loadErrorMessage;
 
   const ContactsView({
@@ -26,6 +27,7 @@ class ContactsView extends StatefulWidget {
     this.appBar,
     this.controller,
     this.loadErrorMessage,
+    this.enableAppBar = true,
     super.key,
   });
 
@@ -40,18 +42,21 @@ class ContactsView extends StatefulWidget {
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
+  final bool enableAppBar;
 
   @override
   State<ContactsView> createState() => _ContactsViewState();
 }
 
-class _ContactsViewState extends State<ContactsView> with ContactObserver {
+class _ContactsViewState extends State<ContactsView>
+    with ContactObserver, ChatUIKitProviderObserver {
   late final ContactListViewController controller;
 
   @override
   void initState() {
     super.initState();
     ChatUIKit.instance.addObserver(this);
+    ChatUIKitProvider.instance.addObserver(this);
     controller = widget.controller ?? ContactListViewController();
   }
 
@@ -211,14 +216,25 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
     );
 
     if (userId?.isNotEmpty == true) {
-      ChatUIKit.instance.sendContactRequest(userId: userId!);
+      try {
+        await ChatUIKit.instance.sendContactRequest(userId: userId!);
+        // ignore: empty_catches
+      } catch (e) {}
     }
   }
 
   @override
   void dispose() {
     ChatUIKit.instance.removeObserver(this);
+    ChatUIKitProvider.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void onContactProfilesUpdate(
+    Map<String, ChatUIKitProfile> map,
+  ) {
+    controller.reload();
   }
 
   @override

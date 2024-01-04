@@ -13,6 +13,7 @@ class SelectContactViewArguments implements ChatUIKitViewArguments {
     this.onLongPress,
     this.fakeSearchHideText,
     this.listViewBackground,
+    this.enableAppBar = true,
     this.attributes,
   });
   final ContactListViewController? controller;
@@ -26,6 +27,7 @@ class SelectContactViewArguments implements ChatUIKitViewArguments {
   final Widget? listViewBackground;
   final String? backText;
   final String? title;
+  final bool enableAppBar;
 
   @override
   String? attributes;

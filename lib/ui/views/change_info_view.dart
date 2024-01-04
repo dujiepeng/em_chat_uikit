@@ -9,7 +9,8 @@ class ChangeInfoView extends StatefulWidget {
         inputTextCallback = arguments.inputTextCallback,
         saveButtonTitle = arguments.saveButtonTitle,
         maxLength = arguments.maxLength,
-        appBar = arguments.appBar;
+        appBar = arguments.appBar,
+        enableAppBar = arguments.enableAppBar;
 
   const ChangeInfoView({
     this.title,
@@ -18,6 +19,7 @@ class ChangeInfoView extends StatefulWidget {
     this.saveButtonTitle,
     this.maxLength = 128,
     this.appBar,
+    this.enableAppBar = true,
     super.key,
   });
   final String? title;
@@ -26,6 +28,7 @@ class ChangeInfoView extends StatefulWidget {
   final int maxLength;
   final ChatUIKitAppBar? appBar;
   final Future<String?> Function()? inputTextCallback;
+  final bool enableAppBar;
 
   @override
   State<ChangeInfoView> createState() => _ChangeInfoViewState();

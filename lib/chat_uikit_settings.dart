@@ -11,7 +11,7 @@ class ChatUIKitSettings {
   static bool showConversationListAvatar = true;
   static String? conversationListMuteImage;
 
-  /// 时间显示间隔时长
+  /// 撤回消息的时间限制，单位秒
   static int recallExpandTime = 120;
 
   static List<String> reportReason = [

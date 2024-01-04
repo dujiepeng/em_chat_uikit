@@ -16,6 +16,17 @@ class _ConversationPageState extends State<ConversationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const ConversationsView();
+    Widget content = const ConversationsView(
+      enableAppBar: false,
+    );
+
+    content = Scaffold(
+      appBar: AppBar(
+        title: const Text('会话'),
+      ),
+      body: content,
+    );
+
+    return content;
   }
 }

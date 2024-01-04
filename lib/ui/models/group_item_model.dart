@@ -20,7 +20,8 @@ class GroupItemModel with ChatUIKitListItemModelBase, NeedSearch {
   }
 
   static GroupItemModel fromGroup(Group group) {
-    ChatUIKitProfile profile = ChatUIKitProfile.groupMember(
+    // 因为不需要向用户要群组的Profile,所以单独创建一个profile。
+    ChatUIKitProfile profile = ChatUIKitProfile.groupChat(
       id: group.groupId,
       name: group.name,
     );

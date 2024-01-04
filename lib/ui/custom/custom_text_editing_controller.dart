@@ -1,8 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-
 import 'package:flutter/widgets.dart';
-
-import 'chat_uikit_emoji_data.dart';
 
 class CustomTextEditingController extends TextEditingController {
   final List<MentionModel> mentionList = [];
@@ -168,7 +165,6 @@ class CustomTextEditingController extends TextEditingController {
 
   @override
   set value(TextEditingValue newValue) {
-    debugPrint(newValue.toString());
     newValue = mentionFilter(newValue);
     super.value = newValue;
   }

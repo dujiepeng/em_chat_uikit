@@ -127,9 +127,16 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
 
   Future<List<ConversationInfo>> mappers(
       List<Conversation> conversations) async {
+    Map<String, ConversationType> map = {
+      for (var element in conversations) element.id: element.type
+    };
+
+    Map<String, ChatUIKitProfile> profilesMap =
+        ChatUIKitProvider.instance.conversationProfiles(map);
     List<ConversationInfo> list = [];
     for (var item in conversations) {
-      ConversationInfo info = await ConversationInfo.fromConversation(item);
+      ConversationInfo info =
+          await ConversationInfo.fromConversation(item, profilesMap[item.id]!);
       list.add(info);
     }
     return list;

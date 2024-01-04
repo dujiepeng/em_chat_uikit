@@ -12,6 +12,7 @@ class GroupMentionView extends StatefulWidget {
         onLongPress = arguments.onLongPress,
         appBar = arguments.appBar,
         controller = arguments.controller,
+        enableAppBar = arguments.enableAppBar,
         groupId = arguments.groupId;
 
   const GroupMentionView({
@@ -24,6 +25,7 @@ class GroupMentionView extends StatefulWidget {
     this.onLongPress,
     this.appBar,
     this.controller,
+    this.enableAppBar = true,
     super.key,
   });
 
@@ -38,6 +40,7 @@ class GroupMentionView extends StatefulWidget {
       onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
+  final bool enableAppBar;
 
   @override
   State<GroupMentionView> createState() => _GroupMentionViewState();
@@ -65,25 +68,27 @@ class _GroupMentionViewState extends State<GroupMentionView> {
       backgroundColor: theme.color.isDark
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
-      appBar: widget.appBar ??
-          ChatUIKitAppBar(
-            showBackButton: true,
-            leading: InkWell(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                '@提及',
-                style: TextStyle(
-                  color: theme.color.isDark
-                      ? theme.color.neutralColor98
-                      : theme.color.neutralColor1,
-                  fontWeight: theme.font.titleMedium.fontWeight,
-                  fontSize: theme.font.titleMedium.fontSize,
+      appBar: !widget.enableAppBar
+          ? null
+          : widget.appBar ??
+              ChatUIKitAppBar(
+                showBackButton: true,
+                leading: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    '@提及',
+                    style: TextStyle(
+                      color: theme.color.isDark
+                          ? theme.color.neutralColor98
+                          : theme.color.neutralColor1,
+                      fontWeight: theme.font.titleMedium.fontWeight,
+                      fontSize: theme.font.titleMedium.fontSize,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
       body: ValueListenableBuilder(
         valueListenable: selectedProfiles,
         builder: (context, value, child) {

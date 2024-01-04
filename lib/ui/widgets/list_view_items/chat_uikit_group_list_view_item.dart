@@ -21,6 +21,7 @@ class ChatUIKitGroupListViewItem extends StatelessWidget {
     Widget name = Text(
       model.showName,
       style: normalStyle,
+      overflow: TextOverflow.ellipsis,
     );
 
     Widget avatar = ChatUIKitAvatar(
@@ -32,7 +33,7 @@ class ChatUIKitGroupListViewItem extends StatelessWidget {
       children: [
         avatar,
         const SizedBox(width: 12),
-        name,
+        Expanded(child: name),
       ],
     );
     content = Container(

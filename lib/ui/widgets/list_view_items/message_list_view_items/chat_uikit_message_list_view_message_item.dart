@@ -81,7 +81,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
         msgWidget = _buildCardMessage(context, message);
       }
     }
-    msgWidget ??= const SizedBox();
+    msgWidget ??= _buildNonsupportMessage(context, message);
 
     Widget content;
 
@@ -141,7 +141,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
             isLeft ?? left ? CrossAxisAlignment.start : CrossAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
         children: [
-          _nickname(theme, isLeft: isLeft ?? left),
+          _nickname(theme, context, isLeft: isLeft ?? left),
           quoteWidget(model: message.getQuote(), isLeft: isLeft ?? left),
           content,
           SizedBox(
@@ -178,7 +178,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
       );
     }
 
-    Widget avatar = _avatar(theme);
+    Widget avatar = _avatar(theme, context);
     avatar = Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: avatar,
@@ -240,13 +240,21 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
         ChatUIKitCardMessageWidget(message: message);
   }
 
-  Widget _avatar(ChatUIKitTheme theme) {
+  Widget _buildNonsupportMessage(BuildContext context, Message message) {
+    return bubbleContentBuilder?.call(context, message) ??
+        ChatUIKitNonsupportMessageWidget(message: message);
+  }
+
+  Widget _avatar(ChatUIKitTheme theme, BuildContext context) {
     Widget? content;
-    if (!showAvatar) {
-      content = const SizedBox();
-    } else {
-      content = avatarWidget;
-      content ??= ChatUIKitAvatar(avatarUrl: message.avatarUrl);
+    if (!showAvatar) return const SizedBox();
+    content = avatarWidget;
+    if (content == null) {
+      String? avatarUrl = MessageListShareUserData.of(context)
+              ?.data[message.from!]
+              ?.avatarUrl ??
+          message.avatarUrl;
+      content = ChatUIKitAvatar(avatarUrl: avatarUrl);
     }
 
     content = InkWell(
@@ -258,9 +266,15 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
     return content;
   }
 
-  Widget _nickname(ChatUIKitTheme theme, {bool isLeft = false}) {
+  Widget _nickname(ChatUIKitTheme theme, BuildContext context,
+      {bool isLeft = false}) {
+    if (!showNickname) return const SizedBox();
+    String nickname =
+        MessageListShareUserData.of(context)?.data[message.from!]?.nickname ??
+            message.nickname ??
+            message.from!;
     Widget content = Text(
-      message.nickname ?? message.from ?? '',
+      nickname,
       style: TextStyle(
           fontWeight: theme.font.labelSmall.fontWeight,
           fontSize: theme.font.labelSmall.fontSize,

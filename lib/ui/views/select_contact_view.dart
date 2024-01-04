@@ -13,6 +13,7 @@ class SelectContactView extends StatefulWidget {
         appBar = arguments.appBar,
         controller = arguments.controller,
         backText = arguments.backText,
+        enableAppBar = arguments.enableAppBar,
         title = arguments.title;
 
   const SelectContactView({
@@ -25,6 +26,7 @@ class SelectContactView extends StatefulWidget {
     this.onTap,
     this.onLongPress,
     this.appBar,
+    this.enableAppBar = true,
     this.controller,
     super.key,
   });
@@ -41,6 +43,7 @@ class SelectContactView extends StatefulWidget {
       onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
+  final bool enableAppBar;
 
   @override
   State<SelectContactView> createState() => _SelectContactViewState();
@@ -63,28 +66,30 @@ class _SelectContactViewState extends State<SelectContactView> {
       backgroundColor: theme.color.isDark
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
-      appBar: widget.appBar ??
-          ChatUIKitAppBar(
-            title: widget.title,
-            showBackButton: true,
-            leading: widget.backText?.isNotEmpty == true
-                ? InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      widget.backText!,
-                      style: TextStyle(
-                        color: theme.color.isDark
-                            ? theme.color.neutralColor98
-                            : theme.color.neutralColor1,
-                        fontWeight: theme.font.titleMedium.fontWeight,
-                        fontSize: theme.font.titleMedium.fontSize,
-                      ),
-                    ),
-                  )
-                : null,
-          ),
+      appBar: !widget.enableAppBar
+          ? null
+          : widget.appBar ??
+              ChatUIKitAppBar(
+                title: widget.title,
+                showBackButton: true,
+                leading: widget.backText?.isNotEmpty == true
+                    ? InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          widget.backText!,
+                          style: TextStyle(
+                            color: theme.color.isDark
+                                ? theme.color.neutralColor98
+                                : theme.color.neutralColor1,
+                            fontWeight: theme.font.titleMedium.fontWeight,
+                            fontSize: theme.font.titleMedium.fontSize,
+                          ),
+                        ),
+                      )
+                    : null,
+              ),
       body: ContactListView(
         controller: controller,
         itemBuilder: widget.listViewItemBuilder,

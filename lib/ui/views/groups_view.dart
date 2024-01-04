@@ -12,6 +12,7 @@ class GroupsView extends StatefulWidget {
         onLongPress = argument.onLongPress,
         fakeSearchHideText = argument.fakeSearchHideText,
         listViewBackground = argument.listViewBackground,
+        enableAppBar = argument.enableAppBar,
         loadErrorMessage = argument.loadErrorMessage;
 
   const GroupsView({
@@ -24,6 +25,7 @@ class GroupsView extends StatefulWidget {
     this.fakeSearchHideText,
     this.listViewBackground,
     this.loadErrorMessage,
+    this.enableAppBar = true,
     super.key,
   });
 
@@ -36,6 +38,7 @@ class GroupsView extends StatefulWidget {
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
+  final bool enableAppBar;
 
   @override
   State<GroupsView> createState() => _GroupsViewState();
@@ -65,25 +68,27 @@ class _GroupsViewState extends State<GroupsView> {
       backgroundColor: theme.color.isDark
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
-      appBar: widget.appBar ??
-          ChatUIKitAppBar(
-            showBackButton: true,
-            leading: InkWell(
-              onTap: () {
-                Navigator.maybePop(context);
-              },
-              child: Text(
-                "群聊${joinedCount != null ? '($joinedCount)' : ''}",
-                style: TextStyle(
-                  fontWeight: theme.font.titleMedium.fontWeight,
-                  fontSize: theme.font.titleMedium.fontSize,
-                  color: theme.color.isDark
-                      ? theme.color.neutralColor98
-                      : theme.color.neutralColor1,
+      appBar: !widget.enableAppBar
+          ? null
+          : widget.appBar ??
+              ChatUIKitAppBar(
+                showBackButton: true,
+                leading: InkWell(
+                  onTap: () {
+                    Navigator.maybePop(context);
+                  },
+                  child: Text(
+                    "群聊${joinedCount != null ? '($joinedCount)' : ''}",
+                    style: TextStyle(
+                      fontWeight: theme.font.titleMedium.fontWeight,
+                      fontSize: theme.font.titleMedium.fontSize,
+                      color: theme.color.isDark
+                          ? theme.color.neutralColor98
+                          : theme.color.neutralColor1,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
       body: SafeArea(
           child: GroupListView(
         controller: controller,

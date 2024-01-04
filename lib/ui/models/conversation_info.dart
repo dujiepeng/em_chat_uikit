@@ -20,19 +20,10 @@ class ConversationInfo with ChatUIKitListItemModelBase, NeedSearch {
 
   static Future<ConversationInfo> fromConversation(
     Conversation conversation,
+    ChatUIKitProfile profile,
   ) async {
     int unreadCount = await conversation.unreadCount();
     Message? lastMessage = await conversation.latestMessage();
-    ChatUIKitProfileType type = conversation.type == ConversationType.Chat
-        ? ChatUIKitProfileType.singleChat
-        : ChatUIKitProfileType.groupChat;
-
-    ChatUIKitProfile profile =
-        ChatUIKitContext.instance.conversationsCache[conversation.id] ??
-            ChatUIKitProfile(
-              id: conversation.id,
-              type: type,
-            );
 
     ConversationInfo info = ConversationInfo(
       profile: profile,

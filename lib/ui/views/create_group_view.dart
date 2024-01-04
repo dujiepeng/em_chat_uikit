@@ -13,6 +13,7 @@ class CreateGroupView extends StatefulWidget {
         onItemTap = arguments.onItemTap,
         onItemLongPress = arguments.onItemLongPress,
         appBar = arguments.appBar,
+        enableAppBar = arguments.enableAppBar,
         controller = arguments.controller;
 
   const CreateGroupView({
@@ -24,6 +25,7 @@ class CreateGroupView extends StatefulWidget {
     this.onItemLongPress,
     this.appBar,
     this.controller,
+    this.enableAppBar = true,
     super.key,
   });
 
@@ -36,6 +38,7 @@ class CreateGroupView extends StatefulWidget {
   final void Function(ContactItemModel model)? onItemLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
+  final bool enableAppBar;
 
   @override
   State<CreateGroupView> createState() => _CreateGroupViewState();
@@ -60,51 +63,53 @@ class _CreateGroupViewState extends State<CreateGroupView> {
       backgroundColor: theme.color.isDark
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
-      appBar: widget.appBar ??
-          ChatUIKitAppBar(
-            showBackButton: true,
-            leading: InkWell(
-              onTap: () {
-                Navigator.maybePop(context);
-              },
-              child: Text(
-                '新群组',
-                style: TextStyle(
-                  color: theme.color.isDark
-                      ? theme.color.neutralColor98
-                      : theme.color.neutralColor1,
-                  fontWeight: theme.font.titleMedium.fontWeight,
-                  fontSize: theme.font.titleMedium.fontSize,
-                ),
-              ),
-            ),
-            trailing: InkWell(
-              onTap: () {
-                if (selectedProfiles.value.isEmpty) {
-                  return;
-                }
-                Navigator.of(context).pop(selectedProfiles.value);
-              },
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(24, 5, 24, 5),
-                child: ValueListenableBuilder(
-                  valueListenable: selectedProfiles,
-                  builder: (context, value, child) {
-                    return Text(
-                      value.isEmpty ? '创建' : '创建(${value.length})',
-                      style: TextStyle(
-                        color: theme.color.isDark
-                            ? theme.color.primaryColor6
-                            : theme.color.primaryColor5,
-                        fontWeight: theme.font.labelMedium.fontWeight,
-                        fontSize: theme.font.labelMedium.fontSize,
-                      ),
-                    );
+      appBar: !widget.enableAppBar
+          ? null
+          : widget.appBar ??
+              ChatUIKitAppBar(
+                showBackButton: true,
+                leading: InkWell(
+                  onTap: () {
+                    Navigator.maybePop(context);
                   },
+                  child: Text(
+                    '新群组',
+                    style: TextStyle(
+                      color: theme.color.isDark
+                          ? theme.color.neutralColor98
+                          : theme.color.neutralColor1,
+                      fontWeight: theme.font.titleMedium.fontWeight,
+                      fontSize: theme.font.titleMedium.fontSize,
+                    ),
+                  ),
+                ),
+                trailing: InkWell(
+                  onTap: () {
+                    if (selectedProfiles.value.isEmpty) {
+                      return;
+                    }
+                    Navigator.of(context).pop(selectedProfiles.value);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 5, 24, 5),
+                    child: ValueListenableBuilder(
+                      valueListenable: selectedProfiles,
+                      builder: (context, value, child) {
+                        return Text(
+                          value.isEmpty ? '创建' : '创建(${value.length})',
+                          style: TextStyle(
+                            color: theme.color.isDark
+                                ? theme.color.primaryColor6
+                                : theme.color.primaryColor5,
+                            fontWeight: theme.font.labelMedium.fontWeight,
+                            fontSize: theme.font.labelMedium.fontSize,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
       body: ValueListenableBuilder(
         valueListenable: selectedProfiles,
         builder: (context, value, child) {

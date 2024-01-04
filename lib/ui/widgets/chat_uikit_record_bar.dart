@@ -470,7 +470,7 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
       widget.statusChangeCallback?.call(statusType, 0, null);
       setState(() {});
     } else {
-      // TODO: show permission error.
+      ChatUIKit.instance.sendChatUIKitEvent(ChatUIKitEvent.noRecordPermission);
     }
   }
 

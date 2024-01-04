@@ -13,10 +13,12 @@ export 'chat_uikit_settings.dart';
 export 'provider/chat_uikit_provider.dart';
 
 export 'sdk_wrapper/chat_sdk_wrapper.dart';
+export 'sdk_wrapper/chat_sdk_wrapper_action_events.dart';
 
 export 'service/chat_uikit_service.dart';
-export 'sdk_wrapper/chat_sdk_wrapper_action_events.dart';
 export 'service/protocols/chat_uikit_profile.dart';
+export 'service/chat_uikit_action_events.dart';
+export 'service/observers/chat_uikit_events_observers.dart';
 
 export 'tools/chat_uikit_helper.dart';
 export 'tools/chat_uikit_image_loader.dart';
@@ -30,6 +32,7 @@ export 'universal/chat_uikit_time_formatter.dart';
 export 'universal/defines.dart';
 
 export 'ui/custom/custom_text_editing_controller.dart';
+export 'ui/custom/message_list_share_user_data.dart';
 
 export 'ui/widgets/list_view_items/chat_uikit_details_list_view_item.dart';
 export 'ui/widgets/list_view_items/chat_uikit_contact_list_view_item.dart';
@@ -47,6 +50,7 @@ export 'ui/widgets/list_view_items/message_list_view_items/message_widget/chat_u
 export 'ui/widgets/list_view_items/message_list_view_items/message_widget/chat_uikit_file_message_widget.dart';
 export 'ui/widgets/list_view_items/message_list_view_items/message_widget/chat_uikit_voice_message_widget.dart';
 export 'ui/widgets/list_view_items/message_list_view_items/message_widget/chat_uikit_card_message_widget.dart';
+export 'ui/widgets/list_view_items/message_list_view_items/message_widget/chat_uikit_nonsupport_message_widget.dart';
 export 'ui/widgets/chat_uikit_app_bar.dart';
 export 'ui/widgets/chat_uikit_avatar.dart';
 export 'ui/widgets/chat_uikit_badge.dart';
@@ -78,7 +82,6 @@ export 'ui/models/chat_uikit_list_item_model_base.dart';
 export 'ui/models/conversation_info.dart';
 export 'ui/models/contact_item_model.dart';
 export 'ui/models/group_item_model.dart';
-export 'ui/models/list_item_model.dart';
 export 'ui/models/new_request_item_model.dart';
 export 'ui/models/quote_mode.dart';
 

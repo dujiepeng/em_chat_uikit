@@ -14,8 +14,22 @@ extension MessageHelper on Message {
   }
 
   String? get nickname {
-    Map? userInfo = attributes?[userNicknameKey];
+    Map? userInfo = attributes?[msgUserInfoKey];
     return userInfo?[userNicknameKey];
+  }
+
+  void addNickname(String? nickname) {
+    if (nickname?.isNotEmpty == true) {
+      attributes ??= {};
+      attributes![msgUserInfoKey][userNicknameKey] = nickname;
+    }
+  }
+
+  void addAvatarURL(String? avatarUrl) {
+    if (avatarUrl?.isNotEmpty == true) {
+      attributes ??= {};
+      attributes![msgUserInfoKey][userAvatarKey] = avatarUrl;
+    }
   }
 
   String get textContent {

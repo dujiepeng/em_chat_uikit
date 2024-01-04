@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String convLoadFinishedKey =
@@ -15,15 +14,6 @@ class ChatUIKitContext {
   String? _currentUserId;
 
   Map<String, dynamic> cachedMap = {};
-
-  // 缓存 profile, 不需要存；
-  Map<String, ChatUIKitProfile> conversationsCache = {};
-  // 缓存 profile, 不需要存；
-  Map<String, ChatUIKitProfile> contactsCache = {};
-// 缓存 profile, 不需要存；
-  Map<String, Map<String, ChatUIKitProfile>> groupMembersCache = {};
-
-  ChatUIKitProfile? currentUserProfile;
 
   static ChatUIKitContext? _instance;
   static ChatUIKitContext get instance {

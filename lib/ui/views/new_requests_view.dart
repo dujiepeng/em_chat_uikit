@@ -12,6 +12,7 @@ class NewRequestsView extends StatefulWidget {
         onLongPress = argument.onLongPress,
         fakeSearchHideText = argument.fakeSearchHideText,
         listViewBackground = argument.listViewBackground,
+        enableAppBar = argument.enableAppBar,
         loadErrorMessage = argument.loadErrorMessage;
 
   const NewRequestsView({
@@ -24,6 +25,7 @@ class NewRequestsView extends StatefulWidget {
     this.fakeSearchHideText,
     this.listViewBackground,
     this.loadErrorMessage,
+    this.enableAppBar = true,
     super.key,
   });
 
@@ -37,6 +39,7 @@ class NewRequestsView extends StatefulWidget {
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
+  final bool enableAppBar;
 
   @override
   State<NewRequestsView> createState() => _NewRequestsViewState();
@@ -67,25 +70,27 @@ class _NewRequestsViewState extends State<NewRequestsView>
         backgroundColor: theme.color.isDark
             ? theme.color.neutralColor1
             : theme.color.neutralColor98,
-        appBar: widget.appBar ??
-            ChatUIKitAppBar(
-              showBackButton: true,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.maybePop(context);
-                },
-                child: Text(
-                  '新请求',
-                  style: TextStyle(
-                    color: theme.color.isDark
-                        ? theme.color.neutralColor98
-                        : theme.color.neutralColor1,
-                    fontWeight: theme.font.titleMedium.fontWeight,
-                    fontSize: theme.font.titleMedium.fontSize,
+        appBar: !widget.enableAppBar
+            ? null
+            : widget.appBar ??
+                ChatUIKitAppBar(
+                  showBackButton: true,
+                  leading: InkWell(
+                    onTap: () {
+                      Navigator.maybePop(context);
+                    },
+                    child: Text(
+                      '新请求',
+                      style: TextStyle(
+                        color: theme.color.isDark
+                            ? theme.color.neutralColor98
+                            : theme.color.neutralColor1,
+                        fontWeight: theme.font.titleMedium.fontWeight,
+                        fontSize: theme.font.titleMedium.fontSize,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
         body: SafeArea(
           child: NewRequestsListView(
             controller: controller,

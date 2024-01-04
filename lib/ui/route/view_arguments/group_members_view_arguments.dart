@@ -13,8 +13,9 @@ class GroupMembersViewArguments implements ChatUIKitViewArguments {
     this.fakeSearchHideText,
     this.listViewBackground,
     this.loadErrorMessage,
-    this.attributes,
+    this.enableAppBar = true,
     this.enableMemberOperation = false,
+    this.attributes,
   });
 
   final String groupId;
@@ -30,6 +31,7 @@ class GroupMembersViewArguments implements ChatUIKitViewArguments {
   final Widget? listViewBackground;
   final String? loadErrorMessage;
   final bool enableMemberOperation;
+  final bool enableAppBar;
 
   @override
   String? attributes;

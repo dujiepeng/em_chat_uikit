@@ -31,6 +31,7 @@ class MessagesView extends StatefulWidget {
         quoteBuilder = arguments.quoteBuilder,
         onErrorTap = arguments.onErrorTap,
         bubbleBuilder = arguments.bubbleBuilder,
+        enableAppBar = arguments.enableAppBar,
         bubbleContentBuilder = arguments.bubbleContentBuilder;
 
   const MessagesView({
@@ -58,6 +59,7 @@ class MessagesView extends StatefulWidget {
     this.onErrorTap,
     this.bubbleBuilder,
     this.bubbleContentBuilder,
+    this.enableAppBar = true,
     super.key,
   });
 
@@ -86,6 +88,7 @@ class MessagesView extends StatefulWidget {
   final void Function(Message message)? onErrorTap;
   final MessageItemBubbleBuilder? bubbleBuilder;
   final MessageBubbleContentBuilder? bubbleContentBuilder;
+  final bool enableAppBar;
 
   @override
   State<MessagesView> createState() => _MessagesViewState();
@@ -251,18 +254,20 @@ class _MessagesViewState extends State<MessagesView> {
       backgroundColor: theme.color.isDark
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
-      appBar: widget.appBar ??
-          ChatUIKitAppBar(
-            title: widget.profile.showName,
-            leading: InkWell(
-              onTap: () {
-                pushNextPage(widget.profile);
-              },
-              child: ChatUIKitAvatar(
-                avatarUrl: widget.profile.avatarUrl,
+      appBar: !widget.enableAppBar
+          ? null
+          : widget.appBar ??
+              ChatUIKitAppBar(
+                title: widget.profile.showName,
+                leading: InkWell(
+                  onTap: () {
+                    pushNextPage(widget.profile);
+                  },
+                  child: ChatUIKitAvatar(
+                    avatarUrl: widget.profile.avatarUrl,
+                  ),
+                ),
               ),
-            ),
-          ),
       // body: content,
       body: content,
     );
@@ -514,6 +519,8 @@ class _MessagesViewState extends State<MessagesView> {
     content = Column(
       children: [header, content],
     );
+
+    content = SafeArea(child: content);
 
     return content;
   }
@@ -958,7 +965,8 @@ class _MessagesViewState extends State<MessagesView> {
       File file = File(message.localPath!);
       if (!file.existsSync()) {
         await controller.downloadMessage(message);
-        // TODO 添加uikit action回调
+        ChatUIKit.instance
+            .sendChatUIKitEvent(ChatUIKitEvent.messageDownloading);
       } else {
         if (message.localPath?.endsWith('aac') == true) {
           try {
@@ -970,8 +978,9 @@ class _MessagesViewState extends State<MessagesView> {
           }
         } else {
           _playingMessage = null;
-          //TODO: 提示格式不支持
-          debugPrint('格式不支持');
+          ChatUIKit.instance.sendChatUIKitEvent(
+            ChatUIKitEvent.voiceTypeNotSupported,
+          );
         }
       }
     }

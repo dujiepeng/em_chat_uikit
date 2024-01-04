@@ -13,6 +13,7 @@ class ConversationsViewArguments implements ChatUIKitViewArguments {
     this.onLongPress,
     this.fakeSearchHideText,
     this.listViewBackground,
+    this.enableAppBar = true,
     this.attributes,
   });
 
@@ -27,6 +28,7 @@ class ConversationsViewArguments implements ChatUIKitViewArguments {
       onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
+  final bool enableAppBar;
   @override
   String? attributes;
 }

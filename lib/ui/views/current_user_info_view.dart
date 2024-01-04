@@ -5,13 +5,19 @@ import 'package:flutter/services.dart';
 class CurrentUserInfoView extends StatefulWidget {
   CurrentUserInfoView.arguments(CurrentUserInfoViewArguments arguments,
       {super.key})
-      : profile = arguments.profile;
+      : profile = arguments.profile,
+        appBar = arguments.appBar,
+        enableAppBar = arguments.enableAppBar;
 
   const CurrentUserInfoView({
     required this.profile,
+    this.appBar,
+    this.enableAppBar = true,
     super.key,
   });
   final ChatUIKitProfile profile;
+  final ChatUIKitAppBar? appBar;
+  final bool enableAppBar;
   @override
   State<CurrentUserInfoView> createState() => _CurrentUserInfoViewState();
 }
@@ -25,9 +31,12 @@ class _CurrentUserInfoViewState extends State<CurrentUserInfoView> {
         backgroundColor: theme.color.isDark
             ? theme.color.neutralColor1
             : theme.color.neutralColor98,
-        appBar: const ChatUIKitAppBar(
-          showBackButton: true,
-        ),
+        appBar: !widget.enableAppBar
+            ? null
+            : widget.appBar ??
+                const ChatUIKitAppBar(
+                  showBackButton: true,
+                ),
         body: _buildContent());
 
     return content;
@@ -74,11 +83,7 @@ class _CurrentUserInfoViewState extends State<CurrentUserInfoView> {
         InkWell(
           onTap: () {
             Clipboard.setData(ClipboardData(text: widget.profile.id));
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('复制成功'),
-              ),
-            );
+            ChatUIKit.instance.sendChatUIKitEvent(ChatUIKitEvent.userIdCopied);
           },
           child: Icon(
             Icons.file_copy_sharp,

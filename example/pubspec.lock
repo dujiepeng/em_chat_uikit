@@ -295,7 +295,7 @@ packages:
       path: "../../../../im_flutter_sdk"
       relative: true
     source: path
-    version: "4.2.0"
+    version: "4.2.0-rc.1"
   image_picker:
     dependency: transitive
     description:

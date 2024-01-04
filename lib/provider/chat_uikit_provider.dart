@@ -1,13 +1,28 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
-typedef ChatUIKitProviderGroupMembersHandler = List<ChatUIKitProfile> Function(
+abstract mixin class ChatUIKitProviderObserver {
+  void onContactProfilesUpdate(
+    Map<String, ChatUIKitProfile> map,
+  ) {}
+
+  void onConversationProfilesUpdate(
+    Map<String, ChatUIKitProfile> map,
+  ) {}
+
+  void onGroupMemberProfilesUpdate(
+    String groupId,
+    Map<String, ChatUIKitProfile> map,
+  ) {}
+}
+
+typedef ChatUIKitProviderGroupMembersHandler = void Function(
     String groupId, List<ChatUIKitProfile> profiles);
 
-typedef ChatUIKitProviderContactsHandler = List<ChatUIKitProfile> Function(
+typedef ChatUIKitProviderContactsHandler = void Function(
   List<ChatUIKitProfile> profiles,
 );
 
-typedef ChatUIKitProviderConversationsHandler = List<ChatUIKitProfile> Function(
+typedef ChatUIKitProviderConversationsHandler = void Function(
   List<ChatUIKitProfile> profiles,
 );
 
@@ -24,58 +39,158 @@ class ChatUIKitProvider {
   ChatUIKitProviderContactsHandler? contactsHandler;
   ChatUIKitProviderConversationsHandler? conversationsHandler;
 
+  // 缓存 profile, 不需要存；
+  final Map<String, ChatUIKitProfile> _conversationsCache = {};
+  // 缓存 profile, 不需要存；
+  final Map<String, ChatUIKitProfile> _contactsCache = {};
+// 缓存 profile, 不需要存；
+  final Map<String, Map<String, ChatUIKitProfile>> _groupMembersCache = {};
+
+  final List<ChatUIKitProviderObserver> _observers = [];
+
+  ChatUIKitProfile? currentUserProfile;
+
+  void addObserver(ChatUIKitProviderObserver observer) {
+    _observers.add(observer);
+  }
+
+  void removeObserver(ChatUIKitProviderObserver observer) {
+    _observers.remove(observer);
+  }
+
+  void clearAllObservers() {
+    _observers.clear();
+  }
+
+  Map<String, ChatUIKitProfile> conversationProfiles(
+      Map<String, ConversationType> map) {
+    List<ChatUIKitProfile> ret = [];
+    List<ChatUIKitProfile> needProviders = [];
+    for (var conversationId in map.keys) {
+      ChatUIKitProfile? profile = _conversationsCache[conversationId];
+      if (profile == null) {
+        if (map[conversationId] == ConversationType.GroupChat) {
+          profile = ChatUIKitProfile.groupChat(id: conversationId);
+        } else {
+          profile = ChatUIKitProfile.singleChat(id: conversationId);
+        }
+        needProviders.add(profile);
+      }
+      ret.add(profile);
+    }
+
+    if (needProviders.isNotEmpty) {
+      conversationsHandler?.call(needProviders);
+    }
+
+    return {for (var element in ret) element.id: element};
+  }
+
   ChatUIKitProfile conversationProfile(
-      String conversationId, ConversationType type) {
-    ChatUIKitProfile? profile =
-        ChatUIKitContext.instance.conversationsCache[conversationId];
+    String conversationId,
+    ConversationType type,
+  ) {
+    ChatUIKitProfile? profile = _conversationsCache[conversationId];
     if (profile == null) {
       if (type == ConversationType.GroupChat) {
         profile = ChatUIKitProfile.groupChat(id: conversationId);
       } else {
         profile = ChatUIKitProfile.singleChat(id: conversationId);
       }
-      List<ChatUIKitProfile>? list = conversationsHandler?.call([profile]);
-      if (list?.isNotEmpty == true) {
-        var result = {for (var element in list!) element.id: element};
-        ChatUIKitContext.instance.conversationsCache.addAll(result);
-        profile = result[profile.id] ?? profile;
-      }
+      conversationsHandler?.call([profile]);
     }
     return profile;
+  }
+
+  Map<String, ChatUIKitProfile> contactProfiles(List<String> list) {
+    List<ChatUIKitProfile> ret = [];
+    List<ChatUIKitProfile> needProviders = [];
+    for (var userId in list) {
+      ChatUIKitProfile? profile = _contactsCache[userId];
+      if (profile == null) {
+        profile = ChatUIKitProfile.contact(id: userId);
+        needProviders.add(profile);
+      }
+      ret.add(profile);
+    }
+
+    if (needProviders.isNotEmpty) {
+      contactsHandler?.call(needProviders);
+    }
+
+    return {for (var element in ret) element.id: element};
   }
 
   ChatUIKitProfile contactProfile(String userId) {
-    ChatUIKitProfile? profile = ChatUIKitContext.instance.contactsCache[userId];
+    ChatUIKitProfile? profile = _contactsCache[userId];
     if (profile == null) {
       profile = ChatUIKitProfile.contact(id: userId);
-      List<ChatUIKitProfile>? list = contactsHandler?.call([profile]);
-      if (list?.isNotEmpty == true) {
-        var result = {for (var element in list!) element.id: element};
-        ChatUIKitContext.instance.contactsCache.addAll(result);
-        profile = result[profile.id] ?? profile;
-      }
+      contactsHandler?.call([profile]);
     }
     return profile;
   }
 
-  ChatUIKitProfile groupMemberProfile(String groupId, String userId) {
-    if (ChatUIKitContext.instance.groupMembersCache[groupId] == null) {
-      ChatUIKitContext.instance.groupMembersCache[groupId] = {};
+  Map<String, ChatUIKitProfile> groupMemberProfiles(
+      String groupId, List<String> list) {
+    List<ChatUIKitProfile> ret = [];
+    List<ChatUIKitProfile> needProviders = [];
+    for (var userId in list) {
+      if (_groupMembersCache[groupId] == null) {
+        _groupMembersCache[groupId] = {};
+      }
+      ChatUIKitProfile? profile = _groupMembersCache[groupId]![userId];
+      if (profile == null) {
+        profile = ChatUIKitProfile.groupMember(id: userId);
+        needProviders.add(profile);
+      }
+      ret.add(profile);
     }
 
-    ChatUIKitProfile? profile =
-        ChatUIKitContext.instance.groupMembersCache[groupId]?[userId];
+    if (needProviders.isNotEmpty) {
+      groupMembersHandler?.call(groupId, needProviders);
+    }
+
+    return {for (var element in ret) element.id: element};
+  }
+
+  ChatUIKitProfile groupMemberProfile(String groupId, String userId) {
+    if (_groupMembersCache[groupId] == null) {
+      _groupMembersCache[groupId] = {};
+    }
+
+    ChatUIKitProfile? profile = _groupMembersCache[groupId]?[userId];
 
     if (profile == null) {
       profile = ChatUIKitProfile.groupMember(id: userId);
-      List<ChatUIKitProfile>? list =
-          groupMembersHandler?.call(groupId, [profile]);
-      if (list?.isNotEmpty == true) {
-        var result = {for (var element in list!) element.id: element};
-        ChatUIKitContext.instance.groupMembersCache[groupId]?.addAll(result);
-        profile = result[profile.id] ?? profile;
-      }
+      groupMembersHandler?.call(groupId, [profile]);
     }
     return profile;
+  }
+
+  void addContactProfiles(List<ChatUIKitProfile> list) {
+    var result = {for (var element in list) element.id: element};
+    _contactsCache.addAll(result);
+
+    for (var observer in _observers) {
+      observer.onContactProfilesUpdate(result);
+    }
+  }
+
+  void addConversationProfiles(List<ChatUIKitProfile> list) {
+    var result = {for (var element in list) element.id: element};
+    _conversationsCache.addAll(result);
+
+    for (var observer in _observers) {
+      observer.onConversationProfilesUpdate(result);
+    }
+  }
+
+  void addGroupMemberProfiles(String groupId, List<ChatUIKitProfile> list) {
+    var result = {for (var element in list) element.id: element};
+    _groupMembersCache[groupId]?.addAll(result);
+
+    for (var observer in _observers) {
+      observer.onGroupMemberProfilesUpdate(groupId, result);
+    }
   }
 }

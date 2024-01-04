@@ -12,6 +12,7 @@ class GroupMentionViewArguments implements ChatUIKitViewArguments {
     this.onLongPress,
     this.fakeSearchHideText,
     this.listViewBackground,
+    this.enableAppBar = true,
     this.attributes,
   });
 
@@ -26,6 +27,7 @@ class GroupMentionViewArguments implements ChatUIKitViewArguments {
       onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
+  final bool enableAppBar;
 
   @override
   String? attributes;

@@ -9,6 +9,7 @@ class ChangeInfoViewArguments implements ChatUIKitViewArguments {
     this.appBar,
     this.maxLength = 128,
     this.attributes,
+    this.enableAppBar = true,
   });
 
   final String? title;
@@ -17,6 +18,7 @@ class ChangeInfoViewArguments implements ChatUIKitViewArguments {
   final Future<String?> Function()? inputTextCallback;
   final ChatUIKitAppBar? appBar;
   final int maxLength;
+  final bool enableAppBar;
 
   @override
   String? attributes;
