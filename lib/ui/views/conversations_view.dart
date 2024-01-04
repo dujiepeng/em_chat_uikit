@@ -337,43 +337,18 @@ class _ConversationsViewState extends State<ConversationsView>
   }
 
   void newGroup() async {
-    final profiles = await Navigator.of(context).pushNamed(
+    final group = await Navigator.of(context).pushNamed(
       ChatUIKitRouteNames.createGroupView,
       arguments: CreateGroupViewArguments(),
     );
-
-    if (profiles is List<ChatUIKitProfile>) {
-      if (profiles.isNotEmpty == true) {
-        List<String> userIds = [];
-        for (var item in profiles) {
-          userIds.add(item.id);
-        }
-
-        try {
-          List list = [];
-          for (var profile in profiles) {
-            list.add(profile.showName);
-          }
-          Group group = await ChatUIKit.instance.createGroup(
-            groupName: list.join(','),
-            options: GroupOptions(
-              maxCount: 2000,
-              style: GroupStyle.PrivateMemberCanInvite,
-            ),
-            inviteMembers: userIds,
-          );
-
-          await ChatUIKitInsertMessageTool.insertCreateGroupMessage(
-            group: group,
-          );
-          pushNewConversation(ChatUIKitProfile.groupMember(
-            id: group.groupId,
-            name: group.name,
-          ));
-        } catch (e) {
-          debugPrint('err: $e');
-        }
-      }
+    if (group is Group) {
+      await ChatUIKitInsertMessageTool.insertCreateGroupMessage(
+        group: group,
+      );
+      pushNewConversation(ChatUIKitProfile.groupMember(
+        id: group.groupId,
+        name: group.name,
+      ));
     }
   }
 

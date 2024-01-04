@@ -12,6 +12,8 @@ class CreateGroupViewArguments implements ChatUIKitViewArguments {
     this.appBar,
     this.controller,
     this.enableAppBar = true,
+    this.willCreateHandler,
+    this.createGroupInfo,
     this.attributes,
   });
 
@@ -25,6 +27,8 @@ class CreateGroupViewArguments implements ChatUIKitViewArguments {
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final bool enableAppBar;
+  final WillCreateHandler? willCreateHandler;
+  final CreateGroupInfo? createGroupInfo;
   @override
   String? attributes;
 }

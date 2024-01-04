@@ -2,6 +2,9 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
+typedef WillCreateHandler = Future<CreateGroupInfo> Function(
+    CreateGroupInfo? createGroupInfo, List<ChatUIKitProfile> selectedProfiles);
+
 class CreateGroupView extends StatefulWidget {
   CreateGroupView.arguments(
     CreateGroupViewArguments arguments, {
@@ -14,11 +17,14 @@ class CreateGroupView extends StatefulWidget {
         onItemLongPress = arguments.onItemLongPress,
         appBar = arguments.appBar,
         enableAppBar = arguments.enableAppBar,
+        willCreateHandler = arguments.willCreateHandler,
+        createGroupInfo = arguments.createGroupInfo,
         controller = arguments.controller;
 
   const CreateGroupView({
     this.listViewItemBuilder,
     this.onSearchTap,
+    this.createGroupInfo,
     this.fakeSearchHideText,
     this.listViewBackground,
     this.onItemTap,
@@ -26,12 +32,14 @@ class CreateGroupView extends StatefulWidget {
     this.appBar,
     this.controller,
     this.enableAppBar = true,
+    this.willCreateHandler,
     super.key,
   });
 
   final ContactListViewController? controller;
   final ChatUIKitAppBar? appBar;
   final void Function(List<ContactItemModel> data)? onSearchTap;
+  final CreateGroupInfo? createGroupInfo;
 
   final ChatUIKitContactItemBuilder? listViewItemBuilder;
   final void Function(ContactItemModel model)? onItemTap;
@@ -39,6 +47,7 @@ class CreateGroupView extends StatefulWidget {
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final bool enableAppBar;
+  final WillCreateHandler? willCreateHandler;
 
   @override
   State<CreateGroupView> createState() => _CreateGroupViewState();
@@ -88,7 +97,7 @@ class _CreateGroupViewState extends State<CreateGroupView> {
                     if (selectedProfiles.value.isEmpty) {
                       return;
                     }
-                    Navigator.of(context).pop(selectedProfiles.value);
+                    createGroup();
                   },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(24, 5, 24, 5),
@@ -222,4 +231,42 @@ class _CreateGroupViewState extends State<CreateGroupView> {
     }
     selectedProfiles.value = [...list];
   }
+
+  void createGroup() async {
+    CreateGroupInfo? info;
+    if (widget.willCreateHandler != null) {
+      info = await widget.willCreateHandler!(
+        widget.createGroupInfo,
+        selectedProfiles.value,
+      );
+    }
+    List<String> userIds = selectedProfiles.value.map((e) => e.id).toList();
+    ChatUIKit.instance
+        .createGroup(
+      groupName: info?.groupName ??
+          widget.createGroupInfo?.groupName ??
+          selectedProfiles.value.map((e) => e.showName).join(','),
+      desc: info?.groupDesc ?? widget.createGroupInfo?.groupDesc,
+      options: GroupOptions(
+        maxCount: 1000,
+        style: GroupStyle.PrivateMemberCanInvite,
+      ),
+      inviteMembers: userIds,
+    )
+        .then((value) {
+      Navigator.of(context).pop(value);
+    }).catchError((e) {});
+  }
+}
+
+class CreateGroupInfo {
+  CreateGroupInfo({
+    required this.groupName,
+    this.groupDesc,
+    this.groupAvatar,
+  });
+
+  final String groupName;
+  final String? groupDesc;
+  final String? groupAvatar;
 }

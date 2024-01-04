@@ -18,7 +18,8 @@ class _HomePageState extends State<HomePage>
         ChatObserver,
         ContactObserver,
         ChatSDKActionEventsObserver,
-        ChatUIKitEventsObservers {
+        ChatUIKitEventsObservers,
+        ChatSDKActionEventsObserver {
   int _currentIndex = 0;
 
   @override
@@ -168,7 +169,8 @@ class _HomePageState extends State<HomePage>
   @override
   void onChatUIKitEventsReceived(ChatUIKitEvent events) {
     if (events == ChatUIKitEvent.groupIdCopied ||
-        events == ChatUIKitEvent.userIdCopied) {
+        events == ChatUIKitEvent.userIdCopied ||
+        events == ChatUIKitEvent.messageCopied) {
       EasyLoading.showSuccess('复制成功');
     } else if (events == ChatUIKitEvent.messageDownloading) {
       EasyLoading.showInfo('下载中');
@@ -194,15 +196,43 @@ class _HomePageState extends State<HomePage>
   }
 
   @override
-  // 用于刷新消息和联系人未读数
+  void onEventBegin(ChatSDKWrapperActionEvent event) {
+    if (event == ChatSDKWrapperActionEvent.acceptContactRequest ||
+        event == ChatSDKWrapperActionEvent.fetchGroupMemberAttributes ||
+        event == ChatSDKWrapperActionEvent.setGroupMemberAttributes ||
+        event == ChatSDKWrapperActionEvent.sendContactRequest ||
+        event == ChatSDKWrapperActionEvent.changeGroupOwner ||
+        event == ChatSDKWrapperActionEvent.declineContactRequest ||
+        event == ChatSDKWrapperActionEvent.setSilentMode ||
+        event == ChatSDKWrapperActionEvent.createGroup ||
+        event == ChatSDKWrapperActionEvent.clearSilentMode) {
+      EasyLoading.show();
+    }
+  }
+
+  @override
   void onEventEnd(ChatSDKWrapperActionEvent event) {
     if (event == ChatSDKWrapperActionEvent.acceptContactRequest ||
+        event == ChatSDKWrapperActionEvent.fetchGroupMemberAttributes ||
+        event == ChatSDKWrapperActionEvent.setGroupMemberAttributes ||
+        event == ChatSDKWrapperActionEvent.sendContactRequest ||
+        event == ChatSDKWrapperActionEvent.changeGroupOwner ||
         event == ChatSDKWrapperActionEvent.declineContactRequest ||
-        event == ChatSDKWrapperActionEvent.markConversationAsRead ||
         event == ChatSDKWrapperActionEvent.setSilentMode ||
+        event == ChatSDKWrapperActionEvent.createGroup ||
         event == ChatSDKWrapperActionEvent.clearSilentMode) {
+      EasyLoading.dismiss();
+    } else if (event == ChatSDKWrapperActionEvent.markConversationAsRead) {
       setState(() {});
     }
+  }
+
+  @override
+  void onEventErrorHandler(
+    ChatSDKWrapperActionEvent event,
+    ChatError error,
+  ) {
+    EasyLoading.showError(error.description);
   }
 }
 

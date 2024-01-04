@@ -234,6 +234,19 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
+  flutter_localization:
+    dependency: transitive
+    description:
+      name: flutter_localization
+      sha256: faaeb1eba307473032e2c2af737f36ced61fc98735608410d0a6d9c231b50912
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
+  flutter_localizations:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -292,10 +305,11 @@ packages:
   im_flutter_sdk:
     dependency: transitive
     description:
-      path: "../../../../im_flutter_sdk"
-      relative: true
-    source: path
-    version: "4.2.0-rc.1"
+      name: im_flutter_sdk
+      sha256: b66d8fc29c0324f50f4a4e58a260db190813846633c777093303813ec2e3d2c6
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.0"
   image_picker:
     dependency: transitive
     description:
@@ -365,6 +379,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      sha256: a3715e3bc90294e971cb7dc063fbf3cd9ee0ebf8604ffeafabd9e6f16abbdbe6
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.18.0"
   js:
     dependency: transitive
     description:

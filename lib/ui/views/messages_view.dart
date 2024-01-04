@@ -695,6 +695,8 @@ class _MessagesViewState extends State<MessagesView> {
           label: '复制',
           onTap: () async {
             Clipboard.setData(ClipboardData(text: message.textContent));
+            ChatUIKit.instance.sendChatUIKitEvent(ChatUIKitEvent.messageCopied);
+            Navigator.of(context).pop();
           },
         ));
       }
