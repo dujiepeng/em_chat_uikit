@@ -1,6 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
-
 import 'package:flutter/material.dart';
 
 typedef MessageItemBuilder = Widget? Function(
@@ -179,7 +178,10 @@ class _MessageListViewState extends State<MessageListView> {
       content ??= ChatUIKitMessageListViewAlertItem(
         infos: [
           MessageAlertAction(
-            text: ChatUIKitTimeTool.getChatTimeStr(message.serverTime),
+            text: ChatUIKitTimeFormatter.instance.formatterHandler?.call(
+                    context, ChatUIKitTimeType.message, message.serverTime) ??
+                ChatUIKitTimeTool.getChatTimeStr(message.serverTime,
+                    needTime: true),
           )
         ],
       );
@@ -274,4 +276,3 @@ class _MessageListViewState extends State<MessageListView> {
     return content;
   }
 }
-

@@ -31,4 +31,34 @@ class SelectContactViewArguments implements ChatUIKitViewArguments {
 
   @override
   String? attributes;
+
+  SelectContactViewArguments copyWith({
+    ContactListViewController? controller,
+    ChatUIKitAppBar? appBar,
+    void Function(List<ContactItemModel> data)? onSearchTap,
+    ChatUIKitContactItemBuilder? listViewItemBuilder,
+    void Function(BuildContext context, ContactItemModel model)? onTap,
+    void Function(BuildContext context, ContactItemModel model)? onLongPress,
+    String? fakeSearchHideText,
+    Widget? listViewBackground,
+    String? backText,
+    String? title,
+    bool? enableAppBar,
+    String? attributes,
+  }) {
+    return SelectContactViewArguments(
+      controller: controller ?? this.controller,
+      appBar: appBar ?? this.appBar,
+      onSearchTap: onSearchTap ?? this.onSearchTap,
+      listViewItemBuilder: listViewItemBuilder ?? this.listViewItemBuilder,
+      onTap: onTap ?? this.onTap,
+      onLongPress: onLongPress ?? this.onLongPress,
+      fakeSearchHideText: fakeSearchHideText ?? this.fakeSearchHideText,
+      listViewBackground: listViewBackground ?? this.listViewBackground,
+      backText: backText ?? this.backText,
+      title: title ?? this.title,
+      enableAppBar: enableAppBar ?? this.enableAppBar,
+      attributes: attributes ?? this.attributes,
+    );
+  }
 }

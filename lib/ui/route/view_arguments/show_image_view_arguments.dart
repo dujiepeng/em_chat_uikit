@@ -18,4 +18,22 @@ class ShowImageViewArguments implements ChatUIKitViewArguments {
   final bool enableAppBar;
   @override
   String? attributes;
+
+  ShowImageViewArguments copyWith({
+    Message? message,
+    void Function(Message message)? onImageLongPressed,
+    void Function(Message message)? onImageTap,
+    AppBar? appBar,
+    bool? enableAppBar,
+    String? attributes,
+  }) {
+    return ShowImageViewArguments(
+      message: message ?? this.message,
+      onImageLongPressed: onImageLongPressed ?? this.onImageLongPressed,
+      onImageTap: onImageTap ?? this.onImageTap,
+      appBar: appBar ?? this.appBar,
+      enableAppBar: enableAppBar ?? this.enableAppBar,
+      attributes: attributes ?? this.attributes,
+    );
+  }
 }

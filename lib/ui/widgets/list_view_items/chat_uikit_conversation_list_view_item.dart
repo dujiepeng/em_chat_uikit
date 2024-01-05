@@ -65,19 +65,24 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
           )
         : const SizedBox();
 
-    Widget timeLabel = showNewMessageTime &&
-            info.lastMessage?.serverTime != null
-        ? Text(
-            ChatUIKitTimeTool.getChatTimeStr(info.lastMessage?.serverTime ?? 0),
-            style: TextStyle(
-              color: theme.color.isDark
-                  ? theme.color.neutralColor6
-                  : theme.color.neutralColor5,
-              fontSize: theme.font.bodySmall.fontSize,
-              fontWeight: theme.font.bodySmall.fontWeight,
-            ),
-          )
-        : const SizedBox();
+    Widget timeLabel =
+        showNewMessageTime && info.lastMessage?.serverTime != null
+            ? Text(
+                ChatUIKitTimeFormatter.instance.formatterHandler?.call(
+                        context,
+                        ChatUIKitTimeType.conversation,
+                        info.lastMessage?.serverTime ?? 0) ??
+                    ChatUIKitTimeTool.getChatTimeStr(
+                        info.lastMessage?.serverTime ?? 0),
+                style: TextStyle(
+                  color: theme.color.isDark
+                      ? theme.color.neutralColor6
+                      : theme.color.neutralColor5,
+                  fontSize: theme.font.bodySmall.fontSize,
+                  fontWeight: theme.font.bodySmall.fontWeight,
+                ),
+              )
+            : const SizedBox();
 
     Widget titleRow = Row(
       mainAxisAlignment: MainAxisAlignment.start,

@@ -28,4 +28,32 @@ class GroupsViewArguments implements ChatUIKitViewArguments {
 
   @override
   String? attributes;
+
+  GroupsViewArguments copyWith({
+    GroupListViewController? controller,
+    ChatUIKitAppBar? appBar,
+    void Function(List<GroupItemModel> data)? onSearchTap,
+    ChatUIKitGroupItemBuilder? listViewItemBuilder,
+    void Function(BuildContext context, GroupItemModel model)? onTap,
+    void Function(BuildContext context, GroupItemModel model)? onLongPress,
+    String? fakeSearchHideText,
+    Widget? listViewBackground,
+    String? loadErrorMessage,
+    bool? enableAppBar,
+    String? attributes,
+  }) {
+    return GroupsViewArguments(
+      controller: controller ?? this.controller,
+      appBar: appBar ?? this.appBar,
+      onSearchTap: onSearchTap ?? this.onSearchTap,
+      listViewItemBuilder: listViewItemBuilder ?? this.listViewItemBuilder,
+      onTap: onTap ?? this.onTap,
+      onLongPress: onLongPress ?? this.onLongPress,
+      fakeSearchHideText: fakeSearchHideText ?? this.fakeSearchHideText,
+      listViewBackground: listViewBackground ?? this.listViewBackground,
+      loadErrorMessage: loadErrorMessage ?? this.loadErrorMessage,
+      enableAppBar: enableAppBar ?? this.enableAppBar,
+      attributes: attributes ?? this.attributes,
+    );
+  }
 }

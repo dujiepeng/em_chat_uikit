@@ -388,7 +388,10 @@ class _MessagesViewState extends State<MessagesView> {
       content ??= ChatUIKitMessageListViewAlertItem(
         infos: [
           MessageAlertAction(
-            text: ChatUIKitTimeTool.getChatTimeStr(message.serverTime),
+            text: ChatUIKitTimeFormatter.instance.formatterHandler?.call(
+                    context, ChatUIKitTimeType.message, message.serverTime) ??
+                ChatUIKitTimeTool.getChatTimeStr(message.serverTime,
+                    needTime: true),
           )
         ],
       );

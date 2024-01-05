@@ -33,4 +33,34 @@ class GroupAddMembersViewArguments implements ChatUIKitViewArguments {
 
   @override
   String? attributes;
+
+  GroupAddMembersViewArguments copyWith({
+    String? groupId,
+    List<String>? inGroupMembers,
+    ContactListViewController? controller,
+    ChatUIKitAppBar? appBar,
+    void Function(List<ContactItemModel> data)? onSearchTap,
+    ChatUIKitContactItemBuilder? listViewItemBuilder,
+    void Function(BuildContext context, ContactItemModel model)? onTap,
+    void Function(BuildContext context, ContactItemModel model)? onLongPress,
+    String? fakeSearchHideText,
+    Widget? listViewBackground,
+    bool? enableAppBar,
+    String? attributes,
+  }) {
+    return GroupAddMembersViewArguments(
+      groupId: groupId ?? this.groupId,
+      inGroupMembers: inGroupMembers ?? this.inGroupMembers,
+      controller: controller ?? this.controller,
+      appBar: appBar ?? this.appBar,
+      onSearchTap: onSearchTap ?? this.onSearchTap,
+      listViewItemBuilder: listViewItemBuilder ?? this.listViewItemBuilder,
+      onTap: onTap ?? this.onTap,
+      onLongPress: onLongPress ?? this.onLongPress,
+      fakeSearchHideText: fakeSearchHideText ?? this.fakeSearchHideText,
+      listViewBackground: listViewBackground ?? this.listViewBackground,
+      enableAppBar: enableAppBar ?? this.enableAppBar,
+      attributes: attributes ?? this.attributes,
+    );
+  }
 }

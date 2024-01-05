@@ -15,4 +15,20 @@ class ReportMessageViewArguments implements ChatUIKitViewArguments {
 
   @override
   String? attributes;
+
+  ReportMessageViewArguments copyWith({
+    String? messageId,
+    List<String>? reportReasons,
+    bool? enableAppBar,
+    ChatUIKitAppBar? appBar,
+    String? attributes,
+  }) {
+    return ReportMessageViewArguments(
+      messageId: messageId ?? this.messageId,
+      reportReasons: reportReasons ?? this.reportReasons,
+      enableAppBar: enableAppBar ?? this.enableAppBar,
+      appBar: appBar ?? this.appBar,
+      attributes: attributes ?? this.attributes,
+    );
+  }
 }

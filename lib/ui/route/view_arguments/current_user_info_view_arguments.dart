@@ -13,4 +13,18 @@ class CurrentUserInfoViewArguments implements ChatUIKitViewArguments {
   final bool enableAppBar;
   @override
   String? attributes;
+
+  CurrentUserInfoViewArguments copyWith({
+    ChatUIKitProfile? profile,
+    bool? enableAppBar,
+    ChatUIKitAppBar? appBar,
+    String? attributes,
+  }) {
+    return CurrentUserInfoViewArguments(
+      profile: profile ?? this.profile,
+      enableAppBar: enableAppBar ?? this.enableAppBar,
+      appBar: appBar ?? this.appBar,
+      attributes: attributes ?? this.attributes,
+    );
+  }
 }

@@ -18,4 +18,22 @@ class ShowVideoViewArguments implements ChatUIKitViewArguments {
   final bool enableAppBar;
   @override
   String? attributes;
+
+  ShowVideoViewArguments copyWith({
+    Message? message,
+    void Function(Message message)? onImageLongPressed,
+    Widget? playIcon,
+    AppBar? appBar,
+    bool? enableAppBar,
+    String? attributes,
+  }) {
+    return ShowVideoViewArguments(
+      message: message ?? this.message,
+      onImageLongPressed: onImageLongPressed ?? this.onImageLongPressed,
+      playIcon: playIcon ?? this.playIcon,
+      appBar: appBar ?? this.appBar,
+      enableAppBar: enableAppBar ?? this.enableAppBar,
+      attributes: attributes ?? this.attributes,
+    );
+  }
 }

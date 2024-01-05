@@ -161,7 +161,8 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
                         ChatUIKitTimeType.message,
                         message.serverTime,
                       ) ??
-                      ChatUIKitTimeTool.getChatTimeStr(message.serverTime),
+                      ChatUIKitTimeTool.getChatTimeStr(message.serverTime,
+                          needTime: true),
                   textDirection:
                       isLeft ?? left ? TextDirection.ltr : TextDirection.rtl,
                   style: TextStyle(

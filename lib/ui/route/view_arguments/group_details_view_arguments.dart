@@ -15,4 +15,20 @@ class GroupDetailsViewArguments implements ChatUIKitViewArguments {
 
   @override
   String? attributes;
+
+  GroupDetailsViewArguments copyWith({
+    ChatUIKitProfile? profile,
+    List<ChatUIKitActionItem>? actions,
+    bool? enableAppBar,
+    ChatUIKitAppBar? appBar,
+    String? attributes,
+  }) {
+    return GroupDetailsViewArguments(
+      profile: profile ?? this.profile,
+      actions: actions ?? this.actions,
+      enableAppBar: enableAppBar ?? this.enableAppBar,
+      appBar: appBar ?? this.appBar,
+      attributes: attributes ?? this.attributes,
+    );
+  }
 }

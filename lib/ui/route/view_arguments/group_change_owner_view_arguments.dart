@@ -33,4 +33,34 @@ class GroupChangeOwnerViewArguments implements ChatUIKitViewArguments {
 
   @override
   String? attributes;
+
+  GroupChangeOwnerViewArguments copyWith({
+    String? groupId,
+    GroupMemberListViewController? controller,
+    ChatUIKitAppBar? appBar,
+    void Function(List<ContactItemModel> data)? onSearchTap,
+    ChatUIKitContactItemBuilder? listViewItemBuilder,
+    void Function(ContactItemModel model)? onItemTap,
+    void Function(ContactItemModel model)? onItemLongPress,
+    String? fakeSearchHideText,
+    Widget? listViewBackground,
+    String? loadErrorMessage,
+    bool? enableAppBar,
+    String? attributes,
+  }) {
+    return GroupChangeOwnerViewArguments(
+      groupId: groupId ?? this.groupId,
+      controller: controller ?? this.controller,
+      appBar: appBar ?? this.appBar,
+      onSearchTap: onSearchTap ?? this.onSearchTap,
+      listViewItemBuilder: listViewItemBuilder ?? this.listViewItemBuilder,
+      onItemTap: onItemTap ?? this.onItemTap,
+      onItemLongPress: onItemLongPress ?? this.onItemLongPress,
+      fakeSearchHideText: fakeSearchHideText ?? this.fakeSearchHideText,
+      listViewBackground: listViewBackground ?? this.listViewBackground,
+      loadErrorMessage: loadErrorMessage ?? this.loadErrorMessage,
+      enableAppBar: enableAppBar ?? this.enableAppBar,
+      attributes: attributes ?? this.attributes,
+    );
+  }
 }

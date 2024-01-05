@@ -22,4 +22,26 @@ class ChangeInfoViewArguments implements ChatUIKitViewArguments {
 
   @override
   String? attributes;
+
+  ChangeInfoViewArguments copyWith({
+    String? title,
+    String? hint,
+    String? saveButtonTitle,
+    Future<String?> Function()? inputTextCallback,
+    ChatUIKitAppBar? appBar,
+    int? maxLength,
+    bool? enableAppBar,
+    String? attributes,
+  }) {
+    return ChangeInfoViewArguments(
+      title: title ?? this.title,
+      hint: hint ?? this.hint,
+      saveButtonTitle: saveButtonTitle ?? this.saveButtonTitle,
+      inputTextCallback: inputTextCallback ?? this.inputTextCallback,
+      appBar: appBar ?? this.appBar,
+      maxLength: maxLength ?? this.maxLength,
+      enableAppBar: enableAppBar ?? this.enableAppBar,
+      attributes: attributes ?? this.attributes,
+    );
+  }
 }

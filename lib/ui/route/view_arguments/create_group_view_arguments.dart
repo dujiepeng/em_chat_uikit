@@ -31,4 +31,34 @@ class CreateGroupViewArguments implements ChatUIKitViewArguments {
   final CreateGroupInfo? createGroupInfo;
   @override
   String? attributes;
+
+  CreateGroupViewArguments copyWith({
+    ContactListViewController? controller,
+    ChatUIKitAppBar? appBar,
+    void Function(List<ContactItemModel> data)? onSearchTap,
+    ChatUIKitContactItemBuilder? listViewItemBuilder,
+    void Function(ContactItemModel model)? onItemTap,
+    void Function(ContactItemModel model)? onItemLongPress,
+    String? fakeSearchHideText,
+    Widget? listViewBackground,
+    bool? enableAppBar,
+    WillCreateHandler? willCreateHandler,
+    CreateGroupInfo? createGroupInfo,
+    String? attributes,
+  }) {
+    return CreateGroupViewArguments(
+      controller: controller ?? this.controller,
+      appBar: appBar ?? this.appBar,
+      onSearchTap: onSearchTap ?? this.onSearchTap,
+      listViewItemBuilder: listViewItemBuilder ?? this.listViewItemBuilder,
+      onItemTap: onItemTap ?? this.onItemTap,
+      onItemLongPress: onItemLongPress ?? this.onItemLongPress,
+      fakeSearchHideText: fakeSearchHideText ?? this.fakeSearchHideText,
+      listViewBackground: listViewBackground ?? this.listViewBackground,
+      enableAppBar: enableAppBar ?? this.enableAppBar,
+      willCreateHandler: willCreateHandler ?? this.willCreateHandler,
+      createGroupInfo: createGroupInfo ?? this.createGroupInfo,
+      attributes: attributes ?? this.attributes,
+    );
+  }
 }
