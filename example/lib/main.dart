@@ -51,6 +51,22 @@ class _MyAppState extends State<MyApp> {
       }),
       home: const WelcomePage(),
       onGenerateRoute: (settings) {
+        if (settings.name == ChatUIKitRouteNames.messagesView) {
+          MessagesViewArguments arguments =
+              settings.arguments as MessagesViewArguments;
+          arguments = arguments.copyWith(
+            appBar: const ChatUIKitAppBar(
+              title: '我是title',
+            ),
+          );
+
+          return MaterialPageRoute(
+            builder: (context) {
+              return MessagesView.arguments(arguments);
+            },
+          );
+        }
+
         return ChatUIKitRoute.generateRoute(settings) ??
             MaterialPageRoute(
               builder: (context) {

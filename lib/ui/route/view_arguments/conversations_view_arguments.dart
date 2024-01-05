@@ -14,6 +14,7 @@ class ConversationsViewArguments implements ChatUIKitViewArguments {
     this.fakeSearchHideText,
     this.listViewBackground,
     this.enableAppBar = true,
+    this.appBarMoreActionsBuilder,
     this.attributes,
   });
 
@@ -24,11 +25,15 @@ class ConversationsViewArguments implements ChatUIKitViewArguments {
   final List<NeedAlphabeticalWidget>? afterWidgets;
   final ChatUIKitListItemBuilder? listViewItemBuilder;
   final void Function(BuildContext context, ConversationInfo model)? onTap;
-  final void Function(BuildContext context, ConversationInfo model)?
-      onLongPress;
+  final List<ChatUIKitBottomSheetItem> Function(
+    BuildContext context,
+    ConversationInfo info,
+    List<ChatUIKitBottomSheetItem> defaultActions,
+  )? onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final bool enableAppBar;
+  final AppBarMoreActionsBuilder? appBarMoreActionsBuilder;
   @override
   String? attributes;
 
@@ -40,10 +45,15 @@ class ConversationsViewArguments implements ChatUIKitViewArguments {
     List<NeedAlphabeticalWidget>? afterWidgets,
     ChatUIKitListItemBuilder? listViewItemBuilder,
     void Function(BuildContext context, ConversationInfo model)? onTap,
-    void Function(BuildContext context, ConversationInfo model)? onLongPress,
+    final List<ChatUIKitBottomSheetItem> Function(
+      BuildContext context,
+      ConversationInfo info,
+      List<ChatUIKitBottomSheetItem> defaultActions,
+    )? onLongPress,
     String? fakeSearchHideText,
     Widget? listViewBackground,
     bool? enableAppBar,
+    AppBarMoreActionsBuilder? appBarMoreActionsBuilder,
     String? attributes,
   }) {
     return ConversationsViewArguments(
@@ -58,6 +68,8 @@ class ConversationsViewArguments implements ChatUIKitViewArguments {
       fakeSearchHideText: fakeSearchHideText ?? this.fakeSearchHideText,
       listViewBackground: listViewBackground ?? this.listViewBackground,
       enableAppBar: enableAppBar ?? this.enableAppBar,
+      appBarMoreActionsBuilder:
+          appBarMoreActionsBuilder ?? this.appBarMoreActionsBuilder,
       attributes: attributes ?? this.attributes,
     );
   }

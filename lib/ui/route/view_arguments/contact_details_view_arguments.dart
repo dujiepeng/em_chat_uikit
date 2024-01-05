@@ -6,9 +6,9 @@ class ContactDetailsViewArguments implements ChatUIKitViewArguments {
     required this.profile,
     required this.actions,
     this.onMessageDidClear,
-    this.attributes,
     this.enableAppBar = true,
     this.appBar,
+    this.attributes,
   });
 
   final ChatUIKitProfile profile;

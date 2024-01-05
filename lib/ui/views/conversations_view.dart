@@ -2,6 +2,9 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
+typedef AppBarMoreActionsBuilder = List<ChatUIKitBottomSheetItem> Function(
+    BuildContext context, List<ChatUIKitBottomSheetItem> items);
+
 class ConversationsView extends StatefulWidget {
   ConversationsView.arguments(ConversationsViewArguments arguments, {super.key})
       : listViewItemBuilder = arguments.listViewItemBuilder,
@@ -14,9 +17,10 @@ class ConversationsView extends StatefulWidget {
         onLongPress = arguments.onLongPress,
         appBar = arguments.appBar,
         controller = arguments.controller,
+        appBarMoreActionsBuilder = arguments.appBarMoreActionsBuilder,
         enableAppBar = arguments.enableAppBar;
 
-  const ConversationsView({
+  ConversationsView({
     this.listViewItemBuilder,
     this.beforeWidgets,
     this.afterWidgets,
@@ -28,6 +32,7 @@ class ConversationsView extends StatefulWidget {
     this.appBar,
     this.controller,
     this.enableAppBar = true,
+    this.appBarMoreActionsBuilder,
     super.key,
   });
 
@@ -38,9 +43,15 @@ class ConversationsView extends StatefulWidget {
   final List<NeedAlphabeticalWidget>? afterWidgets;
   final ChatUIKitListItemBuilder? listViewItemBuilder;
   final void Function(BuildContext context, ConversationInfo info)? onTap;
-  final void Function(BuildContext context, ConversationInfo info)? onLongPress;
+  final List<ChatUIKitBottomSheetItem> Function(
+    BuildContext context,
+    ConversationInfo info,
+    List<ChatUIKitBottomSheetItem> defaultActions,
+  )? onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
+  final List<ChatUIKitBottomSheetItem> moreActionItems = [];
+  final AppBarMoreActionsBuilder? appBarMoreActionsBuilder;
   final bool enableAppBar;
   @override
   State<ConversationsView> createState() => _ConversationsViewState();
@@ -116,10 +127,9 @@ class _ConversationsViewState extends State<ConversationsView>
               (BuildContext context, ConversationInfo info) {
                 pushToMessagePage(info);
               },
-          onLongPress: widget.onLongPress ??
-              (BuildContext context, ConversationInfo info) {
-                longPressed(info);
-              },
+          onLongPress: (BuildContext context, ConversationInfo info) {
+            longPressed(info);
+          },
           onSearchTap: widget.onSearchTap ?? onSearchTap,
         ),
       ),
@@ -175,129 +185,145 @@ class _ConversationsViewState extends State<ConversationsView>
   }
 
   void longPressed(ConversationInfo info) async {
+    List<ChatUIKitBottomSheetItem> list = defaultLongPressActions(info);
+
+    list = widget.onLongPress
+            ?.call(context, info, defaultLongPressActions(info)) ??
+        list;
+
     showChatUIKitBottomSheet(
       cancelTitle:
           ChatUIKitLocal.conversationListLongPressMenuCancel.getString(context),
       context: context,
-      items: [
-        ChatUIKitBottomSheetItem.normal(
-          label: info.noDisturb
-              ? ChatUIKitLocal.conversationListLongPressMenuUnmute
-                  .getString(context)
-              : ChatUIKitLocal.conversationListLongPressMenuMute
-                  .getString(context),
-          onTap: () async {
-            final type = info.profile.type == ChatUIKitProfileType.groupChat
-                ? ConversationType.GroupChat
-                : ConversationType.Chat;
-
-            if (info.noDisturb) {
-              ChatUIKit.instance.clearSilentMode(
-                conversationId: info.profile.id,
-                type: type,
-              );
-            } else {
-              final param = ChatSilentModeParam.remindType(
-                  ChatPushRemindType.MENTION_ONLY);
-              ChatUIKit.instance.setSilentMode(
-                param: param,
-                conversationId: info.profile.id,
-                type: type,
-              );
-            }
-
-            Navigator.of(context).pop();
-          },
-        ),
-        ChatUIKitBottomSheetItem.normal(
-          label: info.pinned
-              ? ChatUIKitLocal.conversationListLongPressMenuUnPin
-                  .getString(context)
-              : ChatUIKitLocal.conversationListLongPressMenuPin
-                  .getString(context),
-          onTap: () async {
-            ChatUIKit.instance.pinConversation(
-              conversationId: info.profile.id,
-              isPinned: !info.pinned,
-            );
-            Navigator.of(context).pop();
-          },
-        ),
-        if (info.unreadCount > 0)
-          ChatUIKitBottomSheetItem.normal(
-            label: ChatUIKitLocal.conversationListLongPressMenuRead
-                .getString(context),
-            onTap: () async {
-              ChatUIKit.instance.markConversationAsRead(
-                conversationId: info.profile.id,
-              );
-              Navigator.of(context).pop();
-            },
-          ),
-        ChatUIKitBottomSheetItem.destructive(
-          label: ChatUIKitLocal.conversationListLongPressMenuDelete
-              .getString(context),
-          onTap: () async {
-            ChatUIKit.instance.deleteLocalConversation(
-              conversationId: info.profile.id,
-            );
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
+      items: list,
     );
   }
 
+  List<ChatUIKitBottomSheetItem> defaultLongPressActions(
+      ConversationInfo info) {
+    return [
+      ChatUIKitBottomSheetItem.normal(
+        label: info.noDisturb
+            ? ChatUIKitLocal.conversationListLongPressMenuUnmute
+                .getString(context)
+            : ChatUIKitLocal.conversationListLongPressMenuMute
+                .getString(context),
+        onTap: () async {
+          final type = info.profile.type == ChatUIKitProfileType.groupChat
+              ? ConversationType.GroupChat
+              : ConversationType.Chat;
+
+          if (info.noDisturb) {
+            ChatUIKit.instance.clearSilentMode(
+              conversationId: info.profile.id,
+              type: type,
+            );
+          } else {
+            final param =
+                ChatSilentModeParam.remindType(ChatPushRemindType.MENTION_ONLY);
+            ChatUIKit.instance.setSilentMode(
+              param: param,
+              conversationId: info.profile.id,
+              type: type,
+            );
+          }
+
+          Navigator.of(context).pop();
+        },
+      ),
+      ChatUIKitBottomSheetItem.normal(
+        label: info.pinned
+            ? ChatUIKitLocal.conversationListLongPressMenuUnPin
+                .getString(context)
+            : ChatUIKitLocal.conversationListLongPressMenuPin
+                .getString(context),
+        onTap: () async {
+          ChatUIKit.instance.pinConversation(
+            conversationId: info.profile.id,
+            isPinned: !info.pinned,
+          );
+          Navigator.of(context).pop();
+        },
+      ),
+      if (info.unreadCount > 0)
+        ChatUIKitBottomSheetItem.normal(
+          label: ChatUIKitLocal.conversationListLongPressMenuRead
+              .getString(context),
+          onTap: () async {
+            ChatUIKit.instance.markConversationAsRead(
+              conversationId: info.profile.id,
+            );
+            Navigator.of(context).pop();
+          },
+        ),
+      ChatUIKitBottomSheetItem.destructive(
+        label: ChatUIKitLocal.conversationListLongPressMenuDelete
+            .getString(context),
+        onTap: () async {
+          ChatUIKit.instance.deleteLocalConversation(
+            conversationId: info.profile.id,
+          );
+          Navigator.of(context).pop();
+        },
+      ),
+    ];
+  }
+
   void showMoreInfo() {
-    final theme = ChatUIKitTheme.of(context);
+    List<ChatUIKitBottomSheetItem> list = defaultItems();
+    list = widget.appBarMoreActionsBuilder?.call(context, list) ?? list;
     showChatUIKitBottomSheet(
       cancelTitle: ChatUIKitLocal.conversationViewMenuCancel.getString(context),
       context: context,
-      items: [
-        ChatUIKitBottomSheetItem.normal(
-          label: ChatUIKitLocal.conversationViewMenuCreateNewChat
-              .getString(context),
-          icon: Icon(
-            Icons.message,
-            color: theme.color.isDark
-                ? theme.color.primaryColor5
-                : theme.color.primaryColor5,
-          ),
-          onTap: () async {
-            Navigator.of(context).pop();
-            newConversations();
-          },
-        ),
-        ChatUIKitBottomSheetItem.normal(
-          label:
-              ChatUIKitLocal.conversationViewMenuAddContact.getString(context),
-          icon: Icon(
-            Icons.person_add_alt_1,
-            color: theme.color.isDark
-                ? theme.color.primaryColor5
-                : theme.color.primaryColor5,
-          ),
-          onTap: () async {
-            Navigator.of(context).pop();
-            addContact();
-          },
-        ),
-        ChatUIKitBottomSheetItem.normal(
-          label:
-              ChatUIKitLocal.conversationViewMenuCreateGroup.getString(context),
-          icon: Icon(
-            Icons.group,
-            color: theme.color.isDark
-                ? theme.color.primaryColor5
-                : theme.color.primaryColor5,
-          ),
-          onTap: () async {
-            Navigator.of(context).pop();
-            newGroup();
-          },
-        ),
-      ],
+      items: list,
     );
+  }
+
+  List<ChatUIKitBottomSheetItem> defaultItems() {
+    final theme = ChatUIKitTheme.of(context);
+    return [
+      ChatUIKitBottomSheetItem.normal(
+        label:
+            ChatUIKitLocal.conversationViewMenuCreateNewChat.getString(context),
+        icon: Icon(
+          Icons.message,
+          color: theme.color.isDark
+              ? theme.color.primaryColor5
+              : theme.color.primaryColor5,
+        ),
+        onTap: () async {
+          Navigator.of(context).pop();
+          newConversations();
+        },
+      ),
+      ChatUIKitBottomSheetItem.normal(
+        label: ChatUIKitLocal.conversationViewMenuAddContact.getString(context),
+        icon: Icon(
+          Icons.person_add_alt_1,
+          color: theme.color.isDark
+              ? theme.color.primaryColor5
+              : theme.color.primaryColor5,
+        ),
+        onTap: () async {
+          Navigator.of(context).pop();
+          addContact();
+        },
+      ),
+      ChatUIKitBottomSheetItem.normal(
+        label:
+            ChatUIKitLocal.conversationViewMenuCreateGroup.getString(context),
+        icon: Icon(
+          Icons.group,
+          color: theme.color.isDark
+              ? theme.color.primaryColor5
+              : theme.color.primaryColor5,
+        ),
+        onTap: () async {
+          Navigator.of(context).pop();
+          newGroup();
+        },
+      ),
+    ];
   }
 
   void newConversations() async {

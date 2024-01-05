@@ -5,8 +5,8 @@ typedef ChatUIKitActionItemOnTap = void Function(BuildContext context);
 class ChatUIKitActionItem {
   ChatUIKitActionItem({
     required this.title,
-    this.onTap,
     required this.icon,
+    this.onTap,
   });
 
   final String title;

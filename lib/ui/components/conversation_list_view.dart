@@ -2,7 +2,7 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
-typedef ChatUIKitConversationItemBuilder = Widget Function(
+typedef ChatUIKitConversationItemBuilder = Widget? Function(
     BuildContext context, ConversationInfo model);
 
 class ConversationListView extends StatefulWidget {

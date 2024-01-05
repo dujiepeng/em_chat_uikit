@@ -13,7 +13,7 @@ typedef ListViewBuilder = Widget Function(
   List<ChatUIKitListItemModelBase> list,
 );
 
-typedef ChatUIKitListItemBuilder = Widget Function(
+typedef ChatUIKitListItemBuilder = Widget? Function(
     BuildContext context, ChatUIKitListItemModelBase model);
 
 class ChatUIKitListView extends StatefulWidget {
