@@ -34,8 +34,7 @@ class MessageListViewController extends ChangeNotifier
   MessageListViewController({required this.profile, this.pageSize = 30}) {
     ChatUIKit.instance.addObserver(this);
     conversationType = () {
-      if (profile.type == ChatUIKitProfileType.groupChat ||
-          profile.type == ChatUIKitProfileType.groupMember) {
+      if (profile.type == ChatUIKitProfileType.groupChat) {
         return ConversationType.GroupChat;
       } else {
         return ConversationType.Chat;
