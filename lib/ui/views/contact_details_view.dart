@@ -145,7 +145,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
     );
 
     Widget easeId = Text(
-      '环信ID: ${profile!.id}',
+      'ID: ${profile!.id}',
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
       style: TextStyle(
@@ -265,7 +265,8 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
       children: [
         content,
         ChatUIKitDetailsListViewItem(
-          title: '消息免打扰',
+          title:
+              ChatUIKitLocal.contactDetailViewDoNotDisturb.getString(context),
           trailing: ValueListenableBuilder(
             valueListenable: isNotDisturb,
             builder: (context, value, child) {
@@ -299,7 +300,9 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
         ),
         InkWell(
           onTap: clearAllHistory,
-          child: const ChatUIKitDetailsListViewItem(title: '清空聊天记录'),
+          child: ChatUIKitDetailsListViewItem(
+              title: ChatUIKitLocal.contactDetailViewClearChatHistory
+                  .getString(context)),
         ),
       ],
     );
@@ -309,18 +312,24 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
 
   void clearAllHistory() async {
     final ret = await showChatUIKitDialog(
-      title: '确认清空聊天记录?',
-      content: '清空聊天记录后，你将无法查看与该联系人的聊天记录。',
+      title: ChatUIKitLocal.contactDetailViewClearChatHistoryAlertTitle
+          .getString(context),
+      content: ChatUIKitLocal.contactDetailViewClearChatHistoryAlertSubTitle
+          .getString(context),
       context: context,
       items: [
         ChatUIKitDialogItem.cancel(
-          label: '取消',
+          label: ChatUIKitLocal
+              .contactDetailViewClearChatHistoryAlertButtonCancel
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop();
           },
         ),
         ChatUIKitDialogItem.confirm(
-          label: '确认',
+          label: ChatUIKitLocal
+              .contactDetailViewClearChatHistoryAlertButtonConfirm
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop(true);
           },
@@ -338,11 +347,11 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
 
   void showBottom() async {
     bool? ret = await showChatUIKitBottomSheet(
-      cancelTitle: '取消',
+      cancelTitle: ChatUIKitLocal.contactDetailViewCancel.getString(context),
       context: context,
       items: [
         ChatUIKitBottomSheetItem.destructive(
-          label: '删除联系人',
+          label: ChatUIKitLocal.contactDetailViewDelete.getString(context),
           onTap: () async {
             Navigator.of(context).pop(true);
             return true;
@@ -439,18 +448,22 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
 
   void deleteContact() {
     showChatUIKitDialog(
-      title: '确认删除联系人?',
-      content: '确认删除${profile!.showName}同时删除与该联系人的聊天记录。',
+      title:
+          ChatUIKitLocal.contactDetailViewDeleteAlertTitle.getString(context),
+      content: ChatUIKitLocal.contactDetailViewDeleteAlertSubTitle
+          .getString(context),
       context: context,
       items: [
         ChatUIKitDialogItem.cancel(
-          label: '取消',
+          label: ChatUIKitLocal.contactDetailViewDeleteAlertButtonCancel
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop();
           },
         ),
         ChatUIKitDialogItem.confirm(
-          label: '确认',
+          label: ChatUIKitLocal.contactDetailViewDeleteAlertButtonConfirm
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop();
             ChatUIKit.instance.deleteContact(userId: profile!.id).then((value) {

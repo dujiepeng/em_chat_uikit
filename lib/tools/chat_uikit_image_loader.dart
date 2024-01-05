@@ -339,4 +339,147 @@ class ChatUIKitImageLoader {
       },
     );
   }
+
+  static Widget messageViewMoreAlum(
+      {double width = 24, double height = 24, Color? color}) {
+    return Image(
+      gaplessPlayback: true,
+      image: ResizeImage(
+        const AssetImage('assets/images/image.png', package: packageName),
+        width: width.toInt(),
+        height: height.toInt(),
+      ),
+      fit: BoxFit.fill,
+    );
+  }
+
+  static Widget messageViewMoreVideo(
+      {double width = 24, double height = 24, Color? color}) {
+    return Image(
+      gaplessPlayback: true,
+      image: ResizeImage(
+        const AssetImage('assets/images/video.png', package: packageName),
+        width: width.toInt(),
+        height: height.toInt(),
+      ),
+      fit: BoxFit.fill,
+    );
+  }
+
+  static Widget messageViewMoreCamera(
+      {double width = 24, double height = 24, Color? color}) {
+    return Image(
+      gaplessPlayback: true,
+      image: ResizeImage(
+        const AssetImage('assets/images/camera.png', package: packageName),
+        width: width.toInt(),
+        height: height.toInt(),
+      ),
+      fit: BoxFit.fill,
+    );
+  }
+
+  static Widget messageViewMoreFile(
+      {double width = 24, double height = 24, Color? color}) {
+    return Image(
+      gaplessPlayback: true,
+      image: ResizeImage(
+        const AssetImage('assets/images/folder.png', package: packageName),
+        width: width.toInt(),
+        height: height.toInt(),
+      ),
+      fit: BoxFit.fill,
+    );
+  }
+
+  static Widget messageViewMoreCard(
+      {double width = 24, double height = 24, Color? color}) {
+    return Image(
+      gaplessPlayback: true,
+      image: ResizeImage(
+        const AssetImage('assets/images/person.png', package: packageName),
+        width: width.toInt(),
+        height: height.toInt(),
+      ),
+      fit: BoxFit.fill,
+    );
+  }
+
+  static Widget messageLongPressCopy(
+      {double width = 24, double height = 24, Color? color}) {
+    return Image(
+      gaplessPlayback: true,
+      image: ResizeImage(
+        const AssetImage('assets/images/message_long_press_copy.png', package: packageName),
+        width: width.toInt(),
+        height: height.toInt(),
+      ),
+      fit: BoxFit.fill,
+    );
+  }
+
+  static Widget messageLongPressReply(
+      {double width = 24, double height = 24, Color? color}) {
+    return Image(
+      gaplessPlayback: true,
+      image: ResizeImage(
+        const AssetImage('assets/images/message_long_press_reply.png', package: packageName),
+        width: width.toInt(),
+        height: height.toInt(),
+      ),
+      fit: BoxFit.fill,
+    );
+  }
+
+  static Widget messageLongPressEdit(
+      {double width = 24, double height = 24, Color? color}) {
+    return Image(
+      gaplessPlayback: true,
+      image: ResizeImage(
+        const AssetImage('assets/images/message_long_press_edit.png', package: packageName),
+        width: width.toInt(),
+        height: height.toInt(),
+      ),
+      fit: BoxFit.fill,
+    );
+  }
+
+  static Widget messageLongPressReport(
+      {double width = 24, double height = 24, Color? color}) {
+    return Image(
+      gaplessPlayback: true,
+      image: ResizeImage(
+        const AssetImage('assets/images/message_long_press_report.png', package: packageName),
+        width: width.toInt(),
+        height: height.toInt(),
+      ),
+      fit: BoxFit.fill,
+    );
+  }
+
+  static Widget messageLongPressDelete(
+      {double width = 24, double height = 24, Color? color}) {
+    return Image(
+      gaplessPlayback: true,
+      image: ResizeImage(
+        const AssetImage('assets/images/message_long_press_delete.png', package: packageName),
+        width: width.toInt(),
+        height: height.toInt(),
+      ),
+      fit: BoxFit.fill,
+    );
+  }
+
+  static Widget messageLongPressRecall(
+      {double width = 24, double height = 24, Color? color}) {
+    return Image(
+      gaplessPlayback: true,
+      image: ResizeImage(
+        const AssetImage('assets/images/message_long_press_recall.png', package: packageName),
+        width: width.toInt(),
+        height: height.toInt(),
+      ),
+      fit: BoxFit.fill,
+    );
+  }
 }

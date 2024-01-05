@@ -2,8 +2,8 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit_example/pages/contact_page.dart';
 import 'package:em_chat_uikit_example/pages/conversation_page.dart';
 import 'package:em_chat_uikit_example/pages/my_page.dart';
+import 'package:em_chat_uikit_example/toast_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,7 +17,6 @@ class _HomePageState extends State<HomePage>
         AutomaticKeepAliveClientMixin,
         ChatObserver,
         ContactObserver,
-        ChatSDKActionEventsObserver,
         ChatUIKitEventsObservers,
         ChatSDKActionEventsObserver {
   int _currentIndex = 0;
@@ -160,28 +159,13 @@ class _HomePageState extends State<HomePage>
       ),
     );
 
+    content = ToastPage(child: content);
+
     return content;
   }
 
   @override
   bool get wantKeepAlive => true;
-
-  @override
-  void onChatUIKitEventsReceived(ChatUIKitEvent events) {
-    if (events == ChatUIKitEvent.groupIdCopied ||
-        events == ChatUIKitEvent.userIdCopied ||
-        events == ChatUIKitEvent.messageCopied) {
-      EasyLoading.showSuccess('复制成功');
-    } else if (events == ChatUIKitEvent.messageDownloading) {
-      EasyLoading.showInfo('下载中');
-    } else if (events == ChatUIKitEvent.noCameraPermission ||
-        events == ChatUIKitEvent.noRecordPermission ||
-        events == ChatUIKitEvent.noStoragePermission) {
-      EasyLoading.showError('权限不足');
-    } else if (events == ChatUIKitEvent.voiceTypeNotSupported) {
-      EasyLoading.showError('语音格式不支持');
-    }
-  }
 
   @override
   // 用于刷新消息未读数
@@ -196,43 +180,15 @@ class _HomePageState extends State<HomePage>
   }
 
   @override
-  void onEventBegin(ChatSDKWrapperActionEvent event) {
-    if (event == ChatSDKWrapperActionEvent.acceptContactRequest ||
-        event == ChatSDKWrapperActionEvent.fetchGroupMemberAttributes ||
-        event == ChatSDKWrapperActionEvent.setGroupMemberAttributes ||
-        event == ChatSDKWrapperActionEvent.sendContactRequest ||
-        event == ChatSDKWrapperActionEvent.changeGroupOwner ||
-        event == ChatSDKWrapperActionEvent.declineContactRequest ||
-        event == ChatSDKWrapperActionEvent.setSilentMode ||
-        event == ChatSDKWrapperActionEvent.createGroup ||
-        event == ChatSDKWrapperActionEvent.clearSilentMode) {
-      EasyLoading.show();
-    }
-  }
-
-  @override
+  // 用于刷新消息和联系人未读数
   void onEventEnd(ChatSDKWrapperActionEvent event) {
     if (event == ChatSDKWrapperActionEvent.acceptContactRequest ||
-        event == ChatSDKWrapperActionEvent.fetchGroupMemberAttributes ||
-        event == ChatSDKWrapperActionEvent.setGroupMemberAttributes ||
-        event == ChatSDKWrapperActionEvent.sendContactRequest ||
-        event == ChatSDKWrapperActionEvent.changeGroupOwner ||
         event == ChatSDKWrapperActionEvent.declineContactRequest ||
+        event == ChatSDKWrapperActionEvent.markConversationAsRead ||
         event == ChatSDKWrapperActionEvent.setSilentMode ||
-        event == ChatSDKWrapperActionEvent.createGroup ||
         event == ChatSDKWrapperActionEvent.clearSilentMode) {
-      EasyLoading.dismiss();
-    } else if (event == ChatSDKWrapperActionEvent.markConversationAsRead) {
       setState(() {});
     }
-  }
-
-  @override
-  void onEventErrorHandler(
-    ChatSDKWrapperActionEvent event,
-    ChatError error,
-  ) {
-    EasyLoading.showError(error.description);
   }
 }
 

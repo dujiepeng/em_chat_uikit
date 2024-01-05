@@ -76,7 +76,8 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
                     Navigator.maybePop(context);
                   },
                   child: Text(
-                    '移除群成员',
+                    ChatUIKitLocal.groupDeleteMembersViewTitle
+                        .getString(context),
                     style: TextStyle(
                       color: theme.color.isDark
                           ? theme.color.neutralColor98
@@ -99,7 +100,10 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
                       valueListenable: selectedProfiles,
                       builder: (context, value, child) {
                         return Text(
-                          value.isEmpty ? '删除' : '删除(${value.length})',
+                          value.isEmpty
+                              ? ChatUIKitLocal.groupDeleteMembersViewDelete
+                                  .getString(context)
+                              : '${ChatUIKitLocal.groupDeleteMembersViewDelete.getString(context)}(${value.length})',
                           style: TextStyle(
                             color: theme.color.isDark
                                 ? theme.color.primaryColor6
@@ -208,7 +212,8 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
                   ),
                 );
               },
-              searchHideText: '搜索联系人',
+              searchHideText: ChatUIKitLocal.groupDeleteMembersViewSearchMember
+                  .getString(context),
               searchData: list,
             );
           },

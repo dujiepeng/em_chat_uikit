@@ -112,7 +112,7 @@ class _GroupsViewState extends State<GroupsView> {
         profile: model.profile,
         actions: [
           ChatUIKitActionItem(
-            title: '发消息',
+            title: ChatUIKitLocal.groupDetailViewSend.getString(context),
             icon: 'assets/images/chat.png',
             onTap: (context) {
               Navigator.of(context).pushNamed(

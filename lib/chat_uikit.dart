@@ -10,6 +10,7 @@ export 'package:video_thumbnail/video_thumbnail.dart';
 
 export 'chat_uikit_context.dart';
 export 'chat_uikit_settings.dart';
+export 'chat_uikit_localizations.dart';
 
 export 'provider/chat_uikit_provider.dart';
 

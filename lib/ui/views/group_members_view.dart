@@ -122,7 +122,8 @@ class _GroupMembersViewState extends State<GroupMembersView>
                     builder: (context, value, child) {
                       if (memberCount.value == 0) {
                         return Text(
-                          '群成员',
+                          ChatUIKitLocal.groupMembersViewTitle
+                              .getString(context),
                           style: TextStyle(
                             color: theme.color.isDark
                                 ? theme.color.neutralColor98
@@ -133,7 +134,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
                         );
                       } else {
                         return Text(
-                          '群成员(${memberCount.value})',
+                          '${ChatUIKitLocal.groupMembersViewTitle.getString(context)}(${memberCount.value})',
                           style: TextStyle(
                             color: theme.color.isDark
                                 ? theme.color.neutralColor98
@@ -232,7 +233,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
         profile: profile,
         actions: [
           ChatUIKitActionItem(
-            title: '发消息',
+            title: ChatUIKitLocal.groupDetailViewSend.getString(context),
             icon: 'assets/images/chat.png',
             onTap: (context) {
               Navigator.of(context).pushNamed(
@@ -349,7 +350,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
               ),
             );
           },
-          searchHideText: '搜索群成员',
+          searchHideText: ChatUIKitLocal.groupMembersSearch.getString(context),
           searchData: list,
         );
       },

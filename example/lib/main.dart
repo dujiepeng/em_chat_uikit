@@ -19,10 +19,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool isLight = true;
-
+  final FlutterLocalization _localization = FlutterLocalization.instance;
   @override
   void initState() {
     super.initState();
+    _localization.init(mapLocales: [
+      const MapLocale('zh', ChatUIKitLocal.zh),
+      const MapLocale('en', ChatUIKitLocal.en),
+    ], initLanguageCode: 'zh');
   }
 
   @override
@@ -31,6 +35,8 @@ class _MyAppState extends State<MyApp> {
     ChatUIKitSettings.avatarRadius = CornerRadius.medium;
 
     return MaterialApp(
+      supportedLocales: _localization.supportedLocales,
+      localizationsDelegates: _localization.localizationsDelegates,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,

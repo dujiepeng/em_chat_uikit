@@ -82,7 +82,7 @@ class _CreateGroupViewState extends State<CreateGroupView> {
                     Navigator.maybePop(context);
                   },
                   child: Text(
-                    '新群组',
+                    ChatUIKitLocal.createGroupViewTitle.getString(context),
                     style: TextStyle(
                       color: theme.color.isDark
                           ? theme.color.neutralColor98
@@ -105,7 +105,10 @@ class _CreateGroupViewState extends State<CreateGroupView> {
                       valueListenable: selectedProfiles,
                       builder: (context, value, child) {
                         return Text(
-                          value.isEmpty ? '创建' : '创建(${value.length})',
+                          value.isEmpty
+                              ? ChatUIKitLocal.createGroupViewCreate
+                                  .getString(context)
+                              : '${ChatUIKitLocal.createGroupViewCreate.getString(context)}(${value.length})',
                           style: TextStyle(
                             color: theme.color.isDark
                                 ? theme.color.primaryColor6
@@ -213,7 +216,8 @@ class _CreateGroupViewState extends State<CreateGroupView> {
                   ),
                 );
               },
-              searchHideText: '搜索联系人',
+              searchHideText: ChatUIKitLocal.createGroupViewSearchContact
+                  .getString(context),
               searchData: list,
             );
           },

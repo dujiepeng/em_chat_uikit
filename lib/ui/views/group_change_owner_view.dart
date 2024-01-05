@@ -77,7 +77,8 @@ class _GroupChangeOwnerViewState extends State<GroupChangeOwnerView> {
                       Navigator.maybePop(context);
                     },
                     child: Text(
-                      '选择新群主',
+                      ChatUIKitLocal.groupChangeOwnerViewTitle
+                          .getString(context),
                       style: TextStyle(
                         color: theme.color.isDark
                             ? theme.color.neutralColor98
@@ -102,17 +103,19 @@ class _GroupChangeOwnerViewState extends State<GroupChangeOwnerView> {
 
   void showConfirmDialog(BuildContext context, ContactItemModel model) async {
     bool? ret = await showChatUIKitDialog(
-      title: '确认转让群主身份给"${model.profile.showName}"?',
+      title: ChatUIKitLocal.groupChangeOwnerViewAlertTitle.getString(context),
       context: context,
       items: [
         ChatUIKitDialogItem.cancel(
-          label: '取消',
+          label: ChatUIKitLocal.groupChangeOwnerViewAlertButtonCancel
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop();
           },
         ),
         ChatUIKitDialogItem.confirm(
-          label: '确认',
+          label: ChatUIKitLocal.groupChangeOwnerViewAlertButtonConfirm
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop(true);
           },

@@ -46,7 +46,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     actions = widget.actions;
     isNotDisturb.value =
         ChatUIKitContext.instance.conversationIsMute(widget.profile.id);
-    fetchInfo();
+    fetchSilentInfo();
     fetchGroup();
     // fetchMembersAttrs();
   }
@@ -73,7 +73,8 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
 
   void fetchGroup() async {
     try {
-      group = await ChatUIKit.instance.getGroup(groupId: widget.profile.id);
+      // 本地不准，暂时不使用本地数据。
+      // group = await ChatUIKit.instance.getGroup(groupId: widget.profile.id);
       group ??=
           await ChatUIKit.instance.fetchGroupInfo(groupId: widget.profile.id);
       memberCount = group?.memberCount ?? 0;
@@ -82,7 +83,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     } catch (e) {}
   }
 
-  void fetchInfo() async {
+  void fetchSilentInfo() async {
     Conversation conversation = await ChatUIKit.instance.createConversation(
         conversationId: widget.profile.id, type: ConversationType.GroupChat);
     Map<String, ChatSilentModeResult> map = await ChatUIKit.instance
@@ -144,7 +145,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     );
 
     Widget easeId = Text(
-      '环信ID: ${widget.profile.id}',
+      'ID: ${widget.profile.id}',
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
       style: TextStyle(
@@ -280,7 +281,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
             );
           },
           child: ChatUIKitDetailsListViewItem(
-            title: '群成员',
+            title: ChatUIKitLocal.groupDetailViewMember.getString(context),
             trailing: SizedBox(
               width: 100,
               child: Row(
@@ -291,7 +292,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
                       return const SizedBox();
                     } else {
                       return Text(
-                        '$memberCount人',
+                        '$memberCount',
                         style: TextStyle(
                           color: theme.color.isDark
                               ? theme.color.neutralColor6
@@ -330,7 +331,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         //   ),
         // ),
         ChatUIKitDetailsListViewItem(
-          title: '消息免打扰',
+          title: ChatUIKitLocal.groupDetailViewDoNotDisturb.getString(context),
           trailing: ValueListenableBuilder(
             valueListenable: isNotDisturb,
             builder: (context, value, child) {
@@ -364,7 +365,9 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         ),
         InkWell(
           onTap: clearAllHistory,
-          child: const ChatUIKitDetailsListViewItem(title: '清空聊天记录'),
+          child: ChatUIKitDetailsListViewItem(
+              title: ChatUIKitLocal.groupDetailViewClearChatHistory
+                  .getString(context)),
         ),
         if (group?.permissionType == GroupPermissionType.Owner) ...[
           Container(height: 20),
@@ -373,7 +376,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
               changeGroupName();
             },
             child: ChatUIKitDetailsListViewItem(
-              title: '群名称',
+              title: ChatUIKitLocal.groupDetailViewGroupName.getString(context),
               trailing: SizedBox(
                 width: 100,
                 child: Row(
@@ -413,7 +416,8 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
               changeGroupDesc();
             },
             child: ChatUIKitDetailsListViewItem(
-              title: '群描述',
+              title:
+                  ChatUIKitLocal.groupDetailViewDescription.getString(context),
               trailing: SizedBox(
                 width: 100,
                 child: Row(
@@ -456,17 +460,20 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
 
   void clearAllHistory() {
     showChatUIKitDialog(
-      title: '确认清空聊天记录?',
+      title: ChatUIKitLocal.groupDetailViewClearChatHistory.getString(context),
       context: context,
       items: [
         ChatUIKitDialogItem.cancel(
-          label: '取消',
+          label: ChatUIKitLocal.groupDetailViewClearChatHistoryAlertButtonCancel
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop();
           },
         ),
         ChatUIKitDialogItem.confirm(
-          label: '确认',
+          label: ChatUIKitLocal
+              .groupDetailViewClearChatHistoryAlertButtonConfirm
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop();
             Conversation conversation = await ChatUIKit.instance
@@ -485,7 +492,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     if (group?.permissionType == GroupPermissionType.Owner) {
       list.add(
         ChatUIKitBottomSheetItem.normal(
-          label: '转移群组',
+          label: ChatUIKitLocal.groupDetailViewTransferGroup.getString(context),
           onTap: () async {
             Navigator.of(context).pop();
             changeOwner();
@@ -494,7 +501,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
       );
       list.add(
         ChatUIKitBottomSheetItem.destructive(
-          label: '解散群组',
+          label: ChatUIKitLocal.groupDetailViewDisbandGroup.getString(context),
           onTap: () async {
             Navigator.of(context).pop();
             destroyGroup();
@@ -504,7 +511,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     } else {
       list.add(
         ChatUIKitBottomSheetItem.destructive(
-          label: '退出群聊',
+          label: ChatUIKitLocal.groupDetailViewLeaveGroup.getString(context),
           onTap: () async {
             Navigator.of(context).pop();
             leaveGroup();
@@ -514,7 +521,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     }
 
     showChatUIKitBottomSheet(
-      cancelTitle: '取消',
+      cancelTitle: ChatUIKitLocal.groupDetailViewCancel.getString(context),
       context: context,
       items: list,
     );
@@ -601,18 +608,21 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
 
   void destroyGroup() {
     showChatUIKitDialog(
-      title: '确认解散群组?',
-      content: '确认解散群组，同时删除该群的聊天记录。',
+      title: ChatUIKitLocal.groupDetailViewDisbandAlertTitle.getString(context),
+      content:
+          ChatUIKitLocal.groupDetailViewDisbandAlertSubTitle.getString(context),
       context: context,
       items: [
         ChatUIKitDialogItem.cancel(
-          label: '取消',
+          label: ChatUIKitLocal.groupDetailViewDisbandAlertButtonCancel
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop();
           },
         ),
         ChatUIKitDialogItem.confirm(
-          label: '解散',
+          label: ChatUIKitLocal.groupDetailViewDisbandAlertButtonConfirm
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop();
             ChatUIKit.instance
@@ -628,18 +638,21 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
 
   void leaveGroup() {
     showChatUIKitDialog(
-      title: '确认退出群聊?',
-      content: '确认退出群组，同时删除该群的聊天记录。',
+      title: ChatUIKitLocal.groupDetailViewLeaveAlertTitle.getString(context),
+      content:
+          ChatUIKitLocal.groupDetailViewLeaveAlertSubTitle.getString(context),
       context: context,
       items: [
         ChatUIKitDialogItem.cancel(
-          label: '取消',
+          label: ChatUIKitLocal.groupDetailViewLeaveAlertButtonCancel
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop();
           },
         ),
         ChatUIKitDialogItem.confirm(
-          label: '退出',
+          label: ChatUIKitLocal.groupDetailViewLeaveAlertButtonConfirm
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop();
             ChatUIKit.instance

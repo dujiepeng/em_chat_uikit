@@ -176,11 +176,16 @@ class _ConversationsViewState extends State<ConversationsView>
 
   void longPressed(ConversationInfo info) async {
     showChatUIKitBottomSheet(
-      cancelTitle: '取消',
+      cancelTitle:
+          ChatUIKitLocal.conversationListLongPressMenuCancel.getString(context),
       context: context,
       items: [
         ChatUIKitBottomSheetItem.normal(
-          label: info.noDisturb ? '取消静音' : '静音',
+          label: info.noDisturb
+              ? ChatUIKitLocal.conversationListLongPressMenuUnmute
+                  .getString(context)
+              : ChatUIKitLocal.conversationListLongPressMenuMute
+                  .getString(context),
           onTap: () async {
             final type = info.profile.type == ChatUIKitProfileType.groupChat
                 ? ConversationType.GroupChat
@@ -205,7 +210,11 @@ class _ConversationsViewState extends State<ConversationsView>
           },
         ),
         ChatUIKitBottomSheetItem.normal(
-          label: info.pinned ? '取消置顶' : '置顶',
+          label: info.pinned
+              ? ChatUIKitLocal.conversationListLongPressMenuUnPin
+                  .getString(context)
+              : ChatUIKitLocal.conversationListLongPressMenuPin
+                  .getString(context),
           onTap: () async {
             ChatUIKit.instance.pinConversation(
               conversationId: info.profile.id,
@@ -216,7 +225,8 @@ class _ConversationsViewState extends State<ConversationsView>
         ),
         if (info.unreadCount > 0)
           ChatUIKitBottomSheetItem.normal(
-            label: '标记已读',
+            label: ChatUIKitLocal.conversationListLongPressMenuRead
+                .getString(context),
             onTap: () async {
               ChatUIKit.instance.markConversationAsRead(
                 conversationId: info.profile.id,
@@ -225,7 +235,8 @@ class _ConversationsViewState extends State<ConversationsView>
             },
           ),
         ChatUIKitBottomSheetItem.destructive(
-          label: '删除会话',
+          label: ChatUIKitLocal.conversationListLongPressMenuDelete
+              .getString(context),
           onTap: () async {
             ChatUIKit.instance.deleteLocalConversation(
               conversationId: info.profile.id,
@@ -240,11 +251,12 @@ class _ConversationsViewState extends State<ConversationsView>
   void showMoreInfo() {
     final theme = ChatUIKitTheme.of(context);
     showChatUIKitBottomSheet(
-      cancelTitle: '取消',
+      cancelTitle: ChatUIKitLocal.conversationViewMenuCancel.getString(context),
       context: context,
       items: [
         ChatUIKitBottomSheetItem.normal(
-          label: '发起新会话',
+          label: ChatUIKitLocal.conversationViewMenuCreateNewChat
+              .getString(context),
           icon: Icon(
             Icons.message,
             color: theme.color.isDark
@@ -257,7 +269,8 @@ class _ConversationsViewState extends State<ConversationsView>
           },
         ),
         ChatUIKitBottomSheetItem.normal(
-          label: '添加联系人',
+          label:
+              ChatUIKitLocal.conversationViewMenuAddContact.getString(context),
           icon: Icon(
             Icons.person_add_alt_1,
             color: theme.color.isDark
@@ -270,7 +283,8 @@ class _ConversationsViewState extends State<ConversationsView>
           },
         ),
         ChatUIKitBottomSheetItem.normal(
-          label: '创建群组',
+          label:
+              ChatUIKitLocal.conversationViewMenuCreateGroup.getString(context),
           icon: Icon(
             Icons.group,
             color: theme.color.isDark
@@ -293,8 +307,9 @@ class _ConversationsViewState extends State<ConversationsView>
       builder: (context) {
         return SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.95,
-          child: const SelectContactView(
-            backText: '新会话',
+          child: SelectContactView(
+            backText: ChatUIKitLocal.conversationViewMenuCreateNewChat
+                .getString(context),
           ),
         );
       },
@@ -308,19 +323,19 @@ class _ConversationsViewState extends State<ConversationsView>
   void addContact() async {
     String? userId = await showChatUIKitDialog(
       borderType: ChatUIKitRectangleType.filletCorner,
-      title: '添加联系人',
-      content: '通过用户ID添加联系人',
+      title: ChatUIKitLocal.addContactTitle.getString(context),
+      content: ChatUIKitLocal.addContactSubTitle.getString(context),
       context: context,
-      hintsText: ['输入用户ID'],
+      hintsText: [ChatUIKitLocal.addContactInputHints.getString(context)],
       items: [
         ChatUIKitDialogItem.cancel(
-          label: '取消',
+          label: ChatUIKitLocal.addContactCancel.getString(context),
           onTap: () async {
             Navigator.of(context).pop();
           },
         ),
         ChatUIKitDialogItem.inputsConfirm(
-          label: '添加',
+          label: ChatUIKitLocal.addContactConfirm.getString(context),
           onInputsTap: (inputs) async {
             Navigator.of(context).pop(inputs.first);
           },

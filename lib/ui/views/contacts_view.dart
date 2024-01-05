@@ -171,7 +171,7 @@ class _ContactsViewState extends State<ContactsView>
         profile: model.profile,
         actions: [
           ChatUIKitActionItem(
-            title: '发消息',
+            title: ChatUIKitLocal.contactDetailViewSend.getString(context),
             icon: 'assets/images/chat.png',
             onTap: (context) {
               Navigator.of(context).pushNamed(

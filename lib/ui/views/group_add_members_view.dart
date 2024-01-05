@@ -79,7 +79,7 @@ class _GroupAddMembersViewState extends State<GroupAddMembersView> {
                     Navigator.maybePop(context);
                   },
                   child: Text(
-                    '添加群成员',
+                    ChatUIKitLocal.groupAddMembersViewTitle.getString(context),
                     style: TextStyle(
                       color: theme.color.isDark
                           ? theme.color.neutralColor98
@@ -102,7 +102,10 @@ class _GroupAddMembersViewState extends State<GroupAddMembersView> {
                       valueListenable: selectedProfiles,
                       builder: (context, value, child) {
                         return Text(
-                          value.isEmpty ? '添加' : '添加(${value.length})',
+                          value.isEmpty
+                              ? ChatUIKitLocal.groupAddMembersViewAdd
+                                  .getString(context)
+                              : '${ChatUIKitLocal.groupAddMembersViewAdd.getString(context)}(${value.length})',
                           style: TextStyle(
                             color: theme.color.isDark
                                 ? theme.color.primaryColor6
@@ -256,7 +259,8 @@ class _GroupAddMembersViewState extends State<GroupAddMembersView> {
                   ),
                 );
               },
-              searchHideText: '搜索联系人',
+              searchHideText: ChatUIKitLocal.groupAddMembersViewSearchContact
+                  .getString(context),
               searchData: list,
             );
           },

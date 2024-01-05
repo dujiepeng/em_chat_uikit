@@ -63,7 +63,7 @@ class _CurrentUserInfoViewState extends State<CurrentUserInfoView> {
     );
 
     Widget easeId = Text(
-      '环信ID: ${widget.profile.id}',
+      'ID: ${widget.profile.id}',
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
       style: TextStyle(

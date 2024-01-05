@@ -167,7 +167,8 @@ class _ChangeInfoViewState extends State<ChangeInfoView> {
                       }
                     },
                     child: Text(
-                      widget.saveButtonTitle ?? '保存',
+                      widget.saveButtonTitle ??
+                          ChatUIKitLocal.changInfoViewSave.getString(context),
                       style: TextStyle(
                         fontWeight: theme.font.labelMedium.fontWeight,
                         fontSize: theme.font.labelMedium.fontSize,

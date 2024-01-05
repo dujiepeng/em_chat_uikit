@@ -533,6 +533,7 @@ class _MessagesViewState extends State<MessagesView> {
   }
 
   Widget inputBar() {
+    final theme = ChatUIKitTheme.of(context);
     return ChatUIKitInputBar(
       key: const ValueKey('inputKey'),
       focusNode: focusNode,
@@ -592,6 +593,11 @@ class _MessagesViewState extends State<MessagesView> {
                     items = [];
                     items.add(ChatUIKitBottomSheetItem.normal(
                       label: '相册',
+                      icon: ChatUIKitImageLoader.messageViewMoreAlum(
+                        color: theme.color.isDark
+                            ? theme.color.primaryColor6
+                            : theme.color.primaryColor5,
+                      ),
                       onTap: () async {
                         Navigator.of(context).pop();
                         selectImage();
@@ -599,6 +605,11 @@ class _MessagesViewState extends State<MessagesView> {
                     ));
                     items.add(ChatUIKitBottomSheetItem.normal(
                       label: '视频',
+                      icon: ChatUIKitImageLoader.messageViewMoreVideo(
+                        color: theme.color.isDark
+                            ? theme.color.primaryColor6
+                            : theme.color.primaryColor5,
+                      ),
                       onTap: () async {
                         Navigator.of(context).pop();
                         selectVideo();
@@ -606,6 +617,11 @@ class _MessagesViewState extends State<MessagesView> {
                     ));
                     items.add(ChatUIKitBottomSheetItem.normal(
                       label: '相机',
+                      icon: ChatUIKitImageLoader.messageViewMoreCamera(
+                        color: theme.color.isDark
+                            ? theme.color.primaryColor6
+                            : theme.color.primaryColor5,
+                      ),
                       onTap: () async {
                         Navigator.of(context).pop();
                         selectCamera();
@@ -613,6 +629,11 @@ class _MessagesViewState extends State<MessagesView> {
                     ));
                     items.add(ChatUIKitBottomSheetItem.normal(
                       label: '文件',
+                      icon: ChatUIKitImageLoader.messageViewMoreFile(
+                        color: theme.color.isDark
+                            ? theme.color.primaryColor6
+                            : theme.color.primaryColor5,
+                      ),
                       onTap: () async {
                         Navigator.of(context).pop();
                         selectFile();
@@ -620,6 +641,11 @@ class _MessagesViewState extends State<MessagesView> {
                     ));
                     items.add(ChatUIKitBottomSheetItem.normal(
                       label: '名片',
+                      icon: ChatUIKitImageLoader.messageViewMoreCard(
+                        color: theme.color.isDark
+                            ? theme.color.primaryColor6
+                            : theme.color.primaryColor5,
+                      ),
                       onTap: () async {
                         Navigator.of(context).pop();
                         selectCard();
@@ -685,6 +711,7 @@ class _MessagesViewState extends State<MessagesView> {
   }
 
   void onItemLongPress(Message message) {
+    final theme = ChatUIKitTheme.of(context);
     clearAllType();
     List<ChatUIKitBottomSheetItem>? items = widget.moreActionItems;
 
@@ -693,6 +720,18 @@ class _MessagesViewState extends State<MessagesView> {
       if (message.bodyType == MessageType.TXT) {
         items.add(ChatUIKitBottomSheetItem.normal(
           label: '复制',
+          style: TextStyle(
+            color: theme.color.isDark
+                ? theme.color.neutralColor98
+                : theme.color.neutralColor1,
+            fontWeight: theme.font.bodyLarge.fontWeight,
+            fontSize: theme.font.bodyLarge.fontSize,
+          ),
+          icon: ChatUIKitImageLoader.messageLongPressCopy(
+            color: theme.color.isDark
+                ? theme.color.neutralColor7
+                : theme.color.neutralColor3,
+          ),
           onTap: () async {
             Clipboard.setData(ClipboardData(text: message.textContent));
             ChatUIKit.instance.sendChatUIKitEvent(ChatUIKitEvent.messageCopied);
@@ -702,6 +741,18 @@ class _MessagesViewState extends State<MessagesView> {
       }
 
       items.add(ChatUIKitBottomSheetItem.normal(
+        icon: ChatUIKitImageLoader.messageLongPressReply(
+          color: theme.color.isDark
+              ? theme.color.neutralColor7
+              : theme.color.neutralColor3,
+        ),
+        style: TextStyle(
+          color: theme.color.isDark
+              ? theme.color.neutralColor98
+              : theme.color.neutralColor1,
+          fontWeight: theme.font.bodyLarge.fontWeight,
+          fontSize: theme.font.bodyLarge.fontSize,
+        ),
         label: '回复',
         onTap: () async {
           Navigator.of(context).pop();
@@ -712,6 +763,18 @@ class _MessagesViewState extends State<MessagesView> {
           message.direction == MessageDirection.SEND) {
         items.add(ChatUIKitBottomSheetItem.normal(
           label: '编辑',
+          style: TextStyle(
+            color: theme.color.isDark
+                ? theme.color.neutralColor98
+                : theme.color.neutralColor1,
+            fontWeight: theme.font.bodyLarge.fontWeight,
+            fontSize: theme.font.bodyLarge.fontSize,
+          ),
+          icon: ChatUIKitImageLoader.messageLongPressEdit(
+            color: theme.color.isDark
+                ? theme.color.neutralColor7
+                : theme.color.neutralColor3,
+          ),
           onTap: () async {
             Navigator.of(context).pop();
             textMessageEdit(message);
@@ -721,6 +784,18 @@ class _MessagesViewState extends State<MessagesView> {
 
       items.add(ChatUIKitBottomSheetItem.normal(
         label: '举报',
+        style: TextStyle(
+          color: theme.color.isDark
+              ? theme.color.neutralColor98
+              : theme.color.neutralColor1,
+          fontWeight: theme.font.bodyLarge.fontWeight,
+          fontSize: theme.font.bodyLarge.fontSize,
+        ),
+        icon: ChatUIKitImageLoader.messageLongPressReport(
+          color: theme.color.isDark
+              ? theme.color.neutralColor7
+              : theme.color.neutralColor3,
+        ),
         onTap: () async {
           Navigator.of(context).pop();
           reportMessage(message);
@@ -728,6 +803,18 @@ class _MessagesViewState extends State<MessagesView> {
       ));
       items.add(ChatUIKitBottomSheetItem.normal(
         label: '删除',
+        style: TextStyle(
+          color: theme.color.isDark
+              ? theme.color.neutralColor98
+              : theme.color.neutralColor1,
+          fontWeight: theme.font.bodyLarge.fontWeight,
+          fontSize: theme.font.bodyLarge.fontSize,
+        ),
+        icon: ChatUIKitImageLoader.messageLongPressDelete(
+          color: theme.color.isDark
+              ? theme.color.neutralColor7
+              : theme.color.neutralColor3,
+        ),
         onTap: () async {
           Navigator.of(context).pop();
           deleteMessage(message);
@@ -740,6 +827,18 @@ class _MessagesViewState extends State<MessagesView> {
                   ChatUIKitSettings.recallExpandTime * 1000) {
         items.add(ChatUIKitBottomSheetItem.normal(
           label: '撤回',
+          style: TextStyle(
+            color: theme.color.isDark
+                ? theme.color.neutralColor98
+                : theme.color.neutralColor1,
+            fontWeight: theme.font.bodyLarge.fontWeight,
+            fontSize: theme.font.bodyLarge.fontSize,
+          ),
+          icon: ChatUIKitImageLoader.messageLongPressRecall(
+            color: theme.color.isDark
+                ? theme.color.neutralColor7
+                : theme.color.neutralColor3,
+          ),
           onTap: () async {
             Navigator.of(context).pop();
             recallMessage(message);
@@ -876,6 +975,7 @@ class _MessagesViewState extends State<MessagesView> {
         controller.sendImageMessage(image.path, name: image.name);
       }
     } catch (e) {
+      ChatUIKit.instance.sendChatUIKitEvent(ChatUIKitEvent.noStoragePermission);
       // widget.onError?.call(ChatUIKitError.toChatError(
       //     ChatUIKitError.noPermission, "no image library permission"));
     }
@@ -888,15 +988,20 @@ class _MessagesViewState extends State<MessagesView> {
         controller.sendVideoMessage(video.path, name: video.name);
       }
     } catch (e) {
+      ChatUIKit.instance.sendChatUIKitEvent(ChatUIKitEvent.noStoragePermission);
       // widget.onError?.call(ChatUIKitError.toChatError(
       //     ChatUIKitError.noPermission, "no image library permission"));
     }
   }
 
   void selectCamera() async {
-    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
-    if (photo != null) {
-      controller.sendImageMessage(photo.path, name: photo.name);
+    try {
+      final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+      if (photo != null) {
+        controller.sendImageMessage(photo.path, name: photo.name);
+      }
+    } catch (e) {
+      ChatUIKit.instance.sendChatUIKitEvent(ChatUIKitEvent.noStoragePermission);
     }
   }
 
@@ -1085,7 +1190,7 @@ class _MessagesViewState extends State<MessagesView> {
         profile: widget.profile,
         actions: [
           ChatUIKitActionItem(
-            title: '发消息',
+            title: ChatUIKitLocal.contactDetailViewSend.getString(context),
             icon: 'assets/images/chat.png',
             onTap: (context) {
               Navigator.of(context).pop();
@@ -1104,7 +1209,7 @@ class _MessagesViewState extends State<MessagesView> {
         profile: widget.profile,
         actions: [
           ChatUIKitActionItem(
-            title: '发消息',
+            title: ChatUIKitLocal.groupDetailViewSend.getString(context),
             icon: 'assets/images/chat.png',
             onTap: (context) {
               Navigator.of(context).pop();
@@ -1123,7 +1228,7 @@ class _MessagesViewState extends State<MessagesView> {
         profile: profile,
         actions: [
           ChatUIKitActionItem(
-            title: '发消息',
+            title: ChatUIKitLocal.contactDetailViewSend.getString(context),
             icon: 'assets/images/chat.png',
             onTap: (ctx) {
               Navigator.of(context).pushNamed(
