@@ -50,8 +50,8 @@ class ChatUIKitListView extends StatefulWidget {
   final String? searchHideText;
   final List<ChatUIKitListItemModelBase> list;
   final ChatUIKitListItemBuilder itemBuilder;
-  final List<NeedAlphabeticalWidget>? beforeWidgets;
-  final List<NeedAlphabeticalWidget>? afterWidgets;
+  final List<Widget>? beforeWidgets;
+  final List<Widget>? afterWidgets;
   final int? Function(Key)? findChildIndexCallback;
 
   @override

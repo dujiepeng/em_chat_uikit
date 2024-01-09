@@ -13,7 +13,8 @@ class GroupsView extends StatefulWidget {
         fakeSearchHideText = argument.fakeSearchHideText,
         listViewBackground = argument.listViewBackground,
         enableAppBar = argument.enableAppBar,
-        loadErrorMessage = argument.loadErrorMessage;
+        loadErrorMessage = argument.loadErrorMessage,
+        attributes = argument.attributes;
 
   const GroupsView({
     this.controller,
@@ -26,6 +27,7 @@ class GroupsView extends StatefulWidget {
     this.listViewBackground,
     this.loadErrorMessage,
     this.enableAppBar = true,
+    this.attributes,
     super.key,
   });
 
@@ -39,6 +41,7 @@ class GroupsView extends StatefulWidget {
   final Widget? listViewBackground;
   final String? loadErrorMessage;
   final bool enableAppBar;
+  final String? attributes;
 
   @override
   State<GroupsView> createState() => _GroupsViewState();
@@ -119,6 +122,7 @@ class _GroupsViewState extends State<GroupsView> {
                 ChatUIKitRouteNames.messagesView,
                 arguments: MessagesViewArguments(
                   profile: model.profile,
+                  attributes: widget.attributes,
                 ),
               );
             },

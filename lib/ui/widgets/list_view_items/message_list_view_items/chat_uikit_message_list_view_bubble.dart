@@ -17,6 +17,7 @@ class ChatUIKitMessageListViewBubble extends StatelessWidget {
     this.style = ChatUIKitMessageListViewBubbleStyle.arrow,
     this.color,
     this.needSmallCorner = true,
+    this.padding,
     super.key,
   });
 
@@ -24,6 +25,7 @@ class ChatUIKitMessageListViewBubble extends StatelessWidget {
   final bool isLeft;
   final Color? color;
   final bool needSmallCorner;
+  final EdgeInsets? padding;
 
   final ChatUIKitMessageListViewBubbleStyle style;
 
@@ -48,12 +50,23 @@ class ChatUIKitMessageListViewBubble extends StatelessWidget {
         ),
         child: RepaintBoundary(
           child: Padding(
-            padding: EdgeInsets.only(
-              left: (isLeft ? arrowWidth : 0) + 12,
-              right: (!isLeft ? arrowWidth : 0) + 12,
-              top: 7,
-              bottom: 7,
-            ),
+            padding: () {
+              if (padding != null) {
+                return EdgeInsets.only(
+                  left: padding!.left + (isLeft ? arrowWidth : 0),
+                  right: padding!.right + (!isLeft ? arrowWidth : 0),
+                  top: padding!.top,
+                  bottom: padding!.bottom,
+                );
+              } else {
+                return EdgeInsets.only(
+                  left: (isLeft ? arrowWidth : 0) + 12,
+                  right: (!isLeft ? arrowWidth : 0) + 12,
+                  top: 7,
+                  bottom: 7,
+                );
+              }
+            }(),
             child: child,
           ),
         ),
@@ -78,12 +91,13 @@ class ChatUIKitMessageListViewBubble extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(
-            left: 12,
-            right: 12,
-            top: 7,
-            bottom: 7,
-          ),
+          padding: padding ??
+              const EdgeInsets.only(
+                left: 12,
+                right: 12,
+                top: 7,
+                bottom: 7,
+              ),
           child: child,
         ),
       );

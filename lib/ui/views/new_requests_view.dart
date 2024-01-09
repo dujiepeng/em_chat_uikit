@@ -13,7 +13,8 @@ class NewRequestsView extends StatefulWidget {
         fakeSearchHideText = argument.fakeSearchHideText,
         listViewBackground = argument.listViewBackground,
         enableAppBar = argument.enableAppBar,
-        loadErrorMessage = argument.loadErrorMessage;
+        loadErrorMessage = argument.loadErrorMessage,
+        attributes = argument.attributes;
 
   const NewRequestsView({
     this.controller,
@@ -26,6 +27,7 @@ class NewRequestsView extends StatefulWidget {
     this.listViewBackground,
     this.loadErrorMessage,
     this.enableAppBar = true,
+    this.attributes,
     super.key,
   });
 
@@ -40,6 +42,7 @@ class NewRequestsView extends StatefulWidget {
   final Widget? listViewBackground;
   final String? loadErrorMessage;
   final bool enableAppBar;
+  final String? attributes;
 
   @override
   State<NewRequestsView> createState() => _NewRequestsViewState();

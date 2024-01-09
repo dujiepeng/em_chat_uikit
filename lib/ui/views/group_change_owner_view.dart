@@ -15,7 +15,8 @@ class GroupChangeOwnerView extends StatefulWidget {
         appBar = arguments.appBar,
         controller = arguments.controller,
         enableAppBar = arguments.enableAppBar,
-        loadErrorMessage = arguments.loadErrorMessage;
+        loadErrorMessage = arguments.loadErrorMessage,
+        attributes = arguments.attributes;
 
   const GroupChangeOwnerView({
     required this.groupId,
@@ -29,6 +30,7 @@ class GroupChangeOwnerView extends StatefulWidget {
     this.controller,
     this.loadErrorMessage,
     this.enableAppBar = true,
+    this.attributes,
     super.key,
   });
 
@@ -45,6 +47,8 @@ class GroupChangeOwnerView extends StatefulWidget {
   final Widget? listViewBackground;
   final String? loadErrorMessage;
   final bool enableAppBar;
+  final String? attributes;
+
   @override
   State<GroupChangeOwnerView> createState() => _GroupChangeOwnerViewState();
 }

@@ -26,8 +26,8 @@ class ConversationListView extends StatefulWidget {
   final ChatUIKitConversationItemBuilder? itemBuilder;
   final void Function(BuildContext context, ConversationInfo info)? onTap;
   final void Function(BuildContext context, ConversationInfo info)? onLongPress;
-  final List<NeedAlphabeticalWidget>? beforeWidgets;
-  final List<NeedAlphabeticalWidget>? afterWidgets;
+  final List<Widget>? beforeWidgets;
+  final List<Widget>? afterWidgets;
 
   final String? searchHideText;
   final Widget? background;
@@ -150,12 +150,9 @@ class _ConversationListViewState extends State<ConversationListView>
                     widget.onLongPress?.call(context, model);
                   }
                 },
-                child: SizedBox(
-                  height: 76,
-                  child: ChatUIKitConversationListViewItem(
-                    model,
-                    key: ValueKey(model.profile.id),
-                  ),
+                child: ChatUIKitConversationListViewItem(
+                  model,
+                  key: ValueKey(model.profile.id),
                 ),
               );
 

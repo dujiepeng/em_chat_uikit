@@ -11,7 +11,8 @@ class SearchGroupMembersView extends StatefulWidget {
         itemBuilder = arguments.itemBuilder,
         enableAppBar = arguments.enableAppBar,
         appBar = arguments.appBar,
-        onTap = arguments.onTap;
+        onTap = arguments.onTap,
+        attributes = arguments.attributes;
 
   const SearchGroupMembersView({
     required this.searchData,
@@ -20,6 +21,7 @@ class SearchGroupMembersView extends StatefulWidget {
     this.onTap,
     this.appBar,
     this.enableAppBar = true,
+    this.attributes,
     super.key,
   });
 
@@ -30,6 +32,7 @@ class SearchGroupMembersView extends StatefulWidget {
       String? searchKeyword)? itemBuilder;
   final ChatUIKitAppBar? appBar;
   final bool enableAppBar;
+  final String? attributes;
 
   @override
   State<SearchGroupMembersView> createState() =>

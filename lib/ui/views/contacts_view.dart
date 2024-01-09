@@ -15,7 +15,9 @@ class ContactsView extends StatefulWidget {
         appBar = arguments.appBar,
         controller = arguments.controller,
         enableAppBar = arguments.enableAppBar,
-        loadErrorMessage = arguments.loadErrorMessage;
+        beforeItems = arguments.beforeItems,
+        loadErrorMessage = arguments.loadErrorMessage,
+        attributes = arguments.attributes;
 
   const ContactsView({
     this.listViewItemBuilder,
@@ -28,13 +30,15 @@ class ContactsView extends StatefulWidget {
     this.controller,
     this.loadErrorMessage,
     this.enableAppBar = true,
+    this.beforeItems,
+    this.attributes,
     super.key,
   });
 
   final ContactListViewController? controller;
   final ChatUIKitAppBar? appBar;
   final void Function(List<ContactItemModel> data)? onSearchTap;
-
+  final List<ChatUIKitListViewMoreItem>? beforeItems;
   final ChatUIKitContactItemBuilder? listViewItemBuilder;
   final void Function(BuildContext context, ContactItemModel model)? onTap;
   final void Function(BuildContext context, ContactItemModel model)?
@@ -43,6 +47,7 @@ class ContactsView extends StatefulWidget {
   final Widget? listViewBackground;
   final String? loadErrorMessage;
   final bool enableAppBar;
+  final String? attributes;
 
   @override
   State<ContactsView> createState() => _ContactsViewState();
@@ -98,7 +103,7 @@ class _ContactsViewState extends State<ContactsView>
         child: ContactListView(
           controller: controller,
           itemBuilder: widget.listViewItemBuilder,
-          beforeWidgets: beforeWidgets,
+          beforeWidgets: widget.beforeItems ?? beforeWidgets,
           searchHideText: widget.fakeSearchHideText,
           background: widget.listViewBackground,
           onTap: widget.onTap ?? tapContactInfo,
@@ -119,7 +124,9 @@ class _ContactsViewState extends State<ContactsView>
         onTap: () {
           Navigator.of(context).pushNamed(
             ChatUIKitRouteNames.newRequestsView,
-            arguments: NewRequestsViewArguments(),
+            arguments: NewRequestsViewArguments(
+              attributes: widget.attributes,
+            ),
           );
         },
         trailing: Padding(
@@ -178,6 +185,7 @@ class _ContactsViewState extends State<ContactsView>
                 ChatUIKitRouteNames.messagesView,
                 arguments: MessagesViewArguments(
                   profile: model.profile,
+                  attributes: widget.attributes,
                 ),
               );
             },

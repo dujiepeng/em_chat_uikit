@@ -14,7 +14,8 @@ class GroupDeleteMembersView extends StatefulWidget {
         appBar = arguments.appBar,
         controller = arguments.controller,
         enableAppBar = arguments.enableAppBar,
-        groupId = arguments.groupId;
+        groupId = arguments.groupId,
+        attributes = arguments.attributes;
 
   const GroupDeleteMembersView({
     required this.groupId,
@@ -27,6 +28,7 @@ class GroupDeleteMembersView extends StatefulWidget {
     this.appBar,
     this.controller,
     this.enableAppBar = true,
+    this.attributes,
     super.key,
   });
 
@@ -42,6 +44,7 @@ class GroupDeleteMembersView extends StatefulWidget {
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final bool enableAppBar;
+  final String? attributes;
 
   @override
   State<GroupDeleteMembersView> createState() => _GroupDeleteMembersViewState();

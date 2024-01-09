@@ -12,19 +12,22 @@ class GroupDetailsView extends StatefulWidget {
   })  : profile = arguments.profile,
         appBar = arguments.appBar,
         enableAppBar = arguments.enableAppBar,
-        actions = arguments.actions;
+        actions = arguments.actions,
+        attributes = arguments.attributes;
 
   const GroupDetailsView({
     required this.profile,
     required this.actions,
     this.appBar,
     this.enableAppBar = true,
+    this.attributes,
     super.key,
   });
   final List<ChatUIKitActionItem> actions;
   final ChatUIKitProfile profile;
   final ChatUIKitAppBar? appBar;
   final bool enableAppBar;
+  final String? attributes;
 
   @override
   State<GroupDetailsView> createState() => _GroupDetailsViewState();
@@ -274,7 +277,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
             Navigator.of(context).pushNamed(
               ChatUIKitRouteNames.groupMembersView,
               arguments: GroupMembersViewArguments(
-                groupId: widget.profile.id,
+                profile: widget.profile,
                 enableMemberOperation:
                     group?.permissionType == GroupPermissionType.Owner,
               ),
@@ -671,6 +674,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
       ChatUIKitRouteNames.groupChangeOwnerView,
       arguments: GroupChangeOwnerViewArguments(
         groupId: widget.profile.id,
+        attributes: widget.attributes,
       ),
     );
   }

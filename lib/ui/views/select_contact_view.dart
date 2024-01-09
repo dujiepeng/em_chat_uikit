@@ -14,7 +14,8 @@ class SelectContactView extends StatefulWidget {
         controller = arguments.controller,
         backText = arguments.backText,
         enableAppBar = arguments.enableAppBar,
-        title = arguments.title;
+        title = arguments.title,
+        attributes = arguments.attributes;
 
   const SelectContactView({
     this.backText,
@@ -28,6 +29,7 @@ class SelectContactView extends StatefulWidget {
     this.appBar,
     this.enableAppBar = true,
     this.controller,
+    this.attributes,
     super.key,
   });
 
@@ -44,6 +46,7 @@ class SelectContactView extends StatefulWidget {
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final bool enableAppBar;
+  final String? attributes;
 
   @override
   State<SelectContactView> createState() => _SelectContactViewState();

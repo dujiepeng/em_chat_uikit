@@ -51,6 +51,17 @@ class ChatUIKit extends ChatSDKWrapper
     }
   }
 
+  @override
+  Future<void> logout() async {
+    try {
+      await super.logout();
+      ChatUIKitContext.instance.currentUserId = null;
+      ChatUIKitProvider.instance.clearAllCache();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   int contactRequestCount() {
     return ChatUIKitContext.instance.requestList().length;
   }

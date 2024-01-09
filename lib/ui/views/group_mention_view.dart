@@ -13,7 +13,8 @@ class GroupMentionView extends StatefulWidget {
         appBar = arguments.appBar,
         controller = arguments.controller,
         enableAppBar = arguments.enableAppBar,
-        groupId = arguments.groupId;
+        groupId = arguments.groupId,
+        attributes = arguments.attributes;
 
   const GroupMentionView({
     required this.groupId,
@@ -26,6 +27,7 @@ class GroupMentionView extends StatefulWidget {
     this.appBar,
     this.controller,
     this.enableAppBar = true,
+    this.attributes,
     super.key,
   });
 
@@ -41,6 +43,7 @@ class GroupMentionView extends StatefulWidget {
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final bool enableAppBar;
+  final String? attributes;
 
   @override
   State<GroupMentionView> createState() => _GroupMentionViewState();

@@ -7,17 +7,21 @@ class CurrentUserInfoView extends StatefulWidget {
       {super.key})
       : profile = arguments.profile,
         appBar = arguments.appBar,
-        enableAppBar = arguments.enableAppBar;
+        enableAppBar = arguments.enableAppBar,
+        attributes = arguments.attributes;
 
   const CurrentUserInfoView({
     required this.profile,
     this.appBar,
     this.enableAppBar = true,
+    this.attributes,
     super.key,
   });
   final ChatUIKitProfile profile;
   final ChatUIKitAppBar? appBar;
   final bool enableAppBar;
+  final String? attributes;
+
   @override
   State<CurrentUserInfoView> createState() => _CurrentUserInfoViewState();
 }

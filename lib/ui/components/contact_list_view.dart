@@ -22,8 +22,8 @@ class ContactListView extends StatefulWidget {
   });
 
   final void Function(List<ContactItemModel> data)? onSearchTap;
-  final List<NeedAlphabeticalWidget>? beforeWidgets;
-  final List<NeedAlphabeticalWidget>? afterWidgets;
+  final List<Widget>? beforeWidgets;
+  final List<Widget>? afterWidgets;
   final ChatUIKitContactItemBuilder? itemBuilder;
   final void Function(BuildContext context, ContactItemModel model)? onTap;
   final void Function(BuildContext context, ContactItemModel model)?

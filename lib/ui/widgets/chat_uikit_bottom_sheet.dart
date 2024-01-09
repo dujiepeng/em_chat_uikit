@@ -68,6 +68,22 @@ class ChatUIKitBottomSheetItem<T> {
   final TextStyle? style;
   final Widget? icon;
   final Future<T?> Function()? onTap;
+
+  ChatUIKitBottomSheetItem copyWith({
+    ChatUIKitBottomSheetItemType? type,
+    String? label,
+    TextStyle? style,
+    Widget? icon,
+    Future<T?> Function()? onTap,
+  }) {
+    return ChatUIKitBottomSheetItem(
+      type: type ?? this.type,
+      label: label ?? this.label,
+      style: style ?? this.style,
+      icon: icon ?? this.icon,
+      onTap: onTap ?? this.onTap,
+    );
+  }
 }
 
 class ChatUIKitBottomSheet<T> extends StatelessWidget {

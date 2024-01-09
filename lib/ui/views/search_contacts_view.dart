@@ -11,7 +11,8 @@ class SearchContactsView extends StatefulWidget {
         itemBuilder = arguments.itemBuilder,
         enableAppBar = arguments.enableAppBar,
         appBar = arguments.appBar,
-        onTap = arguments.onTap;
+        onTap = arguments.onTap,
+        attributes = arguments.attributes;
 
   const SearchContactsView({
     required this.searchData,
@@ -20,6 +21,7 @@ class SearchContactsView extends StatefulWidget {
     this.onTap,
     this.enableAppBar = true,
     this.appBar,
+    this.attributes,
     super.key,
   });
 
@@ -30,6 +32,7 @@ class SearchContactsView extends StatefulWidget {
       String? searchKeyword)? itemBuilder;
   final ChatUIKitAppBar? appBar;
   final bool enableAppBar;
+  final String? attributes;
 
   @override
   State<SearchContactsView> createState() => _SearchContactsViewState();

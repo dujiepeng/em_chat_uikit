@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class GroupMembersView extends StatefulWidget {
   GroupMembersView.arguments(GroupMembersViewArguments arguments, {Key? key})
-      : groupId = arguments.groupId,
+      : profile = arguments.profile,
         listViewItemBuilder = arguments.listViewItemBuilder,
         onSearchTap = arguments.onSearchTap,
         fakeSearchHideText = arguments.fakeSearchHideText,
@@ -16,10 +16,11 @@ class GroupMembersView extends StatefulWidget {
         loadErrorMessage = arguments.loadErrorMessage,
         enableAppBar = arguments.enableAppBar,
         enableMemberOperation = arguments.enableMemberOperation,
+        attributes = arguments.attributes,
         super(key: key);
 
   const GroupMembersView({
-    required this.groupId,
+    required this.profile,
     this.listViewItemBuilder,
     this.onSearchTap,
     this.fakeSearchHideText,
@@ -31,10 +32,11 @@ class GroupMembersView extends StatefulWidget {
     this.loadErrorMessage,
     this.enableMemberOperation = false,
     this.enableAppBar = true,
+    this.attributes,
     super.key,
   });
 
-  final String groupId;
+  final ChatUIKitProfile profile;
 
   final GroupMemberListViewController? controller;
   final ChatUIKitAppBar? appBar;
@@ -49,6 +51,7 @@ class GroupMembersView extends StatefulWidget {
   final String? loadErrorMessage;
   final bool enableMemberOperation;
   final bool enableAppBar;
+  final String? attributes;
 
   @override
   State<GroupMembersView> createState() => _GroupMembersViewState();
@@ -66,7 +69,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
     super.initState();
     ChatUIKit.instance.addObserver(this);
     controller = widget.controller ??
-        GroupMemberListViewController(groupId: widget.groupId);
+        GroupMemberListViewController(groupId: widget.profile.id);
     fetchGroup();
   }
 
@@ -88,9 +91,9 @@ class _GroupMembersViewState extends State<GroupMembersView>
 
   void fetchGroup() async {
     try {
-      group = await ChatUIKit.instance.getGroup(groupId: widget.groupId);
+      group = await ChatUIKit.instance.getGroup(groupId: widget.profile.id);
       group ??=
-          await ChatUIKit.instance.fetchGroupInfo(groupId: widget.groupId);
+          await ChatUIKit.instance.fetchGroupInfo(groupId: widget.profile.id);
 
       memberCount.value = group?.memberCount ?? 0;
       // ignore: empty_catches
@@ -150,7 +153,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
               ),
       body: SafeArea(
           child: GroupMemberListView(
-        groupId: widget.groupId,
+        groupId: widget.profile.id,
         controller: controller,
         itemBuilder: widget.listViewItemBuilder,
         searchHideText: widget.fakeSearchHideText,
@@ -222,7 +225,10 @@ class _GroupMembersViewState extends State<GroupMembersView>
   void pushToCurrentUser(ChatUIKitProfile profile) {
     Navigator.of(context).pushNamed(
       ChatUIKitRouteNames.currentUserInfoView,
-      arguments: CurrentUserInfoViewArguments(profile: profile),
+      arguments: CurrentUserInfoViewArguments(
+        profile: profile,
+        attributes: widget.attributes,
+      ),
     );
   }
 
@@ -231,6 +237,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
       ChatUIKitRouteNames.contactDetailsView,
       arguments: ContactDetailsViewArguments(
         profile: profile,
+        attributes: widget.attributes,
         actions: [
           ChatUIKitActionItem(
             title: ChatUIKitLocal.groupDetailViewSend.getString(context),
@@ -240,6 +247,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
                 ChatUIKitRouteNames.messagesView,
                 arguments: MessagesViewArguments(
                   profile: profile,
+                  attributes: widget.attributes,
                 ),
               );
             },
@@ -252,7 +260,10 @@ class _GroupMembersViewState extends State<GroupMembersView>
   void pushNewRequestDetails(ChatUIKitProfile profile) {
     Navigator.of(context).pushNamed(
       ChatUIKitRouteNames.newRequestDetailsView,
-      arguments: NewRequestDetailsViewArguments(profile: profile),
+      arguments: NewRequestDetailsViewArguments(
+        profile: profile,
+        attributes: widget.attributes,
+      ),
     );
   }
 
@@ -270,7 +281,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
         .pushNamed(
           ChatUIKitRouteNames.groupAddMembersView,
           arguments: GroupAddMembersViewArguments(
-            groupId: widget.groupId,
+            groupId: widget.profile.id,
             inGroupMembers: members,
           ),
         )
@@ -283,7 +294,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
               models.add(ContactItemModel(profile: item));
             }
             ChatUIKit.instance.addGroupMembers(
-              groupId: widget.groupId,
+              groupId: widget.profile.id,
               members: userIds,
             );
 
@@ -299,7 +310,8 @@ class _GroupMembersViewState extends State<GroupMembersView>
     Navigator.of(context)
         .pushNamed(
           ChatUIKitRouteNames.groupDeleteMembersView,
-          arguments: GroupDeleteMembersViewArguments(groupId: widget.groupId),
+          arguments:
+              GroupDeleteMembersViewArguments(groupId: widget.profile.id),
         )
         .then((value) {
           if (value != null && value is List<ChatUIKitProfile>) {
@@ -308,7 +320,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
               userIds.add(item.id);
             }
             ChatUIKit.instance.deleteGroupMembers(
-              groupId: widget.groupId,
+              groupId: widget.profile.id,
               members: userIds,
             );
 

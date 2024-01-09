@@ -18,9 +18,10 @@ class ConversationsView extends StatefulWidget {
         appBar = arguments.appBar,
         controller = arguments.controller,
         appBarMoreActionsBuilder = arguments.appBarMoreActionsBuilder,
-        enableAppBar = arguments.enableAppBar;
+        enableAppBar = arguments.enableAppBar,
+        attributes = arguments.attributes;
 
-  ConversationsView({
+  const ConversationsView({
     this.listViewItemBuilder,
     this.beforeWidgets,
     this.afterWidgets,
@@ -33,15 +34,16 @@ class ConversationsView extends StatefulWidget {
     this.controller,
     this.enableAppBar = true,
     this.appBarMoreActionsBuilder,
+    this.attributes,
     super.key,
   });
 
   final ConversationListViewController? controller;
   final ChatUIKitAppBar? appBar;
   final void Function(List<ConversationInfo> data)? onSearchTap;
-  final List<NeedAlphabeticalWidget>? beforeWidgets;
-  final List<NeedAlphabeticalWidget>? afterWidgets;
-  final ChatUIKitListItemBuilder? listViewItemBuilder;
+  final List<Widget>? beforeWidgets;
+  final List<Widget>? afterWidgets;
+  final ChatUIKitConversationItemBuilder? listViewItemBuilder;
   final void Function(BuildContext context, ConversationInfo info)? onTap;
   final List<ChatUIKitBottomSheetItem> Function(
     BuildContext context,
@@ -50,9 +52,10 @@ class ConversationsView extends StatefulWidget {
   )? onLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
-  final List<ChatUIKitBottomSheetItem> moreActionItems = [];
   final AppBarMoreActionsBuilder? appBarMoreActionsBuilder;
   final bool enableAppBar;
+  final String? attributes;
+
   @override
   State<ConversationsView> createState() => _ConversationsViewState();
 }
@@ -380,7 +383,9 @@ class _ConversationsViewState extends State<ConversationsView>
   void newGroup() async {
     final group = await Navigator.of(context).pushNamed(
       ChatUIKitRouteNames.createGroupView,
-      arguments: CreateGroupViewArguments(),
+      arguments: CreateGroupViewArguments(
+        attributes: widget.attributes,
+      ),
     );
     if (group is Group) {
       await ChatUIKitInsertMessageTool.insertCreateGroupMessage(

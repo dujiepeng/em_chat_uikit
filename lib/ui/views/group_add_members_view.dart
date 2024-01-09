@@ -15,7 +15,8 @@ class GroupAddMembersView extends StatefulWidget {
         controller = arguments.controller,
         groupId = arguments.groupId,
         enableAppBar = arguments.enableAppBar,
-        inGroupMembers = arguments.inGroupMembers;
+        inGroupMembers = arguments.inGroupMembers,
+        attributes = arguments.attributes;
 
   const GroupAddMembersView({
     required this.groupId,
@@ -29,6 +30,7 @@ class GroupAddMembersView extends StatefulWidget {
     this.controller,
     this.inGroupMembers,
     this.enableAppBar = true,
+    this.attributes,
     super.key,
   });
 
@@ -44,6 +46,7 @@ class GroupAddMembersView extends StatefulWidget {
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final bool enableAppBar;
+  final String? attributes;
 
   @override
   State<GroupAddMembersView> createState() => _GroupAddMembersViewState();

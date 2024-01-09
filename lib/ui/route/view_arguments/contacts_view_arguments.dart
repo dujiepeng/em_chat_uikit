@@ -13,13 +13,14 @@ class ContactsViewArguments implements ChatUIKitViewArguments {
     this.listViewBackground,
     this.loadErrorMessage,
     this.enableAppBar = true,
+    this.beforeItems,
     this.attributes,
   });
 
   final ContactListViewController? controller;
   final ChatUIKitAppBar? appBar;
   final void Function(List<ContactItemModel> data)? onSearchTap;
-
+  final List<ChatUIKitListViewMoreItem>? beforeItems;
   final ChatUIKitContactItemBuilder? listViewItemBuilder;
   final void Function(BuildContext context, ContactItemModel model)? onTap;
   final void Function(BuildContext context, ContactItemModel model)?

@@ -11,7 +11,8 @@ class ContactDetailsView extends StatefulWidget {
         profile = arguments.profile,
         onMessageDidClear = arguments.onMessageDidClear,
         enableAppBar = arguments.enableAppBar,
-        appBar = arguments.appBar;
+        appBar = arguments.appBar,
+        attributes = arguments.attributes;
 
   const ContactDetailsView({
     required this.profile,
@@ -19,6 +20,7 @@ class ContactDetailsView extends StatefulWidget {
     this.onMessageDidClear,
     this.appBar,
     this.enableAppBar = true,
+    this.attributes,
     super.key,
   });
 
@@ -27,6 +29,7 @@ class ContactDetailsView extends StatefulWidget {
   final VoidCallback? onMessageDidClear;
   final ChatUIKitAppBar? appBar;
   final bool enableAppBar;
+  final String? attributes;
   @override
   State<ContactDetailsView> createState() => _ContactDetailsViewState();
 }

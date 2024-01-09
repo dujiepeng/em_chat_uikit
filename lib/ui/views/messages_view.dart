@@ -32,7 +32,11 @@ class MessagesView extends StatefulWidget {
         onErrorTap = arguments.onErrorTap,
         bubbleBuilder = arguments.bubbleBuilder,
         enableAppBar = arguments.enableAppBar,
-        bubbleContentBuilder = arguments.bubbleContentBuilder;
+        onMoreActionsItemsHandler = arguments.onMoreActionsItemsHandler,
+        onItemLongPressActionsItemsHandler =
+            arguments.onItemLongPressActionsItemsHandler,
+        bubbleContentBuilder = arguments.bubbleContentBuilder,
+        attributes = arguments.attributes;
 
   const MessagesView({
     required this.profile,
@@ -60,6 +64,9 @@ class MessagesView extends StatefulWidget {
     this.bubbleBuilder,
     this.bubbleContentBuilder,
     this.enableAppBar = true,
+    this.onMoreActionsItemsHandler,
+    this.onItemLongPressActionsItemsHandler,
+    this.attributes,
     super.key,
   });
 
@@ -80,7 +87,17 @@ class MessagesView extends StatefulWidget {
   final MessageItemBuilder? alertItemBuilder;
   final FocusNode? focusNode;
   final List<ChatUIKitBottomSheetItem>? moreActionItems;
+  final List<ChatUIKitBottomSheetItem>? Function(
+    BuildContext context,
+    List<ChatUIKitBottomSheetItem> willShowList,
+  )? onMoreActionsItemsHandler;
   final List<ChatUIKitBottomSheetItem>? onItemLongPressActions;
+  final List<ChatUIKitBottomSheetItem>? Function(
+    BuildContext context,
+    List<ChatUIKitBottomSheetItem> willShowList,
+    Message message,
+  )? onItemLongPressActionsItemsHandler;
+
   final Widget? emojiWidget;
   final Widget? Function(BuildContext context, Message message)?
       replyBarBuilder;
@@ -89,6 +106,7 @@ class MessagesView extends StatefulWidget {
   final MessageItemBubbleBuilder? bubbleBuilder;
   final MessageBubbleContentBuilder? bubbleContentBuilder;
   final bool enableAppBar;
+  final String? attributes;
 
   @override
   State<MessagesView> createState() => _MessagesViewState();
@@ -591,7 +609,6 @@ class _MessagesViewState extends State<MessagesView> {
                   clearAllType();
                   List<ChatUIKitBottomSheetItem>? items =
                       widget.moreActionItems;
-
                   if (items == null) {
                     items = [];
                     items.add(ChatUIKitBottomSheetItem.normal(
@@ -656,7 +673,15 @@ class _MessagesViewState extends State<MessagesView> {
                     ));
                   }
 
-                  showChatUIKitBottomSheet(context: context, items: items);
+                  if (widget.onMoreActionsItemsHandler != null) {
+                    items = widget.onMoreActionsItemsHandler!.call(
+                      context,
+                      items,
+                    );
+                  }
+                  if (items != null) {
+                    showChatUIKitBottomSheet(context: context, items: items);
+                  }
                 },
                 child: ChatUIKitImageLoader.moreKeyboard(),
               ),
@@ -716,8 +741,7 @@ class _MessagesViewState extends State<MessagesView> {
   void onItemLongPress(Message message) {
     final theme = ChatUIKitTheme.of(context);
     clearAllType();
-    List<ChatUIKitBottomSheetItem>? items = widget.moreActionItems;
-
+    List<ChatUIKitBottomSheetItem>? items = widget.onItemLongPressActions;
     if (items == null) {
       items = [];
       if (message.bodyType == MessageType.TXT) {
@@ -850,7 +874,16 @@ class _MessagesViewState extends State<MessagesView> {
       }
     }
 
-    showChatUIKitBottomSheet(context: context, items: items);
+    if (widget.onItemLongPressActionsItemsHandler != null) {
+      items = widget.onItemLongPressActionsItemsHandler!.call(
+        context,
+        items,
+        message,
+      );
+    }
+    if (items != null) {
+      showChatUIKitBottomSheet(context: context, items: items);
+    }
   }
 
   void avatarTap(Message message) async {
@@ -866,12 +899,18 @@ class _MessagesViewState extends State<MessagesView> {
     if (message.bodyType == MessageType.IMAGE) {
       Navigator.of(context).pushNamed(
         ChatUIKitRouteNames.showImageView,
-        arguments: ShowImageViewArguments(message: message),
+        arguments: ShowImageViewArguments(
+          message: message,
+          attributes: widget.attributes,
+        ),
       );
     } else if (message.bodyType == MessageType.VIDEO) {
       Navigator.of(context).pushNamed(
         ChatUIKitRouteNames.showVideoView,
-        arguments: ShowVideoViewArguments(message: message),
+        arguments: ShowVideoViewArguments(
+          message: message,
+          attributes: widget.attributes,
+        ),
       );
     }
 
@@ -1130,6 +1169,7 @@ class _MessagesViewState extends State<MessagesView> {
       arguments: ReportMessageViewArguments(
         messageId: message.msgId,
         reportReasons: ChatUIKitSettings.reportReason,
+        attributes: widget.attributes,
       ),
     );
     if (reportReason != null) {
@@ -1176,7 +1216,10 @@ class _MessagesViewState extends State<MessagesView> {
   void pushToCurrentUser(ChatUIKitProfile profile) {
     Navigator.of(context).pushNamed(
       ChatUIKitRouteNames.currentUserInfoView,
-      arguments: CurrentUserInfoViewArguments(profile: profile),
+      arguments: CurrentUserInfoViewArguments(
+        profile: profile,
+        attributes: widget.attributes,
+      ),
     );
   }
 
@@ -1185,6 +1228,7 @@ class _MessagesViewState extends State<MessagesView> {
     Navigator.of(context).pushNamed(
       ChatUIKitRouteNames.contactDetailsView,
       arguments: ContactDetailsViewArguments(
+        attributes: widget.attributes,
         onMessageDidClear: () {
           replyMessage = null;
           controller.clearMessages();
@@ -1210,6 +1254,7 @@ class _MessagesViewState extends State<MessagesView> {
       ChatUIKitRouteNames.groupDetailsView,
       arguments: GroupDetailsViewArguments(
         profile: widget.profile,
+        attributes: widget.attributes,
         actions: [
           ChatUIKitActionItem(
             title: ChatUIKitLocal.groupDetailViewSend.getString(context),
@@ -1229,6 +1274,7 @@ class _MessagesViewState extends State<MessagesView> {
       ChatUIKitRouteNames.contactDetailsView,
       arguments: ContactDetailsViewArguments(
         profile: profile,
+        attributes: widget.attributes,
         actions: [
           ChatUIKitActionItem(
             title: ChatUIKitLocal.contactDetailViewSend.getString(context),
@@ -1238,6 +1284,7 @@ class _MessagesViewState extends State<MessagesView> {
                 ChatUIKitRouteNames.messagesView,
                 arguments: MessagesViewArguments(
                   profile: profile,
+                  attributes: widget.attributes,
                 ),
               );
             },
@@ -1251,7 +1298,10 @@ class _MessagesViewState extends State<MessagesView> {
   void pushRequestDetail(ChatUIKitProfile profile) {
     Navigator.of(context).pushNamed(
       ChatUIKitRouteNames.newRequestDetailsView,
-      arguments: NewRequestDetailsViewArguments(profile: profile),
+      arguments: NewRequestDetailsViewArguments(
+        profile: profile,
+        attributes: widget.attributes,
+      ),
     );
   }
 }

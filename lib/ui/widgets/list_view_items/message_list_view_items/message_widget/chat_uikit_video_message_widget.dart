@@ -8,10 +8,12 @@ class ChatUIKitVideoMessageWidget extends StatefulWidget {
   const ChatUIKitVideoMessageWidget({
     required this.message,
     this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
+    this.progressIndicatorColor,
     super.key,
   });
   final Message message;
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
+  final Color? progressIndicatorColor;
   @override
   State<ChatUIKitVideoMessageWidget> createState() =>
       _ChatUIKitVideoMessageWidgetState();
@@ -118,8 +120,10 @@ class _ChatUIKitVideoMessageWidgetState
         content = SizedBox(
           width: width,
           height: height,
-          child: const Center(
-            child: CircularProgressIndicator(),
+          child: Center(
+            child: CircularProgressIndicator(
+              color: widget.progressIndicatorColor,
+            ),
           ),
         );
       }

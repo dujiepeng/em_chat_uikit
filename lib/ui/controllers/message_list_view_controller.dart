@@ -20,6 +20,7 @@ class MessageListViewController extends ChangeNotifier
   String? lastMessageId;
   bool hasNew = false;
   MessageLastActionType lastActionType = MessageLastActionType.none;
+  final Message? Function(Message)? willSendHandler;
 
   final List<Message> msgList = [];
   final Map<String, UserData> userMap = {};
@@ -31,7 +32,11 @@ class MessageListViewController extends ChangeNotifier
     lastMessageId = null;
   }
 
-  MessageListViewController({required this.profile, this.pageSize = 30}) {
+  MessageListViewController({
+    required this.profile,
+    this.pageSize = 30,
+    this.willSendHandler,
+  }) {
     ChatUIKit.instance.addObserver(this);
     conversationType = () {
       if (profile.type == ChatUIKitProfileType.groupChat) {
@@ -407,7 +412,14 @@ class MessageListViewController extends ChangeNotifier
   }
 
   Future<void> sendMessage(Message message) async {
-    final msg = await ChatUIKit.instance.sendMessage(message: message);
+    Message? willSendMsg = message;
+    if (willSendHandler != null) {
+      willSendMsg = willSendHandler!(willSendMsg);
+      if (willSendMsg == null) {
+        return Future(() => null);
+      }
+    }
+    final msg = await ChatUIKit.instance.sendMessage(message: willSendMsg);
     msgList.insert(0, msg);
     hasNew = true;
     lastActionType = MessageLastActionType.send;

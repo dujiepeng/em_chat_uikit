@@ -29,6 +29,8 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     this.bubbleBuilder,
     this.enableAppBar = true,
     this.bubbleContentBuilder,
+    this.onMoreActionsItemsHandler,
+    this.onItemLongPressActionsItemsHandler,
   });
 
   final ChatUIKitProfile profile;
@@ -56,6 +58,15 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
   final void Function(Message message)? onErrorTap;
   final MessageItemBubbleBuilder? bubbleBuilder;
   final MessageBubbleContentBuilder? bubbleContentBuilder;
+  final List<ChatUIKitBottomSheetItem>? Function(
+    BuildContext context,
+    List<ChatUIKitBottomSheetItem> willShowList,
+  )? onMoreActionsItemsHandler;
+  final List<ChatUIKitBottomSheetItem>? Function(
+    BuildContext context,
+    List<ChatUIKitBottomSheetItem> willShowList,
+    Message message,
+  )? onItemLongPressActionsItemsHandler;
   final bool enableAppBar;
   @override
   String? attributes;

@@ -11,10 +11,12 @@ class ChatUIKitImageMessageWidget extends StatefulWidget {
   const ChatUIKitImageMessageWidget({
     required this.message,
     this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
+    this.progressIndicatorColor,
     super.key,
   });
   final Message message;
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
+  final Color? progressIndicatorColor;
 
   @override
   State<ChatUIKitImageMessageWidget> createState() =>
@@ -147,8 +149,10 @@ class _ChatUIKitImageMessageWidgetState
         content = SizedBox(
           width: width,
           height: height,
-          child: const Center(
-            child: CircularProgressIndicator(),
+          child: Center(
+            child: CircularProgressIndicator(
+              color: widget.progressIndicatorColor,
+            ),
           ),
         );
       }

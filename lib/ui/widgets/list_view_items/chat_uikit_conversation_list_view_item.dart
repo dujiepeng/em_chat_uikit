@@ -226,6 +226,8 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
       ],
     );
 
+    content = SizedBox(height: 74, child: content);
+
     return content;
   }
 }

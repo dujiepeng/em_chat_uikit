@@ -62,6 +62,24 @@ class ChatUIKitProvider {
     _observers.clear();
   }
 
+  void clearContactCache() {
+    _contactsCache.clear();
+  }
+
+  void clearConversationCache() {
+    _conversationsCache.clear();
+  }
+
+  void clearGroupMemberCache() {
+    _groupMembersCache.clear();
+  }
+
+  void clearAllCache() {
+    _contactsCache.clear();
+    _conversationsCache.clear();
+    _groupMembersCache.clear();
+  }
+
   Map<String, ChatUIKitProfile> conversationProfiles(
       Map<String, ConversationType> map) {
     List<ChatUIKitProfile> ret = [];

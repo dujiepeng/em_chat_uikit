@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 class GroupMembersViewArguments implements ChatUIKitViewArguments {
   GroupMembersViewArguments({
-    required this.groupId,
+    required this.profile,
     this.controller,
     this.appBar,
     this.onSearchTap,
@@ -18,7 +18,7 @@ class GroupMembersViewArguments implements ChatUIKitViewArguments {
     this.attributes,
   });
 
-  final String groupId;
+  final ChatUIKitProfile profile;
   final GroupMemberListViewController? controller;
   final ChatUIKitAppBar? appBar;
   final void Function(List<ContactItemModel> data)? onSearchTap;
@@ -37,7 +37,7 @@ class GroupMembersViewArguments implements ChatUIKitViewArguments {
   String? attributes;
 
   GroupMembersViewArguments copyWith({
-    String? groupId,
+    ChatUIKitProfile? profile,
     GroupMemberListViewController? controller,
     ChatUIKitAppBar? appBar,
     void Function(List<ContactItemModel> data)? onSearchTap,
@@ -52,7 +52,7 @@ class GroupMembersViewArguments implements ChatUIKitViewArguments {
     String? attributes,
   }) {
     return GroupMembersViewArguments(
-      groupId: groupId ?? this.groupId,
+      profile: profile ?? this.profile,
       controller: controller ?? this.controller,
       appBar: appBar ?? this.appBar,
       onSearchTap: onSearchTap ?? this.onSearchTap,

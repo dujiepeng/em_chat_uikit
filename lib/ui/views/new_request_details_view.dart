@@ -10,7 +10,8 @@ class NewRequestDetailsView extends StatefulWidget {
         btnText = arguments.btnText,
         appBar = arguments.appBar,
         enableAppBar = arguments.enableAppBar,
-        isReceivedRequest = arguments.isReceivedRequest;
+        isReceivedRequest = arguments.isReceivedRequest,
+        attributes = arguments.attributes;
 
   const NewRequestDetailsView({
     required this.profile,
@@ -18,6 +19,7 @@ class NewRequestDetailsView extends StatefulWidget {
     this.btnText,
     this.appBar,
     this.enableAppBar = true,
+    this.attributes,
     super.key,
   });
 
@@ -26,6 +28,7 @@ class NewRequestDetailsView extends StatefulWidget {
   final bool isReceivedRequest;
   final ChatUIKitAppBar? appBar;
   final bool enableAppBar;
+  final String? attributes;
 
   @override
   State<NewRequestDetailsView> createState() => _NewRequestDetailsViewState();

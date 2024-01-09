@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ShowVideoViewArguments implements ChatUIKitViewArguments {
   ShowVideoViewArguments({
     required this.message,
-    this.onImageLongPressed,
+    this.onLongPressed,
     this.attributes,
     this.playIcon,
     this.appBar,
@@ -12,7 +12,7 @@ class ShowVideoViewArguments implements ChatUIKitViewArguments {
   });
 
   final Message message;
-  final void Function(Message message)? onImageLongPressed;
+  final void Function(Message message)? onLongPressed;
   final Widget? playIcon;
   final AppBar? appBar;
   final bool enableAppBar;
@@ -21,7 +21,7 @@ class ShowVideoViewArguments implements ChatUIKitViewArguments {
 
   ShowVideoViewArguments copyWith({
     Message? message,
-    void Function(Message message)? onImageLongPressed,
+    void Function(Message message)? onLongPressed,
     Widget? playIcon,
     AppBar? appBar,
     bool? enableAppBar,
@@ -29,7 +29,7 @@ class ShowVideoViewArguments implements ChatUIKitViewArguments {
   }) {
     return ShowVideoViewArguments(
       message: message ?? this.message,
-      onImageLongPressed: onImageLongPressed ?? this.onImageLongPressed,
+      onLongPressed: onLongPressed ?? this.onLongPressed,
       playIcon: playIcon ?? this.playIcon,
       appBar: appBar ?? this.appBar,
       enableAppBar: enableAppBar ?? this.enableAppBar,

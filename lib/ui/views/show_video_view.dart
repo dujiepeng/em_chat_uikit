@@ -5,25 +5,28 @@ import 'package:flutter/material.dart';
 class ShowVideoView extends StatefulWidget {
   ShowVideoView.arguments(ShowVideoViewArguments argument, {super.key})
       : message = argument.message,
-        onImageLongPressed = argument.onImageLongPressed,
+        onLongPressed = argument.onLongPressed,
         appBar = argument.appBar,
         enableAppBar = argument.enableAppBar,
-        playIcon = argument.playIcon;
+        playIcon = argument.playIcon,
+        attributes = argument.attributes;
 
   const ShowVideoView({
     required this.message,
-    this.onImageLongPressed,
+    this.onLongPressed,
     this.playIcon,
     this.appBar,
     this.enableAppBar = true,
+    this.attributes,
     super.key,
   });
 
   final Message message;
-  final void Function(Message message)? onImageLongPressed;
+  final void Function(Message message)? onLongPressed;
   final Widget? playIcon;
   final AppBar? appBar;
   final bool enableAppBar;
+  final String? attributes;
 
   @override
   State<ShowVideoView> createState() => _ShowVideoViewState();
@@ -35,7 +38,7 @@ class _ShowVideoViewState extends State<ShowVideoView> {
     final theme = ChatUIKitTheme.of(context);
     Widget content = ChatUIKitShowVideoWidget(
       message: widget.message,
-      onLongPressed: longPressed,
+      onLongPressed: widget.onLongPressed,
       playIcon: widget.playIcon,
     );
 
@@ -90,33 +93,33 @@ class _ShowVideoViewState extends State<ShowVideoView> {
   void save() async {}
 
   void forward() async {
-    final profile = await Navigator.of(context).pushNamed(
-      ChatUIKitRouteNames.selectContactsView,
-      arguments: SelectContactViewArguments(
-        title: '选择联系人',
-        backText: '取消',
-      ),
-    );
+    // final profile = await Navigator.of(context).pushNamed(
+    //   ChatUIKitRouteNames.selectContactsView,
+    //   arguments: SelectContactViewArguments(
+    //     title: '选择联系人',
+    //     backText: '取消',
+    //   ),
+    // );
 
-    if (profile != null && profile is ChatUIKitProfile) {
-      Message? targetMsg =
-          await ChatUIKit.instance.loadMessage(messageId: widget.message.msgId);
-      if (targetMsg != null) {
-        final msg = Message.createVideoSendMessage(
-          targetId: profile.id,
-          chatType: (profile.type == ChatUIKitProfileType.contact ||
-                  profile.type == ChatUIKitProfileType.contact)
-              ? ChatType.Chat
-              : ChatType.GroupChat,
-          filePath: targetMsg.localPath!,
-          width: targetMsg.width,
-          height: targetMsg.height,
-          displayName: targetMsg.displayName,
-          fileSize: targetMsg.fileSize,
-        );
+    // if (profile != null && profile is ChatUIKitProfile) {
+    //   Message? targetMsg =
+    //       await ChatUIKit.instance.loadMessage(messageId: widget.message.msgId);
+    //   if (targetMsg != null) {
+    //     final msg = Message.createVideoSendMessage(
+    //       targetId: profile.id,
+    //       chatType: (profile.type == ChatUIKitProfileType.contact ||
+    //               profile.type == ChatUIKitProfileType.contact)
+    //           ? ChatType.Chat
+    //           : ChatType.GroupChat,
+    //       filePath: targetMsg.localPath!,
+    //       width: targetMsg.width,
+    //       height: targetMsg.height,
+    //       displayName: targetMsg.displayName,
+    //       fileSize: targetMsg.fileSize,
+    //     );
 
-        ChatUIKit.instance.sendMessage(message: msg);
-      }
-    }
+    //     ChatUIKit.instance.sendMessage(message: msg);
+    //   }
+    // }
   }
 }

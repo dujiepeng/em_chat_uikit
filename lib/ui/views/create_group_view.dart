@@ -19,7 +19,8 @@ class CreateGroupView extends StatefulWidget {
         enableAppBar = arguments.enableAppBar,
         willCreateHandler = arguments.willCreateHandler,
         createGroupInfo = arguments.createGroupInfo,
-        controller = arguments.controller;
+        controller = arguments.controller,
+        attributes = arguments.attributes;
 
   const CreateGroupView({
     this.listViewItemBuilder,
@@ -33,6 +34,7 @@ class CreateGroupView extends StatefulWidget {
     this.controller,
     this.enableAppBar = true,
     this.willCreateHandler,
+    this.attributes,
     super.key,
   });
 
@@ -48,6 +50,7 @@ class CreateGroupView extends StatefulWidget {
   final Widget? listViewBackground;
   final bool enableAppBar;
   final WillCreateHandler? willCreateHandler;
+  final String? attributes;
 
   @override
   State<CreateGroupView> createState() => _CreateGroupViewState();

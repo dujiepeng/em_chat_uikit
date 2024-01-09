@@ -5,25 +5,28 @@ import 'package:flutter/material.dart';
 class ShowImageView extends StatefulWidget {
   ShowImageView.arguments(ShowImageViewArguments argument, {super.key})
       : message = argument.message,
-        onImageTap = argument.onImageTap,
+        onTap = argument.onTap,
         appBar = argument.appBar,
         enableAppBar = argument.enableAppBar,
-        onImageLongPressed = argument.onImageLongPressed;
+        onLongPressed = argument.onLongPressed,
+        attributes = argument.attributes;
 
   const ShowImageView({
     required this.message,
-    this.onImageLongPressed,
-    this.onImageTap,
+    this.onLongPressed,
+    this.onTap,
     this.appBar,
     this.enableAppBar = true,
+    this.attributes,
     super.key,
   });
 
   final Message message;
-  final void Function(Message message)? onImageLongPressed;
-  final void Function(Message message)? onImageTap;
+  final void Function(Message message)? onLongPressed;
+  final void Function(Message message)? onTap;
   final AppBar? appBar;
   final bool enableAppBar;
+  final String? attributes;
 
   @override
   State<ShowImageView> createState() => _ShowImageViewState();
@@ -35,8 +38,8 @@ class _ShowImageViewState extends State<ShowImageView> {
     final theme = ChatUIKitTheme.of(context);
     Widget content = ChatUIKitShowImageWidget(
       message: widget.message,
-      onLongPressed: longPressed,
-      onTap: widget.onImageTap ??
+      onLongPressed: widget.onLongPressed,
+      onTap: widget.onTap ??
           (message) {
             Navigator.of(context).pop();
           },
@@ -101,33 +104,33 @@ class _ShowImageViewState extends State<ShowImageView> {
   void save() async {}
 
   void forward() async {
-    final profile = await Navigator.of(context).pushNamed(
-      ChatUIKitRouteNames.selectContactsView,
-      arguments: SelectContactViewArguments(
-        title: '选择联系人',
-        backText: '取消',
-      ),
-    );
+    // final profile = await Navigator.of(context).pushNamed(
+    //   ChatUIKitRouteNames.selectContactsView,
+    //   arguments: SelectContactViewArguments(
+    //     title: '选择联系人',
+    //     backText: '取消',
+    //   ),
+    // );
 
-    if (profile != null && profile is ChatUIKitProfile) {
-      Message? targetMsg =
-          await ChatUIKit.instance.loadMessage(messageId: widget.message.msgId);
-      if (targetMsg != null) {
-        final msg = Message.createImageSendMessage(
-          targetId: profile.id,
-          chatType: (profile.type == ChatUIKitProfileType.contact ||
-                  profile.type == ChatUIKitProfileType.contact)
-              ? ChatType.Chat
-              : ChatType.GroupChat,
-          filePath: targetMsg.localPath!,
-          width: targetMsg.width,
-          height: targetMsg.height,
-          displayName: targetMsg.displayName,
-          fileSize: targetMsg.fileSize,
-        );
+    // if (profile != null && profile is ChatUIKitProfile) {
+    //   Message? targetMsg =
+    //       await ChatUIKit.instance.loadMessage(messageId: widget.message.msgId);
+    //   if (targetMsg != null) {
+    //     final msg = Message.createImageSendMessage(
+    //       targetId: profile.id,
+    //       chatType: (profile.type == ChatUIKitProfileType.contact ||
+    //               profile.type == ChatUIKitProfileType.contact)
+    //           ? ChatType.Chat
+    //           : ChatType.GroupChat,
+    //       filePath: targetMsg.localPath!,
+    //       width: targetMsg.width,
+    //       height: targetMsg.height,
+    //       displayName: targetMsg.displayName,
+    //       fileSize: targetMsg.fileSize,
+    //     );
 
-        ChatUIKit.instance.sendMessage(message: msg);
-      }
-    }
+    //     ChatUIKit.instance.sendMessage(message: msg);
+    //   }
+    // }
   }
 }

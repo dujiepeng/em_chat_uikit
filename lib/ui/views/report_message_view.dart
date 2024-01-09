@@ -8,19 +8,22 @@ class ReportMessageView extends StatefulWidget {
   })  : messageId = arguments.messageId,
         appBar = arguments.appBar,
         enableAppBar = arguments.enableAppBar,
-        reportReasons = arguments.reportReasons;
+        reportReasons = arguments.reportReasons,
+        attributes = arguments.attributes;
 
   const ReportMessageView({
     required this.messageId,
     required this.reportReasons,
     this.appBar,
     this.enableAppBar = true,
+    this.attributes,
     super.key,
   });
   final ChatUIKitAppBar? appBar;
   final String messageId;
   final List<String> reportReasons;
   final bool enableAppBar;
+  final String? attributes;
 
   @override
   State<ReportMessageView> createState() => _ReportMessageViewState();
