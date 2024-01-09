@@ -21,8 +21,8 @@ class GroupListView extends StatefulWidget {
     super.key,
   });
   final void Function(List<GroupItemModel> data)? onSearchTap;
-  final List<NeedAlphabeticalWidget>? beforeWidgets;
-  final List<NeedAlphabeticalWidget>? afterWidgets;
+  final List<Widget>? beforeWidgets;
+  final List<Widget>? afterWidgets;
   final ChatUIKitGroupItemBuilder? itemBuilder;
   final void Function(BuildContext context, GroupItemModel model)? onTap;
   final void Function(BuildContext context, GroupItemModel model)? onLongPress;

@@ -49,7 +49,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     actions = widget.actions;
     isNotDisturb.value =
         ChatUIKitContext.instance.conversationIsMute(widget.profile.id);
-    fetchSilentInfo();
+    // fetchSilentInfo();
     fetchGroup();
     // fetchMembersAttrs();
   }

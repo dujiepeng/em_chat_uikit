@@ -22,8 +22,8 @@ class NewRequestsListView extends StatefulWidget {
   });
 
   final void Function(List<NewRequestItemModel> data)? onSearchTap;
-  final List<NeedAlphabeticalWidget>? beforeWidgets;
-  final List<NeedAlphabeticalWidget>? afterWidgets;
+  final List<Widget>? beforeWidgets;
+  final List<Widget>? afterWidgets;
   final ChatUIKitNewRequestItemBuilder? itemBuilder;
   final void Function(BuildContext context, NewRequestItemModel model)? onTap;
   final void Function(BuildContext context, NewRequestItemModel model)?
