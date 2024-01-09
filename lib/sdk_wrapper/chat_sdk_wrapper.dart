@@ -72,11 +72,12 @@ abstract class ChatUIKitWrapperBase {
     try {
       _onEventBegin(actionEvent);
       result = await method.call();
-      _onEventEnd(actionEvent);
       return result;
     } on ChatError catch (e) {
       _onEventError(actionEvent, e);
       rethrow;
+    } finally {
+      _onEventEnd(actionEvent);
     }
   }
 

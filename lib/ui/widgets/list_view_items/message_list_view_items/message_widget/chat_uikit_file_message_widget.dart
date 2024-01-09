@@ -8,6 +8,7 @@ class ChatUIKitFileMessageWidget extends StatelessWidget {
     this.subTitleStyle,
     this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
     this.icon,
+    this.forceLeft,
     super.key,
   });
   final TextStyle? titleStyle;
@@ -15,11 +16,12 @@ class ChatUIKitFileMessageWidget extends StatelessWidget {
   final Message message;
   final Widget? icon;
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
+  final bool? forceLeft;
 
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
-    bool left = message.direction == MessageDirection.RECEIVE;
+    bool left = forceLeft ?? message.direction == MessageDirection.RECEIVE;
 
     Widget title = Text(
       message.displayName ?? '',

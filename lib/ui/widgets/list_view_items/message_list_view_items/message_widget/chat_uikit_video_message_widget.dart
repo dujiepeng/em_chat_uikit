@@ -9,11 +9,13 @@ class ChatUIKitVideoMessageWidget extends StatefulWidget {
     required this.message,
     this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
     this.progressIndicatorColor,
+    this.forceLeft,
     super.key,
   });
   final Message message;
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
   final Color? progressIndicatorColor;
+  final bool? forceLeft;
   @override
   State<ChatUIKitVideoMessageWidget> createState() =>
       _ChatUIKitVideoMessageWidgetState();
@@ -58,7 +60,8 @@ class _ChatUIKitVideoMessageWidgetState
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
-    bool left = message.direction == MessageDirection.RECEIVE;
+    bool left =
+        widget.forceLeft ?? message.direction == MessageDirection.RECEIVE;
     String? thumbnailLocalPath = message.thumbnailLocalPath;
     double width = message.width;
     double height = message.height;
@@ -93,7 +96,7 @@ class _ChatUIKitVideoMessageWidgetState
 
     Widget? content;
 
-    if (downloadError) {
+    if (downloadError && message.direction == MessageDirection.RECEIVE) {
       content = loadError(width, height);
     } else {
       if (thumbnailLocalPath?.isNotEmpty == true) {

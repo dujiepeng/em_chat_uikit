@@ -3,6 +3,7 @@ import 'package:em_chat_uikit/service/actions/chat_uikit_chat_actions.dart';
 import 'package:em_chat_uikit/service/actions/chat_uikit_contact_actions.dart';
 import 'package:em_chat_uikit/service/actions/chat_uikit_events_actions.dart';
 import 'package:em_chat_uikit/service/actions/chat_uikit_notification_actions.dart';
+
 import 'package:em_chat_uikit/service/observers/chat_uikit_contact_observers.dart';
 
 class ChatUIKit extends ChatSDKWrapper

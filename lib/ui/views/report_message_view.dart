@@ -110,7 +110,7 @@ class _ReportMessageViewState extends State<ReportMessageView> {
                       Navigator.of(context).pop();
                     } else {
                       Navigator.of(context)
-                          .pop(ChatUIKitSettings.reportReason[selectedIndex]);
+                          .pop(widget.reportReasons[selectedIndex]);
                     }
                   },
                 ),

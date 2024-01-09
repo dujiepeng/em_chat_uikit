@@ -79,7 +79,7 @@ mixin ChatWrapper on ChatUIKitWrapperBase {
   void onMessagesRecalled(List<Message> messages) {
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       if (observer is ChatObserver) {
-        observer.onMessagesRecalled(messages);
+        observer.onMessagesRecalled(messages, []);
       }
     }
   }

@@ -5,16 +5,18 @@ class ChatUIKitNonsupportMessageWidget extends StatelessWidget {
   const ChatUIKitNonsupportMessageWidget({
     required this.message,
     this.style,
+    this.forceLeft,
     super.key,
   });
 
   final TextStyle? style;
   final Message message;
+  final bool? forceLeft;
 
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
-    bool left = message.direction == MessageDirection.RECEIVE;
+    bool left = forceLeft ?? message.direction == MessageDirection.RECEIVE;
     Widget content = Text(
       '不支持的消息类型',
       style: style ??

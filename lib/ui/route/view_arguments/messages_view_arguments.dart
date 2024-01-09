@@ -7,7 +7,6 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     this.controller,
     this.appBar,
     this.inputBar,
-    this.attributes,
     this.showAvatar = true,
     this.showNickname = true,
     this.onItemTap,
@@ -31,6 +30,8 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     this.bubbleContentBuilder,
     this.onMoreActionsItemsHandler,
     this.onItemLongPressActionsItemsHandler,
+    this.forceLeft,
+    this.attributes,
   });
 
   final ChatUIKitProfile profile;
@@ -68,6 +69,8 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     Message message,
   )? onItemLongPressActionsItemsHandler;
   final bool enableAppBar;
+  bool? forceLeft;
+
   @override
   String? attributes;
 

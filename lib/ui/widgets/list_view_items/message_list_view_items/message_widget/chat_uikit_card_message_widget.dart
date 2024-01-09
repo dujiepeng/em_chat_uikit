@@ -4,15 +4,17 @@ import 'package:flutter/material.dart';
 class ChatUIKitCardMessageWidget extends StatelessWidget {
   const ChatUIKitCardMessageWidget({
     required this.message,
+    this.forceLeft,
     super.key,
   });
 
   final Message message;
+  final bool? forceLeft;
 
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
-    bool left = message.direction == MessageDirection.RECEIVE;
+    bool left = forceLeft ?? message.direction == MessageDirection.RECEIVE;
 
     Widget content = Row(
       mainAxisAlignment: MainAxisAlignment.start,

@@ -36,6 +36,7 @@ class MessagesView extends StatefulWidget {
         onItemLongPressActionsItemsHandler =
             arguments.onItemLongPressActionsItemsHandler,
         bubbleContentBuilder = arguments.bubbleContentBuilder,
+        forceLeft = arguments.forceLeft,
         attributes = arguments.attributes;
 
   const MessagesView({
@@ -66,6 +67,7 @@ class MessagesView extends StatefulWidget {
     this.enableAppBar = true,
     this.onMoreActionsItemsHandler,
     this.onItemLongPressActionsItemsHandler,
+    this.forceLeft,
     this.attributes,
     super.key,
   });
@@ -97,6 +99,7 @@ class MessagesView extends StatefulWidget {
     List<ChatUIKitBottomSheetItem> willShowList,
     Message message,
   )? onItemLongPressActionsItemsHandler;
+  final bool? forceLeft;
 
   final Widget? emojiWidget;
   final Widget? Function(BuildContext context, Message message)?
@@ -193,6 +196,7 @@ class _MessagesViewState extends State<MessagesView> {
     final theme = ChatUIKitTheme.of(context);
 
     Widget content = MessageListView(
+      forceLeft: widget.forceLeft,
       bubbleContentBuilder: widget.bubbleContentBuilder,
       bubbleBuilder: widget.bubbleBuilder,
       quoteBuilder: widget.quoteBuilder ?? quoteWidget,
@@ -1164,19 +1168,31 @@ class _MessagesViewState extends State<MessagesView> {
   }
 
   void reportMessage(Message message) async {
+    Map<String, String> reasons =
+        ChatUIKitSettings.reportMessageReason.call(context);
+    List<String> reasonKeys = reasons.keys.toList();
     final reportReason = await Navigator.of(context).pushNamed(
       ChatUIKitRouteNames.reportMessageView,
       arguments: ReportMessageViewArguments(
         messageId: message.msgId,
-        reportReasons: ChatUIKitSettings.reportReason,
+        reportReasons: reasonKeys.map((e) => reasons[e]!).toList(),
         attributes: widget.attributes,
       ),
     );
-    if (reportReason != null) {
-      if (reportReason is String) {
-        controller.reportMessage(
-            message: message, tag: reportReason.toString());
+    if (reportReason != null && reportReason is String) {
+      String? tag;
+      for (var entry in reasons.entries) {
+        if (entry.value == reportReason) {
+          tag = entry.key;
+          break;
+        }
       }
+      if (tag == null) return;
+      controller.reportMessage(
+        message: message,
+        tag: tag,
+        reason: reportReason,
+      );
     }
   }
 

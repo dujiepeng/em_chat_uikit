@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:em_chat_uikit/chat_uikit.dart';
+
 import 'package:flutter/material.dart';
 
 enum MessageLastActionType {
@@ -151,7 +152,7 @@ class MessageListViewController extends ChangeNotifier
   }
 
   @override
-  void onMessagesRecalled(List<Message> messages) {
+  void onMessagesRecalled(List<Message> recalled, List<Message> replaces) {
     // TODO: 删除消息插入
   }
 
@@ -287,12 +288,13 @@ class MessageListViewController extends ChangeNotifier
   Future<void> reportMessage({
     required Message message,
     required String tag,
+    required String reason,
   }) async {
     try {
       ChatUIKit.instance.reportMessage(
         messageId: message.msgId,
         tag: tag,
-        reason: '',
+        reason: reason,
       );
       // ignore: empty_catches
     } catch (e) {}

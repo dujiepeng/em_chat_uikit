@@ -9,12 +9,14 @@ class ChatUIKitVoiceMessageWidget extends StatefulWidget {
     this.style,
     this.icon,
     this.playing = false,
+    this.forceLeft,
     super.key,
   });
   final TextStyle? style;
   final Message message;
   final Widget? icon;
   final bool playing;
+  final bool? forceLeft;
 
   @override
   State<ChatUIKitVoiceMessageWidget> createState() =>
@@ -49,7 +51,8 @@ class _ChatUIKitVoiceMessageWidgetState
       controller.stop();
     }
     final theme = ChatUIKitTheme.of(context);
-    bool left = message.direction == MessageDirection.RECEIVE;
+    bool left =
+        widget.forceLeft ?? message.direction == MessageDirection.RECEIVE;
 
     Color iconColor = left
         ? theme.color.isDark

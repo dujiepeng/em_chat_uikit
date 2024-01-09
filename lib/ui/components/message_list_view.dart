@@ -26,6 +26,7 @@ class MessageListView extends StatefulWidget {
     this.onErrorTap,
     this.bubbleBuilder,
     this.bubbleContentBuilder,
+    this.forceLeft,
     super.key,
   });
   final ChatUIKitProfile profile;
@@ -45,6 +46,7 @@ class MessageListView extends StatefulWidget {
   final void Function(Message message)? onErrorTap;
   final MessageItemBubbleBuilder? bubbleBuilder;
   final MessageBubbleContentBuilder? bubbleContentBuilder;
+  final bool? forceLeft;
 
   @override
   State<MessageListView> createState() => _MessageListViewState();
@@ -224,6 +226,7 @@ class _MessageListViewState extends State<MessageListView> {
 
     Widget? content = widget.itemBuilder?.call(context, message);
     content ??= ChatUIKitMessageListViewMessageItem(
+      forceLeft: widget.forceLeft,
       key: ValueKey(message.msgId),
       bubbleContentBuilder: widget.bubbleContentBuilder,
       bubbleBuilder: widget.bubbleBuilder,
@@ -267,9 +270,11 @@ class _MessageListViewState extends State<MessageListView> {
     );
 
     content = Align(
-      alignment: message.direction == MessageDirection.SEND
-          ? Alignment.centerRight
-          : Alignment.centerLeft,
+      alignment: widget.forceLeft == true
+          ? Alignment.centerLeft
+          : message.direction == MessageDirection.SEND
+              ? Alignment.centerRight
+              : Alignment.centerLeft,
       child: content,
     );
 

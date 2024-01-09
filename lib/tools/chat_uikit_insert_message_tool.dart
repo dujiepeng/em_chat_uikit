@@ -44,7 +44,6 @@ class ChatUIKitInsertMessageTool {
     int? timestamp,
   }) {
     int time = timestamp ?? DateTime.now().millisecondsSinceEpoch - 1;
-
     Message alertMsg = Message.createCustomSendMessage(
       targetId: conversationId,
       event: alertRecallNameKey,

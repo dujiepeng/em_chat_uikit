@@ -52,8 +52,8 @@ class ChatUIKitMessageStatusWidget extends StatelessWidget {
 
   Widget _loading(ChatUIKitTheme theme) {
     return SizedBox(
-      width: size,
-      height: size,
+      width: size - 4,
+      height: size - 4,
       child: CircularProgressIndicator(
         color: color ??
             (theme.color.isDark

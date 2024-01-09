@@ -5,15 +5,17 @@ class ChatUIKitTextMessageWidget extends StatelessWidget {
   const ChatUIKitTextMessageWidget({
     required this.message,
     this.style,
+    this.isLeft,
     super.key,
   });
   final TextStyle? style;
   final Message message;
+  final bool? isLeft;
 
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
-    bool left = message.direction == MessageDirection.RECEIVE;
+    bool left = isLeft ?? message.direction == MessageDirection.RECEIVE;
     Widget content = Text(
       message.textContent,
       style: style ??
