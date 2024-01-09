@@ -14,6 +14,7 @@ class ContactsViewArguments implements ChatUIKitViewArguments {
     this.loadErrorMessage,
     this.enableAppBar = true,
     this.beforeItems,
+    this.afterItems,
     this.attributes,
   });
 
@@ -21,6 +22,7 @@ class ContactsViewArguments implements ChatUIKitViewArguments {
   final ChatUIKitAppBar? appBar;
   final void Function(List<ContactItemModel> data)? onSearchTap;
   final List<ChatUIKitListViewMoreItem>? beforeItems;
+  final List<ChatUIKitListViewMoreItem>? afterItems;
   final ChatUIKitContactItemBuilder? listViewItemBuilder;
   final void Function(BuildContext context, ContactItemModel model)? onTap;
   final void Function(BuildContext context, ContactItemModel model)?

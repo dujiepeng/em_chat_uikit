@@ -6,7 +6,7 @@ class ChatUIKitListViewMoreItem extends StatelessWidget
   const ChatUIKitListViewMoreItem({
     required this.title,
     this.trailing,
-    this.enableArrow = true,
+    this.enableMoreArrow = true,
     this.onTap,
     super.key,
   });
@@ -14,7 +14,7 @@ class ChatUIKitListViewMoreItem extends StatelessWidget
 
   final Widget? trailing;
 
-  final bool enableArrow;
+  final bool enableMoreArrow;
 
   final VoidCallback? onTap;
 
@@ -37,7 +37,7 @@ class ChatUIKitListViewMoreItem extends StatelessWidget
       ],
     );
 
-    if (enableArrow) {
+    if (enableMoreArrow) {
       content = Row(
         children: [
           Expanded(

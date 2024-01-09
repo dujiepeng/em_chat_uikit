@@ -16,6 +16,7 @@ class ContactsView extends StatefulWidget {
         controller = arguments.controller,
         enableAppBar = arguments.enableAppBar,
         beforeItems = arguments.beforeItems,
+        afterItems = arguments.afterItems,
         loadErrorMessage = arguments.loadErrorMessage,
         attributes = arguments.attributes;
 
@@ -31,6 +32,7 @@ class ContactsView extends StatefulWidget {
     this.loadErrorMessage,
     this.enableAppBar = true,
     this.beforeItems,
+    this.afterItems,
     this.attributes,
     super.key,
   });
@@ -39,6 +41,7 @@ class ContactsView extends StatefulWidget {
   final ChatUIKitAppBar? appBar;
   final void Function(List<ContactItemModel> data)? onSearchTap;
   final List<ChatUIKitListViewMoreItem>? beforeItems;
+  final List<ChatUIKitListViewMoreItem>? afterItems;
   final ChatUIKitContactItemBuilder? listViewItemBuilder;
   final void Function(BuildContext context, ContactItemModel model)? onTap;
   final void Function(BuildContext context, ContactItemModel model)?
@@ -104,6 +107,7 @@ class _ContactsViewState extends State<ContactsView>
           controller: controller,
           itemBuilder: widget.listViewItemBuilder,
           beforeWidgets: widget.beforeItems ?? beforeWidgets,
+          afterWidgets: widget.afterItems,
           searchHideText: widget.fakeSearchHideText,
           background: widget.listViewBackground,
           onTap: widget.onTap ?? tapContactInfo,
