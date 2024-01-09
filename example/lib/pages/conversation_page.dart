@@ -18,8 +18,6 @@ class _ConversationPageState extends State<ConversationPage> {
 
   @override
   Widget build(Object context) {
-    return MessagesView(
-      profile: ChatUIKitProfile.contact(id: 'du005'),
-    );
+    return const ConversationsView();
   }
 }

@@ -340,7 +340,7 @@ class _MessagesViewState extends State<MessagesView> {
         }
       },
       bubbleStyle: widget.bubbleStyle,
-      key: ValueKey(message.msgId),
+      key: ValueKey(message.localTime),
       showAvatar: widget.showAvatar,
       quoteBuilder: widget.quoteBuilder,
       showNickname: widget.showNickname,

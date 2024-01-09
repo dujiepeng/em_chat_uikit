@@ -227,7 +227,7 @@ class _MessageListViewState extends State<MessageListView> {
     Widget? content = widget.itemBuilder?.call(context, message);
     content ??= ChatUIKitMessageListViewMessageItem(
       forceLeft: widget.forceLeft,
-      key: ValueKey(message.msgId),
+      key: ValueKey(message.localTime),
       bubbleContentBuilder: widget.bubbleContentBuilder,
       bubbleBuilder: widget.bubbleBuilder,
       onErrorTap: () {

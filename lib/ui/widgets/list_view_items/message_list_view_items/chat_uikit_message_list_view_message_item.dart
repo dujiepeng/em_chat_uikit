@@ -91,7 +91,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
     } else {
       content = bubbleBuilder?.call(context, msgWidget, message) ??
           ChatUIKitMessageListViewBubble(
-            key: ValueKey(message.msgId),
+            key: ValueKey(message.localTime),
             needSmallCorner: message.getQuote() == null,
             style: bubbleStyle,
             isLeft: left,
