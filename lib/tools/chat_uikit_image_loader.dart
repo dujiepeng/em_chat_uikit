@@ -7,6 +7,7 @@ class ChatUIKitImageLoader {
       {double width = 24, double height = 24, Color? color}) {
     return Image(
       gaplessPlayback: true,
+      color: color,
       image: ResizeImage(
         const AssetImage('assets/images/chat.png', package: packageName),
         width: width.toInt(),
@@ -20,6 +21,7 @@ class ChatUIKitImageLoader {
       {double width = 20, double height = 20, Color? color}) {
     return Image(
       gaplessPlayback: true,
+      color: color,
       image: ResizeImage(
         AssetImage('assets/images/voice_$frame.png', package: packageName),
         width: width.toInt(),
@@ -45,6 +47,7 @@ class ChatUIKitImageLoader {
   static Widget file({double width = 30, double height = 30, Color? color}) {
     return Image(
       gaplessPlayback: true,
+      color: color,
       image: ResizeImage(
         const AssetImage('assets/images/file_icon.png', package: packageName),
         width: width.toInt(),
@@ -57,6 +60,7 @@ class ChatUIKitImageLoader {
   static Widget search({double width = 30, double height = 30, Color? color}) {
     return Image(
       gaplessPlayback: true,
+      color: color,
       image: ResizeImage(
         const AssetImage('assets/images/search.png', package: packageName),
         width: width.toInt(),
@@ -70,6 +74,7 @@ class ChatUIKitImageLoader {
       {double width = 105, double height = 105, Color? color}) {
     return Image(
       gaplessPlayback: true,
+      color: color,
       image: ResizeImage(
         const AssetImage('assets/images/list_empty.png', package: packageName),
         width: width.toInt(),
@@ -95,6 +100,7 @@ class ChatUIKitImageLoader {
       {double width = 20, double height = 20, Color? color}) {
     return Image(
       gaplessPlayback: true,
+      color: color,
       image: ResizeImage(
         const AssetImage('assets/images/no_disturb.png', package: packageName),
         width: width.toInt(),
@@ -108,6 +114,7 @@ class ChatUIKitImageLoader {
       {double width = 30, double height = 30, Color? color}) {
     return Image(
       gaplessPlayback: true,
+      color: color,
       image: ResizeImage(
         const AssetImage('assets/images/avatar.png', package: packageName),
         width: width.toInt(),
@@ -143,6 +150,7 @@ class ChatUIKitImageLoader {
     return Image(
       width: width,
       height: height,
+      color: color,
       image: const AssetImage(
         'assets/images/input_bar_keyboard.png',
         package: packageName,
@@ -165,6 +173,7 @@ class ChatUIKitImageLoader {
     // );
 
     return Image(
+      color: color,
       width: width,
       height: height,
       image: const AssetImage(
@@ -178,6 +187,7 @@ class ChatUIKitImageLoader {
   static Widget messageEdit(
       {double width = 16, double height = 16, Color? color}) {
     return Image(
+      color: color,
       gaplessPlayback: true,
       image: ResizeImage(
         const AssetImage('assets/images/edit_bar.png', package: packageName),
@@ -201,6 +211,7 @@ class ChatUIKitImageLoader {
     //   fit: BoxFit.fill,
     // );
     return Image(
+      color: color,
       width: width,
       height: height,
       gaplessPlayback: true,
@@ -223,6 +234,7 @@ class ChatUIKitImageLoader {
     //   fit: BoxFit.fill,
     // );
     return Image(
+      color: color,
       width: width,
       height: height,
       gaplessPlayback: true,
@@ -235,6 +247,7 @@ class ChatUIKitImageLoader {
   static Widget sendKeyboard(
       {double width = 30, double height = 30, Color? color}) {
     return Image(
+      color: color,
       gaplessPlayback: true,
       image: ResizeImage(
         const AssetImage('assets/images/input_bar_send.png',
@@ -249,6 +262,7 @@ class ChatUIKitImageLoader {
   static Widget voiceDelete(
       {double width = 20, double height = 20, Color? color}) {
     return Image(
+      color: color,
       gaplessPlayback: true,
       image: ResizeImage(
         const AssetImage('assets/images/record_delete.png',
@@ -263,6 +277,7 @@ class ChatUIKitImageLoader {
   static Widget voiceSend(
       {double width = 20, double height = 20, Color? color}) {
     return Image(
+      color: color,
       gaplessPlayback: true,
       image: ResizeImage(
         const AssetImage('assets/images/record_send.png', package: packageName),
@@ -276,6 +291,7 @@ class ChatUIKitImageLoader {
   static Widget voiceMic(
       {double width = 20, double height = 20, Color? color}) {
     return Image(
+      color: color,
       gaplessPlayback: true,
       image: ResizeImage(
         const AssetImage('assets/images/record_mic.png', package: packageName),
@@ -289,6 +305,7 @@ class ChatUIKitImageLoader {
   static Widget imageDefault(
       {double width = 44, double height = 44, Color? color}) {
     return Image(
+      color: color,
       gaplessPlayback: true,
       image: ResizeImage(
         const AssetImage('assets/images/image_default.png',
@@ -303,6 +320,7 @@ class ChatUIKitImageLoader {
   static Widget videoDefault(
       {double width = 44, double height = 44, Color? color}) {
     return Image(
+      color: color,
       gaplessPlayback: true,
       image: ResizeImage(
         const AssetImage('assets/images/video_default.png',
@@ -344,6 +362,7 @@ class ChatUIKitImageLoader {
       {double width = 24, double height = 24, Color? color}) {
     return Image(
       gaplessPlayback: true,
+      color: color,
       image: ResizeImage(
         const AssetImage('assets/images/image.png', package: packageName),
         width: width.toInt(),
@@ -356,6 +375,7 @@ class ChatUIKitImageLoader {
   static Widget messageViewMoreVideo(
       {double width = 24, double height = 24, Color? color}) {
     return Image(
+      color: color,
       gaplessPlayback: true,
       image: ResizeImage(
         const AssetImage('assets/images/video.png', package: packageName),
@@ -369,6 +389,7 @@ class ChatUIKitImageLoader {
   static Widget messageViewMoreCamera(
       {double width = 24, double height = 24, Color? color}) {
     return Image(
+      color: color,
       gaplessPlayback: true,
       image: ResizeImage(
         const AssetImage('assets/images/camera.png', package: packageName),
@@ -382,6 +403,7 @@ class ChatUIKitImageLoader {
   static Widget messageViewMoreFile(
       {double width = 24, double height = 24, Color? color}) {
     return Image(
+      color: color,
       gaplessPlayback: true,
       image: ResizeImage(
         const AssetImage('assets/images/folder.png', package: packageName),
@@ -396,6 +418,7 @@ class ChatUIKitImageLoader {
       {double width = 24, double height = 24, Color? color}) {
     return Image(
       gaplessPlayback: true,
+      color: color,
       image: ResizeImage(
         const AssetImage('assets/images/person.png', package: packageName),
         width: width.toInt(),
@@ -409,8 +432,10 @@ class ChatUIKitImageLoader {
       {double width = 24, double height = 24, Color? color}) {
     return Image(
       gaplessPlayback: true,
+      color: color,
       image: ResizeImage(
-        const AssetImage('assets/images/message_long_press_copy.png', package: packageName),
+        const AssetImage('assets/images/message_long_press_copy.png',
+            package: packageName),
         width: width.toInt(),
         height: height.toInt(),
       ),
@@ -422,8 +447,10 @@ class ChatUIKitImageLoader {
       {double width = 24, double height = 24, Color? color}) {
     return Image(
       gaplessPlayback: true,
+      color: color,
       image: ResizeImage(
-        const AssetImage('assets/images/message_long_press_reply.png', package: packageName),
+        const AssetImage('assets/images/message_long_press_reply.png',
+            package: packageName),
         width: width.toInt(),
         height: height.toInt(),
       ),
@@ -435,8 +462,10 @@ class ChatUIKitImageLoader {
       {double width = 24, double height = 24, Color? color}) {
     return Image(
       gaplessPlayback: true,
+      color: color,
       image: ResizeImage(
-        const AssetImage('assets/images/message_long_press_edit.png', package: packageName),
+        const AssetImage('assets/images/message_long_press_edit.png',
+            package: packageName),
         width: width.toInt(),
         height: height.toInt(),
       ),
@@ -448,8 +477,10 @@ class ChatUIKitImageLoader {
       {double width = 24, double height = 24, Color? color}) {
     return Image(
       gaplessPlayback: true,
+      color: color,
       image: ResizeImage(
-        const AssetImage('assets/images/message_long_press_report.png', package: packageName),
+        const AssetImage('assets/images/message_long_press_report.png',
+            package: packageName),
         width: width.toInt(),
         height: height.toInt(),
       ),
@@ -460,9 +491,11 @@ class ChatUIKitImageLoader {
   static Widget messageLongPressDelete(
       {double width = 24, double height = 24, Color? color}) {
     return Image(
+      color: color,
       gaplessPlayback: true,
       image: ResizeImage(
-        const AssetImage('assets/images/message_long_press_delete.png', package: packageName),
+        const AssetImage('assets/images/message_long_press_delete.png',
+            package: packageName),
         width: width.toInt(),
         height: height.toInt(),
       ),
@@ -473,9 +506,11 @@ class ChatUIKitImageLoader {
   static Widget messageLongPressRecall(
       {double width = 24, double height = 24, Color? color}) {
     return Image(
+      color: color,
       gaplessPlayback: true,
       image: ResizeImage(
-        const AssetImage('assets/images/message_long_press_recall.png', package: packageName),
+        const AssetImage('assets/images/message_long_press_recall.png',
+            package: packageName),
         width: width.toInt(),
         height: height.toInt(),
       ),

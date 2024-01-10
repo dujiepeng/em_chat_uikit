@@ -115,7 +115,11 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
                 fontWeight: theme.font.labelMedium.fontWeight,
               ),
               children: [
-                if (info.hasMention) const TextSpan(text: '[有人@我]'),
+                if (info.hasMention)
+                  TextSpan(
+                    text:
+                        '[${ChatUIKitLocal.conversationListItemMention.getString(context)}]',
+                  ),
                 TextSpan(text: () {
                   String str = '';
                   if (info.profile.type == ChatUIKitProfileType.groupChat) {
@@ -226,7 +230,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
       ],
     );
 
-    content = SizedBox(height: 74, child: content);
+    content = SizedBox(height: 76, child: content);
 
     return content;
   }

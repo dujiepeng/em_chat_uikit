@@ -15,6 +15,7 @@ class ConversationsViewArguments implements ChatUIKitViewArguments {
     this.listViewBackground,
     this.enableAppBar = true,
     this.appBarMoreActionsBuilder,
+    this.title,
     this.attributes,
   });
 
@@ -34,6 +35,7 @@ class ConversationsViewArguments implements ChatUIKitViewArguments {
   final Widget? listViewBackground;
   final bool enableAppBar;
   final AppBarMoreActionsBuilder? appBarMoreActionsBuilder;
+  final String? title;
   @override
   String? attributes;
 

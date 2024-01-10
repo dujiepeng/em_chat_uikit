@@ -32,7 +32,7 @@ mixin ContactActions on ContactWrapper {
     });
   }
 
-  Future<List<String>> fetchAllContacts() {
+  Future<List<String>> fetchAllContactIds() {
     return checkResult(ChatSDKWrapperActionEvent.fetchAllContacts, () {
       return Client.getInstance.contactManager.fetchAllContactIds();
     });

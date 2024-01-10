@@ -53,7 +53,7 @@ extension Request on ChatUIKitContext {
   }
 
   bool addRequest(String userId, String? reason, [bool isGroup = false]) {
-    dynamic requestList = cachedMap[requestsKey] ?? [];
+    List requestList = cachedMap[requestsKey] ?? [];
     if (requestList.any((element) =>
         element['id'] == userId && element['isGroup'] == isGroup)) {
       return false;
@@ -69,11 +69,14 @@ extension Request on ChatUIKitContext {
   }
 
   void removeRequest(String userId, [bool isGroup = false]) {
-    dynamic requestList = cachedMap[requestsKey] ?? [];
-    requestList.removeWhere(
+    List requestList = cachedMap[requestsKey] ?? [];
+    int index = requestList.indexWhere(
         (element) => element['id'] == userId && element['isGroup'] == isGroup);
-    cachedMap[requestsKey] = requestList;
-    _updateStore();
+    if (index != -1) {
+      requestList.removeAt(index);
+      cachedMap[requestsKey] = requestList;
+      _updateStore();
+    }
   }
 }
 

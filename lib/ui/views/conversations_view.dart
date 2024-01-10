@@ -19,6 +19,7 @@ class ConversationsView extends StatefulWidget {
         controller = arguments.controller,
         appBarMoreActionsBuilder = arguments.appBarMoreActionsBuilder,
         enableAppBar = arguments.enableAppBar,
+        title = arguments.title,
         attributes = arguments.attributes;
 
   const ConversationsView({
@@ -34,6 +35,7 @@ class ConversationsView extends StatefulWidget {
     this.controller,
     this.enableAppBar = true,
     this.appBarMoreActionsBuilder,
+    this.title,
     this.attributes,
     super.key,
   });
@@ -54,6 +56,7 @@ class ConversationsView extends StatefulWidget {
   final Widget? listViewBackground;
   final AppBarMoreActionsBuilder? appBarMoreActionsBuilder;
   final bool enableAppBar;
+  final String? title;
   final String? attributes;
 
   @override
@@ -94,7 +97,7 @@ class _ConversationsViewState extends State<ConversationsView>
           ? null
           : widget.appBar ??
               ChatUIKitAppBar(
-                title: 'Chats',
+                title: widget.title ?? 'Chats',
                 showBackButton: false,
                 titleTextStyle: TextStyle(
                   color: theme.color.isDark

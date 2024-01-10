@@ -84,7 +84,7 @@ class WaterRipplePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    double width = 100;
+    double width = 94;
     double height = 64;
     double borderRadius = 100;
 

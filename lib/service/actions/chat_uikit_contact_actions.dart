@@ -12,4 +12,22 @@ mixin ChatUIKitContactActions on ChatSDKWrapper {
     await super.declineContactRequest(userId: userId);
     ChatUIKitContext.instance.removeRequest(userId);
   }
+
+  @override
+  Future<List<String>> getAllContacts() async {
+    List<String> ret = await super.getAllContacts();
+    for (var userId in ret) {
+      ChatUIKitContext.instance.removeRequest(userId);
+    }
+    return ret;
+  }
+
+  @override
+  Future<List<String>> fetchAllContactIds() async {
+    List<String> ret = await super.fetchAllContactIds();
+    for (var userId in ret) {
+      ChatUIKitContext.instance.removeRequest(userId);
+    }
+    return ret;
+  }
 }

@@ -237,6 +237,8 @@ mixin ChatUIKitLocal {
 
   static const nonSupportMessage = 'non_support_message';
 
+  static const conversationListItemMention = 'conversation_list_item_mention';
+
   static const Map<String, dynamic> zh = {
     conversationsViewMenuAddContact: '添加联系人',
     conversationsViewMenuCreateGroup: '创建群组',
@@ -373,6 +375,7 @@ mixin ChatUIKitLocal {
     reportMessageViewCancel: '取消',
     selectContactViewSearchHint: '搜索联系人',
     nonSupportMessage: '不支持的消息类型',
+    conversationListItemMention: '有人@我',
   };
 
   static const Map<String, dynamic> en = {
@@ -519,5 +522,6 @@ mixin ChatUIKitLocal {
     reportMessageViewCancel: 'Cancel',
     selectContactViewSearchHint: 'Search contacts',
     nonSupportMessage: 'Unsupported message type',
+    conversationListItemMention: 'Mentioned',
   };
 }
