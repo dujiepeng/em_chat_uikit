@@ -259,7 +259,9 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  widget.searchHideText ?? '搜索',
+                  widget.searchHideText ??
+                      ChatUIKitLocal.conversationsViewSearchHint
+                          .getString(context),
                   style: TextStyle(
                     color: ChatUIKitTheme.of(context).color.isDark
                         ? ChatUIKitTheme.of(context).color.neutralColor4

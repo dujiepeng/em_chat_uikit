@@ -134,6 +134,8 @@ mixin ChatUIKitLocal {
       'group_detail_change_group_description';
 
   static const groupMentionViewMentionAll = 'group_mention_view_mention_all';
+  static const groupMentionViewTitle = 'group_mention_view_title';
+  static const groupMentionViewSearchHint = 'group_mention_view_search_hint';
 
   static const groupAddMembersViewTitle = 'group_add_member_view_title';
   static const groupAddMembersViewSearchContact =
@@ -233,7 +235,6 @@ mixin ChatUIKitLocal {
 
   static const selectContactViewSearchHint = 'select_contact_view_search_hint';
 
-
   static const nonSupportMessage = 'non_support_message';
 
   static const Map<String, dynamic> zh = {
@@ -316,6 +317,8 @@ mixin ChatUIKitLocal {
     groupDetailChangeGroupName: '修改群名称',
     groupDetailChangeGroupDescription: '修改群描述',
     groupMentionViewMentionAll: '所有人',
+    groupMentionViewTitle: '提及',
+    groupMentionViewSearchHint: '搜索',
     groupAddMembersViewTitle: '添加群成员',
     groupAddMembersViewSearchContact: '搜索联系人',
     groupAddMembersViewAdd: '添加',
@@ -456,6 +459,8 @@ mixin ChatUIKitLocal {
     groupDetailChangeGroupName: 'Change Group Name',
     groupDetailChangeGroupDescription: 'Change Group Description',
     groupMentionViewMentionAll: 'All',
+    groupMentionViewTitle: 'Group Mention',
+    groupMentionViewSearchHint: 'Search',
     groupAddMembersViewTitle: 'Add Group Members',
     groupAddMembersViewSearchContact: 'Search Contacts',
     groupAddMembersViewAdd: 'Add',

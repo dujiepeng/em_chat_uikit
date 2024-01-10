@@ -6,6 +6,9 @@ import 'package:em_chat_uikit/ui/custom/chat_uikit_emoji_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+typedef MessageItemTapCallback = bool? Function(
+    BuildContext context, Message message);
+
 class MessagesView extends StatefulWidget {
   MessagesView.arguments(MessagesViewArguments arguments, {super.key})
       : profile = arguments.profile,
@@ -80,12 +83,12 @@ class MessagesView extends StatefulWidget {
   final Widget? inputBar;
   final bool showAvatar;
   final bool showNickname;
-  final bool? Function(Message message)? onItemTap;
-  final bool? Function(Message message)? onItemLongPress;
-  final bool? Function(Message message)? onDoubleTap;
-  final bool? Function(Message message)? onAvatarTap;
-  final bool? Function(Message message)? onAvatarLongPress;
-  final bool? Function(Message message)? onNicknameTap;
+  final MessageItemTapCallback? onItemTap;
+  final MessageItemTapCallback? onItemLongPress;
+  final MessageItemTapCallback? onDoubleTap;
+  final MessageItemTapCallback? onAvatarTap;
+  final MessageItemTapCallback? onAvatarLongPress;
+  final MessageItemTapCallback? onNicknameTap;
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
   final MessageItemBuilder? itemBuilder;
   final MessageItemBuilder? alertItemBuilder;
@@ -210,33 +213,33 @@ class _MessagesViewState extends State<MessagesView> {
       showAvatar: widget.showAvatar,
       showNickname: widget.showNickname,
       onItemTap: (msg) {
-        bool? ret = widget.onItemTap?.call(msg);
+        bool? ret = widget.onItemTap?.call(context, msg);
         if (ret != true) {
           bubbleTab(msg);
         }
       },
       onItemLongPress: (msg) {
-        bool? ret = widget.onItemLongPress?.call(msg);
+        bool? ret = widget.onItemLongPress?.call(context, msg);
         if (ret != true) {
           onItemLongPress(msg);
         }
       },
       onDoubleTap: (msg) {
-        bool? ret = widget.onDoubleTap?.call(msg);
+        bool? ret = widget.onDoubleTap?.call(context, msg);
         if (ret != true) {}
       },
       onAvatarTap: (msg) {
-        bool? ret = widget.onAvatarTap?.call(msg);
+        bool? ret = widget.onAvatarTap?.call(context, msg);
         if (ret != true) {
           avatarTap(msg);
         }
       },
       onAvatarLongPressed: (msg) {
-        bool? ret = widget.onAvatarLongPress?.call(msg);
+        bool? ret = widget.onAvatarLongPress?.call(context, msg);
         if (ret != true) {}
       },
       onNicknameTap: (msg) {
-        bool? ret = widget.onNicknameTap?.call(msg);
+        bool? ret = widget.onNicknameTap?.call(context, msg);
         if (ret != true) {}
       },
       bubbleStyle: widget.bubbleStyle,
@@ -377,31 +380,31 @@ class _MessagesViewState extends State<MessagesView> {
         if (widget.onAvatarTap == null) {
           avatarTap(message);
         } else {
-          widget.onAvatarTap!.call(message);
+          widget.onAvatarTap!.call(context, message);
         }
       },
       onAvatarLongPressed: () {
-        widget.onAvatarLongPress?.call(message);
+        widget.onAvatarLongPress?.call(context, message);
       },
       onBubbleDoubleTap: () {
-        widget.onDoubleTap?.call(message);
+        widget.onDoubleTap?.call(context, message);
       },
       onBubbleLongPressed: () {
         if (widget.onItemLongPress == null) {
           onItemLongPress(message);
         } else {
-          widget.onItemLongPress!.call(message);
+          widget.onItemLongPress!.call(context, message);
         }
       },
       onBubbleTap: () {
         if (widget.onItemTap == null) {
           bubbleTab(message);
         } else {
-          widget.onItemTap!.call(message);
+          widget.onItemTap!.call(context, message);
         }
       },
       onNicknameTap: () {
-        widget.onNicknameTap?.call(message);
+        widget.onNicknameTap?.call(context, message);
       },
       message: message,
     );
@@ -521,7 +524,6 @@ class _MessagesViewState extends State<MessagesView> {
           setState(() {});
         }
       },
-      focusNode: focusNode,
       textEditingController: editBarTextEditingController!,
       trailing: InkWell(
         onTap: () {
@@ -774,6 +776,7 @@ class _MessagesViewState extends State<MessagesView> {
   }
 
   void clearAllType() {
+    debugPrint('clearAllType');
     showEmoji = false;
     editMessage = null;
     replyMessage = null;

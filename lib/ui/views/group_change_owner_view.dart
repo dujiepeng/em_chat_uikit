@@ -128,11 +128,11 @@ class _GroupChangeOwnerViewState extends State<GroupChangeOwnerView> {
     );
 
     if (ret == true) {
-      try {
-        await ChatUIKit.instance.changeGroupOwner(
-            groupId: widget.groupId, newOwner: model.profile.id);
-        // ignore: empty_catches
-      } catch (e) {}
+      ChatUIKit.instance
+          .changeGroupOwner(groupId: widget.groupId, newOwner: model.profile.id)
+          .then((value) {
+        Navigator.of(context).pop(true);
+      }).catchError((e) {});
     }
   }
 }

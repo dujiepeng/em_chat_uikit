@@ -124,13 +124,6 @@ class _ChangeInfoViewState extends State<ChangeInfoView> {
             ),
           ),
         ),
-        Container(
-          height: borderHeight,
-          color: theme.color.isDark
-              ? theme.color.neutralColor2
-              : theme.color.neutralColor9,
-          margin: const EdgeInsets.only(left: 16),
-        )
       ],
     );
 

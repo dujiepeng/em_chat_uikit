@@ -79,7 +79,7 @@ class _GroupMentionViewState extends State<GroupMentionView> {
                     Navigator.of(context).pop();
                   },
                   child: Text(
-                    '@提及',
+                    '@${ChatUIKitLocal.groupMembersViewTitle.getString(context)}}',
                     style: TextStyle(
                       color: theme.color.isDark
                           ? theme.color.neutralColor98
@@ -171,7 +171,8 @@ class _GroupMentionViewState extends State<GroupMentionView> {
                   ),
                 );
               },
-              searchHideText: '搜索联系人',
+              searchHideText:
+                  ChatUIKitLocal.groupMentionViewSearchHint.getString(context),
               searchData: list,
             );
           },

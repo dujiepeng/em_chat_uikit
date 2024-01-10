@@ -1,6 +1,7 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit_example/home_page.dart';
 import 'package:em_chat_uikit_example/login_page.dart';
+import 'package:em_chat_uikit_example/pages/download_page.dart';
 import 'package:em_chat_uikit_example/welcome_page.dart';
 
 import 'package:flutter/material.dart';
@@ -51,21 +52,34 @@ class _MyAppState extends State<MyApp> {
       }),
       home: const WelcomePage(),
       onGenerateRoute: (settings) {
-        // if (settings.name == ChatUIKitRouteNames.messagesView) {
-        //   MessagesViewArguments arguments =
-        //       settings.arguments as MessagesViewArguments;
-        //   arguments = arguments.copyWith(
-        //     appBar: const ChatUIKitAppBar(title: '我是title'),
-        //   );
+        RouteSettings newSettings = settings;
+        if (settings.name == ChatUIKitRouteNames.messagesView) {
+          MessagesViewArguments arguments =
+              settings.arguments as MessagesViewArguments;
+          arguments = arguments.copyWith(
+            onItemTap: (ctx, message) {
+              if (message.bodyType == MessageType.FILE) {
+                Navigator.of(ctx).push(
+                  MaterialPageRoute(
+                    builder: (context) => DownloadFileWidget(
+                      message: message,
+                      key: ValueKey(message.localTime),
+                    ),
+                  ),
+                );
+                return true;
+              }
+              return false;
+            },
+          );
 
-        //   return MaterialPageRoute(
-        //     builder: (context) {
-        //       return MessagesView.arguments(arguments);
-        //     },
-        //   );
-        // }
+          newSettings = RouteSettings(
+            name: settings.name,
+            arguments: arguments,
+          );
+        }
 
-        return ChatUIKitRoute.generateRoute(settings) ??
+        return ChatUIKitRoute.generateRoute(newSettings) ??
             MaterialPageRoute(
               builder: (context) {
                 if (settings.name == '/home') {

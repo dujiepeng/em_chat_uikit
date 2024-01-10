@@ -449,8 +449,8 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
     */
   }
 
-  void deleteContact() {
-    showChatUIKitDialog(
+  void deleteContact() async {
+    final ret = await showChatUIKitDialog(
       title:
           ChatUIKitLocal.contactDetailViewDeleteAlertTitle.getString(context),
       content: ChatUIKitLocal.contactDetailViewDeleteAlertSubTitle
@@ -468,13 +468,15 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
           label: ChatUIKitLocal.contactDetailViewDeleteAlertButtonConfirm
               .getString(context),
           onTap: () async {
-            Navigator.of(context).pop();
-            ChatUIKit.instance.deleteContact(userId: profile!.id).then((value) {
-              Navigator.of(context).pop();
-            }).catchError((e) {});
+            Navigator.of(context).pop(true);
           },
         ),
       ],
     );
+    if (ret == true) {
+      ChatUIKit.instance.deleteContact(userId: profile!.id).then((value) {
+        ChatUIKitRoute.popToRoot(context);
+      }).catchError((e) {});
+    }
   }
 }

@@ -81,7 +81,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     try {
       // 本地不准，暂时不使用本地数据。
       // group = await ChatUIKit.instance.getGroup(groupId: widget.profile.id);
-      group ??=
+      group =
           await ChatUIKit.instance.fetchGroupInfo(groupId: widget.profile.id);
       memberCount = group?.memberCount ?? 0;
       setState(() {});
@@ -149,6 +149,21 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
             : theme.color.neutralColor1,
       ),
     );
+
+    Widget desc = group?.description?.isNotEmpty == true
+        ? Text(
+            group?.description ?? '',
+            overflow: TextOverflow.ellipsis,
+            maxLines: 3,
+            style: TextStyle(
+              fontSize: theme.font.bodySmall.fontSize,
+              fontWeight: theme.font.bodySmall.fontWeight,
+              color: theme.color.isDark
+                  ? theme.color.neutralColor95
+                  : theme.color.neutralColor3,
+            ),
+          )
+        : const SizedBox();
 
     Widget easeId = Text(
       'ID: ${widget.profile.id}',
@@ -262,6 +277,8 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         const SizedBox(height: 12),
         name,
         const SizedBox(height: 4),
+        if (group?.description?.isNotEmpty == true) desc,
+        if (group?.description?.isNotEmpty == true) const SizedBox(height: 4),
         row,
         const SizedBox(height: 20),
         Padding(
@@ -270,6 +287,11 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         ),
         const SizedBox(height: 20),
       ],
+    );
+
+    content = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40),
+      child: content,
     );
 
     content = ListView(
@@ -613,8 +635,8 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     // );
   }
 
-  void destroyGroup() {
-    showChatUIKitDialog(
+  void destroyGroup() async {
+    final ret = await showChatUIKitDialog(
       title: ChatUIKitLocal.groupDetailViewDisbandAlertTitle.getString(context),
       content:
           ChatUIKitLocal.groupDetailViewDisbandAlertSubTitle.getString(context),
@@ -631,20 +653,20 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
           label: ChatUIKitLocal.groupDetailViewDisbandAlertButtonConfirm
               .getString(context),
           onTap: () async {
-            Navigator.of(context).pop();
-            ChatUIKit.instance
-                .destroyGroup(groupId: widget.profile.id)
-                .then((value) {
-              Navigator.of(context).pop(true);
-            }).catchError((e) {});
+            Navigator.of(context).pop(true);
           },
         ),
       ],
     );
+    if (ret == true) {
+      ChatUIKit.instance.destroyGroup(groupId: widget.profile.id).then((value) {
+        ChatUIKitRoute.popToRoot(context);
+      }).catchError((e) {});
+    }
   }
 
-  void leaveGroup() {
-    showChatUIKitDialog(
+  void leaveGroup() async {
+    final ret = await showChatUIKitDialog(
       title: ChatUIKitLocal.groupDetailViewLeaveAlertTitle.getString(context),
       content:
           ChatUIKitLocal.groupDetailViewLeaveAlertSubTitle.getString(context),
@@ -661,26 +683,30 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
           label: ChatUIKitLocal.groupDetailViewLeaveAlertButtonConfirm
               .getString(context),
           onTap: () async {
-            Navigator.of(context).pop();
-            ChatUIKit.instance
-                .leaveGroup(groupId: widget.profile.id)
-                .then((value) {
-              Navigator.of(context).pop(true);
-            }).catchError((e) {});
+            Navigator.of(context).pop(true);
           },
         ),
       ],
     );
+    if (ret == true) {
+      ChatUIKit.instance.leaveGroup(groupId: widget.profile.id).then((value) {
+        ChatUIKitRoute.popToRoot(context);
+      }).catchError((e) {});
+    }
   }
 
-  void changeOwner() {
-    Navigator.of(context).pushNamed(
+  void changeOwner() async {
+    final ret = await Navigator.of(context).pushNamed(
       ChatUIKitRouteNames.groupChangeOwnerView,
       arguments: GroupChangeOwnerViewArguments(
         groupId: widget.profile.id,
         attributes: widget.attributes,
       ),
     );
+
+    if (ret == true) {
+      fetchGroup();
+    }
   }
 
 /*
@@ -752,7 +778,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
       ChatUIKitRouteNames.changeInfoView,
       arguments: ChangeInfoViewArguments(
         title: ChatUIKitLocal.groupDetailViewDescription.getString(context),
-        maxLength: 512,
+        maxLength: 256,
         inputTextCallback: () async {
           if (group?.groupId != null) {
             if (group?.groupId != null) {

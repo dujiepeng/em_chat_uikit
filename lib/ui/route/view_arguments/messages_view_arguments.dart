@@ -41,12 +41,12 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
   final Widget? inputBar;
   final bool showAvatar;
   final bool showNickname;
-  final bool Function(Message message)? onItemTap;
-  final bool Function(Message message)? onItemLongPress;
-  final bool Function(Message message)? onDoubleTap;
-  final bool Function(Message message)? onAvatarTap;
-  final bool Function(Message message)? onAvatarLongPressed;
-  final bool Function(Message message)? onNicknameTap;
+  final MessageItemTapCallback? onItemTap;
+  final MessageItemTapCallback? onItemLongPress;
+  final MessageItemTapCallback? onDoubleTap;
+  final MessageItemTapCallback? onAvatarTap;
+  final MessageItemTapCallback? onAvatarLongPressed;
+  final MessageItemTapCallback? onNicknameTap;
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
   final List<ChatUIKitBottomSheetItem>? moreActionItems;
   final List<ChatUIKitBottomSheetItem>? onItemLongPressActions;
@@ -82,12 +82,12 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     Widget? inputBar,
     bool? showAvatar,
     bool? showNickname,
-    bool Function(Message message)? onItemTap,
-    bool Function(Message message)? onItemLongPress,
-    bool Function(Message message)? onDoubleTap,
-    bool Function(Message message)? onAvatarTap,
-    bool Function(Message message)? onAvatarLongPressed,
-    bool Function(Message message)? onNicknameTap,
+    MessageItemTapCallback? onItemTap,
+    MessageItemTapCallback? onItemLongPress,
+    MessageItemTapCallback? onDoubleTap,
+    MessageItemTapCallback? onAvatarTap,
+    MessageItemTapCallback? onAvatarLongPressed,
+    MessageItemTapCallback? onNicknameTap,
     ChatUIKitMessageListViewBubbleStyle? bubbleStyle,
     List<ChatUIKitBottomSheetItem>? moreActionItems,
     List<ChatUIKitBottomSheetItem>? onItemLongPressActions,

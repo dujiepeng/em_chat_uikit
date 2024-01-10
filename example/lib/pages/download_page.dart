@@ -23,7 +23,7 @@ class _DownloadFileWidgetState extends State<DownloadFileWidget> {
             return Center(
               child: TextButton(
                 onPressed: () {
-                  EasyLoading.show(status: '需要你根据name后缀，实现打开文件的逻辑');
+                  EasyLoading.showToast('需要你根据后缀，实现打开文件的逻辑');
                 },
                 child: const Text('打开文件'),
               ),
