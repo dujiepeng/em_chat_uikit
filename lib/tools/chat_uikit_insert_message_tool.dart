@@ -35,29 +35,4 @@ class ChatUIKitInsertMessageTool {
 
     await ChatUIKit.instance.insertMessage(message: alertMsg);
   }
-
-  static Message insertRecallMessage({
-    required String conversationId,
-    required ConversationType type,
-    required String messageId,
-    String? info,
-    int? timestamp,
-  }) {
-    int time = timestamp ?? DateTime.now().millisecondsSinceEpoch - 1;
-    Message alertMsg = Message.createCustomSendMessage(
-      targetId: conversationId,
-      event: alertRecallNameKey,
-      chatType: ChatType.values[type.index],
-      params: {
-        alertRecallNameKey: info ?? '',
-      },
-    );
-    alertMsg.conversationId = conversationId;
-    alertMsg.serverTime = time + 1;
-    alertMsg.localTime = time + 1;
-    alertMsg.status = MessageStatus.SUCCESS;
-
-    ChatUIKit.instance.insertMessage(message: alertMsg);
-    return alertMsg;
-  }
 }

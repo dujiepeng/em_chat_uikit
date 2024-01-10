@@ -55,10 +55,11 @@ export 'ui/widgets/list_view_items/message_list_view_items/message_widget/chat_u
 export 'ui/widgets/list_view_items/message_list_view_items/message_widget/chat_uikit_nonsupport_message_widget.dart';
 export 'ui/widgets/chat_uikit_app_bar.dart';
 export 'ui/widgets/chat_uikit_avatar.dart';
+export 'ui/widgets/chat_uikit_alphabetical_widget.dart';
 export 'ui/widgets/chat_uikit_badge.dart';
 export 'ui/widgets/chat_uikit_bottom_sheet.dart';
 export 'ui/widgets/chat_uikit_dialog.dart';
-export 'ui/widgets/chat_uikit_alphabetical_widget.dart';
+export 'ui/widgets/chat_uikit_downloads_helper_widget.dart';
 export 'ui/widgets/chat_uikit_list_view.dart';
 export 'ui/widgets/chat_uikit_search_widget.dart';
 export 'ui/widgets/chat_uikit_input_bar.dart';

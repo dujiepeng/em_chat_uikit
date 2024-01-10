@@ -649,7 +649,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
 
   Widget _unSupportWidget(ChatUIKitTheme theme) {
     return Text(
-      '不支持的消息类型',
+      ChatUIKitLocal.nonSupportMessage.getString(context),
       style: TextStyle(
         color: theme.color.isDark
             ? theme.color.neutralColor5

@@ -2,16 +2,22 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 // import 'package:username/username.dart';
 
 class GroupListViewController with ChatUIKitListViewControllerBase {
-  GroupListViewController();
+  GroupListViewController({
+    this.pageSize = 20,
+  });
 
-  String? cursor;
+  final int pageSize;
+  int pageNum = 0;
 
   @override
   Future<void> fetchItemList() async {
     loadingType.value = ChatUIKitListViewType.loading;
-
+    pageNum = 0;
     try {
-      List<Group> items = await ChatUIKit.instance.fetchJoinedGroups();
+      List<Group> items = await ChatUIKit.instance.fetchJoinedGroups(
+        pageSize: pageSize,
+        pageNum: pageNum,
+      );
       List<GroupItemModel> tmp = mappers(items);
       list.clear();
       list.addAll(tmp);
@@ -26,9 +32,20 @@ class GroupListViewController with ChatUIKitListViewControllerBase {
   }
 
   @override
-  Future<List<ChatUIKitListItemModelBase>> fetchMoreItemList() async {
-    List<ChatUIKitListItemModelBase> list = [];
-    return list;
+  Future<void> fetchMoreItemList() async {
+    if (hasMore == false) return;
+    pageNum += 1;
+    List<Group> items = await ChatUIKit.instance.fetchJoinedGroups(
+      pageSize: pageSize,
+      pageNum: pageNum,
+    );
+    if (items.isEmpty || items.length < pageSize) {
+      hasMore = false;
+      return;
+    }
+    List<GroupItemModel> tmp = mappers(items);
+    list.addAll(tmp);
+    refresh();
   }
 
   List<GroupItemModel> mappers(List<Group> groups) {

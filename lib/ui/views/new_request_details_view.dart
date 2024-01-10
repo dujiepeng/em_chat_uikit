@@ -75,7 +75,7 @@ class _NewRequestDetailsViewState extends State<NewRequestDetailsView> {
     );
 
     Widget easeId = Text(
-      '环信ID: ${widget.profile.id}',
+      'ID: ${widget.profile.id}',
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
       style: TextStyle(
@@ -123,7 +123,8 @@ class _NewRequestDetailsViewState extends State<NewRequestDetailsView> {
       ),
       child: Center(
         child: Text(
-          widget.btnText ?? '添加联系人',
+          widget.btnText ??
+              ChatUIKitLocal.newRequestDetailsViewAddContact.getString(context),
           style: TextStyle(
             fontSize: theme.font.headlineSmall.fontSize,
             fontWeight: theme.font.headlineSmall.fontWeight,

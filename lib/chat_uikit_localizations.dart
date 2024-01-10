@@ -1,14 +1,16 @@
 mixin ChatUIKitLocal {
-  static const String conversationViewMenuAddContact =
+  static const String conversationsViewMenuAddContact =
       'new_chat_button_click_menu_add_contacts';
-  static const String conversationViewMenuCreateGroup =
+  static const String conversationsViewMenuCreateGroup =
       'new_chat_button_click_menu_create_group';
-  static const String conversationViewMenuCreateNewChat =
+  static const String conversationsViewMenuCreateNewChat =
       'new_chat_button_click_menu_create_new_chat';
-  static const String conversationViewMenuSelectContacts =
+  static const String conversationsViewMenuSelectContacts =
       'new_chat_button_click_menu_select_contacts';
-  static const String conversationViewMenuCancel =
+  static const String conversationsViewMenuCancel =
       'new_chat_button_click_menu_cancel';
+  static const String conversationsViewSearchHint =
+      'conversations_view_search_hint';
 
   static const String conversationListLongPressMenuDelete =
       'conversation_list_long_pressed_menu_delete';
@@ -52,6 +54,20 @@ mixin ChatUIKitLocal {
   static const createGroupViewSearchContact =
       'create_group_view_search_contact';
   static const createGroupViewCancel = 'create_group_view_cancel';
+
+  static const contactsViewNewRequests = 'contacts_view_new_request';
+  static const contactsViewGroups = 'contacts_view_groups';
+  static const contactsViewSearch = 'contacts_view_search';
+  static const contactsAddContactAlertTitle =
+      'contacts_add_contact_alert_title';
+  static const contactsAddContactAlertSubTitle =
+      'contacts_add_contact_alert_sub_title';
+  static const contactsAddContactAlertHintText =
+      'contacts_add_contact_alert_hint_text';
+  static const contactsAddContactAlertButtonConfirm =
+      'contacts_add_contact_alert_button_confirm';
+  static const contactsAddContactAlertButtonCancel =
+      'contacts_add_contact_alert_button_cancel';
 
   static const contactDetailViewSend = 'contact_detail_view_send';
   static const contactDetailViewRemark = 'contact_detail_view_remark';
@@ -113,6 +129,11 @@ mixin ChatUIKitLocal {
       'group_detail_view_leave_alert_button_confirm';
   static const groupDetailViewLeaveAlertButtonCancel =
       'group_detail_view_leave_alert_button_cancel';
+  static const groupDetailChangeGroupName = 'group_detail_change_group_name';
+  static const groupDetailChangeGroupDescription =
+      'group_detail_change_group_description';
+
+  static const groupMentionViewMentionAll = 'group_mention_view_mention_all';
 
   static const groupAddMembersViewTitle = 'group_add_member_view_title';
   static const groupAddMembersViewSearchContact =
@@ -135,14 +156,93 @@ mixin ChatUIKitLocal {
   static const groupChangeOwnerViewAlertButtonCancel =
       'group_change_owner_view_alert_button_cancel';
 
+  static const groupsViewTitle = 'groups_view_title';
+
   static const changInfoViewSave = 'change_info_view_save';
+  static const changInfoViewInputHint = 'change_info_view_input_hint';
+
+  static const messagesViewRecallInfo = 'messages_view_recall_info';
+  static const messagesViewAlertGroupInfoTitle =
+      'messages_view_alert_group_info_title';
+  static const messagesViewEditMessageTitle =
+      'messages_view_edit_message_title';
+  static const messagesViewMoreActionsTitleAlbum =
+      'messages_view_more_actions_title_album';
+  static const messagesViewMoreActionsTitleCamera =
+      'messages_view_more_actions_title_camera';
+  static const messagesViewMoreActionsTitleFile =
+      'messages_view_more_actions_title_file';
+  static const messagesViewMoreActionsTitleLocation =
+      'messages_view_more_actions_title_location';
+  static const messagesViewMoreActionsTitleVideo =
+      'messages_view_more_actions_title_video';
+  static const messagesViewMoreActionsTitleVoice =
+      'messages_view_more_actions_title_voice';
+  static const messagesViewMoreActionsTitleContact =
+      'messages_view_more_actions_title_contact';
+  static const messagesViewLongPressActionsTitleCopy =
+      'messages_view_long_press_actions_title_copy';
+  static const messagesViewLongPressActionsTitleRecall =
+      'messages_view_long_press_actions_title_recall';
+  static const messagesViewLongPressActionsTitleDelete =
+      'messages_view_long_press_actions_title_delete';
+  static const messagesViewLongPressActionsTitleReply =
+      'messages_view_long_press_actions_title_reply';
+  static const messagesViewLongPressActionsTitleEdit =
+      'messages_view_long_press_actions_title_edit';
+  static const messagesViewLongPressActionsTitleReport =
+      'messages_view_long_press_actions_title_report';
+  static const messagesViewDeleteMessageAlertTitle =
+      'messages_view_delete_message_alert_title';
+  static const messagesViewDeleteMessageAlertSubTitle =
+      'messages_view_delete_message_alert_sub_title';
+  static const messagesViewDeleteMessageAlertButtonConfirm =
+      'messages_view_delete_message_alert_confirm';
+  static const messagesViewDeleteMessageAlertButtonCancel =
+      'messages_view_delete_message_alert_cancel';
+  static const messagesViewRecallMessageAlertTitle =
+      'messages_view_recall_message_alert_title';
+  static const messagesViewRecallMessageAlertSubTitle =
+      'messages_view_recall_message_alert_sub_title';
+  static const messagesViewRecallMessageAlertButtonConfirm =
+      'messages_view_recall_message_alert_confirm';
+  static const messagesViewRecallMessageAlertButtonCancel =
+      'messages_view_recall_message_alert_cancel';
+  static const messagesViewSelectContactTitle =
+      'messages_view_select_contact_title';
+  static const messagesViewSelectContactCancel =
+      'messages_view_select_contact_cancel';
+  static const messagesViewShareContactAlertTitle =
+      'messages_view_share_contact_alert_title';
+  static const messagesViewShareContactAlertSubTitle =
+      'messages_view_share_contact_alert_sub_title';
+  static const messagesViewShareContactAlertButtonConfirm =
+      'messages_view_share_contact_alert_confirm';
+  static const messagesViewShareContactAlertButtonCancel =
+      'messages_view_share_contact_alert_cancel';
+
+  static const newRequestDetailsViewAddContact =
+      'new_request_details_view_add_contact';
+  static const newRequestsViewTitle = 'new_requests_view_title';
+
+  static const reportMessageViewTitle = 'report_message_view_title';
+  static const reportMessageViewReportReasons =
+      'report_message_view_report_reasons';
+  static const reportMessageViewConfirm = 'report_message_view_confirm';
+  static const reportMessageViewCancel = 'report_message_view_cancel';
+
+  static const selectContactViewSearchHint = 'select_contact_view_search_hint';
+
+
+  static const nonSupportMessage = 'non_support_message';
 
   static const Map<String, dynamic> zh = {
-    conversationViewMenuAddContact: '添加联系人',
-    conversationViewMenuCreateGroup: '创建群组',
-    conversationViewMenuSelectContacts: '选择联系人',
-    conversationViewMenuCreateNewChat: '发起新会话',
-    conversationViewMenuCancel: '取消',
+    conversationsViewMenuAddContact: '添加联系人',
+    conversationsViewMenuCreateGroup: '创建群组',
+    conversationsViewMenuSelectContacts: '选择联系人',
+    conversationsViewMenuCreateNewChat: '发起新会话',
+    conversationsViewMenuCancel: '取消',
+    conversationsViewSearchHint: '搜索',
     conversationListLongPressMenuDelete: '删除',
     conversationListLongPressMenuPin: '置顶',
     conversationListLongPressMenuUnPin: '取消置顶',
@@ -168,6 +268,14 @@ mixin ChatUIKitLocal {
     createGroupViewCreate: '创建',
     createGroupViewSearchContact: '搜索联系人',
     createGroupViewCancel: '取消',
+    contactsViewNewRequests: '新请求',
+    contactsViewGroups: '群组',
+    contactsViewSearch: '搜索联系人',
+    contactsAddContactAlertTitle: '添加联系人',
+    contactsAddContactAlertSubTitle: '通过用户ID添加联系人',
+    contactsAddContactAlertHintText: '输入用户ID',
+    contactsAddContactAlertButtonConfirm: '添加',
+    contactsAddContactAlertButtonCancel: '取消',
     contactDetailViewSend: '发消息',
     contactDetailViewRemark: '备注',
     contactDetailViewPhone: '电话',
@@ -205,6 +313,9 @@ mixin ChatUIKitLocal {
     groupDetailViewLeaveAlertSubTitle: '确定退出群组，同时删除与该群的聊天记录。',
     groupDetailViewLeaveAlertButtonConfirm: '退出',
     groupDetailViewLeaveAlertButtonCancel: '取消',
+    groupDetailChangeGroupName: '修改群名称',
+    groupDetailChangeGroupDescription: '修改群描述',
+    groupMentionViewMentionAll: '所有人',
     groupAddMembersViewTitle: '添加群成员',
     groupAddMembersViewSearchContact: '搜索联系人',
     groupAddMembersViewAdd: '添加',
@@ -218,15 +329,56 @@ mixin ChatUIKitLocal {
     groupChangeOwnerViewAlertSubTitle: '转让后，对方将变为群主。',
     groupChangeOwnerViewAlertButtonConfirm: '确认',
     groupChangeOwnerViewAlertButtonCancel: '取消',
+    groupsViewTitle: '群组',
     changInfoViewSave: '保存',
+    changInfoViewInputHint: '请输入',
+    messagesViewRecallInfo: '撤回了一条消息',
+    messagesViewAlertGroupInfoTitle: '创建群组',
+    messagesViewEditMessageTitle: '编辑中',
+    messagesViewMoreActionsTitleAlbum: '相册',
+    messagesViewMoreActionsTitleCamera: '拍照',
+    messagesViewMoreActionsTitleFile: '文件',
+    messagesViewMoreActionsTitleLocation: '位置',
+    messagesViewMoreActionsTitleVideo: '视频',
+    messagesViewMoreActionsTitleVoice: '语音',
+    messagesViewMoreActionsTitleContact: '名片',
+    messagesViewLongPressActionsTitleCopy: '复制',
+    messagesViewLongPressActionsTitleRecall: '撤回',
+    messagesViewLongPressActionsTitleDelete: '删除',
+    messagesViewLongPressActionsTitleReply: '回复',
+    messagesViewLongPressActionsTitleEdit: '编辑',
+    messagesViewLongPressActionsTitleReport: '举报',
+    messagesViewDeleteMessageAlertTitle: '删除消息',
+    messagesViewDeleteMessageAlertSubTitle: '你确定要删除本条消息么?',
+    messagesViewDeleteMessageAlertButtonConfirm: '删除',
+    messagesViewDeleteMessageAlertButtonCancel: '取消',
+    messagesViewRecallMessageAlertTitle: '确定要撤回本条消息？',
+    messagesViewRecallMessageAlertSubTitle: '撤回后消息将被删除。',
+    messagesViewRecallMessageAlertButtonConfirm: '撤回',
+    messagesViewRecallMessageAlertButtonCancel: '取消',
+    messagesViewSelectContactTitle: '选择联系人',
+    messagesViewSelectContactCancel: '取消',
+    messagesViewShareContactAlertTitle: '分享名片',
+    messagesViewShareContactAlertSubTitle: '分享名片给对方',
+    messagesViewShareContactAlertButtonConfirm: '分享',
+    messagesViewShareContactAlertButtonCancel: '取消',
+    newRequestDetailsViewAddContact: '添加联系人',
+    newRequestsViewTitle: '新请求',
+    reportMessageViewTitle: '消息举报',
+    reportMessageViewReportReasons: '举报原因',
+    reportMessageViewConfirm: '举报',
+    reportMessageViewCancel: '取消',
+    selectContactViewSearchHint: '搜索联系人',
+    nonSupportMessage: '不支持的消息类型',
   };
 
   static const Map<String, dynamic> en = {
-    conversationViewMenuAddContact: 'Add Contacts',
-    conversationViewMenuCreateGroup: 'Create Group',
-    conversationViewMenuSelectContacts: 'Select Contacts',
-    conversationViewMenuCreateNewChat: 'Create New Chat',
-    conversationViewMenuCancel: 'Cancel',
+    conversationsViewMenuAddContact: 'Add Contacts',
+    conversationsViewMenuCreateGroup: 'Create Group',
+    conversationsViewMenuSelectContacts: 'Select Contacts',
+    conversationsViewMenuCreateNewChat: 'Create New Chat',
+    conversationsViewMenuCancel: 'Cancel',
+    conversationsViewSearchHint: 'Search',
     conversationListLongPressMenuDelete: 'Delete',
     conversationListLongPressMenuPin: 'Pin',
     conversationListLongPressMenuUnPin: 'Unpin',
@@ -252,6 +404,14 @@ mixin ChatUIKitLocal {
     createGroupViewCreate: 'Create',
     createGroupViewSearchContact: 'Search Contacts',
     createGroupViewCancel: 'Cancel',
+    contactsViewNewRequests: 'New Request',
+    contactsViewGroups: 'Groups',
+    contactsViewSearch: 'Search Contacts',
+    contactsAddContactAlertTitle: 'Add Contacts',
+    contactsAddContactAlertSubTitle: 'Add Contacts by ID',
+    contactsAddContactAlertHintText: 'Input ID',
+    contactsAddContactAlertButtonConfirm: 'Add',
+    contactsAddContactAlertButtonCancel: 'Cancel',
     contactDetailViewSend: 'Send message',
     contactDetailViewRemark: 'Remark',
     contactDetailViewPhone: 'Phone',
@@ -293,6 +453,9 @@ mixin ChatUIKitLocal {
         'Leaving a group will also delete the chat history.',
     groupDetailViewLeaveAlertButtonConfirm: 'Confirm',
     groupDetailViewLeaveAlertButtonCancel: 'Cancel',
+    groupDetailChangeGroupName: 'Change Group Name',
+    groupDetailChangeGroupDescription: 'Change Group Description',
+    groupMentionViewMentionAll: 'All',
     groupAddMembersViewTitle: 'Add Group Members',
     groupAddMembersViewSearchContact: 'Search Contacts',
     groupAddMembersViewAdd: 'Add',
@@ -307,6 +470,49 @@ mixin ChatUIKitLocal {
         'After the transfer, the other party will become the owner.',
     groupChangeOwnerViewAlertButtonConfirm: 'Confirm',
     groupChangeOwnerViewAlertButtonCancel: 'Cancel',
+    groupsViewTitle: 'Groups',
     changInfoViewSave: 'Save',
+    changInfoViewInputHint: 'input',
+    messagesViewRecallInfo: 'recalled a message',
+    messagesViewAlertGroupInfoTitle: 'create a group',
+    messagesViewEditMessageTitle: 'Editing',
+    messagesViewMoreActionsTitleAlbum: 'Album',
+    messagesViewMoreActionsTitleCamera: 'Camera',
+    messagesViewMoreActionsTitleFile: 'File',
+    messagesViewMoreActionsTitleLocation: 'Location',
+    messagesViewMoreActionsTitleVideo: 'Video',
+    messagesViewMoreActionsTitleVoice: 'Voice',
+    messagesViewMoreActionsTitleContact: 'Contact',
+    messagesViewLongPressActionsTitleCopy: 'Copy',
+    messagesViewLongPressActionsTitleRecall: 'Recall',
+    messagesViewLongPressActionsTitleDelete: 'Delete',
+    messagesViewLongPressActionsTitleReply: 'Reply',
+    messagesViewLongPressActionsTitleEdit: 'Edit',
+    messagesViewLongPressActionsTitleReport: 'Report',
+    messagesViewDeleteMessageAlertTitle: 'Delete message',
+    messagesViewDeleteMessageAlertSubTitle:
+        'Are you sure you want to delete this message?',
+    messagesViewDeleteMessageAlertButtonConfirm: 'Confirm',
+    messagesViewDeleteMessageAlertButtonCancel: 'Cancel',
+    messagesViewRecallMessageAlertTitle:
+        'Are you sure you want to recall this message?',
+    messagesViewRecallMessageAlertSubTitle:
+        'After the recall, the message will be deleted.',
+    messagesViewRecallMessageAlertButtonConfirm: 'Recall',
+    messagesViewRecallMessageAlertButtonCancel: 'Cancel',
+    messagesViewSelectContactTitle: 'Select contact',
+    messagesViewSelectContactCancel: 'Cancel',
+    messagesViewShareContactAlertTitle: 'Share contact',
+    messagesViewShareContactAlertSubTitle: 'Share contact with the other party',
+    messagesViewShareContactAlertButtonConfirm: 'Share',
+    messagesViewShareContactAlertButtonCancel: 'Cancel',
+    newRequestDetailsViewAddContact: 'Add contact',
+    newRequestsViewTitle: 'New Requests',
+    reportMessageViewTitle: 'Report message',
+    reportMessageViewReportReasons: 'Report reasons',
+    reportMessageViewConfirm: 'Report',
+    reportMessageViewCancel: 'Cancel',
+    selectContactViewSearchHint: 'Search contacts',
+    nonSupportMessage: 'Unsupported message type',
   };
 }

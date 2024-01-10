@@ -70,6 +70,7 @@ class _ShowVideoViewState extends State<ShowVideoView> {
     return content;
   }
 
+/*
   void longPressed(Message message) {
     showChatUIKitBottomSheet(
         context: context,
@@ -89,6 +90,7 @@ class _ShowVideoViewState extends State<ShowVideoView> {
         ],
         cancelTitle: '取消');
   }
+  */
 
   void save() async {}
 

@@ -111,7 +111,8 @@ class _ChangeInfoViewState extends State<ChangeInfoView> {
             ),
             textAlign: TextAlign.start,
             decoration: InputDecoration(
-              hintText: widget.hint ?? '请输入',
+              hintText: widget.hint ??
+                  ChatUIKitLocal.changInfoViewInputHint.getString(context),
               hintStyle: TextStyle(
                 fontWeight: theme.font.titleMedium.fontWeight,
                 fontSize: theme.font.titleMedium.fontSize,

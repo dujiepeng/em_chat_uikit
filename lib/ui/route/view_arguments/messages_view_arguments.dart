@@ -30,6 +30,7 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     this.bubbleContentBuilder,
     this.onMoreActionsItemsHandler,
     this.onItemLongPressActionsItemsHandler,
+    this.inputBarTextEditingController,
     this.forceLeft,
     this.attributes,
   });
@@ -40,12 +41,12 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
   final Widget? inputBar;
   final bool showAvatar;
   final bool showNickname;
-  final void Function(Message message)? onItemTap;
-  final void Function(Message message)? onItemLongPress;
-  final void Function(Message message)? onDoubleTap;
-  final void Function(Message message)? onAvatarTap;
-  final void Function(Message message)? onAvatarLongPressed;
-  final void Function(Message message)? onNicknameTap;
+  final bool Function(Message message)? onItemTap;
+  final bool Function(Message message)? onItemLongPress;
+  final bool Function(Message message)? onDoubleTap;
+  final bool Function(Message message)? onAvatarTap;
+  final bool Function(Message message)? onAvatarLongPressed;
+  final bool Function(Message message)? onNicknameTap;
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
   final List<ChatUIKitBottomSheetItem>? moreActionItems;
   final List<ChatUIKitBottomSheetItem>? onItemLongPressActions;
@@ -69,8 +70,8 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     Message message,
   )? onItemLongPressActionsItemsHandler;
   final bool enableAppBar;
+  final CustomTextEditingController? inputBarTextEditingController;
   bool? forceLeft;
-
   @override
   String? attributes;
 
@@ -81,12 +82,12 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     Widget? inputBar,
     bool? showAvatar,
     bool? showNickname,
-    void Function(Message message)? onItemTap,
-    void Function(Message message)? onItemLongPress,
-    void Function(Message message)? onDoubleTap,
-    void Function(Message message)? onAvatarTap,
-    void Function(Message message)? onAvatarLongPressed,
-    void Function(Message message)? onNicknameTap,
+    bool Function(Message message)? onItemTap,
+    bool Function(Message message)? onItemLongPress,
+    bool Function(Message message)? onDoubleTap,
+    bool Function(Message message)? onAvatarTap,
+    bool Function(Message message)? onAvatarLongPressed,
+    bool Function(Message message)? onNicknameTap,
     ChatUIKitMessageListViewBubbleStyle? bubbleStyle,
     List<ChatUIKitBottomSheetItem>? moreActionItems,
     List<ChatUIKitBottomSheetItem>? onItemLongPressActions,
@@ -99,6 +100,16 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     void Function(Message message)? onErrorTap,
     MessageItemBubbleBuilder? bubbleBuilder,
     MessageBubbleContentBuilder? bubbleContentBuilder,
+    List<ChatUIKitBottomSheetItem>? Function(
+      BuildContext context,
+      List<ChatUIKitBottomSheetItem> willShowList,
+    )? onMoreActionsItemsHandler,
+    List<ChatUIKitBottomSheetItem>? Function(
+      BuildContext context,
+      List<ChatUIKitBottomSheetItem> willShowList,
+      Message message,
+    )? onItemLongPressActionsItemsHandler,
+    CustomTextEditingController? inputBarTextEditingController,
     bool? enableAppBar,
     String? attributes,
   }) {
@@ -128,7 +139,13 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
       onErrorTap: onErrorTap ?? this.onErrorTap,
       bubbleBuilder: bubbleBuilder ?? this.bubbleBuilder,
       bubbleContentBuilder: bubbleContentBuilder ?? this.bubbleContentBuilder,
+      onMoreActionsItemsHandler:
+          onMoreActionsItemsHandler ?? this.onMoreActionsItemsHandler,
+      onItemLongPressActionsItemsHandler: onItemLongPressActionsItemsHandler ??
+          this.onItemLongPressActionsItemsHandler,
       enableAppBar: enableAppBar ?? this.enableAppBar,
+      inputBarTextEditingController:
+          inputBarTextEditingController ?? this.inputBarTextEditingController,
       attributes: attributes ?? this.attributes,
     );
   }

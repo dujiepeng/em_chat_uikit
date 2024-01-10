@@ -340,7 +340,7 @@ class ChatUIKitImageLoader {
     );
   }
 
-  static Widget messageViewMoreAlum(
+  static Widget messageViewMoreAlbum(
       {double width = 24, double height = 24, Color? color}) {
     return Image(
       gaplessPlayback: true,

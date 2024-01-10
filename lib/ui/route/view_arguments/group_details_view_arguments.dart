@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:flutter/widgets.dart';
 
 class GroupDetailsViewArguments implements ChatUIKitViewArguments {
   GroupDetailsViewArguments({
@@ -6,12 +7,14 @@ class GroupDetailsViewArguments implements ChatUIKitViewArguments {
     required this.actions,
     this.appBar,
     this.enableAppBar = true,
+    this.onMessageDidClear,
     this.attributes,
   });
   final ChatUIKitProfile profile;
   final List<ChatUIKitActionItem> actions;
   final ChatUIKitAppBar? appBar;
   final bool enableAppBar;
+  final VoidCallback? onMessageDidClear;
 
   @override
   String? attributes;

@@ -18,6 +18,7 @@ class ContactsView extends StatefulWidget {
         beforeItems = arguments.beforeItems,
         afterItems = arguments.afterItems,
         loadErrorMessage = arguments.loadErrorMessage,
+        title = arguments.title,
         attributes = arguments.attributes;
 
   const ContactsView({
@@ -33,6 +34,7 @@ class ContactsView extends StatefulWidget {
     this.enableAppBar = true,
     this.beforeItems,
     this.afterItems,
+    this.title,
     this.attributes,
     super.key,
   });
@@ -50,6 +52,7 @@ class ContactsView extends StatefulWidget {
   final Widget? listViewBackground;
   final String? loadErrorMessage;
   final bool enableAppBar;
+  final String? title;
   final String? attributes;
 
   @override
@@ -78,7 +81,7 @@ class _ContactsViewState extends State<ContactsView>
           : theme.color.neutralColor98,
       appBar: widget.appBar ??
           ChatUIKitAppBar(
-            title: 'Contacts',
+            title: widget.title ?? 'Contacts',
             titleTextStyle: TextStyle(
               color: theme.color.isDark
                   ? theme.color.primaryColor6
@@ -124,7 +127,7 @@ class _ContactsViewState extends State<ContactsView>
   List<ChatUIKitListViewMoreItem> get beforeWidgets {
     return [
       ChatUIKitListViewMoreItem(
-        title: '新请求',
+        title: ChatUIKitLocal.contactsViewNewRequests.getString(context),
         onTap: () {
           Navigator.of(context).pushNamed(
             ChatUIKitRouteNames.newRequestsView,
@@ -139,7 +142,7 @@ class _ContactsViewState extends State<ContactsView>
         ),
       ),
       ChatUIKitListViewMoreItem(
-        title: '群聊',
+        title: ChatUIKitLocal.contactsViewGroups.getString(context),
         onTap: () {
           Navigator.of(context)
               .pushNamed(
@@ -167,7 +170,7 @@ class _ContactsViewState extends State<ContactsView>
           onTap: (ctx, profile) {
             Navigator.of(ctx).pop();
           },
-          searchHideText: '搜索联系人',
+          searchHideText: ChatUIKitLocal.contactsViewSearch.getString(context),
           searchData: list,
         );
       },
@@ -207,19 +210,24 @@ class _ContactsViewState extends State<ContactsView>
   void addContact() async {
     String? userId = await showChatUIKitDialog(
       borderType: ChatUIKitRectangleType.filletCorner,
-      title: '添加联系人',
-      content: '通过用户ID添加联系人',
+      title: ChatUIKitLocal.contactsAddContactAlertTitle.getString(context),
+      content:
+          ChatUIKitLocal.contactsAddContactAlertSubTitle.getString(context),
       context: context,
-      hintsText: ['输入用户ID'],
+      hintsText: [
+        ChatUIKitLocal.contactsAddContactAlertHintText.getString(context)
+      ],
       items: [
         ChatUIKitDialogItem.cancel(
-          label: '取消',
+          label: ChatUIKitLocal.contactsAddContactAlertButtonCancel
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop();
           },
         ),
         ChatUIKitDialogItem.inputsConfirm(
-          label: '添加',
+          label: ChatUIKitLocal.contactsAddContactAlertButtonConfirm
+              .getString(context),
           onInputsTap: (inputs) async {
             Navigator.of(context).pop(inputs.first);
           },

@@ -18,7 +18,7 @@ class ChatUIKitNonsupportMessageWidget extends StatelessWidget {
     final theme = ChatUIKitTheme.of(context);
     bool left = forceLeft ?? message.direction == MessageDirection.RECEIVE;
     Widget content = Text(
-      '不支持的消息类型',
+      ChatUIKitLocal.nonSupportMessage.getString(context),
       style: style ??
           (left
               ? TextStyle(
@@ -32,8 +32,8 @@ class ChatUIKitNonsupportMessageWidget extends StatelessWidget {
                   fontWeight: theme.font.bodyLarge.fontWeight,
                   fontSize: theme.font.bodyLarge.fontSize,
                   color: theme.color.isDark
-                      ? theme.color.neutralColor5
-                      : theme.color.neutralColor6,
+                      ? theme.color.neutralColor1
+                      : theme.color.neutralColor98,
                 )),
     );
 

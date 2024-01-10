@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/sdk_wrapper/chat_sdk_wrapper.dart';
+import 'package:em_chat_uikit/sdk_wrapper/sdk_wrapper_tools.dart';
 import 'package:flutter/foundation.dart';
 
 mixin ChatWrapper on ChatUIKitWrapperBase {
@@ -77,9 +78,14 @@ mixin ChatWrapper on ChatUIKitWrapperBase {
 
   @protected
   void onMessagesRecalled(List<Message> messages) {
+    List<Message> replaces = [];
+    for (var msg in messages) {
+      final replace = SDKWrapperTools.insertRecallMessage(recalledMessage: msg);
+      replaces.add(replace);
+    }
     for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
       if (observer is ChatObserver) {
-        observer.onMessagesRecalled(messages, []);
+        observer.onMessagesRecalled(messages, replaces);
       }
     }
   }

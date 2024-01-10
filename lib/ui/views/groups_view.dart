@@ -81,7 +81,7 @@ class _GroupsViewState extends State<GroupsView> {
                     Navigator.maybePop(context);
                   },
                   child: Text(
-                    "群聊${joinedCount != null ? '($joinedCount)' : ''}",
+                    "${ChatUIKitLocal.groupsViewTitle.getString(context)}${joinedCount != null ? '($joinedCount)' : ''}",
                     style: TextStyle(
                       fontWeight: theme.font.titleMedium.fontWeight,
                       fontSize: theme.font.titleMedium.fontSize,

@@ -190,38 +190,10 @@ class _MessageListViewState extends State<MessageListView> {
       return content;
     }
 
-    if (message.isRecallAlert) {
-      Map<String, String>? map = (message.body as CustomMessageBody).params;
-      Widget? content = widget.alertItemBuilder?.call(
-        context,
-        message,
-      );
-      content ??= ChatUIKitMessageListViewAlertItem(
-        infos: [
-          MessageAlertAction(
-              text: map?[alertRecallNameKey]?.isNotEmpty == true
-                  ? map![alertRecallNameKey]!
-                  : '撤回一条消息'),
-        ],
-      );
-      return content;
-    }
-
-    if (message.isCreateGroupAlert) {
-      Map<String, String>? map = (message.body as CustomMessageBody).params;
-      Widget? content = widget.alertItemBuilder?.call(
-        context,
-        message,
-      );
-      content ??= ChatUIKitMessageListViewAlertItem(
-        infos: [
-          MessageAlertAction(text: map?[alertCreateGroupMessageOwnerKey] ?? ''),
-          MessageAlertAction(text: ' 创建群组 '),
-          MessageAlertAction(
-              text: map?[alertCreateGroupMessageGroupNameKey] ?? ''),
-        ],
-      );
-      return content;
+    if (message.isRecallAlert || message.isCreateGroupAlert) {
+      if (widget.alertItemBuilder != null) {
+        return widget.alertItemBuilder!.call(context, message)!;
+      }
     }
 
     Widget? content = widget.itemBuilder?.call(context, message);

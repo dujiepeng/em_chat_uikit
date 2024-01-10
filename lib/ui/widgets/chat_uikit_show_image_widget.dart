@@ -29,7 +29,7 @@ class ChatUIKitShowImageWidget extends StatefulWidget {
 
 class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
     with MessageObserver {
-  late final Message message;
+  Message? message;
 
   String? localPath;
   String? localThumbPath;
@@ -46,12 +46,14 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
   }
 
   void checkFile() {
-    if (message.localPath?.isNotEmpty == true) {
-      File file = File(message.localPath!);
+    if (message!.localPath?.isNotEmpty == true) {
+      File file = File(message!.localPath!);
       if (file.existsSync()) {
-        localPath = message.localPath;
+        localPath = message!.localPath;
       } else {
-        ChatUIKit.instance.downloadAttachment(message: message);
+        Future.delayed(const Duration(milliseconds: 100)).then((value) {
+          ChatUIKit.instance.downloadAttachment(message: message!);
+        });
       }
     }
 
@@ -60,10 +62,10 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
       return;
     }
 
-    if (message.thumbnailLocalPath?.isNotEmpty == true) {
-      File file = File(message.thumbnailLocalPath!);
+    if (message!.thumbnailLocalPath?.isNotEmpty == true) {
+      File file = File(message!.thumbnailLocalPath!);
       if (file.existsSync()) {
-        localThumbPath = message.thumbnailLocalPath;
+        localThumbPath = message!.thumbnailLocalPath;
       }
     }
 
@@ -72,8 +74,8 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
       return;
     }
 
-    if (message.thumbnailRemotePath?.isNotEmpty == true) {
-      remoteThumbPath = message.thumbnailRemotePath;
+    if (message!.thumbnailRemotePath?.isNotEmpty == true) {
+      remoteThumbPath = message!.thumbnailRemotePath;
     }
 
     if (remoteThumbPath?.isNotEmpty == true) {
@@ -91,7 +93,7 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
 
   @override
   void onProgress(String msgId, int progress) {
-    if (message.msgId == msgId) {
+    if (message!.msgId == msgId) {
       _progress.value = progress;
       widget.onProgress?.call(progress);
     }
@@ -99,7 +101,7 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
 
   @override
   void onError(String msgId, Message msg, ChatError error) {
-    if (message.msgId == msgId) {
+    if (message!.msgId == msgId) {
       message = msg;
       widget.onError?.call(error);
     }
@@ -107,7 +109,7 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
 
   @override
   void onSuccess(String msgId, Message msg) {
-    if (message.msgId == msgId) {
+    if (message!.msgId == msgId) {
       message = msg;
       widget.onSuccess?.call();
       checkFile();
@@ -143,12 +145,12 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
     content = InkWell(
       onTap: () {
         if (widget.onTap != null) {
-          widget.onTap!(message);
+          widget.onTap!(message!);
         }
       },
       onLongPress: () {
         if (widget.onLongPressed != null) {
-          widget.onLongPressed!(message);
+          widget.onLongPressed!(message!);
         }
       },
       child: content,

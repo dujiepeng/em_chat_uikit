@@ -18,7 +18,10 @@ const String alertCreateGroupMessageEventKey =
     'alertCreateGroupMessageEventKey';
 const String alertCreateGroupMessageOwnerKey = 'owner';
 const String alertCreateGroupMessageGroupNameKey = 'groupName';
-const String alertRecallNameKey = 'alertRecallNameKey';
+const String alertRecalledKey = 'alertRecalledKey';
+const String alertRecallInfoKey = 'alertRecallInfoKey';
+const String alertRecallMessageTypeKey = 'alertRecallMessageTypeKey';
+const String alertRecallMessageDirectionKey = 'alertRecallMessageDirectionKey';
 
 const String mentionKey = 'em_at_list';
 const String mentionAllValue = 'ALL';

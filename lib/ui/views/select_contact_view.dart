@@ -119,7 +119,8 @@ class _SelectContactViewState extends State<SelectContactView> {
           onTap: (ctx, profile) {
             Navigator.of(ctx).pop(profile);
           },
-          searchHideText: '搜索联系人',
+          searchHideText:
+              ChatUIKitLocal.selectContactViewSearchHint.getString(context),
           searchData: list,
         );
       },

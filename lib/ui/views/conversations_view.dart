@@ -154,7 +154,8 @@ class _ConversationsViewState extends State<ConversationsView>
           onTap: (ctx, profile) {
             Navigator.of(ctx).pop(profile);
           },
-          searchHideText: '搜索',
+          searchHideText:
+              ChatUIKitLocal.conversationsViewSearchHint.getString(context),
           searchData: list,
         );
       },
@@ -276,7 +277,8 @@ class _ConversationsViewState extends State<ConversationsView>
     List<ChatUIKitBottomSheetItem> list = defaultItems();
     list = widget.appBarMoreActionsBuilder?.call(context, list) ?? list;
     showChatUIKitBottomSheet(
-      cancelTitle: ChatUIKitLocal.conversationViewMenuCancel.getString(context),
+      cancelTitle:
+          ChatUIKitLocal.conversationsViewMenuCancel.getString(context),
       context: context,
       items: list,
     );
@@ -286,8 +288,8 @@ class _ConversationsViewState extends State<ConversationsView>
     final theme = ChatUIKitTheme.of(context);
     return [
       ChatUIKitBottomSheetItem.normal(
-        label:
-            ChatUIKitLocal.conversationViewMenuCreateNewChat.getString(context),
+        label: ChatUIKitLocal.conversationsViewMenuCreateNewChat
+            .getString(context),
         icon: Icon(
           Icons.message,
           color: theme.color.isDark
@@ -300,7 +302,8 @@ class _ConversationsViewState extends State<ConversationsView>
         },
       ),
       ChatUIKitBottomSheetItem.normal(
-        label: ChatUIKitLocal.conversationViewMenuAddContact.getString(context),
+        label:
+            ChatUIKitLocal.conversationsViewMenuAddContact.getString(context),
         icon: Icon(
           Icons.person_add_alt_1,
           color: theme.color.isDark
@@ -314,7 +317,7 @@ class _ConversationsViewState extends State<ConversationsView>
       ),
       ChatUIKitBottomSheetItem.normal(
         label:
-            ChatUIKitLocal.conversationViewMenuCreateGroup.getString(context),
+            ChatUIKitLocal.conversationsViewMenuCreateGroup.getString(context),
         icon: Icon(
           Icons.group,
           color: theme.color.isDark
@@ -337,7 +340,7 @@ class _ConversationsViewState extends State<ConversationsView>
         return SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.95,
           child: SelectContactView(
-            backText: ChatUIKitLocal.conversationViewMenuCreateNewChat
+            backText: ChatUIKitLocal.conversationsViewMenuCreateNewChat
                 .getString(context),
           ),
         );

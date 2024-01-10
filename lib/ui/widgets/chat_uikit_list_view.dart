@@ -206,6 +206,21 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
       ],
     );
 
+    content = NotificationListener(
+      onNotification: (notification) {
+        if (notification is ScrollEndNotification) {
+          if (widget.hasMore) {
+            if (controller!.position.pixels ==
+                controller!.position.maxScrollExtent) {
+              widget.loadMore?.call();
+            }
+          }
+        }
+        return false;
+      },
+      child: content,
+    );
+
     return content;
   }
 

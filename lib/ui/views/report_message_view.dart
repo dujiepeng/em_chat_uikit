@@ -44,7 +44,8 @@ class _ReportMessageViewState extends State<ReportMessageView> {
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
               return Text(
-                '举报原因',
+                ChatUIKitLocal.reportMessageViewReportReasons
+                    .getString(context),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 style: TextStyle(
@@ -89,7 +90,7 @@ class _ReportMessageViewState extends State<ReportMessageView> {
             children: [
               Expanded(
                 child: ChatUIKitButton.neutral(
-                  '取消',
+                  ChatUIKitLocal.reportMessageViewCancel.getString(context),
                   radius: 4,
                   fontWeight: theme.font.headlineSmall.fontWeight,
                   fontSize: theme.font.headlineSmall.fontSize,
@@ -101,7 +102,7 @@ class _ReportMessageViewState extends State<ReportMessageView> {
               const SizedBox(width: 12),
               Expanded(
                 child: ChatUIKitButton.primary(
-                  '举报',
+                  ChatUIKitLocal.reportMessageViewConfirm.getString(context),
                   radius: 4,
                   fontWeight: theme.font.headlineSmall.fontWeight,
                   fontSize: theme.font.headlineSmall.fontSize,
@@ -134,8 +135,8 @@ class _ReportMessageViewState extends State<ReportMessageView> {
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
       appBar: widget.appBar ??
-          const ChatUIKitAppBar(
-            title: '消息举报',
+          ChatUIKitAppBar(
+            title: ChatUIKitLocal.reportMessageViewTitle.getString(context),
           ),
       body: content,
     );

@@ -54,8 +54,6 @@ class _GroupMentionViewState extends State<GroupMentionView> {
       ValueNotifier<List<ChatUIKitProfile>>([]);
   late final GroupMemberListViewController controller;
 
-  bool enableMulti = false;
-
   @override
   void initState() {
     super.initState();
@@ -96,62 +94,23 @@ class _GroupMentionViewState extends State<GroupMentionView> {
         valueListenable: selectedProfiles,
         builder: (context, value, child) {
           return GroupMemberListView(
-            // beforeWidgets: enableMulti
-            //     ? []
-            //     : [
-            //         ChatUIKitListViewMoreItem(
-            //           title: '所有人',
-            //           onTap: () {
-            //             Navigator.of(context).pushNamed(
-            //               ChatUIKitRouteNames.newRequestsView,
-            //               arguments: NewRequestsViewArguments(),
-            //             );
-            //           },
-            //           trailing: Padding(
-            //             padding: const EdgeInsets.only(right: 5),
-            //             child: ChatUIKitBadge(
-            //                 ChatUIKitContext.instance.requestList().length),
-            //           ),
-            //         ),
-            //       ],
+            beforeWidgets: [
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: const MentionAllItem(),
+              )
+            ],
             groupId: widget.groupId,
             controller: controller,
             itemBuilder: widget.listViewItemBuilder ??
                 (context, model) {
                   return InkWell(
                     onTap: () {
-                      if (enableMulti) {
-                        tapContactInfo(model.profile);
-                      } else {
-                        Navigator.of(context).pop(model.profile);
-                      }
+                      Navigator.of(context).pop(model.profile);
                     },
-                    child: enableMulti
-                        ? Padding(
-                            padding:
-                                const EdgeInsets.only(left: 19.5, right: 15.5),
-                            child: Row(
-                              children: [
-                                value.contains(model.profile)
-                                    ? Icon(
-                                        Icons.check_box,
-                                        size: 21,
-                                        color: theme.color.isDark
-                                            ? theme.color.primaryColor6
-                                            : theme.color.primaryColor5,
-                                      )
-                                    : Icon(
-                                        Icons.check_box_outline_blank,
-                                        size: 21,
-                                        color: theme.color.isDark
-                                            ? theme.color.neutralColor4
-                                            : theme.color.neutralColor7,
-                                      ),
-                                ChatUIKitContactListViewItem(model)
-                              ],
-                            ),
-                          )
-                        : ChatUIKitContactListViewItem(model),
+                    child: ChatUIKitContactListViewItem(model),
                   );
                 },
             searchHideText: widget.fakeSearchHideText,
@@ -229,5 +188,62 @@ class _GroupMentionViewState extends State<GroupMentionView> {
       list.add(profile);
     }
     selectedProfiles.value = [...list];
+  }
+}
+
+class MentionAllItem extends StatelessWidget {
+  const MentionAllItem({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = ChatUIKitTheme.of(context);
+
+    TextStyle normalStyle = TextStyle(
+      color: theme.color.isDark
+          ? theme.color.neutralColor98
+          : theme.color.neutralColor1,
+      fontSize: theme.font.titleMedium.fontSize,
+      fontWeight: theme.font.titleMedium.fontWeight,
+    );
+
+    Widget name = Text(
+      ChatUIKitLocal.groupMentionViewMentionAll.getString(context),
+      style: normalStyle,
+    );
+
+    Widget avatar = const ChatUIKitAvatar(
+      size: 40,
+    );
+
+    Widget content = Row(
+      children: [
+        avatar,
+        const SizedBox(width: 12),
+        name,
+      ],
+    );
+    content = Container(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+      height: 60 - 0.5,
+      color: theme.color.isDark
+          ? theme.color.neutralColor1
+          : theme.color.neutralColor98,
+      child: content,
+    );
+
+    content = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        content,
+        Container(
+          height: borderHeight,
+          color: theme.color.isDark
+              ? theme.color.neutralColor2
+              : theme.color.neutralColor9,
+          margin: const EdgeInsets.only(left: 16),
+        )
+      ],
+    );
+    return content;
   }
 }

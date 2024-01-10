@@ -1,3 +1,4 @@
+import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit/sdk_wrapper/chat_sdk_wrapper.dart';
 
 mixin ChatActions on ChatWrapper {
@@ -43,9 +44,10 @@ mixin ChatActions on ChatWrapper {
     });
   }
 
-  Future<void> recallMessage({required String messageId}) async {
+  Future<void> recallMessage({required Message message}) async {
     return checkResult(ChatSDKWrapperActionEvent.recallMessage, () async {
-      return Client.getInstance.chatManager.recallMessage(messageId);
+      await Client.getInstance.chatManager.recallMessage(message.msgId);
+      onMessagesRecalled([message]);
     });
   }
 

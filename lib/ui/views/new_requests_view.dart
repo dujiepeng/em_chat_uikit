@@ -83,7 +83,7 @@ class _NewRequestsViewState extends State<NewRequestsView>
                       Navigator.maybePop(context);
                     },
                     child: Text(
-                      '新请求',
+                      ChatUIKitLocal.newRequestsViewTitle.getString(context),
                       style: TextStyle(
                         color: theme.color.isDark
                             ? theme.color.neutralColor98

@@ -13,6 +13,7 @@ class GroupDetailsView extends StatefulWidget {
         appBar = arguments.appBar,
         enableAppBar = arguments.enableAppBar,
         actions = arguments.actions,
+        onMessageDidClear = arguments.onMessageDidClear,
         attributes = arguments.attributes;
 
   const GroupDetailsView({
@@ -21,6 +22,7 @@ class GroupDetailsView extends StatefulWidget {
     this.appBar,
     this.enableAppBar = true,
     this.attributes,
+    this.onMessageDidClear,
     super.key,
   });
   final List<ChatUIKitActionItem> actions;
@@ -28,6 +30,7 @@ class GroupDetailsView extends StatefulWidget {
   final ChatUIKitAppBar? appBar;
   final bool enableAppBar;
   final String? attributes;
+  final VoidCallback? onMessageDidClear;
 
   @override
   State<GroupDetailsView> createState() => _GroupDetailsViewState();
@@ -461,8 +464,8 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     return content;
   }
 
-  void clearAllHistory() {
-    showChatUIKitDialog(
+  void clearAllHistory() async {
+    final ret = await showChatUIKitDialog(
       title: ChatUIKitLocal.groupDetailViewClearChatHistory.getString(context),
       context: context,
       items: [
@@ -475,19 +478,20 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         ),
         ChatUIKitDialogItem.confirm(
           label: ChatUIKitLocal
-              .groupDetailViewClearChatHistoryAlertButtonConfirm
+              .contactDetailViewClearChatHistoryAlertButtonConfirm
               .getString(context),
           onTap: () async {
-            Navigator.of(context).pop();
-            Conversation conversation = await ChatUIKit.instance
-                .createConversation(
-                    conversationId: widget.profile.id,
-                    type: ConversationType.Chat);
-            await conversation.deleteAllMessages();
+            Navigator.of(context).pop(true);
           },
         ),
       ],
     );
+    if (ret == true) {
+      Conversation conversation = await ChatUIKit.instance.createConversation(
+          conversationId: widget.profile.id, type: ConversationType.GroupChat);
+      await conversation.deleteAllMessages();
+      widget.onMessageDidClear?.call();
+    }
   }
 
   void showBottom() async {
@@ -679,6 +683,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     );
   }
 
+/*
   void changeGroupNickname() {
     Navigator.of(context)
         .pushNamed(ChatUIKitRouteNames.changeInfoView,
@@ -712,12 +717,13 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
       }
     });
   }
-
+*/
   void changeGroupName() {
     Navigator.of(context)
         .pushNamed(ChatUIKitRouteNames.changeInfoView,
             arguments: ChangeInfoViewArguments(
-                title: '修改群名称',
+                title:
+                    ChatUIKitLocal.groupDetailViewGroupName.getString(context),
                 maxLength: 32,
                 inputTextCallback: () async {
                   if (group?.groupId != null) {
@@ -745,7 +751,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         .pushNamed(
       ChatUIKitRouteNames.changeInfoView,
       arguments: ChangeInfoViewArguments(
-        title: '修改群描述',
+        title: ChatUIKitLocal.groupDetailViewDescription.getString(context),
         maxLength: 512,
         inputTextCallback: () async {
           if (group?.groupId != null) {

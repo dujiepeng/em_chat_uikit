@@ -153,7 +153,18 @@ class MessageListViewController extends ChangeNotifier
 
   @override
   void onMessagesRecalled(List<Message> recalled, List<Message> replaces) {
-    // TODO: 删除消息插入
+    bool needReload = false;
+    for (var i = 0; i < recalled.length; i++) {
+      int index =
+          msgList.indexWhere((element) => recalled[i].msgId == element.msgId);
+      if (index != -1) {
+        msgList[index] = replaces[i];
+        needReload = true;
+      }
+    }
+    if (needReload) {
+      notifyListeners();
+    }
   }
 
   @override
@@ -272,13 +283,7 @@ class MessageListViewController extends ChangeNotifier
     int index = msgList.indexWhere((element) => message.msgId == element.msgId);
     if (index != -1) {
       try {
-        await ChatUIKit.instance.recallMessage(messageId: message.msgId);
-        Message recallMsg = ChatUIKitInsertMessageTool.insertRecallMessage(
-            conversationId: profile.id,
-            type: conversationType,
-            messageId: message.msgId,
-            info: '撤回一条消息');
-        msgList[index] = recallMsg;
+        await ChatUIKit.instance.recallMessage(message: message);
         notifyListeners();
         // ignore: empty_catches
       } catch (e) {}

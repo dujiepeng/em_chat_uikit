@@ -286,11 +286,44 @@ extension MessageHelper on Message {
 
   bool get isRecallAlert {
     if (bodyType == MessageType.CUSTOM) {
-      if ((body as CustomMessageBody).event == alertRecallNameKey) {
+      if ((body as CustomMessageBody).event == alertRecalledKey) {
         return true;
       }
     }
     return false;
+  }
+
+  MessageType? get recalledMessageType {
+    if (bodyType == MessageType.CUSTOM) {
+      if ((body as CustomMessageBody).event == alertRecalledKey) {
+        String? type =
+            (body as CustomMessageBody).params?[alertRecallMessageTypeKey];
+        if (type == null) return null;
+        return MessageType.values[int.parse(type)];
+      }
+    }
+    return null;
+  }
+
+  String? get recallMessageInfo {
+    if (bodyType == MessageType.CUSTOM) {
+      if ((body as CustomMessageBody).event == alertRecalledKey) {
+        return (body as CustomMessageBody).params?[alertRecallInfoKey];
+      }
+    }
+    return null;
+  }
+
+  MessageDirection? get recallMessageDirection {
+    if (bodyType == MessageType.CUSTOM) {
+      if ((body as CustomMessageBody).event == alertRecalledKey) {
+        String? directionStr =
+            (body as CustomMessageBody).params?[alertRecallMessageDirectionKey];
+        if (directionStr == null) return null;
+        return MessageDirection.values[int.parse(directionStr)];
+      }
+    }
+    return null;
   }
 
   void addQuote(Message message) {

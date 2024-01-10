@@ -15,6 +15,7 @@ class ContactsViewArguments implements ChatUIKitViewArguments {
     this.enableAppBar = true,
     this.beforeItems,
     this.afterItems,
+    this.title,
     this.attributes,
   });
 
@@ -30,6 +31,7 @@ class ContactsViewArguments implements ChatUIKitViewArguments {
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
+  final String? title;
   final bool enableAppBar;
   @override
   String? attributes;

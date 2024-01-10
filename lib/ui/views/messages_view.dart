@@ -36,6 +36,7 @@ class MessagesView extends StatefulWidget {
         onItemLongPressActionsItemsHandler =
             arguments.onItemLongPressActionsItemsHandler,
         bubbleContentBuilder = arguments.bubbleContentBuilder,
+        inputBarTextEditingController = arguments.inputBarTextEditingController,
         forceLeft = arguments.forceLeft,
         attributes = arguments.attributes;
 
@@ -68,6 +69,7 @@ class MessagesView extends StatefulWidget {
     this.onMoreActionsItemsHandler,
     this.onItemLongPressActionsItemsHandler,
     this.forceLeft,
+    this.inputBarTextEditingController,
     this.attributes,
     super.key,
   });
@@ -78,12 +80,12 @@ class MessagesView extends StatefulWidget {
   final Widget? inputBar;
   final bool showAvatar;
   final bool showNickname;
-  final void Function(Message message)? onItemTap;
-  final void Function(Message message)? onItemLongPress;
-  final void Function(Message message)? onDoubleTap;
-  final void Function(Message message)? onAvatarTap;
-  final void Function(Message message)? onAvatarLongPress;
-  final void Function(Message message)? onNicknameTap;
+  final bool? Function(Message message)? onItemTap;
+  final bool? Function(Message message)? onItemLongPress;
+  final bool? Function(Message message)? onDoubleTap;
+  final bool? Function(Message message)? onAvatarTap;
+  final bool? Function(Message message)? onAvatarLongPress;
+  final bool? Function(Message message)? onNicknameTap;
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
   final MessageItemBuilder? itemBuilder;
   final MessageItemBuilder? alertItemBuilder;
@@ -108,6 +110,7 @@ class MessagesView extends StatefulWidget {
   final void Function(Message message)? onErrorTap;
   final MessageItemBubbleBuilder? bubbleBuilder;
   final MessageBubbleContentBuilder? bubbleContentBuilder;
+  final CustomTextEditingController? inputBarTextEditingController;
   final bool enableAppBar;
   final String? attributes;
 
@@ -136,7 +139,8 @@ class _MessagesViewState extends State<MessagesView> {
   @override
   void initState() {
     super.initState();
-    inputBarTextEditingController = CustomTextEditingController();
+    inputBarTextEditingController =
+        widget.inputBarTextEditingController ?? CustomTextEditingController();
     inputBarTextEditingController.addListener(() {
       if (showMoreBtn !=
           !inputBarTextEditingController.text.trim().isNotEmpty) {
@@ -149,7 +153,8 @@ class _MessagesViewState extends State<MessagesView> {
         }
       }
     });
-    controller = MessageListViewController(profile: widget.profile);
+    controller =
+        widget.controller ?? MessageListViewController(profile: widget.profile);
     focusNode = widget.focusNode ?? FocusNode();
     _picker = ImagePicker();
     _player = AudioPlayer();
@@ -204,12 +209,36 @@ class _MessagesViewState extends State<MessagesView> {
       controller: controller,
       showAvatar: widget.showAvatar,
       showNickname: widget.showNickname,
-      onItemTap: widget.onItemTap ?? bubbleTab,
-      onItemLongPress: widget.onItemLongPress ?? onItemLongPress,
-      onDoubleTap: widget.onDoubleTap,
-      onAvatarTap: widget.onAvatarTap ?? avatarTap,
-      onAvatarLongPressed: widget.onAvatarLongPress,
-      onNicknameTap: widget.onNicknameTap,
+      onItemTap: (msg) {
+        bool? ret = widget.onItemTap?.call(msg);
+        if (ret != true) {
+          bubbleTab(msg);
+        }
+      },
+      onItemLongPress: (msg) {
+        bool? ret = widget.onItemLongPress?.call(msg);
+        if (ret != true) {
+          onItemLongPress(msg);
+        }
+      },
+      onDoubleTap: (msg) {
+        bool? ret = widget.onDoubleTap?.call(msg);
+        if (ret != true) {}
+      },
+      onAvatarTap: (msg) {
+        bool? ret = widget.onAvatarTap?.call(msg);
+        if (ret != true) {
+          avatarTap(msg);
+        }
+      },
+      onAvatarLongPressed: (msg) {
+        bool? ret = widget.onAvatarLongPress?.call(msg);
+        if (ret != true) {}
+      },
+      onNicknameTap: (msg) {
+        bool? ret = widget.onNicknameTap?.call(msg);
+        if (ret != true) {}
+      },
       bubbleStyle: widget.bubbleStyle,
       itemBuilder: widget.itemBuilder ?? voiceItemBuilder,
       alertItemBuilder: widget.alertItemBuilder ?? alertItem,
@@ -428,7 +457,10 @@ class _MessagesViewState extends State<MessagesView> {
       );
       content ??= ChatUIKitMessageListViewAlertItem(
         infos: [
-          MessageAlertAction(text: map?[alertRecallNameKey] ?? '撤回一条消息'),
+          MessageAlertAction(
+              text: map?[alertRecalledKey]?.isNotEmpty == true
+                  ? map![alertRecalledKey]!
+                  : ChatUIKitLocal.messagesViewRecallInfo.getString(context)),
         ],
       );
       return content;
@@ -451,7 +483,9 @@ class _MessagesViewState extends State<MessagesView> {
               pushNextPage(profile);
             },
           ),
-          MessageAlertAction(text: ' 创建群组 '),
+          MessageAlertAction(
+              text:
+                  ' ${ChatUIKitLocal.messagesViewAlertGroupInfoTitle.getString(context)} '),
           MessageAlertAction(
             text: map?[alertCreateGroupMessageGroupNameKey] ?? '',
             onTap: () {
@@ -523,7 +557,7 @@ class _MessagesViewState extends State<MessagesView> {
         ),
         const SizedBox(width: 2),
         Text(
-          '编辑中',
+          ChatUIKitLocal.messagesViewEditMessageTitle.getString(context),
           style: TextStyle(
               fontWeight: theme.font.labelSmall.fontWeight,
               fontSize: theme.font.labelSmall.fontSize,
@@ -616,8 +650,9 @@ class _MessagesViewState extends State<MessagesView> {
                   if (items == null) {
                     items = [];
                     items.add(ChatUIKitBottomSheetItem.normal(
-                      label: '相册',
-                      icon: ChatUIKitImageLoader.messageViewMoreAlum(
+                      label: ChatUIKitLocal.messagesViewMoreActionsTitleAlbum
+                          .getString(context),
+                      icon: ChatUIKitImageLoader.messageViewMoreAlbum(
                         color: theme.color.isDark
                             ? theme.color.primaryColor6
                             : theme.color.primaryColor5,
@@ -628,7 +663,8 @@ class _MessagesViewState extends State<MessagesView> {
                       },
                     ));
                     items.add(ChatUIKitBottomSheetItem.normal(
-                      label: '视频',
+                      label: ChatUIKitLocal.messagesViewMoreActionsTitleVideo
+                          .getString(context),
                       icon: ChatUIKitImageLoader.messageViewMoreVideo(
                         color: theme.color.isDark
                             ? theme.color.primaryColor6
@@ -640,7 +676,8 @@ class _MessagesViewState extends State<MessagesView> {
                       },
                     ));
                     items.add(ChatUIKitBottomSheetItem.normal(
-                      label: '相机',
+                      label: ChatUIKitLocal.messagesViewMoreActionsTitleCamera
+                          .getString(context),
                       icon: ChatUIKitImageLoader.messageViewMoreCamera(
                         color: theme.color.isDark
                             ? theme.color.primaryColor6
@@ -652,7 +689,8 @@ class _MessagesViewState extends State<MessagesView> {
                       },
                     ));
                     items.add(ChatUIKitBottomSheetItem.normal(
-                      label: '文件',
+                      label: ChatUIKitLocal.messagesViewMoreActionsTitleFile
+                          .getString(context),
                       icon: ChatUIKitImageLoader.messageViewMoreFile(
                         color: theme.color.isDark
                             ? theme.color.primaryColor6
@@ -664,7 +702,8 @@ class _MessagesViewState extends State<MessagesView> {
                       },
                     ));
                     items.add(ChatUIKitBottomSheetItem.normal(
-                      label: '名片',
+                      label: ChatUIKitLocal.messagesViewMoreActionsTitleContact
+                          .getString(context),
                       icon: ChatUIKitImageLoader.messageViewMoreCard(
                         color: theme.color.isDark
                             ? theme.color.primaryColor6
@@ -738,6 +777,7 @@ class _MessagesViewState extends State<MessagesView> {
     showEmoji = false;
     editMessage = null;
     replyMessage = null;
+    stopVoice();
     focusNode.unfocus();
     setState(() {});
   }
@@ -750,7 +790,8 @@ class _MessagesViewState extends State<MessagesView> {
       items = [];
       if (message.bodyType == MessageType.TXT) {
         items.add(ChatUIKitBottomSheetItem.normal(
-          label: '复制',
+          label: ChatUIKitLocal.messagesViewLongPressActionsTitleCopy
+              .getString(context),
           style: TextStyle(
             color: theme.color.isDark
                 ? theme.color.neutralColor98
@@ -784,7 +825,8 @@ class _MessagesViewState extends State<MessagesView> {
           fontWeight: theme.font.bodyLarge.fontWeight,
           fontSize: theme.font.bodyLarge.fontSize,
         ),
-        label: '回复',
+        label: ChatUIKitLocal.messagesViewLongPressActionsTitleReply
+            .getString(context),
         onTap: () async {
           Navigator.of(context).pop();
           replyMessaged(message);
@@ -793,7 +835,8 @@ class _MessagesViewState extends State<MessagesView> {
       if (message.bodyType == MessageType.TXT &&
           message.direction == MessageDirection.SEND) {
         items.add(ChatUIKitBottomSheetItem.normal(
-          label: '编辑',
+          label: ChatUIKitLocal.messagesViewLongPressActionsTitleEdit
+              .getString(context),
           style: TextStyle(
             color: theme.color.isDark
                 ? theme.color.neutralColor98
@@ -814,7 +857,8 @@ class _MessagesViewState extends State<MessagesView> {
       }
 
       items.add(ChatUIKitBottomSheetItem.normal(
-        label: '举报',
+        label: ChatUIKitLocal.messagesViewLongPressActionsTitleReport
+            .getString(context),
         style: TextStyle(
           color: theme.color.isDark
               ? theme.color.neutralColor98
@@ -833,7 +877,8 @@ class _MessagesViewState extends State<MessagesView> {
         },
       ));
       items.add(ChatUIKitBottomSheetItem.normal(
-        label: '删除',
+        label: ChatUIKitLocal.messagesViewLongPressActionsTitleDelete
+            .getString(context),
         style: TextStyle(
           color: theme.color.isDark
               ? theme.color.neutralColor98
@@ -857,7 +902,8 @@ class _MessagesViewState extends State<MessagesView> {
               DateTime.now().millisecondsSinceEpoch -
                   ChatUIKitSettings.recallExpandTime * 1000) {
         items.add(ChatUIKitBottomSheetItem.normal(
-          label: '撤回',
+          label: ChatUIKitLocal.messagesViewLongPressActionsTitleRecall
+              .getString(context),
           style: TextStyle(
             color: theme.color.isDark
                 ? theme.color.neutralColor98
@@ -964,18 +1010,22 @@ class _MessagesViewState extends State<MessagesView> {
 
   void deleteMessage(Message message) async {
     final delete = await showChatUIKitDialog(
-      title: "确认删除这条消息?",
-      content: "删除后，对方依旧可以看到这条消息。",
+      title:
+          ChatUIKitLocal.messagesViewDeleteMessageAlertTitle.getString(context),
+      content: ChatUIKitLocal.messagesViewDeleteMessageAlertSubTitle
+          .getString(context),
       context: context,
       items: [
         ChatUIKitDialogItem.cancel(
-          label: '取消',
+          label: ChatUIKitLocal.messagesViewDeleteMessageAlertButtonCancel
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop();
           },
         ),
         ChatUIKitDialogItem.confirm(
-          label: '确认',
+          label: ChatUIKitLocal.messagesViewDeleteMessageAlertButtonConfirm
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop(true);
           },
@@ -989,17 +1039,20 @@ class _MessagesViewState extends State<MessagesView> {
 
   void recallMessage(Message message) async {
     final recall = await showChatUIKitDialog(
-      title: "确认撤回这条消息?",
+      title:
+          ChatUIKitLocal.messagesViewRecallMessageAlertTitle.getString(context),
       context: context,
       items: [
         ChatUIKitDialogItem.cancel(
-          label: '取消',
+          label: ChatUIKitLocal.messagesViewRecallMessageAlertButtonCancel
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop();
           },
         ),
         ChatUIKitDialogItem.confirm(
-          label: '确认',
+          label: ChatUIKitLocal.messagesViewRecallMessageAlertButtonConfirm
+              .getString(context),
           onTap: () async {
             Navigator.of(context).pop(true);
           },
@@ -1073,22 +1126,30 @@ class _MessagesViewState extends State<MessagesView> {
         return SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.95,
           child: SelectContactView(
-            backText: '取消',
-            title: '选择联系人',
+            backText: ChatUIKitLocal.messagesViewSelectContactCancel
+                .getString(context),
+            title: ChatUIKitLocal.messagesViewSelectContactTitle
+                .getString(context),
             onTap: (context, model) {
               showChatUIKitDialog(
-                title: '分享联系人',
-                content: '确定分享给${model.showName}给${widget.profile.showName}吗？',
+                title: ChatUIKitLocal.messagesViewShareContactAlertTitle
+                    .getString(context),
+                content: ChatUIKitLocal.messagesViewShareContactAlertSubTitle
+                    .getString(context),
                 context: context,
                 items: [
                   ChatUIKitDialogItem.cancel(
-                    label: '取消',
+                    label: ChatUIKitLocal
+                        .messagesViewShareContactAlertButtonCancel
+                        .getString(context),
                     onTap: () async {
                       Navigator.of(context).pop();
                     },
                   ),
                   ChatUIKitDialogItem.confirm(
-                    label: '确认',
+                    label: ChatUIKitLocal
+                        .messagesViewShareContactAlertButtonConfirm
+                        .getString(context),
                     onTap: () async {
                       Navigator.of(context).pop(model);
                     },
@@ -1271,6 +1332,11 @@ class _MessagesViewState extends State<MessagesView> {
       arguments: GroupDetailsViewArguments(
         profile: widget.profile,
         attributes: widget.attributes,
+        onMessageDidClear: () {
+          replyMessage = null;
+          controller.clearMessages();
+          setState(() {});
+        },
         actions: [
           ChatUIKitActionItem(
             title: ChatUIKitLocal.groupDetailViewSend.getString(context),
