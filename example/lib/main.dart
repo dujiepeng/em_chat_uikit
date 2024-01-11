@@ -2,6 +2,8 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit_example/home_page.dart';
 import 'package:em_chat_uikit_example/login_page.dart';
 import 'package:em_chat_uikit_example/pages/help/download_page.dart';
+import 'package:em_chat_uikit_example/pages/me/change_avatar_page.dart';
+import 'package:em_chat_uikit_example/pages/me/personal_info_page.dart';
 import 'package:em_chat_uikit_example/welcome_page.dart';
 
 import 'package:flutter/material.dart';
@@ -88,6 +90,10 @@ class _MyAppState extends State<MyApp> {
                   return const HomePage();
                 } else if (settings.name == '/login') {
                   return const LoginPage();
+                } else if (settings.name == '/personal_info') {
+                  return const PersonalInfoPage();
+                } else if (settings.name == '/change_avatar') {
+                  return const ChangeAvatarPage();
                 } else {
                   return const WelcomePage();
                 }

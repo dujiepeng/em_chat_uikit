@@ -22,4 +22,11 @@ class UserData {
 
   final String? nickname;
   final String? avatarUrl;
+
+  UserData copyWith({String? nickname, String? avatarUrl}) {
+    return UserData(
+      nickname: nickname ?? this.nickname,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+    );
+  }
 }

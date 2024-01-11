@@ -40,6 +40,10 @@ class _ChatUIKitAvatarState extends State<ChatUIKitAvatar> {
         child: widget.avatarUrl?.isNotEmpty == true
             ? ChatUIKitImageLoader.networkImage(
                 image: widget.avatarUrl,
+                placeholderWidget: ChatUIKitImageLoader.defaultAvatar(
+                  height: widget.size,
+                  width: widget.size,
+                ),
               )
             : ChatUIKitImageLoader.defaultAvatar(
                 height: widget.size,

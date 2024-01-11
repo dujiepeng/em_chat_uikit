@@ -765,16 +765,14 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
                   return null;
                 }))
         .then((value) {
-      if (value != null) {
-        if (value is String) {
-          ChatUIKit.instance
-              .changeGroupName(groupId: group!.groupId, name: value)
-              .then((_) {
-            fetchGroup();
-          }).catchError((e) {
-            debugPrint(e.toString());
-          });
-        }
+      if (value is String) {
+        ChatUIKit.instance
+            .changeGroupName(groupId: group!.groupId, name: value)
+            .then((_) {
+          fetchGroup();
+        }).catchError((e) {
+          debugPrint(e.toString());
+        });
       }
     });
   }
@@ -797,16 +795,14 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
       ),
     )
         .then((value) {
-      if (value != null) {
-        if (value is String) {
-          ChatUIKit.instance
-              .changeGroupDescription(groupId: group!.groupId, desc: value)
-              .then((_) {
-            fetchGroup();
-          }).catchError((e) {
-            debugPrint(e.toString());
-          });
-        }
+      if (value is String) {
+        ChatUIKit.instance
+            .changeGroupDescription(groupId: group!.groupId, desc: value)
+            .then((_) {
+          fetchGroup();
+        }).catchError((e) {
+          debugPrint(e.toString());
+        });
       }
     });
   }

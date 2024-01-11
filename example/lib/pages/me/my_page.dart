@@ -14,11 +14,12 @@ class _MyPageState extends State<MyPage> {
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
     Widget content = Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: theme.color.isDark
-            ? theme.color.neutralColor1
-            : theme.color.neutralColor98,
-        body: _buildContent());
+      resizeToAvoidBottomInset: false,
+      backgroundColor: theme.color.isDark
+          ? theme.color.neutralColor1
+          : theme.color.neutralColor98,
+      body: SafeArea(child: _buildContent()),
+    );
 
     return content;
   }
@@ -67,6 +68,9 @@ class _MyPageState extends State<MyPage> {
           onTap: () {
             Clipboard.setData(
                 ClipboardData(text: ChatUIKit.instance.currentUserId() ?? ''));
+            ChatUIKit.instance.sendChatUIKitEvent(
+              ChatUIKitEvent.userIdCopied,
+            );
           },
           child: Icon(
             Icons.file_copy_sharp,
@@ -95,36 +99,54 @@ class _MyPageState extends State<MyPage> {
         content,
         const SizedBox(height: 20),
         const Text('设置'),
-        ListItem(
-          imageWidget: Image.asset('assets/images/online.png'),
-          title: '在线状态',
+        InkWell(
+          onTap: nonsupport,
+          child: ListItem(
+            imageWidget: Image.asset('assets/images/online.png'),
+            title: '在线状态',
+          ),
         ),
-        ListItem(
-          imageWidget: Image.asset('assets/images/personal.png'),
-          title: '个人信息',
+        InkWell(
+          onTap: pushToPersonalInfoPage,
+          child: ListItem(
+            imageWidget: Image.asset('assets/images/personal.png'),
+            title: '个人信息',
+          ),
         ),
-        ListItem(
-          imageWidget: Image.asset('assets/images/settings.png'),
-          title: '通用',
+        InkWell(
+          onTap: nonsupport,
+          child: ListItem(
+            imageWidget: Image.asset('assets/images/settings.png'),
+            title: '通用',
+          ),
         ),
-        ListItem(
-          imageWidget: Image.asset('assets/images/notifications.png'),
-          title: '消息通知',
+        InkWell(
+          onTap: nonsupport,
+          child: ListItem(
+            imageWidget: Image.asset('assets/images/notifications.png'),
+            title: '消息通知',
+          ),
         ),
-        ListItem(
-          imageWidget: Image.asset('assets/images/secret.png'),
-          title: '隐私',
+        InkWell(
+          onTap: nonsupport,
+          child: ListItem(
+            imageWidget: Image.asset('assets/images/secret.png'),
+            title: '隐私',
+          ),
         ),
-        ListItem(
-          imageWidget: Image.asset('assets/images/info.png'),
-          title: '关于',
-          trailing: 'Easemob UIKit v2.0.0',
-          enableArrow: true,
+        InkWell(
+          onTap: nonsupport,
+          child: ListItem(
+            imageWidget: Image.asset('assets/images/info.png'),
+            title: '关于',
+            trailing: 'Easemob UIKit v2.0.0',
+            enableArrow: true,
+          ),
         ),
         const SizedBox(height: 16),
         InkWell(
           onTap: () {
-            ChatUIKit.instance.logout();
+            logout();
           },
           child: Text(
             '退出登录',
@@ -141,11 +163,56 @@ class _MyPageState extends State<MyPage> {
     );
 
     content = Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 60),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 60, bottom: 10),
       child: content,
     );
 
     return content;
+  }
+
+  void pushToPersonalInfoPage() {
+    Navigator.of(context)
+        .pushNamed('/personal_info')
+        .then((value) => setState(() {}));
+  }
+
+  void nonsupport() {
+    showChatUIKitDialog(
+      title: '暂不支持',
+      context: context,
+      items: [
+        ChatUIKitDialogItem.confirm(
+          label: '确定',
+          onTap: () async {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  }
+
+  void logout() {
+    showChatUIKitDialog(
+      title: '退出登录',
+      context: context,
+      items: [
+        ChatUIKitDialogItem.cancel(
+          label: '取消',
+          onTap: () async {
+            Navigator.of(context).pop();
+          },
+        ),
+        ChatUIKitDialogItem.confirm(
+          label: '退出',
+          onTap: () async {
+            Navigator.of(context).pop();
+            ChatUIKit.instance.logout().then((value) {
+              Navigator.of(context).popAndPushNamed('/login');
+            });
+          },
+        ),
+      ],
+    );
   }
 }
 
@@ -202,6 +269,20 @@ class ListItem extends StatelessWidget {
         ],
       ),
     );
+
+    content = Column(
+      children: [
+        content,
+        Divider(
+          height: 0.5,
+          indent: 36,
+          color: theme.color.isDark
+              ? theme.color.neutralColor2
+              : theme.color.neutralColor9,
+        )
+      ],
+    );
+
     return content;
   }
 }

@@ -46,6 +46,10 @@ class MessageListViewController extends ChangeNotifier
         return ConversationType.Chat;
       }
     }();
+    userMap[ChatUIKit.instance.currentUserId()!] = UserData(
+      nickname: ChatUIKitProvider.instance.currentUserData?.nickname,
+      avatarUrl: ChatUIKitProvider.instance.currentUserData?.avatarUrl,
+    );
   }
 
   @override
