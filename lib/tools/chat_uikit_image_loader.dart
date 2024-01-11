@@ -59,15 +59,25 @@ class ChatUIKitImageLoader {
 
   static Widget search({double width = 30, double height = 30, Color? color}) {
     return Image(
-      gaplessPlayback: true,
+      width: width,
+      height: height,
       color: color,
-      image: ResizeImage(
-        const AssetImage('assets/images/search.png', package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
+      image: const AssetImage(
+        'assets/images/search.png',
+        package: packageName,
       ),
       fit: BoxFit.fill,
     );
+    // return Image(
+    //   gaplessPlayback: true,
+    //   color: color,
+    //   image: ResizeImage(
+    //     const AssetImage('assets/images/search.png', package: packageName),
+    //     width: width.toInt(),
+    //     height: height.toInt(),
+    //   ),
+    //   fit: BoxFit.fill,
+    // );
   }
 
   static Widget listEmpty(

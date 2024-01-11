@@ -88,6 +88,7 @@ class _GroupsViewState extends State<GroupsView> {
                   },
                   child: Text(
                     "${ChatUIKitLocal.groupsViewTitle.getString(context)}${joinedCount != null ? '($joinedCount)' : ''}",
+                    textScaleFactor: 1.0,
                     style: TextStyle(
                       fontWeight: theme.font.titleMedium.fontWeight,
                       fontSize: theme.font.titleMedium.fontSize,

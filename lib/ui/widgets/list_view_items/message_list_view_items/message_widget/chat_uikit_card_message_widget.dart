@@ -30,6 +30,7 @@ class ChatUIKitCardMessageWidget extends StatelessWidget {
         Expanded(
           child: Text(
             message.cardUserNickname ?? message.cardUserId!,
+            textScaleFactor: 1.0,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
             style: TextStyle(
@@ -62,7 +63,8 @@ class ChatUIKitCardMessageWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 4),
           child: Text(
-            '联系人',
+            ChatUIKitLocal.messageListItemContactCard.getString(context),
+            textScaleFactor: 1.0,
             style: TextStyle(
               fontWeight: theme.font.bodyExtraSmall.fontWeight,
               fontSize: theme.font.bodyExtraSmall.fontSize,

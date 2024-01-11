@@ -47,6 +47,7 @@ class _ReportMessageViewState extends State<ReportMessageView> {
                 ChatUIKitLocal.reportMessageViewReportReasons
                     .getString(context),
                 overflow: TextOverflow.ellipsis,
+                textScaleFactor: 1.0,
                 maxLines: 1,
                 style: TextStyle(
                     fontWeight: theme.font.titleSmall.fontWeight,
@@ -152,6 +153,7 @@ class _ReportMessageViewState extends State<ReportMessageView> {
         children: [
           Text(
             title,
+            textScaleFactor: 1.0,
             style: TextStyle(
                 fontWeight: theme.font.titleMedium.fontWeight,
                 fontSize: theme.font.titleMedium.fontSize,

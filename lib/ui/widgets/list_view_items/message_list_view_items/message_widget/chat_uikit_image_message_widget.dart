@@ -32,6 +32,11 @@ class _ChatUIKitImageMessageWidgetState
   bool downloadError = false;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
   void initState() {
     super.initState();
     ChatUIKit.instance.addObserver(this);
@@ -113,6 +118,7 @@ class _ChatUIKitImageMessageWidgetState
         final file = File(thumbnailLocalPath!);
         bool exists = file.existsSync();
         if (exists) {
+          // precacheImage(FileImage(file), context);
           content = Image(
             image: ResizeImage(
               FileImage(file),
@@ -133,6 +139,7 @@ class _ChatUIKitImageMessageWidgetState
           final file = File(localPath!);
           bool exists = file.existsSync();
           if (exists) {
+            // precacheImage(FileImage(file), context);
             content = Image(
               image: ResizeImage(
                 FileImage(file),

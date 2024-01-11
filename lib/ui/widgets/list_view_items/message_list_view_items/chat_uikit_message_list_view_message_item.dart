@@ -156,6 +156,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
             children: [
               SizedBox(width: getArrowWidth),
               Text(
+                textScaleFactor: 1.0,
                 ChatUIKitTimeFormatter.instance.formatterHandler?.call(
                       context,
                       ChatUIKitTimeType.message,
@@ -220,12 +221,13 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
 
   Widget _buildVoiceMessage(
       BuildContext context, Message message, bool isLeft) {
-    return bubbleContentBuilder?.call(context, message) ??
-        ChatUIKitVoiceMessageWidget(
-          message: message,
-          playing: isPlaying,
-          forceLeft: isLeft,
-        );
+    Widget? content = bubbleContentBuilder?.call(context, message);
+    content ??= ChatUIKitVoiceMessageWidget(
+      message: message,
+      playing: isPlaying,
+      forceLeft: isLeft,
+    );
+    return content;
   }
 
   Widget _buildVideoMessage(
@@ -292,6 +294,9 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
     Widget content = nicknameWidget ??
         Text(
           nickname,
+          textScaleFactor: 1.0,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
               fontWeight: theme.font.labelSmall.fontWeight,
               fontSize: theme.font.labelSmall.fontSize,

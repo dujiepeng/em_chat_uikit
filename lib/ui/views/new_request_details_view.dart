@@ -65,6 +65,7 @@ class _NewRequestDetailsViewState extends State<NewRequestDetailsView> {
       widget.profile.showName,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
+      textScaleFactor: 1.0,
       style: TextStyle(
         fontSize: theme.font.headlineLarge.fontSize,
         fontWeight: theme.font.headlineLarge.fontWeight,
@@ -77,6 +78,7 @@ class _NewRequestDetailsViewState extends State<NewRequestDetailsView> {
     Widget easeId = Text(
       'ID: ${widget.profile.id}',
       overflow: TextOverflow.ellipsis,
+      textScaleFactor: 1.0,
       maxLines: 1,
       style: TextStyle(
         fontSize: theme.font.bodySmall.fontSize,
@@ -125,6 +127,7 @@ class _NewRequestDetailsViewState extends State<NewRequestDetailsView> {
         child: Text(
           widget.btnText ??
               ChatUIKitLocal.newRequestDetailsViewAddContact.getString(context),
+          textScaleFactor: 1.0,
           style: TextStyle(
             fontSize: theme.font.headlineSmall.fontSize,
             fontWeight: theme.font.headlineSmall.fontWeight,

@@ -15,6 +15,7 @@ class ChatUIKitDetailsListViewItem extends StatelessWidget {
         ListTile(
           title: Text(
             title,
+            textScaleFactor: 1.0,
             style: TextStyle(
               fontWeight: theme.font.titleMedium.fontWeight,
               fontSize: theme.font.titleMedium.fontSize,

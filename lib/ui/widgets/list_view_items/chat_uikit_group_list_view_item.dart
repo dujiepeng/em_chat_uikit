@@ -20,6 +20,7 @@ class ChatUIKitGroupListViewItem extends StatelessWidget {
 
     Widget name = Text(
       model.showName,
+      textScaleFactor: 1.0,
       style: normalStyle,
       overflow: TextOverflow.ellipsis,
     );

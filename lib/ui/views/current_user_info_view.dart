@@ -49,13 +49,16 @@ class _CurrentUserInfoViewState extends State<CurrentUserInfoView> {
   Widget _buildContent() {
     final theme = ChatUIKitTheme.of(context);
     Widget avatar = ChatUIKitAvatar(
-      avatarUrl: widget.profile.avatarUrl,
+      avatarUrl: ChatUIKitProvider.instance.currentUserData?.avatarUrl,
       size: 100,
     );
 
     Widget name = Text(
-      widget.profile.showName,
+      ChatUIKitProvider.instance.currentUserData?.nickname ??
+          ChatUIKit.instance.currentUserId() ??
+          '',
       overflow: TextOverflow.ellipsis,
+      textScaleFactor: 1.0,
       maxLines: 1,
       style: TextStyle(
         fontSize: theme.font.headlineLarge.fontSize,
@@ -70,6 +73,7 @@ class _CurrentUserInfoViewState extends State<CurrentUserInfoView> {
       'ID: ${widget.profile.id}',
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
+      textScaleFactor: 1.0,
       style: TextStyle(
         fontSize: theme.font.bodySmall.fontSize,
         fontWeight: theme.font.bodySmall.fontWeight,

@@ -25,13 +25,17 @@ class ChatUIKitNewRequestListViewItem extends StatelessWidget {
 
     Widget name = Text(
       model.showName,
+      textScaleFactor: 1.0,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
       style: normalStyle,
     );
 
     Widget reason = Text(
-      model.reason?.isNotEmpty == true ? model.reason! : '请求添加您为好友',
+      model.reason?.isNotEmpty == true
+          ? model.reason!
+          : ChatUIKitLocal.newRequestItemAddReason.getString(context),
+      textScaleFactor: 1.0,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
       style: TextStyle(
@@ -70,7 +74,8 @@ class ChatUIKitNewRequestListViewItem extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                '添加',
+                ChatUIKitLocal.newRequestItemAdd.getString(context),
+                textScaleFactor: 1.0,
                 style: TextStyle(
                   color: theme.color.isDark
                       ? theme.color.neutralColor1

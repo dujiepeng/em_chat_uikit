@@ -47,12 +47,14 @@ class HighlightTool {
           children: tmp,
           style: normalStyle,
         ),
+        textScaleFactor: 1.0,
       );
     }
 
     name ??= Text(
       text,
       style: normalStyle,
+      textScaleFactor: 1.0,
     );
     return name;
   }

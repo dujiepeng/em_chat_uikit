@@ -208,6 +208,7 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                   right: widget.leftRightPadding),
               child: Text(
                 widget.title!,
+                textScaleFactor: 1.0,
                 textAlign: TextAlign.center,
                 style: widget.titleStyle ??
                     TextStyle(
@@ -227,6 +228,7 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                   right: widget.leftRightPadding),
               child: Text(
                 widget.content!,
+                textScaleFactor: 1.0,
                 textAlign: TextAlign.center,
                 style: widget.contentStyle ??
                     TextStyle(
@@ -429,6 +431,7 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                     child: Center(
                       child: Text(
                         item.label,
+                        textScaleFactor: 1.0,
                         style: TextStyle(
                           fontSize: themeFont.headlineSmall.fontSize,
                           fontWeight: themeFont.headlineSmall.fontWeight,

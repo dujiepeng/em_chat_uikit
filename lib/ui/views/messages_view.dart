@@ -147,9 +147,8 @@ class _MessagesViewState extends State<MessagesView> {
     inputBarTextEditingController.addListener(() {
       if (showMoreBtn !=
           !inputBarTextEditingController.text.trim().isNotEmpty) {
-        safeSetState(() {
-          showMoreBtn = !inputBarTextEditingController.text.trim().isNotEmpty;
-        });
+        showMoreBtn = !inputBarTextEditingController.text.trim().isNotEmpty;
+        setState(() {});
       }
       if (inputBarTextEditingController.needMention) {
         if (widget.profile.type == ChatUIKitProfileType.groupChat) {
@@ -165,15 +164,13 @@ class _MessagesViewState extends State<MessagesView> {
     focusNode.addListener(() {
       if (editMessage != null) return;
       if (focusNode.hasFocus) {
-        safeSetState(() {
-          showEmoji = false;
-        });
+        showEmoji = false;
+        setState(() {});
       }
     });
   }
 
   void needMention() {
-    // clearAllType();
     if (controller.conversationType == ConversationType.GroupChat) {
       Navigator.of(context)
           .pushNamed(
@@ -189,12 +186,6 @@ class _MessagesViewState extends State<MessagesView> {
           }
         }
       });
-    }
-  }
-
-  void safeSetState(VoidCallback fn) {
-    if (mounted) {
-      setState(fn);
     }
   }
 
@@ -220,34 +211,40 @@ class _MessagesViewState extends State<MessagesView> {
       controller: controller,
       showAvatar: widget.showAvatar,
       showNickname: widget.showNickname,
-      onItemTap: (msg) {
+      onItemTap: (msg) async {
         bool? ret = widget.onItemTap?.call(context, msg);
+        await stopVoice();
         if (ret != true) {
           bubbleTab(msg);
         }
       },
-      onItemLongPress: (msg) {
+      onItemLongPress: (msg) async {
         bool? ret = widget.onItemLongPress?.call(context, msg);
+        stopVoice();
         if (ret != true) {
           onItemLongPress(msg);
         }
       },
-      onDoubleTap: (msg) {
+      onDoubleTap: (msg) async {
         bool? ret = widget.onDoubleTap?.call(context, msg);
+        stopVoice();
         if (ret != true) {}
       },
-      onAvatarTap: (msg) {
+      onAvatarTap: (msg) async {
         bool? ret = widget.onAvatarTap?.call(context, msg);
+        stopVoice();
         if (ret != true) {
           avatarTap(msg);
         }
       },
-      onAvatarLongPressed: (msg) {
+      onAvatarLongPressed: (msg) async {
         bool? ret = widget.onAvatarLongPress?.call(context, msg);
+        stopVoice();
         if (ret != true) {}
       },
-      onNicknameTap: (msg) {
+      onNicknameTap: (msg) async {
         bool? ret = widget.onNicknameTap?.call(context, msg);
+        stopVoice();
         if (ret != true) {}
       },
       bubbleStyle: widget.bubbleStyle,
@@ -260,9 +257,8 @@ class _MessagesViewState extends State<MessagesView> {
       onNotification: (notification) {
         if (notification is ScrollUpdateNotification) {
           if (showEmoji) {
-            safeSetState(() {
-              showEmoji = false;
-            });
+            showEmoji = false;
+            setState(() {});
           }
           if (focusNode.hasFocus) {
             focusNode.unfocus();
@@ -340,9 +336,8 @@ class _MessagesViewState extends State<MessagesView> {
           Positioned.fill(
             child: InkWell(
               onTap: () {
-                safeSetState(() {
-                  editMessage = null;
-                });
+                editMessage = null;
+                setState(() {});
               },
               child: Opacity(
                 opacity: 0.5,
@@ -398,17 +393,15 @@ class _MessagesViewState extends State<MessagesView> {
         widget.onDoubleTap?.call(context, message);
       },
       onBubbleLongPressed: () {
-        if (widget.onItemLongPress == null) {
+        bool? ret = widget.onItemLongPress?.call(context, message);
+        if (ret != true) {
           onItemLongPress(message);
-        } else {
-          widget.onItemLongPress!.call(context, message);
         }
       },
       onBubbleTap: () {
-        if (widget.onItemTap == null) {
+        bool? ret = widget.onItemTap?.call(context, message);
+        if (ret != true) {
           bubbleTab(message);
-        } else {
-          widget.onItemTap!.call(context, message);
         }
       },
       onNicknameTap: () {
@@ -526,9 +519,8 @@ class _MessagesViewState extends State<MessagesView> {
         ChatUIKitReplyBar(
           message: replyMessage!,
           onCancelTap: () {
-            safeSetState(() {
-              replyMessage = null;
-            });
+            replyMessage = null;
+            setState(() {});
           },
         );
   }
@@ -539,9 +531,8 @@ class _MessagesViewState extends State<MessagesView> {
       autofocus: true,
       onChanged: (input) {
         if (messageEditCanSend != (input.trim() != editMessage?.textContent)) {
-          safeSetState(() {
-            messageEditCanSend = input.trim() != editMessage?.textContent;
-          });
+          messageEditCanSend = input.trim() != editMessage?.textContent;
+          setState(() {});
         }
       },
       textEditingController: editBarTextEditingController!,
@@ -550,11 +541,10 @@ class _MessagesViewState extends State<MessagesView> {
           if (!messageEditCanSend) return;
           String text = editBarTextEditingController?.text.trim() ?? '';
           if (text.isNotEmpty) {
-            safeSetState(() {
-              controller.editMessage(editMessage!, text);
-              editBarTextEditingController?.clear();
-              editMessage = null;
-            });
+            controller.editMessage(editMessage!, text);
+            editBarTextEditingController?.clear();
+            editMessage = null;
+            setState(() {});
           }
         },
         child: Icon(
@@ -581,6 +571,7 @@ class _MessagesViewState extends State<MessagesView> {
         const SizedBox(width: 2),
         Text(
           ChatUIKitLocal.messagesViewEditMessageTitle.getString(context),
+          textScaleFactor: 1.0,
           style: TextStyle(
               fontWeight: theme.font.labelSmall.fontWeight,
               fontSize: theme.font.labelSmall.fontSize,
@@ -623,13 +614,14 @@ class _MessagesViewState extends State<MessagesView> {
       leading: InkWell(
         onTap: () async {
           focusNode.unfocus();
-          safeSetState(() {
-            showEmoji = false;
-          });
+          showEmoji = false;
+          setState(() {});
           ChatUIKitRecordModel? model = await showChatUIKitRecordBar(
             context: context,
             statusChangeCallback: (type, duration, path) {
-              if (type == ChatUIKitVoiceBarStatusType.playing) {
+              if (type == ChatUIKitVoiceBarStatusType.recording) {
+                stopVoice();
+              } else if (type == ChatUIKitVoiceBarStatusType.playing) {
                 // 播放录音
                 previewVoice(true, path: path);
               } else if (type == ChatUIKitVoiceBarStatusType.ready) {
@@ -650,19 +642,17 @@ class _MessagesViewState extends State<MessagesView> {
             if (!showEmoji)
               InkWell(
                 onTap: () {
-                  safeSetState(() {
-                    focusNode.unfocus();
-                    showEmoji = !showEmoji;
-                  });
+                  focusNode.unfocus();
+                  showEmoji = !showEmoji;
+                  setState(() {});
                 },
                 child: ChatUIKitImageLoader.faceKeyboard(),
               ),
             if (showEmoji)
               InkWell(
                 onTap: () {
-                  safeSetState(() {
-                    showEmoji = !showEmoji;
-                  });
+                  showEmoji = !showEmoji;
+                  setState(() {});
                 },
                 child: ChatUIKitImageLoader.textKeyboard(),
               ),
@@ -784,13 +774,11 @@ class _MessagesViewState extends State<MessagesView> {
                     );
                     inputBarTextEditingController.clearMentions();
                     inputBarTextEditingController.clear();
-
-                    safeSetState(() {
-                      if (replyMessage != null) {
-                        replyMessage = null;
-                      }
-                      showMoreBtn = true;
-                    });
+                    if (replyMessage != null) {
+                      replyMessage = null;
+                    }
+                    showMoreBtn = true;
+                    setState(() {});
                   }
                 },
                 child: ChatUIKitImageLoader.sendKeyboard(),
@@ -803,14 +791,12 @@ class _MessagesViewState extends State<MessagesView> {
 
   void clearAllType() {
     debugPrint('clearAllType');
-
     stopVoice();
     focusNode.unfocus();
-    safeSetState(() {
-      showEmoji = false;
-      editMessage = null;
-      replyMessage = null;
-    });
+    showEmoji = false;
+    editMessage = null;
+    replyMessage = null;
+    setState(() {});
   }
 
   void onItemLongPress(Message message) {
@@ -963,7 +949,11 @@ class _MessagesViewState extends State<MessagesView> {
       );
     }
     if (items != null) {
-      showChatUIKitBottomSheet(context: context, items: items);
+      showChatUIKitBottomSheet(
+        context: context,
+        items: items,
+        showCancel: false,
+      );
     }
   }
 
@@ -1025,21 +1015,16 @@ class _MessagesViewState extends State<MessagesView> {
   void textMessageEdit(Message message) {
     clearAllType();
     if (message.bodyType != MessageType.TXT) return;
-
+    editMessage = message;
     editBarTextEditingController =
         TextEditingController(text: editMessage?.textContent ?? "");
-    safeSetState(() {
-      editMessage = message;
-    });
   }
 
   void replyMessaged(Message message) {
     clearAllType();
     focusNode.requestFocus();
-
-    safeSetState(() {
-      replyMessage = message;
-    });
+    replyMessage = message;
+    setState(() {});
   }
 
   void deleteMessage(Message message) async {
@@ -1232,7 +1217,7 @@ class _MessagesViewState extends State<MessagesView> {
         }
       }
     }
-    safeSetState(() {});
+    setState(() {});
   }
 
   Future<void> previewVoice(bool play, {String? path}) async {
@@ -1250,9 +1235,8 @@ class _MessagesViewState extends State<MessagesView> {
 
     await _player.play(DeviceFileSource(path));
     _player.onPlayerComplete.first.whenComplete(() async {
-      safeSetState(() {
-        _playingMessage = null;
-      });
+      _playingMessage = null;
+      setState(() {});
     }).onError((error, stackTrace) {});
   }
 
@@ -1260,6 +1244,7 @@ class _MessagesViewState extends State<MessagesView> {
     if (_player.state == PlayerState.playing) {
       await _player.stop();
       _playingMessage = null;
+      setState(() {});
     }
   }
 
@@ -1343,9 +1328,8 @@ class _MessagesViewState extends State<MessagesView> {
         attributes: widget.attributes,
         onMessageDidClear: () {
           controller.clearMessages();
-          safeSetState(() {
-            replyMessage = null;
-          });
+          replyMessage = null;
+          setState(() {});
         },
         profile: widget.profile,
         actions: [
@@ -1370,9 +1354,8 @@ class _MessagesViewState extends State<MessagesView> {
         attributes: widget.attributes,
         onMessageDidClear: () {
           controller.clearMessages();
-          safeSetState(() {
-            replyMessage = null;
-          });
+          replyMessage = null;
+          setState(() {});
         },
         actions: [
           ChatUIKitActionItem(

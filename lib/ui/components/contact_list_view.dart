@@ -51,9 +51,7 @@ class _ContactListViewState extends State<ContactListView>
     controller = widget.controller ?? ContactListViewController();
     controller.fetchItemList();
     controller.loadingType.addListener(() {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        safeSetState(() {});
-      });
+      setState(() {});
     });
   }
 
@@ -70,12 +68,6 @@ class _ContactListViewState extends State<ContactListView>
     scrollController.dispose();
     controller.dispose();
     super.dispose();
-  }
-
-  void safeSetState(VoidCallback fn) {
-    if (mounted) {
-      setState(fn);
-    }
   }
 
   @override

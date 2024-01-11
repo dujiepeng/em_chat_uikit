@@ -80,6 +80,7 @@ class _GroupMentionViewState extends State<GroupMentionView> {
                   },
                   child: Text(
                     '@${ChatUIKitLocal.groupMembersViewTitle.getString(context)}',
+                    textScaleFactor: 1.0,
                     style: TextStyle(
                       color: theme.color.isDark
                           ? theme.color.neutralColor98
@@ -210,6 +211,7 @@ class MentionAllItem extends StatelessWidget {
     Widget name = Text(
       ChatUIKitLocal.groupMentionViewMentionAll.getString(context),
       style: normalStyle,
+      textScaleFactor: 1.0,
     );
 
     Widget avatar = const ChatUIKitAvatar(

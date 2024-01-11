@@ -8,7 +8,8 @@ Future<T?> showChatUIKitBottomSheet<T>({
   Color? barrierColor,
   bool enableRadius = true,
   String? title,
-  String cancelTitle = 'Cancel',
+  String? cancelTitle,
+  bool showCancel = true,
   TextStyle? cancelStyle,
 }) {
   return showModalBottomSheet(
@@ -30,6 +31,7 @@ Future<T?> showChatUIKitBottomSheet<T>({
         items: items,
         cancelTitle: cancelTitle,
         cancelStyle: cancelStyle,
+        showCancel: showCancel,
       );
     },
   );
@@ -93,6 +95,7 @@ class ChatUIKitBottomSheet<T> extends StatelessWidget {
     this.titleStyle,
     this.cancelTitle,
     this.cancelStyle,
+    this.showCancel = true,
     super.key,
   });
   final List<ChatUIKitBottomSheetItem> items;
@@ -100,6 +103,7 @@ class ChatUIKitBottomSheet<T> extends StatelessWidget {
   final TextStyle? titleStyle;
   final String? cancelTitle;
   final TextStyle? cancelStyle;
+  final bool showCancel;
   @override
   Widget build(BuildContext context) {
     return BottomSheet(
@@ -149,6 +153,7 @@ class ChatUIKitBottomSheet<T> extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 13),
         child: Text(
           title!,
+          textScaleFactor: 1.0,
           style: titleStyle ??
               TextStyle(
                 fontWeight:
@@ -195,6 +200,7 @@ class ChatUIKitBottomSheet<T> extends StatelessWidget {
                       ),
                       Text(
                         element.label,
+                        textScaleFactor: 1.0,
                         style: element.style ??
                             (element.type == ChatUIKitBottomSheetItemType.normal
                                 ? normalStyle
@@ -204,6 +210,7 @@ class ChatUIKitBottomSheet<T> extends StatelessWidget {
                   )
                 : Text(
                     element.label,
+                    textScaleFactor: 1.0,
                     style: element.style ??
                         (element.type == ChatUIKitBottomSheetItemType.normal
                             ? normalStyle
@@ -220,7 +227,10 @@ class ChatUIKitBottomSheet<T> extends StatelessWidget {
           ? ChatUIKitTheme.of(context).color.neutralColor0
           : ChatUIKitTheme.of(context).color.neutralColor95),
     ));
-    if (cancelTitle?.isNotEmpty == true) {
+
+    if (showCancel) {
+      String? str = cancelTitle;
+      str ??= ChatUIKitLocal.bottomSheetCancel.getString(context);
       list.add(
         InkWell(
           onTap: () {
@@ -230,7 +240,8 @@ class ChatUIKitBottomSheet<T> extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 17),
             alignment: Alignment.center,
             child: Text(
-              cancelTitle!,
+              str,
+              textScaleFactor: 1.0,
               style: cancelStyle ??
                   TextStyle(
                     fontWeight:

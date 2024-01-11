@@ -66,6 +66,7 @@ class _ChatUIKitAppBarState extends State<ChatUIKitAppBar> {
         widget.title!,
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
+        textScaleFactor: 1.0,
         style: widget.titleTextStyle ??
             TextStyle(
               fontSize: theme.font.titleMedium.fontSize,
@@ -91,6 +92,7 @@ class _ChatUIKitAppBarState extends State<ChatUIKitAppBar> {
     if (widget.subTitle?.isNotEmpty == true) {
       subTitle = Text(
         widget.subTitle!,
+        textScaleFactor: 1.0,
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
         style: widget.subTitleTextStyle ??

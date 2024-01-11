@@ -73,6 +73,7 @@ class ChatUIKitMessageListViewAlertItem extends StatelessWidget {
     }
 
     return RichText(
+      textScaleFactor: 1.0,
       text: TextSpan(
         style: defaultStyle,
         children: list,

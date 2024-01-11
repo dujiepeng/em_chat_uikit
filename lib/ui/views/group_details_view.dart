@@ -147,6 +147,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     Widget name = Text(
       widget.profile.showName,
       overflow: TextOverflow.ellipsis,
+      textScaleFactor: 1.0,
       maxLines: 1,
       style: TextStyle(
         fontSize: theme.font.headlineLarge.fontSize,
@@ -161,6 +162,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         ? Text(
             group?.description ?? '',
             overflow: TextOverflow.ellipsis,
+            textScaleFactor: 1.0,
             maxLines: 3,
             style: TextStyle(
               fontSize: theme.font.bodySmall.fontSize,
@@ -176,6 +178,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
       'ID: ${widget.profile.id}',
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
+      textScaleFactor: 1.0,
       style: TextStyle(
         fontSize: theme.font.bodySmall.fontSize,
         fontWeight: theme.font.bodySmall.fontWeight,
@@ -254,6 +257,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
                   child: Text(
                     action.title,
                     maxLines: 1,
+                    textScaleFactor: 1.0,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: theme.font.bodySmall.fontSize,
@@ -328,6 +332,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
                     } else {
                       return Text(
                         '$memberCount',
+                        textScaleFactor: 1.0,
                         style: TextStyle(
                           color: theme.color.isDark
                               ? theme.color.neutralColor6
@@ -422,6 +427,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
                       child: Text(
                         group?.name ?? "",
                         overflow: TextOverflow.ellipsis,
+                        textScaleFactor: 1.0,
                         maxLines: 1,
                         textAlign: TextAlign.end,
                         style: TextStyle(
@@ -464,6 +470,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.end,
                         maxLines: 1,
+                        textScaleFactor: 1.0,
                         style: TextStyle(
                           color: theme.color.isDark
                               ? theme.color.neutralColor6

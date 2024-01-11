@@ -221,6 +221,7 @@ class _MessageListViewState extends State<MessageListView> {
         widget.onDoubleTap?.call(message);
       },
       onBubbleLongPressed: () {
+        debugPrint('onBubbleLongPressed');
         widget.onItemLongPress?.call(message);
       },
       onBubbleTap: () {

@@ -127,6 +127,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
                         return Text(
                           ChatUIKitLocal.groupMembersViewTitle
                               .getString(context),
+                          textScaleFactor: 1.0,
                           style: TextStyle(
                             color: theme.color.isDark
                                 ? theme.color.neutralColor98
@@ -138,6 +139,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
                       } else {
                         return Text(
                           '${ChatUIKitLocal.groupMembersViewTitle.getString(context)}(${memberCount.value})',
+                          textScaleFactor: 1.0,
                           style: TextStyle(
                             color: theme.color.isDark
                                 ? theme.color.neutralColor98

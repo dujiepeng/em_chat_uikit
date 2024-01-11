@@ -235,6 +235,21 @@ extension MessageHelper on Message {
         if (isCardMessage) {
           str = '[Card]';
         } else {
+          if (isRecallAlert) {
+            Map<String, String>? map = (body as CustomMessageBody).params;
+
+            String? from = map?[alertRecallMessageFromKey];
+            String? showName;
+            if (ChatUIKit.instance.currentUserId() == from) {
+              showName =
+                  ChatUIKitLocal.messagesViewRecallInfoYou.getString(context!);
+            } else {
+              ChatUIKitProfile profile =
+                  ChatUIKitProvider.instance.contactProfile(from ?? '');
+              showName = profile.showName;
+            }
+            return '$showName${ChatUIKitLocal.messagesViewRecallInfo.getString(context!)}';
+          }
           str = '[Custom]';
         }
 

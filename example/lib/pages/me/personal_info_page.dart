@@ -28,59 +28,23 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
       body: SafeArea(
         child: ListView(
           children: [
-            ListTile(
-              title: Text(
-                '头像',
-                style: TextStyle(
-                  fontSize: theme.font.titleMedium.fontSize,
-                  fontWeight: theme.font.titleMedium.fontWeight,
-                ),
-              ),
-              trailing: ChatUIKitAvatar(
+            PersonalInfoItem(
+              title: '头像',
+              imageWidget: ChatUIKitAvatar(
                 avatarUrl:
                     ChatUIKitProvider.instance.currentUserData?.avatarUrl,
                 size: 40,
               ),
               onTap: pushChangeAvatarPage,
             ),
-            Divider(
-              height: 0.5,
-              indent: 16,
-              color: theme.color.isDark
-                  ? theme.color.neutralColor2
-                  : theme.color.neutralColor9,
-            ),
-            ListTile(
-              title: Text(
-                '昵称',
-                style: TextStyle(
-                  fontSize: theme.font.titleMedium.fontSize,
-                  fontWeight: theme.font.titleMedium.fontWeight,
-                ),
-              ),
-              trailing: Text(
-                ChatUIKitProvider.instance.currentUserData?.nickname ??
-                    ChatUIKit.instance.currentUserId() ??
-                    '',
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: TextStyle(
-                  fontSize: theme.font.labelLarge.fontSize,
-                  fontWeight: theme.font.labelLarge.fontWeight,
-                  color: theme.color.isDark
-                      ? theme.color.neutralColor7
-                      : theme.color.neutralColor5,
-                ),
-              ),
+            PersonalInfoItem(
+              title: '昵称',
+              trailing: ChatUIKitProvider.instance.currentUserData?.nickname ??
+                  ChatUIKit.instance.currentUserId() ??
+                  '',
               onTap: pushChangeNicknamePage,
+              enableArrow: true,
             ),
-            Divider(
-              height: 0.5,
-              indent: 16,
-              color: theme.color.isDark
-                  ? theme.color.neutralColor2
-                  : theme.color.neutralColor9,
-            )
           ],
         ),
       ),
@@ -124,5 +88,90 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         }
       },
     );
+  }
+}
+
+class PersonalInfoItem extends StatelessWidget {
+  const PersonalInfoItem(
+      {required this.title,
+      this.trailing,
+      this.imageWidget,
+      this.enableArrow = false,
+      this.onTap,
+      super.key});
+
+  final String title;
+  final String? trailing;
+  final Widget? imageWidget;
+  final bool enableArrow;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = ChatUIKitTheme.of(context);
+    Widget content = SizedBox(
+      height: 54,
+      child: Row(
+        children: [
+          Text(
+            title,
+            textScaleFactor: 1.0,
+            style: TextStyle(
+              fontSize: theme.font.titleMedium.fontSize,
+              fontWeight: theme.font.titleMedium.fontWeight,
+              color: theme.color.isDark
+                  ? theme.color.neutralColor100
+                  : theme.color.neutralColor1,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              trailing ?? '',
+              textScaleFactor: 1.0,
+              textAlign: TextAlign.right,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: theme.font.labelLarge.fontSize,
+                fontWeight: theme.font.labelLarge.fontWeight,
+                color: theme.color.isDark
+                    ? theme.color.neutralColor7
+                    : theme.color.neutralColor5,
+              ),
+            ),
+          ),
+          if (imageWidget != null)
+            SizedBox(
+              width: 40,
+              height: 40,
+              child: imageWidget,
+            ),
+          const SizedBox(width: 8),
+          if (enableArrow) const Icon(Icons.arrow_forward_ios, size: 16),
+        ],
+      ),
+    );
+
+    content = Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16), child: content);
+
+    content = Column(
+      children: [
+        content,
+        Divider(
+          height: 0.5,
+          indent: 16,
+          color: theme.color.isDark
+              ? theme.color.neutralColor2
+              : theme.color.neutralColor9,
+        )
+      ],
+    );
+
+    content = InkWell(
+      onTap: onTap,
+      child: content,
+    );
+
+    return content;
   }
 }

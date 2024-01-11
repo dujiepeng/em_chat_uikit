@@ -194,7 +194,8 @@ class _ChatUIKitSearchWidgetState extends State<ChatUIKitSearchWidget> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Text(
-                  '取消',
+                  ChatUIKitLocal.searchWidgetCancel.getString(context),
+                  textScaleFactor: 1.0,
                   style: TextStyle(
                     color: theme.color.isDark
                         ? theme.color.primaryColor6
@@ -244,6 +245,7 @@ class _ChatUIKitSearchWidgetState extends State<ChatUIKitSearchWidget> {
                 const SizedBox(width: 4),
                 Text(
                   widget.searchHideText,
+                  textScaleFactor: 1.0,
                   style: TextStyle(
                     color: ChatUIKitTheme.of(context).color.isDark
                         ? ChatUIKitTheme.of(context).color.neutralColor4

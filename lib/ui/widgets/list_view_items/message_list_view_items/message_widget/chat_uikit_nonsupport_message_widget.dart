@@ -19,6 +19,7 @@ class ChatUIKitNonsupportMessageWidget extends StatelessWidget {
     bool left = forceLeft ?? message.direction == MessageDirection.RECEIVE;
     Widget content = Text(
       ChatUIKitLocal.nonSupportMessage.getString(context),
+      textScaleFactor: 1.0,
       style: style ??
           (left
               ? TextStyle(

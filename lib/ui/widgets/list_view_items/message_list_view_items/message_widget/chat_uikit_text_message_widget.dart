@@ -18,6 +18,7 @@ class ChatUIKitTextMessageWidget extends StatelessWidget {
     bool left = isLeft ?? message.direction == MessageDirection.RECEIVE;
     Widget content = Text(
       message.textContent,
+      textScaleFactor: 1.0,
       style: style ??
           (left
               ? TextStyle(
@@ -43,6 +44,7 @@ class ChatUIKitTextMessageWidget extends StatelessWidget {
           content,
           Text(
             '已编辑',
+            textScaleFactor: 1.0,
             style: TextStyle(
               fontWeight: theme.font.bodyExtraSmall.fontWeight,
               fontSize: theme.font.bodyExtraSmall.fontSize,

@@ -83,6 +83,7 @@ class _GroupChangeOwnerViewState extends State<GroupChangeOwnerView> {
                     child: Text(
                       ChatUIKitLocal.groupChangeOwnerViewTitle
                           .getString(context),
+                      textScaleFactor: 1.0,
                       style: TextStyle(
                         color: theme.color.isDark
                             ? theme.color.neutralColor98

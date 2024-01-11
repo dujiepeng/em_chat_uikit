@@ -43,7 +43,7 @@ Future<T?> showChatUIKitRecordBar<T>({
   ChatUIKitRecordConfig recordConfig = const ChatUIKitRecordConfig(),
   Color? backgroundColor,
   bool enableRadius = false,
-  int maxDuration = 30,
+  int maxDuration = 60,
   Widget? deleteIcon,
   Widget? micIcon,
   Widget? sendIcon,
@@ -263,22 +263,28 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
     );
     if (statusType == ChatUIKitVoiceBarStatusType.none) {
       return Text(
-        widget.hintText ?? '点击录音',
+        widget.hintText ?? ChatUIKitLocal.recordBarRecord.getString(context),
+        textScaleFactor: 1.0,
         style: widget.hintTextStyle ?? style,
       );
     } else if (statusType == ChatUIKitVoiceBarStatusType.recording) {
       return Text(
-        widget.recordText ?? '正在录音',
+        widget.recordText ??
+            ChatUIKitLocal.recordBarRecording.getString(context),
+        textScaleFactor: 1.0,
         style: widget.recordTextStyle ?? style,
       );
     } else if (statusType == ChatUIKitVoiceBarStatusType.ready) {
       return Text(
-        widget.playText ?? '点击播放',
+        widget.playText ?? ChatUIKitLocal.recordBarPlay.getString(context),
+        textScaleFactor: 1.0,
         style: widget.playTextStyle ?? style,
       );
     } else if (statusType == ChatUIKitVoiceBarStatusType.playing) {
       return Text(
-        widget.playingText ?? '播放中',
+        widget.playingText ??
+            ChatUIKitLocal.recordBarPlaying.getString(context),
+        textScaleFactor: 1.0,
         style: widget.playingTextStyle ?? style,
       );
     }
@@ -290,7 +296,11 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
     Widget content;
     if (widget.maxDuration - recordCounter <= 10 &&
         statusType == ChatUIKitVoiceBarStatusType.recording) {
-      content = Text("${widget.maxDuration - recordCounter}'后自动停止",
+      ChatUIKitLocal.recordBarAutoStop.getString(context);
+      content = Text(
+          context.formatString(ChatUIKitLocal.recordBarAutoStop,
+              ['${widget.maxDuration - recordCounter}']),
+          textScaleFactor: 1.0,
           style: TextStyle(
             fontWeight: theme.font.bodySmall.fontWeight,
             fontSize: theme.font.bodySmall.fontSize,
@@ -337,6 +347,7 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
                   statusType == ChatUIKitVoiceBarStatusType.ready) {
                 return Text(
                   '${recordCounter}s',
+                  textScaleFactor: 1.0,
                   style: TextStyle(
                       color: theme.color.isDark
                           ? theme.color.neutralColor98
@@ -347,6 +358,7 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
               } else if (statusType == ChatUIKitVoiceBarStatusType.playing) {
                 return Text(
                   '${playCounter}s',
+                  textScaleFactor: 1.0,
                   style: TextStyle(
                       color: theme.color.isDark
                           ? theme.color.neutralColor98

@@ -38,6 +38,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
     Widget title = showTitle
         ? Text(
             info.showName,
+            textScaleFactor: 1.0,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
             style: TextStyle(
@@ -74,6 +75,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
                         info.lastMessage?.serverTime ?? 0) ??
                     ChatUIKitTimeTool.getChatTimeStr(
                         info.lastMessage?.serverTime ?? 0),
+                textScaleFactor: 1.0,
                 style: TextStyle(
                   color: theme.color.isDark
                       ? theme.color.neutralColor6
@@ -104,6 +106,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
 
     Widget subTitle = showSubTitle
         ? RichText(
+            textScaleFactor: 1.0,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
             text: TextSpan(
@@ -145,7 +148,6 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
           ? Container(
               width: 8,
               height: 8,
-              alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: theme.color.isDark
                     ? theme.color.primaryColor6
@@ -154,12 +156,18 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
               ),
             )
           : const SizedBox();
+      unreadCount = Center(
+        child: unreadCount,
+      );
     } else {
       unreadCount = showUnreadCount && info.unreadCount > 0
           ? Container(
               padding: const EdgeInsets.fromLTRB(4, 1, 4, 1),
               constraints: const BoxConstraints(
-                  minWidth: 20, maxHeight: 20, minHeight: 20),
+                minWidth: 20,
+                maxHeight: 20,
+                minHeight: 20,
+              ),
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: theme.color.isDark
@@ -169,6 +177,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
               ),
               child: Text(
                 info.unreadCount > 99 ? '99+' : info.unreadCount.toString(),
+                textScaleFactor: 1.0,
                 style: TextStyle(
                   color: theme.color.isDark
                       ? theme.color.neutralColor1
@@ -180,6 +189,12 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
             )
           : const SizedBox();
     }
+
+    unreadCount = SizedBox(
+      width: 20,
+      height: 20,
+      child: unreadCount,
+    );
 
     Widget subTitleRow = Row(
       children: [

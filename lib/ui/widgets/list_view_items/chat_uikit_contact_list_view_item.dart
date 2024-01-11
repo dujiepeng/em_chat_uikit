@@ -20,6 +20,7 @@ class ChatUIKitContactListViewItem extends StatelessWidget {
 
     Widget name = Text(
       model.showName,
+      textScaleFactor: 1.0,
       style: normalStyle,
     );
 

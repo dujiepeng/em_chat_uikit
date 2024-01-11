@@ -42,6 +42,7 @@ mixin ChatUIKitLocal {
   static const recordBarRecording = 'record_bar_recording';
   static const recordBarPlay = 'record_bar_play';
   static const recordBarPlaying = 'record_bar_playing';
+  static const recordBarAutoStop = 'record_bar_auto_stop';
 
   static const addContactTitle = 'add_contact_title';
   static const addContactSubTitle = 'add_contact_sub_title';
@@ -240,6 +241,30 @@ mixin ChatUIKitLocal {
 
   static const conversationListItemMention = 'conversation_list_item_mention';
 
+  static const listViewLoadFailed = 'list_view_load_failed';
+  static const listViewReload = 'list_view_reload';
+  static const quoteWidgetTitleImage = 'quote_widget_title_image';
+  static const quoteWidgetTitleVideo = 'quote_widget_title_video';
+  static const quoteWidgetTitleVoice = 'quote_widget_title_voice';
+  static const quoteWidgetTitleFile = 'quote_widget_title_file';
+  static const quoteWidgetTitleContact = 'quote_widget_title_contact';
+  static const quoteWidgetTitleUnFind = 'quote_widget_title_un_find';
+
+  static const messageListItemEdited = 'message_list_item_edit';
+  static const messageListItemContactCard = 'message_list_item_contact_card';
+  static const newRequestItemAdd = 'new_request_item_title';
+  static const newRequestItemAddReason = 'new_request_item_add_reason';
+  static const searchWidgetCancel = 'search_widget_cancel';
+
+  static const replayBarTitleContact = 'replay_bar_title_contact';
+  static const replayBarTitleFile = 'replay_bar_title_file';
+  static const replayBarTitleVoice = 'replay_bar_title_voice';
+  static const replayBarTitleVideo = 'replay_bar_title_video';
+  static const replayBarTitleImage = 'replay_bar_title_image';
+  static const replayBarTitle = 'replay_bar_title';
+
+  static const bottomSheetCancel = 'bottom_sheet_cancel';
+
   static const Map<String, dynamic> zh = {
     conversationsViewMenuAddContact: '添加联系人',
     conversationsViewMenuCreateGroup: '创建群组',
@@ -263,6 +288,7 @@ mixin ChatUIKitLocal {
     recordBarRecording: '正在录音',
     recordBarPlay: '点击播放',
     recordBarPlaying: '播放中',
+    recordBarAutoStop: '%a秒后自动停止',
     addContactTitle: '添加联系人',
     addContactSubTitle: '通过用户ID添加联系人',
     addContactInputHints: '输入用户ID',
@@ -378,6 +404,26 @@ mixin ChatUIKitLocal {
     selectContactViewSearchHint: '搜索联系人',
     nonSupportMessage: '不支持的消息类型',
     conversationListItemMention: '有人@我',
+    listViewLoadFailed: '加载失败',
+    listViewReload: '重新加载',
+    quoteWidgetTitleImage: '图片',
+    quoteWidgetTitleVideo: '视频',
+    quoteWidgetTitleVoice: '语音 ',
+    quoteWidgetTitleFile: '文件 ',
+    quoteWidgetTitleContact: '联系人 ',
+    quoteWidgetTitleUnFind: '未找到原消息',
+    messageListItemEdited: '已编辑',
+    messageListItemContactCard: '联系人',
+    newRequestItemAdd: '添加',
+    newRequestItemAddReason: '请求添加您为好友',
+    searchWidgetCancel: '取消',
+    replayBarTitleContact: '联系人 ',
+    replayBarTitleFile: '附件 ',
+    replayBarTitleVoice: '语音 ',
+    replayBarTitleVideo: '视频',
+    replayBarTitleImage: '图片',
+    replayBarTitle:'正在回复 ',
+    bottomSheetCancel: '取消',
   };
 
   static const Map<String, dynamic> en = {
@@ -403,6 +449,7 @@ mixin ChatUIKitLocal {
     recordBarRecording: 'Recording',
     recordBarPlay: 'Play',
     recordBarPlaying: 'Playing',
+    recordBarAutoStop: 'It stops after %a seconds',
     addContactTitle: 'Add Contacts',
     addContactSubTitle: 'Add Contacts by ID',
     addContactInputHints: 'Input ID',
@@ -526,5 +573,25 @@ mixin ChatUIKitLocal {
     selectContactViewSearchHint: 'Search contacts',
     nonSupportMessage: 'Unsupported message type',
     conversationListItemMention: 'Mentioned',
+    listViewLoadFailed: 'Load failed',
+    listViewReload: 'Reload',
+    quoteWidgetTitleImage: 'Image',
+    quoteWidgetTitleVideo: 'Video',
+    quoteWidgetTitleVoice: 'Voice ',
+    quoteWidgetTitleFile: 'File ',
+    quoteWidgetTitleContact: 'Contact ',
+    quoteWidgetTitleUnFind: 'Not found original message',
+    messageListItemEdited: 'Have been edited',
+    messageListItemContactCard: 'Contact card',
+    newRequestItemAdd: 'Add',
+    newRequestItemAddReason: 'Request to add you as a friend',
+    searchWidgetCancel: 'Cancel',
+    replayBarTitleContact: 'Contact ',
+    replayBarTitleFile: 'File ',
+    replayBarTitleVoice: 'Voice ',
+    replayBarTitleVideo: 'Video',
+    replayBarTitleImage: 'Image',
+    replayBarTitle:'Replying ',
+    bottomSheetCancel: 'Cancel',
   };
 }

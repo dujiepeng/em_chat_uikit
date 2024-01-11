@@ -77,6 +77,7 @@ class _ChatUIKitVoiceMessageWidgetState
 
     Widget timeWidget = Text(
       '${message.duration}"',
+      textScaleFactor: 1.0,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
       style: widget.style ??

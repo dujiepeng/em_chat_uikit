@@ -25,6 +25,7 @@ class ChatUIKitAlphabeticalListViewItem extends StatelessWidget {
         alignment: Alignment.centerLeft,
         child: Text(
           model.alphabetical,
+          textScaleFactor: 1.0,
           style: model.textStyle ??
               TextStyle(
                 fontWeight: theme.font.titleSmall.fontWeight,

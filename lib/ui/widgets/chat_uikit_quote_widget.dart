@@ -101,6 +101,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
       children: [
         Text(
           message.nickname ?? message.from ?? '',
+          textScaleFactor: 1.0,
           style: TextStyle(
             color: theme.color.isDark
                 ? theme.color.neutralSpecialColor5
@@ -112,6 +113,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         Text(
           message.textContent,
           overflow: TextOverflow.ellipsis,
+          textScaleFactor: 1.0,
           maxLines: 2,
           style: TextStyle(
             color: theme.color.isDark
@@ -139,8 +141,9 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         const SizedBox(width: 4),
         Flexible(
           child: Text(
-            "图片",
+            ChatUIKitLocal.quoteWidgetTitleImage.getString(context),
             overflow: TextOverflow.ellipsis,
+            textScaleFactor: 1.0,
             maxLines: 1,
             style: TextStyle(
               fontWeight: theme.font.labelMedium.fontWeight,
@@ -158,6 +161,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
       children: [
         Text(
           message.nickname ?? message.from ?? '',
+          textScaleFactor: 1.0,
           style: TextStyle(
             color: theme.color.isDark
                 ? theme.color.neutralSpecialColor5
@@ -294,7 +298,8 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         const SizedBox(width: 4),
         Flexible(
           child: Text(
-            "视频",
+            ChatUIKitLocal.quoteWidgetTitleVideo.getString(context),
+            textScaleFactor: 1.0,
             style: TextStyle(
               fontWeight: theme.font.labelMedium.fontWeight,
               fontSize: theme.font.labelMedium.fontSize,
@@ -311,6 +316,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
       children: [
         Text(
           message.nickname ?? message.from ?? '',
+          textScaleFactor: 1.0,
           style: TextStyle(
             color: theme.color.isDark
                 ? theme.color.neutralSpecialColor5
@@ -451,10 +457,11 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
           child: RichText(
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
+            textScaleFactor: 1.0,
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: '语音 ',
+                  text: ChatUIKitLocal.quoteWidgetTitleVoice.getString(context),
                   style: TextStyle(
                     fontWeight: theme.font.bodySmall.fontWeight,
                     fontSize: theme.font.bodySmall.fontSize,
@@ -485,6 +492,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         Text(
           message.nickname ?? message.from ?? '',
           overflow: TextOverflow.ellipsis,
+          textScaleFactor: 1.0,
           maxLines: 1,
           style: TextStyle(
             color: theme.color.isDark
@@ -519,10 +527,11 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
           child: RichText(
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
+            textScaleFactor: 1.0,
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: '附件 ',
+                  text: ChatUIKitLocal.quoteWidgetTitleFile.getString(context),
                   style: TextStyle(
                     fontWeight: theme.font.labelSmall.fontWeight,
                     fontSize: theme.font.labelSmall.fontSize,
@@ -552,6 +561,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
       children: [
         Text(
           message.nickname ?? message.from ?? '',
+          textScaleFactor: 1.0,
           style: TextStyle(
             color: theme.color.isDark
                 ? theme.color.neutralSpecialColor5
@@ -583,10 +593,12 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
           const SizedBox(width: 4),
           Flexible(
             child: RichText(
+              textScaleFactor: 1.0,
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: '联系人 ',
+                    text: ChatUIKitLocal.quoteWidgetTitleContact
+                        .getString(context),
                     style: TextStyle(
                       fontWeight: theme.font.labelMedium.fontWeight,
                       fontSize: theme.font.labelMedium.fontSize,
@@ -617,6 +629,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         children: [
           Text(
             message.nickname ?? message.from ?? '',
+            textScaleFactor: 1.0,
             style: TextStyle(
               color: theme.color.isDark
                   ? theme.color.neutralSpecialColor5
@@ -636,7 +649,8 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
 
   Widget _emptyWidget(ChatUIKitTheme theme) {
     return Text(
-      '未找到原消息',
+      ChatUIKitLocal.quoteWidgetTitleUnFind.getString(context),
+      textScaleFactor: 1.0,
       style: TextStyle(
         color: theme.color.isDark
             ? theme.color.neutralColor5
@@ -650,6 +664,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
   Widget _unSupportWidget(ChatUIKitTheme theme) {
     return Text(
       ChatUIKitLocal.nonSupportMessage.getString(context),
+      textScaleFactor: 1.0,
       style: TextStyle(
         color: theme.color.isDark
             ? theme.color.neutralColor5

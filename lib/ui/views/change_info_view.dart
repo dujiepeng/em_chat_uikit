@@ -93,6 +93,7 @@ class _ChangeInfoViewState extends State<ChangeInfoView> {
                     alignment: Alignment.topRight,
                     child: Text(
                       "$currentLength/$maxLength",
+                      textScaleFactor: 1.0,
                       style: TextStyle(
                           color: theme.color.isDark
                               ? theme.color.neutralColor5
@@ -143,6 +144,7 @@ class _ChangeInfoViewState extends State<ChangeInfoView> {
               },
               child: Text(
                 widget.title ?? '',
+                textScaleFactor: 1.0,
                 style: TextStyle(
                     fontWeight: theme.font.titleMedium.fontWeight,
                     fontSize: theme.font.titleMedium.fontSize,
@@ -166,6 +168,7 @@ class _ChangeInfoViewState extends State<ChangeInfoView> {
                     child: Text(
                       widget.saveButtonTitle ??
                           ChatUIKitLocal.changInfoViewSave.getString(context),
+                      textScaleFactor: 1.0,
                       style: TextStyle(
                         fontWeight: theme.font.labelMedium.fontWeight,
                         fontSize: theme.font.labelMedium.fontSize,

@@ -36,6 +36,7 @@ class ChatUIKitBadge extends StatelessWidget {
       ),
       child: Text(
         count > 99 ? '99+' : count.toString(),
+        textScaleFactor: 1.0,
         style: TextStyle(
           color: textColor ??
               (theme.color.isDark

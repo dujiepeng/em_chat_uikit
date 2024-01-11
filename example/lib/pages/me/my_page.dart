@@ -39,6 +39,7 @@ class _MyPageState extends State<MyPage> {
       ChatUIKitProvider.instance.currentUserData?.nickname ??
           ChatUIKit.instance.currentUserId() ??
           '',
+      textScaleFactor: 1.0,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
       style: TextStyle(
@@ -54,6 +55,7 @@ class _MyPageState extends State<MyPage> {
       'ID: ${ChatUIKit.instance.currentUserId()}',
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
+      textScaleFactor: 1.0,
       style: TextStyle(
         fontSize: theme.font.bodySmall.fontSize,
         fontWeight: theme.font.bodySmall.fontWeight,
@@ -102,7 +104,10 @@ class _MyPageState extends State<MyPage> {
       children: [
         content,
         const SizedBox(height: 20),
-        const Text('设置'),
+        const Text(
+          '设置',
+          textScaleFactor: 1.0,
+        ),
         InkWell(
           onTap: nonsupport,
           child: ListItem(
@@ -154,6 +159,7 @@ class _MyPageState extends State<MyPage> {
           },
           child: Text(
             '退出登录',
+            textScaleFactor: 1.0,
             style: TextStyle(
               fontWeight: theme.font.titleMedium.fontWeight,
               fontSize: theme.font.titleMedium.fontSize,
@@ -249,6 +255,7 @@ class ListItem extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             title,
+            textScaleFactor: 1.0,
             style: TextStyle(
               fontSize: theme.font.titleMedium.fontSize,
               fontWeight: theme.font.titleMedium.fontWeight,
@@ -261,6 +268,7 @@ class ListItem extends StatelessWidget {
           Text(
             trailing ?? '',
             textAlign: TextAlign.right,
+            textScaleFactor: 1.0,
             style: TextStyle(
               fontSize: theme.font.labelMedium.fontSize,
               fontWeight: theme.font.labelMedium.fontWeight,

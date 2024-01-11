@@ -53,9 +53,7 @@ class _ConversationListViewState extends State<ConversationListView>
     controller.fetchItemList();
 
     controller.loadingType.addListener(() {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        setState(() {});
-      });
+       setState(() {});
     });
   }
 
@@ -71,9 +69,7 @@ class _ConversationListViewState extends State<ConversationListView>
   void onConversationProfilesUpdate(
     Map<String, ChatUIKitProfile> map,
   ) {
-    if (mounted) {
-      controller.reload();
-    }
+    controller.reload();
   }
 
   @override
@@ -94,9 +90,7 @@ class _ConversationListViewState extends State<ConversationListView>
 
   @override
   void onConversationsUpdate() {
-    if (mounted) {
-      controller.reload();
-    }
+    controller.reload();
   }
 
   @override

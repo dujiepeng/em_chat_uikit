@@ -173,6 +173,7 @@ class _ChatUIKitAlphabeticalWidgetState
                 child: Text(
                   element.toUpperCase(),
                   textAlign: TextAlign.right,
+                  textScaleFactor: 1.0,
                   style: TextStyle(
                     color: selected
                         ? (theme.color.isDark

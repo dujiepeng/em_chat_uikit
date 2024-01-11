@@ -105,7 +105,9 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
             widget.background ?? ChatUIKitImageLoader.listEmpty(),
             const SizedBox(height: 8),
             Text(
-              widget.errorMessage ?? '加载失败',
+              widget.errorMessage ??
+                  ChatUIKitLocal.listViewLoadFailed.getString(context),
+              textScaleFactor: 1.0,
               style: TextStyle(
                 color: theme.color.isDark
                     ? theme.color.neutralColor7
@@ -128,7 +130,9 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
                       : theme.color.primaryColor5,
                 ),
                 child: Text(
-                  widget.reloadMessage ?? '重新加载',
+                  widget.reloadMessage ??
+                      ChatUIKitLocal.listViewReload.getString(context),
+                  textScaleFactor: 1.0,
                   style: TextStyle(
                     color: theme.color.isDark
                         ? theme.color.neutralColor98
@@ -262,6 +266,7 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
                   widget.searchHideText ??
                       ChatUIKitLocal.conversationsViewSearchHint
                           .getString(context),
+                  textScaleFactor: 1.0,
                   style: TextStyle(
                     color: ChatUIKitTheme.of(context).color.isDark
                         ? ChatUIKitTheme.of(context).color.neutralColor4

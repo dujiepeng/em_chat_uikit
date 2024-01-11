@@ -82,6 +82,7 @@ class _SelectContactViewState extends State<SelectContactView> {
                         },
                         child: Text(
                           widget.backText!,
+                          textScaleFactor: 1.0,
                           style: TextStyle(
                             color: theme.color.isDark
                                 ? theme.color.neutralColor98

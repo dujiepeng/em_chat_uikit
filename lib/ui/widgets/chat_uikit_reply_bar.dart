@@ -93,10 +93,11 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
   Widget title(ChatUIKitTheme theme) {
     return widget.title ??
         RichText(
+          textScaleFactor: 1.0,
           text: TextSpan(
             children: [
               TextSpan(
-                text: '正在回复 ',
+                text: ChatUIKitLocal.replayBarTitle.getString(context),
                 style: TextStyle(
                   fontWeight: theme.font.bodySmall.fontWeight,
                   fontSize: theme.font.bodySmall.fontSize,
@@ -145,6 +146,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
   Widget _textWidget(ChatUIKitTheme theme) {
     return Text(
       widget.message.textContent,
+      textScaleFactor: 1.0,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
@@ -168,7 +170,8 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
         const SizedBox(width: 4),
         Expanded(
           child: Text(
-            "图片",
+            ChatUIKitLocal.replayBarTitleImage.getString(context),
+            textScaleFactor: 1.0,
             style: TextStyle(
               fontWeight: theme.font.labelSmall.fontWeight,
               fontSize: theme.font.labelSmall.fontSize,
@@ -193,7 +196,8 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
         const SizedBox(width: 4),
         Expanded(
           child: Text(
-            "视频",
+            ChatUIKitLocal.replayBarTitleVideo.getString(context),
+            textScaleFactor: 1.0,
             style: TextStyle(
               fontWeight: theme.font.labelSmall.fontWeight,
               fontSize: theme.font.labelSmall.fontSize,
@@ -221,10 +225,11 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
         const SizedBox(width: 4),
         Expanded(
           child: RichText(
+            textScaleFactor: 1.0,
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: '语音 ',
+                  text: ChatUIKitLocal.replayBarTitleVoice.getString(context),
                   style: TextStyle(
                     fontWeight: theme.font.bodySmall.fontWeight,
                     fontSize: theme.font.bodySmall.fontSize,
@@ -267,10 +272,11 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
         const SizedBox(width: 4),
         Expanded(
             child: RichText(
+          textScaleFactor: 1.0,
           text: TextSpan(
             children: [
               TextSpan(
-                text: '附件 ',
+                text: ChatUIKitLocal.replayBarTitleFile.getString(context),
                 style: TextStyle(
                   fontWeight: theme.font.labelSmall.fontWeight,
                   fontSize: theme.font.labelSmall.fontSize,
@@ -310,10 +316,12 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
           const SizedBox(width: 4),
           Expanded(
             child: RichText(
+              textScaleFactor: 1.0,
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: '联系人 ',
+                    text:
+                        ChatUIKitLocal.replayBarTitleContact.getString(context),
                     style: TextStyle(
                       fontWeight: theme.font.labelMedium.fontWeight,
                       fontSize: theme.font.labelMedium.fontSize,
@@ -395,7 +403,8 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
       final theme = ChatUIKitTheme.of(context);
       content ??= Center(
         child: ChatUIKitImageLoader.imageDefault(
-          width: 24,height: 24,
+          width: 24,
+          height: 24,
           color: theme.color.isDark
               ? theme.color.neutralColor5
               : theme.color.neutralColor7,
@@ -486,7 +495,8 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
 
       content ??= Center(
         child: ChatUIKitImageLoader.videoDefault(
-          width: 24,height: 24,
+          width: 24,
+          height: 24,
           color: theme.color.isDark
               ? theme.color.neutralColor5
               : theme.color.neutralColor7,

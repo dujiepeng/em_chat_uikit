@@ -224,8 +224,9 @@ class _ConversationsViewState extends State<ConversationsView> {
               type: type,
             );
           } else {
-            final param =
-                ChatSilentModeParam.remindType(ChatPushRemindType.MENTION_ONLY);
+            final param = ChatSilentModeParam.remindType(
+              ChatPushRemindType.MENTION_ONLY,
+            );
             ChatUIKit.instance.setSilentMode(
               param: param,
               conversationId: info.profile.id,
