@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit_example/pages/tool/remote_avatars.dart';
 import 'package:flutter/material.dart';
 
 class ChangeAvatarPage extends StatefulWidget {
@@ -10,20 +11,6 @@ class ChangeAvatarPage extends StatefulWidget {
 
 class _ChangeAvatarPageState extends State<ChangeAvatarPage> {
   int _selected = -1;
-  final List<String> avatars = [
-    'https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png',
-    'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-512.png',
-    'https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/muslim_man_avatar-512.png',
-    'https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/cactus_cacti_avatar_pirate-512.png',
-    'https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/geisha_japanese_woman_avatar-512.png',
-    'https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/sloth_lazybones_sluggard_avatar-128.png',
-    'https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/grandma_elderly_nanny_avatar-512.png',
-    'https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/punk_man_person_avatar-512.png',
-    'https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/girl_avatar_child_kid-512.png',
-    'https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/muslim_woman_paranja_avatar-512.png',
-    'https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/zombie_avatar_monster_dead-512.png',
-    'https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/afro_avatar_male_man-512.png'
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +43,10 @@ class _ChangeAvatarPageState extends State<ChangeAvatarPage> {
                   _selected = position;
                   UserData? data = ChatUIKitProvider.instance.currentUserData;
                   if (data == null) {
-                    data = UserData(avatarUrl: avatars[position]);
+                    data = UserData(avatarUrl: RemoteAvatars.avatars[position]);
                   } else {
-                    data = data.copyWith(avatarUrl: avatars[position]);
+                    data = data.copyWith(
+                        avatarUrl: RemoteAvatars.avatars[position]);
                   }
                   ChatUIKitProvider.instance.currentUserData = data;
                 }
@@ -74,7 +62,7 @@ class _ChangeAvatarPageState extends State<ChangeAvatarPage> {
                     )),
                     margin: const EdgeInsets.all(10),
                     child: ChatUIKitAvatar(
-                        avatarUrl: avatars[position], size: 300),
+                        avatarUrl: RemoteAvatars.avatars[position], size: 300),
                   ),
                   Positioned.fill(
                     child: Offstage(
@@ -88,7 +76,7 @@ class _ChangeAvatarPageState extends State<ChangeAvatarPage> {
                 ],
               ),
             );
-          }, childCount: avatars.length),
+          }, childCount: RemoteAvatars.avatars.length),
         ),
       ),
     );

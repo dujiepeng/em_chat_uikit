@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit_example/pages/tool/remote_avatars.dart';
 import 'package:flutter/material.dart';
 
 class UserProviderWidget extends StatefulWidget {
@@ -17,11 +18,6 @@ class _UserProviderWidgetState extends State<UserProviderWidget> {
     ChatUIKitProvider.instance.contactsHandler = _contactsHandler;
     ChatUIKitProvider.instance.conversationsHandler = _conversationsHandler;
     ChatUIKitProvider.instance.groupMembersHandler = _groupMembersHandler;
-
-    // ChatUIKitProvider.instance.currentUserData = const UserData(
-    //     nickname: '张三',
-    //     avatarUrl:
-    //         'https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/muslim_man_avatar-512.png');
   }
 
   @override
@@ -34,7 +30,11 @@ class _UserProviderWidgetState extends State<UserProviderWidget> {
   ) {
     List<ChatUIKitProfile> list = [];
     for (var i = 0; i < profiles.length; i++) {
-      list.add(profiles[i].copy(name: '${profiles[i].id}_nick'));
+      list.add(
+        profiles[i].copy(
+            name: '${profiles[i].id}_nick',
+            avatarUrl: RemoteAvatars.getRandomAvatar),
+      );
     }
     return list;
   }
@@ -44,7 +44,11 @@ class _UserProviderWidgetState extends State<UserProviderWidget> {
   ) {
     List<ChatUIKitProfile> list = [];
     for (var i = 0; i < profiles.length; i++) {
-      list.add(profiles[i].copy(name: '${profiles[i].id}_nick'));
+      list.add(
+        profiles[i].copy(
+            name: '${profiles[i].id}_nick',
+            avatarUrl: RemoteAvatars.getRandomAvatar),
+      );
     }
     return list;
   }

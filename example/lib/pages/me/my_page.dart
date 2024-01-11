@@ -18,7 +18,11 @@ class _MyPageState extends State<MyPage> {
       backgroundColor: theme.color.isDark
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
-      body: SafeArea(child: _buildContent()),
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: _buildContent(),
+      ),
     );
 
     return content;
@@ -111,6 +115,7 @@ class _MyPageState extends State<MyPage> {
           child: ListItem(
             imageWidget: Image.asset('assets/images/personal.png'),
             title: '个人信息',
+            enableArrow: true,
           ),
         ),
         InkWell(
@@ -140,7 +145,6 @@ class _MyPageState extends State<MyPage> {
             imageWidget: Image.asset('assets/images/info.png'),
             title: '关于',
             trailing: 'Easemob UIKit v2.0.0',
-            enableArrow: true,
           ),
         ),
         const SizedBox(height: 16),
