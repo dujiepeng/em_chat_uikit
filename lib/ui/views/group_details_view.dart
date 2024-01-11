@@ -84,7 +84,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
       group =
           await ChatUIKit.instance.fetchGroupInfo(groupId: widget.profile.id);
       memberCount = group?.memberCount ?? 0;
-      setState(() {});
+      safeSetState(() {});
       // ignore: empty_catches
     } catch (e) {}
   }
@@ -104,6 +104,13 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     );
   }
 */
+
+  void safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
@@ -383,7 +390,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
                         conversationId: widget.profile.id,
                         type: ConversationType.GroupChat);
                   }
-                  setState(() {
+                  safeSetState(() {
                     isNotDisturb.value = value;
                   });
                 },

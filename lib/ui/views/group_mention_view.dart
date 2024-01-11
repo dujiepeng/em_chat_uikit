@@ -79,7 +79,7 @@ class _GroupMentionViewState extends State<GroupMentionView> {
                     Navigator.of(context).pop();
                   },
                   child: Text(
-                    '@${ChatUIKitLocal.groupMembersViewTitle.getString(context)}}',
+                    '@${ChatUIKitLocal.groupMembersViewTitle.getString(context)}',
                     style: TextStyle(
                       color: theme.color.isDark
                           ? theme.color.neutralColor98

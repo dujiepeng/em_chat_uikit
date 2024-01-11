@@ -147,8 +147,9 @@ class _MessagesViewState extends State<MessagesView> {
     inputBarTextEditingController.addListener(() {
       if (showMoreBtn !=
           !inputBarTextEditingController.text.trim().isNotEmpty) {
-        showMoreBtn = !inputBarTextEditingController.text.trim().isNotEmpty;
-        setState(() {});
+        safeSetState(() {
+          showMoreBtn = !inputBarTextEditingController.text.trim().isNotEmpty;
+        });
       }
       if (inputBarTextEditingController.needMention) {
         if (widget.profile.type == ChatUIKitProfileType.groupChat) {
@@ -164,8 +165,9 @@ class _MessagesViewState extends State<MessagesView> {
     focusNode.addListener(() {
       if (editMessage != null) return;
       if (focusNode.hasFocus) {
-        showEmoji = false;
-        setState(() {});
+        safeSetState(() {
+          showEmoji = false;
+        });
       }
     });
   }
@@ -187,6 +189,12 @@ class _MessagesViewState extends State<MessagesView> {
           }
         }
       });
+    }
+  }
+
+  void safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
     }
   }
 
@@ -252,10 +260,9 @@ class _MessagesViewState extends State<MessagesView> {
       onNotification: (notification) {
         if (notification is ScrollUpdateNotification) {
           if (showEmoji) {
-            showEmoji = false;
-            if (mounted) {
-              setState(() {});
-            }
+            safeSetState(() {
+              showEmoji = false;
+            });
           }
           if (focusNode.hasFocus) {
             focusNode.unfocus();
@@ -333,8 +340,9 @@ class _MessagesViewState extends State<MessagesView> {
           Positioned.fill(
             child: InkWell(
               onTap: () {
-                editMessage = null;
-                setState(() {});
+                safeSetState(() {
+                  editMessage = null;
+                });
               },
               child: Opacity(
                 opacity: 0.5,
@@ -458,12 +466,15 @@ class _MessagesViewState extends State<MessagesView> {
         context,
         message,
       );
+      String? from = map?[alertRecallMessageFromKey];
+      ChatUIKitProfile? profile =
+          ChatUIKitProvider.instance.contactProfile(from ?? '');
       content ??= ChatUIKitMessageListViewAlertItem(
         infos: [
           MessageAlertAction(
-              text: map?[alertRecalledKey]?.isNotEmpty == true
-                  ? map![alertRecalledKey]!
-                  : ChatUIKitLocal.messagesViewRecallInfo.getString(context)),
+            text:
+                '${profile.showName}${ChatUIKitLocal.messagesViewRecallInfo.getString(context)}',
+          ),
         ],
       );
       return content;
@@ -508,8 +519,9 @@ class _MessagesViewState extends State<MessagesView> {
         ChatUIKitReplyBar(
           message: replyMessage!,
           onCancelTap: () {
-            replyMessage = null;
-            setState(() {});
+            safeSetState(() {
+              replyMessage = null;
+            });
           },
         );
   }
@@ -520,8 +532,9 @@ class _MessagesViewState extends State<MessagesView> {
       autofocus: true,
       onChanged: (input) {
         if (messageEditCanSend != (input.trim() != editMessage?.textContent)) {
-          messageEditCanSend = input.trim() != editMessage?.textContent;
-          setState(() {});
+          safeSetState(() {
+            messageEditCanSend = input.trim() != editMessage?.textContent;
+          });
         }
       },
       textEditingController: editBarTextEditingController!,
@@ -530,10 +543,11 @@ class _MessagesViewState extends State<MessagesView> {
           if (!messageEditCanSend) return;
           String text = editBarTextEditingController?.text.trim() ?? '';
           if (text.isNotEmpty) {
-            controller.editMessage(editMessage!, text);
-            editBarTextEditingController?.clear();
-            editMessage = null;
-            setState(() {});
+            safeSetState(() {
+              controller.editMessage(editMessage!, text);
+              editBarTextEditingController?.clear();
+              editMessage = null;
+            });
           }
         },
         child: Icon(
@@ -602,8 +616,9 @@ class _MessagesViewState extends State<MessagesView> {
       leading: InkWell(
         onTap: () async {
           focusNode.unfocus();
-          showEmoji = false;
-          setState(() {});
+          safeSetState(() {
+            showEmoji = false;
+          });
           ChatUIKitRecordModel? model = await showChatUIKitRecordBar(
             context: context,
             statusChangeCallback: (type, duration, path) {
@@ -628,17 +643,19 @@ class _MessagesViewState extends State<MessagesView> {
             if (!showEmoji)
               InkWell(
                 onTap: () {
-                  focusNode.unfocus();
-                  showEmoji = !showEmoji;
-                  setState(() {});
+                  safeSetState(() {
+                    focusNode.unfocus();
+                    showEmoji = !showEmoji;
+                  });
                 },
                 child: ChatUIKitImageLoader.faceKeyboard(),
               ),
             if (showEmoji)
               InkWell(
                 onTap: () {
-                  showEmoji = !showEmoji;
-                  setState(() {});
+                  safeSetState(() {
+                    showEmoji = !showEmoji;
+                  });
                 },
                 child: ChatUIKitImageLoader.textKeyboard(),
               ),
@@ -760,11 +777,13 @@ class _MessagesViewState extends State<MessagesView> {
                     );
                     inputBarTextEditingController.clearMentions();
                     inputBarTextEditingController.clear();
-                    if (replyMessage != null) {
-                      replyMessage = null;
-                    }
-                    showMoreBtn = true;
-                    setState(() {});
+
+                    safeSetState(() {
+                      if (replyMessage != null) {
+                        replyMessage = null;
+                      }
+                      showMoreBtn = true;
+                    });
                   }
                 },
                 child: ChatUIKitImageLoader.sendKeyboard(),
@@ -777,12 +796,14 @@ class _MessagesViewState extends State<MessagesView> {
 
   void clearAllType() {
     debugPrint('clearAllType');
-    showEmoji = false;
-    editMessage = null;
-    replyMessage = null;
+
     stopVoice();
     focusNode.unfocus();
-    setState(() {});
+    safeSetState(() {
+      showEmoji = false;
+      editMessage = null;
+      replyMessage = null;
+    });
   }
 
   void onItemLongPress(Message message) {
@@ -998,17 +1019,20 @@ class _MessagesViewState extends State<MessagesView> {
     clearAllType();
     if (message.bodyType != MessageType.TXT) return;
 
-    editMessage = message;
     editBarTextEditingController =
         TextEditingController(text: editMessage?.textContent ?? "");
-    setState(() {});
+    safeSetState(() {
+      editMessage = message;
+    });
   }
 
   void replyMessaged(Message message) {
     clearAllType();
     focusNode.requestFocus();
-    replyMessage = message;
-    setState(() {});
+
+    safeSetState(() {
+      replyMessage = message;
+    });
   }
 
   void deleteMessage(Message message) async {
@@ -1201,7 +1225,7 @@ class _MessagesViewState extends State<MessagesView> {
         }
       }
     }
-    setState(() {});
+    safeSetState(() {});
   }
 
   Future<void> previewVoice(bool play, {String? path}) async {
@@ -1219,8 +1243,9 @@ class _MessagesViewState extends State<MessagesView> {
 
     await _player.play(DeviceFileSource(path));
     _player.onPlayerComplete.first.whenComplete(() async {
-      _playingMessage = null;
-      setState(() {});
+      safeSetState(() {
+        _playingMessage = null;
+      });
     }).onError((error, stackTrace) {});
   }
 
@@ -1310,9 +1335,10 @@ class _MessagesViewState extends State<MessagesView> {
       arguments: ContactDetailsViewArguments(
         attributes: widget.attributes,
         onMessageDidClear: () {
-          replyMessage = null;
           controller.clearMessages();
-          setState(() {});
+          safeSetState(() {
+            replyMessage = null;
+          });
         },
         profile: widget.profile,
         actions: [
@@ -1336,9 +1362,10 @@ class _MessagesViewState extends State<MessagesView> {
         profile: widget.profile,
         attributes: widget.attributes,
         onMessageDidClear: () {
-          replyMessage = null;
           controller.clearMessages();
-          setState(() {});
+          safeSetState(() {
+            replyMessage = null;
+          });
         },
         actions: [
           ChatUIKitActionItem(

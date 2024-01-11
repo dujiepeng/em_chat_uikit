@@ -164,6 +164,7 @@ mixin ChatUIKitLocal {
   static const changInfoViewInputHint = 'change_info_view_input_hint';
 
   static const messagesViewRecallInfo = 'messages_view_recall_info';
+  static const messagesViewRecallHeader = 'messages_view_recall_header';
   static const messagesViewAlertGroupInfoTitle =
       'messages_view_alert_group_info_title';
   static const messagesViewEditMessageTitle =
@@ -338,6 +339,7 @@ mixin ChatUIKitLocal {
     changInfoViewSave: '保存',
     changInfoViewInputHint: '请输入',
     messagesViewRecallInfo: '撤回了一条消息',
+    messagesViewRecallHeader: '你',
     messagesViewAlertGroupInfoTitle: '创建群组',
     messagesViewEditMessageTitle: '编辑中',
     messagesViewMoreActionsTitleAlbum: '相册',
@@ -482,6 +484,7 @@ mixin ChatUIKitLocal {
     changInfoViewSave: 'Save',
     changInfoViewInputHint: 'input',
     messagesViewRecallInfo: 'recalled a message',
+    messagesViewRecallHeader: 'You ',
     messagesViewAlertGroupInfoTitle: 'create a group',
     messagesViewEditMessageTitle: 'Editing',
     messagesViewMoreActionsTitleAlbum: 'Album',

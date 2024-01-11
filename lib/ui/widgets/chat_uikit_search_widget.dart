@@ -121,7 +121,8 @@ class _ChatUIKitSearchWidgetState extends State<ChatUIKitSearchWidget> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ChatUIKitImageLoader.search(
-                      width: 22, height: 24,
+                      width: 22,
+                      height: 24,
                       color: ChatUIKitTheme.of(context).color.neutralColor3,
                     ),
                     const SizedBox(width: 6),
@@ -184,7 +185,7 @@ class _ChatUIKitSearchWidgetState extends State<ChatUIKitSearchWidget> {
             ),
             InkWell(
               onTap: () {
-                setState(() {
+                safeSetState(() {
                   isSearch = false;
                 });
                 searchController.clear();
@@ -215,7 +216,7 @@ class _ChatUIKitSearchWidgetState extends State<ChatUIKitSearchWidget> {
       height: 44,
       child: InkWell(
         onTap: () {
-          setState(() {
+          safeSetState(() {
             isSearch = true;
           });
           SearchNotification(isSearch).dispatch(context);
@@ -255,5 +256,11 @@ class _ChatUIKitSearchWidgetState extends State<ChatUIKitSearchWidget> {
         ),
       ),
     );
+  }
+
+  void safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
   }
 }

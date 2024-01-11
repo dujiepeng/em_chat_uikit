@@ -59,15 +59,13 @@ class ContactsView extends StatefulWidget {
   State<ContactsView> createState() => _ContactsViewState();
 }
 
-class _ContactsViewState extends State<ContactsView>
-    with ContactObserver, ChatUIKitProviderObserver {
+class _ContactsViewState extends State<ContactsView> with ContactObserver {
   late final ContactListViewController controller;
 
   @override
   void initState() {
     super.initState();
     ChatUIKit.instance.addObserver(this);
-    ChatUIKitProvider.instance.addObserver(this);
     controller = widget.controller ?? ContactListViewController();
   }
 
@@ -246,33 +244,36 @@ class _ContactsViewState extends State<ContactsView>
   @override
   void dispose() {
     ChatUIKit.instance.removeObserver(this);
-    ChatUIKitProvider.instance.removeObserver(this);
-    super.dispose();
-  }
 
-  @override
-  void onContactProfilesUpdate(
-    Map<String, ChatUIKitProfile> map,
-  ) {
-    controller.reload();
+    super.dispose();
   }
 
   @override
   // 用于更新好友请求未读数
   void onContactRequestReceived(String userId, String? reason) {
-    setState(() {});
+    safeSetState(() {});
   }
 
   // 用户更新好友请求未读数
   @override
   void onContactAdded(String userId) {
-    setState(() {});
-    controller.reload();
+    if (mounted) {
+      setState(() {});
+      controller.reload();
+    }
   }
 
   // 用于更新删除好友后的列表刷新
   @override
   void onContactDeleted(String userId) {
-    controller.reload();
+    if (mounted) {
+      controller.reload();
+    }
+  }
+
+  void safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
   }
 }

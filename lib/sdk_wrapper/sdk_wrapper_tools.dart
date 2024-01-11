@@ -14,7 +14,9 @@ class SDKWrapperTools {
         if (recalledMessage.bodyType == MessageType.TXT)
           alertRecallInfoKey: recalledMessage.textContent,
         alertRecallMessageTypeKey: recalledMessage.bodyType.index.toString(),
-        alertRecallMessageDirectionKey: recalledMessage.direction.index.toString(),
+        alertRecallMessageDirectionKey:
+            recalledMessage.direction.index.toString(),
+        alertRecallMessageFromKey: recalledMessage.from!,
       },
     );
     alertMsg.conversationId = recalledMessage.conversationId;

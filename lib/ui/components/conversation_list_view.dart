@@ -51,12 +51,19 @@ class _ConversationListViewState extends State<ConversationListView>
     ChatUIKitProvider.instance.addObserver(this);
     controller = widget.controller ?? ConversationListViewController();
     controller.fetchItemList();
+
+    controller.loadingType.addListener(() {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        setState(() {});
+      });
+    });
   }
 
   @override
   void dispose() {
     ChatUIKit.instance.removeObserver(this);
     ChatUIKitProvider.instance.removeObserver(this);
+    controller.dispose();
     super.dispose();
   }
 
@@ -64,7 +71,9 @@ class _ConversationListViewState extends State<ConversationListView>
   void onConversationProfilesUpdate(
     Map<String, ChatUIKitProfile> map,
   ) {
-    controller.reload();
+    if (mounted) {
+      controller.reload();
+    }
   }
 
   @override
@@ -78,12 +87,16 @@ class _ConversationListViewState extends State<ConversationListView>
         await conversation?.addMention();
       }
     }
-    controller.reload();
+    if (mounted) {
+      controller.reload();
+    }
   }
 
   @override
   void onConversationsUpdate() {
-    controller.reload();
+    if (mounted) {
+      controller.reload();
+    }
   }
 
   @override
@@ -98,70 +111,65 @@ class _ConversationListViewState extends State<ConversationListView>
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<ChatUIKitListViewType>(
-      valueListenable: controller.loadingType,
-      builder: (context, type, child) {
-        return ChatUIKitListView(
-          type: type,
-          list: controller.list,
-          refresh: () {
-            controller.fetchItemList();
-          },
-          enableSearchBar: enableSearchBar,
-          errorMessage: widget.errorMessage,
-          reloadMessage: widget.reloadMessage,
-          beforeWidgets: widget.beforeWidgets,
-          afterWidgets: widget.afterWidgets,
-          background: widget.background,
-          onSearchTap: (data) {
-            List<ConversationInfo> list = [];
-            for (var item in data) {
-              if (item is ConversationInfo) {
-                list.add(item);
-              }
-            }
-            widget.onSearchTap?.call(list);
-          },
-          searchHideText: widget.searchHideText,
-          findChildIndexCallback: (key) {
-            final ValueKey<String> valueKey = key as ValueKey<String>;
-            int index = controller.list.indexWhere((info) {
-              if (info is ConversationInfo) {
-                return info.profile.id == valueKey.value;
-              } else {
-                return false;
-              }
-            });
+    return ChatUIKitListView(
+      type: controller.loadingType.value,
+      list: controller.list,
+      refresh: () {
+        controller.fetchItemList();
+      },
+      enableSearchBar: enableSearchBar,
+      errorMessage: widget.errorMessage,
+      reloadMessage: widget.reloadMessage,
+      beforeWidgets: widget.beforeWidgets,
+      afterWidgets: widget.afterWidgets,
+      background: widget.background,
+      onSearchTap: (data) {
+        List<ConversationInfo> list = [];
+        for (var item in data) {
+          if (item is ConversationInfo) {
+            list.add(item);
+          }
+        }
+        widget.onSearchTap?.call(list);
+      },
+      searchHideText: widget.searchHideText,
+      findChildIndexCallback: (key) {
+        final ValueKey<String> valueKey = key as ValueKey<String>;
+        int index = controller.list.indexWhere((info) {
+          if (info is ConversationInfo) {
+            return info.profile.id == valueKey.value;
+          } else {
+            return false;
+          }
+        });
 
-            return index > -1 ? index : null;
-          },
-          itemBuilder: (context, model) {
-            if (model is ConversationInfo) {
-              Widget? item;
-              if (widget.itemBuilder != null) {
-                item = widget.itemBuilder!(context, model);
+        return index > -1 ? index : null;
+      },
+      itemBuilder: (context, model) {
+        if (model is ConversationInfo) {
+          Widget? item;
+          if (widget.itemBuilder != null) {
+            item = widget.itemBuilder!(context, model);
+          }
+          item ??= InkWell(
+            onTap: () {
+              widget.onTap?.call(context, model);
+            },
+            onLongPress: () {
+              if (widget.enableLongPress) {
+                widget.onLongPress?.call(context, model);
               }
-              item ??= InkWell(
-                onTap: () {
-                  widget.onTap?.call(context, model);
-                },
-                onLongPress: () {
-                  if (widget.enableLongPress) {
-                    widget.onLongPress?.call(context, model);
-                  }
-                },
-                child: ChatUIKitConversationListViewItem(
-                  model,
-                  key: ValueKey(model.profile.id),
-                ),
-              );
+            },
+            child: ChatUIKitConversationListViewItem(
+              model,
+              key: ValueKey(model.profile.id),
+            ),
+          );
 
-              return item;
-            } else {
-              return const SizedBox();
-            }
-          },
-        );
+          return item;
+        } else {
+          return const SizedBox();
+        }
       },
     );
   }

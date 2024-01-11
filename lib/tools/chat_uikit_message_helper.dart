@@ -314,6 +314,15 @@ extension MessageHelper on Message {
     return null;
   }
 
+  String? get recallMessageFrom {
+    if (bodyType == MessageType.CUSTOM) {
+      if ((body as CustomMessageBody).event == alertRecalledKey) {
+        return (body as CustomMessageBody).params?[alertRecallMessageFromKey];
+      }
+    }
+    return null;
+  }
+
   MessageDirection? get recallMessageDirection {
     if (bodyType == MessageType.CUSTOM) {
       if ((body as CustomMessageBody).event == alertRecalledKey) {

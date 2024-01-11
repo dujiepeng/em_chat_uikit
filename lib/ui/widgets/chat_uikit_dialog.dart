@@ -142,8 +142,14 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
 
     for (var element in _controllers) {
       element.addListener(() {
-        setState(() {});
+        safeSetState(() {});
       });
+    }
+  }
+
+  void safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
     }
   }
 

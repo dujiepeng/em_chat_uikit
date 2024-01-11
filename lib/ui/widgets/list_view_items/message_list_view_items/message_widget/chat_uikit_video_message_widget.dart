@@ -43,17 +43,25 @@ class _ChatUIKitVideoMessageWidgetState
   @override
   void onSuccess(String msgId, Message msg) {
     if (msgId == message.msgId) {
-      downloading = false;
-      setState(() {});
+      safeSetState(() {
+        downloading = false;
+      });
     }
   }
 
   @override
   void onError(String msgId, Message message, ChatError error) {
     if (msgId == message.msgId) {
-      downloading = false;
-      downloadError = true;
-      setState(() {});
+      safeSetState(() {
+        downloading = false;
+        downloadError = true;
+      });
+    }
+  }
+
+  void safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
     }
   }
 
@@ -197,9 +205,11 @@ class _ChatUIKitVideoMessageWidgetState
 
   void download() {
     if (downloading) return;
-    downloading = true;
-    ChatUIKit.instance.downloadThumbnail(message: message);
-    setState(() {});
+
+    safeSetState(() {
+      downloading = true;
+      ChatUIKit.instance.downloadThumbnail(message: message);
+    });
   }
 
   Widget loadError(double width, double height) {

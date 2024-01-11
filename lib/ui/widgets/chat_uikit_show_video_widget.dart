@@ -75,7 +75,7 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
     } else {
       ChatUIKit.instance.downloadThumbnail(message: message!);
     }
-    setState(() {});
+    safeSetState(() {});
   }
 
   @override
@@ -129,7 +129,7 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
           if (_controller?.value.isInitialized == true) {
             if (isPlaying != (_controller?.value.isPlaying ?? false)) {
               isPlaying = (_controller?.value.isPlaying ?? false);
-              setState(() {});
+              safeSetState(() {});
             }
           }
         }
@@ -189,7 +189,7 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
           Positioned.fill(
             child: InkWell(
               onTap: () {
-                setState(() {
+                safeSetState(() {
                   if (_controller!.value.isPlaying) {
                     _controller?.pause();
                   } else {
@@ -238,5 +238,11 @@ class _ChatUIKitShowVideoWidgetState extends State<ChatUIKitShowVideoWidget>
   void onLongPressed() {
     _controller?.pause();
     widget.onLongPressed?.call(message!);
+  }
+
+  void safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
   }
 }

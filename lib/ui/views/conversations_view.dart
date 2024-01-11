@@ -64,27 +64,21 @@ class ConversationsView extends StatefulWidget {
 }
 
 class _ConversationsViewState extends State<ConversationsView>
-    with ChatUIKitProviderObserver {
+     {
   late ConversationListViewController controller;
   @override
   void initState() {
     super.initState();
     controller = widget.controller ?? ConversationListViewController();
-    ChatUIKitProvider.instance.addObserver(this);
+
   }
 
   @override
   void dispose() {
-    ChatUIKitProvider.instance.removeObserver(this);
     super.dispose();
   }
 
-  @override
-  void onConversationProfilesUpdate(
-    Map<String, ChatUIKitProfile> map,
-  ) {
-    controller.reload();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +166,9 @@ class _ConversationsViewState extends State<ConversationsView>
           ),
         )
             .then((value) {
-          controller.reload();
+          if (mounted) {
+            controller.reload();
+          }
         });
       }
     });
@@ -187,7 +183,9 @@ class _ConversationsViewState extends State<ConversationsView>
       ),
     )
         .then((value) {
-      controller.reload();
+      if (mounted) {
+        controller.reload();
+      }
     });
   }
 
@@ -413,7 +411,9 @@ class _ConversationsViewState extends State<ConversationsView>
       ),
     )
         .then((value) {
-      controller.reload();
+      if (mounted) {
+        controller.reload();
+      }
     });
   }
 }

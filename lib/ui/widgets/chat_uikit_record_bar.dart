@@ -162,8 +162,9 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (!voiceShow && !isClose) {
-        voiceShow = true;
-        setState(() {});
+        safeSetState(() {
+          voiceShow = true;
+        });
       }
     });
 
@@ -217,9 +218,11 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
                       file.deleteSync();
                     }
                   }
-                  voiceShow = false;
-                  isClose = true;
-                  setState(() {});
+
+                  safeSetState(() {
+                    voiceShow = false;
+                    isClose = true;
+                  });
                 },
                 child: AnimatedOpacity(
                   curve: Curves.linearToEaseOut,
@@ -383,8 +386,10 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
                   recordPath = await _audioRecorder.stop();
                   stopRecordTimer();
                 }
-                statusType = ChatUIKitVoiceBarStatusType.none;
-                setState(() {});
+
+                safeSetState(() {
+                  statusType = ChatUIKitVoiceBarStatusType.none;
+                });
                 WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
                   if (recordPath?.isNotEmpty == true) {
                     File file = File(recordPath!);
@@ -466,9 +471,10 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
       );
 
       startRecordTimer();
-      statusType = ChatUIKitVoiceBarStatusType.recording;
-      widget.statusChangeCallback?.call(statusType, 0, null);
-      setState(() {});
+      safeSetState(() {
+        statusType = ChatUIKitVoiceBarStatusType.recording;
+        widget.statusChangeCallback?.call(statusType, 0, null);
+      });
     } else {
       ChatUIKit.instance.sendChatUIKitEvent(ChatUIKitEvent.noRecordPermission);
     }
@@ -476,24 +482,28 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
 
   Future<void> stopRecord() async {
     recordPath = await _audioRecorder.stop();
-    stopRecordTimer();
-    statusType = ChatUIKitVoiceBarStatusType.ready;
-    widget.statusChangeCallback?.call(statusType, recordCounter, recordPath!);
-    setState(() {});
+
+    safeSetState(() {
+      stopRecordTimer();
+      statusType = ChatUIKitVoiceBarStatusType.ready;
+      widget.statusChangeCallback?.call(statusType, recordCounter, recordPath!);
+    });
   }
 
   void play() {
-    statusType = ChatUIKitVoiceBarStatusType.playing;
-    widget.statusChangeCallback?.call(statusType, recordCounter, recordPath!);
-    startPlayTimer();
-    setState(() {});
+    safeSetState(() {
+      statusType = ChatUIKitVoiceBarStatusType.playing;
+      widget.statusChangeCallback?.call(statusType, recordCounter, recordPath!);
+      startPlayTimer();
+    });
   }
 
   void stopPlay() {
-    statusType = ChatUIKitVoiceBarStatusType.ready;
-    widget.statusChangeCallback?.call(statusType, recordCounter, recordPath!);
-    stopPlayTimer();
-    setState(() {});
+    safeSetState(() {
+      statusType = ChatUIKitVoiceBarStatusType.ready;
+      widget.statusChangeCallback?.call(statusType, recordCounter, recordPath!);
+      stopPlayTimer();
+    });
   }
 
   void startPlayTimer() {
@@ -509,12 +519,13 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
   }
 
   void playTimerRun() {
-    playCounter++;
-    if (playCounter >= recordCounter) {
-      stopPlay();
-      return;
-    }
-    setState(() {});
+    safeSetState(() {
+      playCounter++;
+      if (playCounter >= recordCounter) {
+        stopPlay();
+        return;
+      }
+    });
   }
 
   void startRecordTimer() {
@@ -530,12 +541,13 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
   }
 
   void recordTimerRun() {
-    recordCounter++;
-    if (recordCounter >= widget.maxDuration) {
-      stopRecord();
-      return;
-    }
-    setState(() {});
+    safeSetState(() {
+      recordCounter++;
+      if (recordCounter >= widget.maxDuration) {
+        stopRecord();
+        return;
+      }
+    });
   }
 
   String extensionName() {
@@ -555,6 +567,12 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
         return 'wav';
       default:
         return '';
+    }
+  }
+
+  void safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
     }
   }
 }

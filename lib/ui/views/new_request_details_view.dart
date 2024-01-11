@@ -176,12 +176,18 @@ class _NewRequestDetailsViewState extends State<NewRequestDetailsView> {
         } catch (e) {}
       }
       if (needSetState) {
-        setState(() {
+        safeSetState(() {
           hasSend = true;
         });
       }
 
       // ignore: empty_catches
     } on ChatError {}
+  }
+
+  void safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
   }
 }

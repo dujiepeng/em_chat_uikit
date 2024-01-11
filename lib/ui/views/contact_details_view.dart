@@ -67,12 +67,18 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
     super.dispose();
   }
 
+  void safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
+  }
+
   @override
   void onContactProfilesUpdate(
     Map<String, ChatUIKitProfile> map,
   ) {
     if (map.keys.contains(profile?.id)) {
-      setState(() {
+      safeSetState(() {
         profile = map[profile?.id];
       });
     }
@@ -83,7 +89,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
     Map<String, ChatUIKitProfile> map,
   ) {
     if (map.keys.contains(profile?.id)) {
-      setState(() {
+      safeSetState(() {
         profile = map[profile?.id];
       });
     }
@@ -95,7 +101,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
     Map<String, ChatUIKitProfile> map,
   ) {
     if (map.keys.contains(profile?.id)) {
-      setState(() {
+      safeSetState(() {
         profile = map[profile?.id];
       });
     }
@@ -293,7 +299,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
                         conversationId: profile!.id,
                         type: ConversationType.Chat);
                   }
-                  setState(() {
+                  safeSetState(() {
                     isNotDisturb.value = value;
                   });
                 },

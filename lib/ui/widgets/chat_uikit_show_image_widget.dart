@@ -58,7 +58,7 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
     }
 
     if (localPath?.isNotEmpty == true) {
-      setState(() {});
+      safeSetState(() {});
       return;
     }
 
@@ -70,7 +70,7 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
     }
 
     if (localThumbPath?.isNotEmpty == true) {
-      setState(() {});
+      safeSetState(() {});
       return;
     }
 
@@ -79,7 +79,7 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
     }
 
     if (remoteThumbPath?.isNotEmpty == true) {
-      setState(() {});
+      safeSetState(() {});
       return;
     }
   }
@@ -157,5 +157,11 @@ class _ChatUIKitShowImageWidgetState extends State<ChatUIKitShowImageWidget>
     );
 
     return content;
+  }
+
+  void safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
   }
 }

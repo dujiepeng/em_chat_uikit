@@ -38,7 +38,8 @@ class ContactListView extends StatefulWidget {
   State<ContactListView> createState() => _ContactListViewState();
 }
 
-class _ContactListViewState extends State<ContactListView> {
+class _ContactListViewState extends State<ContactListView>
+    with ChatUIKitProviderObserver {
   ScrollController scrollController = ScrollController();
   late final ContactListViewController controller;
   bool enableSearchBar = true;
@@ -46,80 +47,93 @@ class _ContactListViewState extends State<ContactListView> {
   @override
   void initState() {
     super.initState();
-
+    ChatUIKitProvider.instance.addObserver(this);
     controller = widget.controller ?? ContactListViewController();
     controller.fetchItemList();
+    controller.loadingType.addListener(() {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        safeSetState(() {});
+      });
+    });
+  }
+
+  @override
+  void onContactProfilesUpdate(
+    Map<String, ChatUIKitProfile> map,
+  ) {
+    controller.reload();
   }
 
   @override
   void dispose() {
+    ChatUIKitProvider.instance.removeObserver(this);
     scrollController.dispose();
+    controller.dispose();
     super.dispose();
+  }
+
+  void safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget content = ValueListenableBuilder<ChatUIKitListViewType>(
-      valueListenable: controller.loadingType,
-      builder: (context, type, child) {
-        return ChatUIKitAlphabeticalWidget(
-          onTapCancel: () {},
-          onTap: (context, alphabetical) {},
-          beforeWidgets: widget.beforeWidgets,
-          listViewHasSearchBar: enableSearchBar,
-          list: controller.list,
+    return ChatUIKitAlphabeticalWidget(
+      onTapCancel: () {},
+      onTap: (context, alphabetical) {},
+      beforeWidgets: widget.beforeWidgets,
+      listViewHasSearchBar: enableSearchBar,
+      list: controller.list,
+      scrollController: scrollController,
+      builder: (context, list) {
+        return ChatUIKitListView(
           scrollController: scrollController,
-          builder: (context, list) {
-            return ChatUIKitListView(
-              scrollController: scrollController,
-              type: type,
-              list: list,
-              refresh: () {
-                controller.fetchItemList();
-              },
-              enableSearchBar: enableSearchBar,
-              errorMessage: widget.errorMessage,
-              reloadMessage: widget.reloadMessage,
-              beforeWidgets: widget.beforeWidgets,
-              afterWidgets: widget.afterWidgets,
-              background: widget.background,
-              onSearchTap: (data) {
-                List<ContactItemModel> list = [];
-                for (var item in data) {
-                  if (item is ContactItemModel) {
-                    list.add(item);
-                  }
-                }
-                widget.onSearchTap?.call(list);
-              },
-              searchHideText: widget.searchHideText,
-              itemBuilder: (context, model) {
-                if (model is ContactItemModel) {
-                  Widget? item;
-                  if (widget.itemBuilder != null) {
-                    item = widget.itemBuilder!(context, model);
-                  }
-                  item ??= InkWell(
-                    onTap: () {
-                      widget.onTap?.call(context, model);
-                    },
-                    onLongPress: () {
-                      widget.onLongPress?.call(context, model);
-                    },
-                    child: ChatUIKitContactListViewItem(model),
-                  );
+          type: controller.loadingType.value,
+          list: list,
+          refresh: () {
+            controller.fetchItemList();
+          },
+          enableSearchBar: enableSearchBar,
+          errorMessage: widget.errorMessage,
+          reloadMessage: widget.reloadMessage,
+          beforeWidgets: widget.beforeWidgets,
+          afterWidgets: widget.afterWidgets,
+          background: widget.background,
+          onSearchTap: (data) {
+            List<ContactItemModel> list = [];
+            for (var item in data) {
+              if (item is ContactItemModel) {
+                list.add(item);
+              }
+            }
+            widget.onSearchTap?.call(list);
+          },
+          searchHideText: widget.searchHideText,
+          itemBuilder: (context, model) {
+            if (model is ContactItemModel) {
+              Widget? item;
+              if (widget.itemBuilder != null) {
+                item = widget.itemBuilder!(context, model);
+              }
+              item ??= InkWell(
+                onTap: () {
+                  widget.onTap?.call(context, model);
+                },
+                onLongPress: () {
+                  widget.onLongPress?.call(context, model);
+                },
+                child: ChatUIKitContactListViewItem(model),
+              );
 
-                  return item;
-                } else {
-                  return const SizedBox();
-                }
-              },
-            );
+              return item;
+            } else {
+              return const SizedBox();
+            }
           },
         );
       },
     );
-
-    return content;
   }
 }

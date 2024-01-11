@@ -3,6 +3,7 @@ import 'package:em_chat_uikit_example/pages/contact_page.dart';
 import 'package:em_chat_uikit_example/pages/conversation_page.dart';
 import 'package:em_chat_uikit_example/pages/my_page.dart';
 import 'package:em_chat_uikit_example/toast_page.dart';
+import 'package:em_chat_uikit_example/user_provider_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,38 +26,7 @@ class _HomePageState extends State<HomePage>
   void initState() {
     super.initState();
     ChatUIKit.instance.addObserver(this);
-
-    ChatUIKitProvider.instance.contactsHandler = _contactsHandler;
-    ChatUIKitProvider.instance.conversationsHandler = _conversationsHandler;
-    ChatUIKitProvider.instance.groupMembersHandler = _groupMembersHandler;
   }
-
-  void _contactsHandler(
-    List<ChatUIKitProfile> profiles,
-  ) {
-    debugPrint('contactsHandler: ${profiles.length}');
-    List<ChatUIKitProfile> list = [];
-    for (var i = 0; i < profiles.length; i++) {
-      list.add(profiles[i].copy(name: '${profiles[i].id}_nick'));
-    }
-    ChatUIKitProvider.instance.addContactProfiles(list);
-  }
-
-  void _conversationsHandler(
-    List<ChatUIKitProfile> profiles,
-  ) {
-    debugPrint('_conversationsHandler: ${profiles.length}');
-    List<ChatUIKitProfile> list = [];
-    for (var i = 0; i < profiles.length; i++) {
-      list.add(profiles[i].copy(name: '${profiles[i].id}_nick'));
-    }
-    ChatUIKitProvider.instance.addConversationProfiles(list);
-  }
-
-  void _groupMembersHandler(
-    String groupId,
-    List<ChatUIKitProfile> profiles,
-  ) {}
 
   @override
   void dispose() {
@@ -160,6 +130,8 @@ class _HomePageState extends State<HomePage>
     );
 
     content = ToastPage(child: content);
+
+    content = UserProviderWidget(child: content);
 
     return content;
   }

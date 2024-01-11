@@ -37,8 +37,14 @@ class _ChatUIKitVoiceMessageWidgetState
         vsync: this, duration: const Duration(milliseconds: 1000));
     animation = IntTween(begin: 0, end: 2).animate(controller)
       ..addListener(() {
-        setState(() {});
+        safeSetState(() {});
       });
+  }
+
+  void safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
   }
 
   @override

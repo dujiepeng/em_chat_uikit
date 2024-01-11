@@ -120,13 +120,17 @@ class _NewRequestsViewState extends State<NewRequestsView>
             ))
         .then((value) {
       if (value == true) {
-        controller.reload();
+        if (mounted) {
+          controller.reload();
+        }
       }
     });
   }
 
   @override
   void onContactRequestReceived(String userId, String? reason) {
-    controller.reload();
+    if (mounted) {
+      controller.reload();
+    }
   }
 }

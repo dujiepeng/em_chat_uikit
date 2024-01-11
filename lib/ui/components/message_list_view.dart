@@ -66,17 +66,13 @@ class _MessageListViewState extends State<MessageListView> {
         widget.controller ?? MessageListViewController(profile: widget.profile);
     controller.addListener(() {
       if (controller.lastActionType == MessageLastActionType.load) {
-        if (mounted) {
-          setState(() {});
-        }
+        safeSetState(() {});
       }
 
       if ((controller.lastActionType == MessageLastActionType.receive &&
               scrollController.offset == 0) ||
           controller.lastActionType == MessageLastActionType.send) {
-        if (mounted) {
-          setState(() {});
-        }
+        safeSetState(() {});
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           scrollController.animateTo(
             0,
@@ -89,6 +85,12 @@ class _MessageListViewState extends State<MessageListView> {
     fetchMessages();
     controller.sendConversationsReadAck();
     controller.clearMentionIfNeed();
+  }
+
+  void safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
   }
 
   @override
@@ -140,7 +142,7 @@ class _MessageListViewState extends State<MessageListView> {
         if (notification is ScrollUpdateNotification) {
           if (controller.hasNew && scrollController.offset < 20) {
             controller.hasNew = false;
-            setState(() {});
+            safeSetState(() {});
           }
           if (scrollController.position.maxScrollExtent -
                   scrollController.offset <

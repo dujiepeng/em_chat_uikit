@@ -24,5 +24,9 @@ abstract mixin class ChatUIKitListViewControllerBase {
 
   Future<void> reload() async {}
 
+  void dispose() {
+    loadingType.dispose();
+  }
+
   List<ChatUIKitListItemModelBase> list = [];
 }

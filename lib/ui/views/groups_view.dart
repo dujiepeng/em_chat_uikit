@@ -58,9 +58,15 @@ class _GroupsViewState extends State<GroupsView> {
     ChatUIKit.instance.fetchJoinedGroupCount().then((value) {
       if (mounted) {
         joinedCount = value;
-        setState(() {});
+        safeSetState(() {});
       }
     }).catchError((e) {});
+  }
+
+  void safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
   }
 
   @override

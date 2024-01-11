@@ -15,14 +15,15 @@ abstract mixin class ChatUIKitProviderObserver {
   ) {}
 }
 
-typedef ChatUIKitProviderGroupMembersHandler = void Function(
+typedef ChatUIKitProviderGroupMembersHandler = List<ChatUIKitProfile>? Function(
     String groupId, List<ChatUIKitProfile> profiles);
 
-typedef ChatUIKitProviderContactsHandler = void Function(
+typedef ChatUIKitProviderContactsHandler = List<ChatUIKitProfile>? Function(
   List<ChatUIKitProfile> profiles,
 );
 
-typedef ChatUIKitProviderConversationsHandler = void Function(
+typedef ChatUIKitProviderConversationsHandler = List<ChatUIKitProfile>?
+    Function(
   List<ChatUIKitProfile> profiles,
 );
 
@@ -98,7 +99,13 @@ class ChatUIKitProvider {
     }
 
     if (needProviders.isNotEmpty) {
-      conversationsHandler?.call(needProviders);
+      List<ChatUIKitProfile>? tmp = conversationsHandler?.call(needProviders);
+      if (tmp?.isNotEmpty == true) {
+        var result = {for (var element in tmp!) element.id: element};
+        _conversationsCache.addAll(result);
+        ret.removeWhere((element) => result.keys.contains(element.id));
+        ret.addAll(result.values);
+      }
     }
 
     return {for (var element in ret) element.id: element};
@@ -133,19 +140,21 @@ class ChatUIKitProvider {
     }
 
     if (needProviders.isNotEmpty) {
-      contactsHandler?.call(needProviders);
+      List<ChatUIKitProfile>? tmp = contactsHandler?.call(needProviders);
+      if (tmp?.isNotEmpty == true) {
+        var result = {for (var element in tmp!) element.id: element};
+        _contactsCache.addAll(result);
+        ret.removeWhere((element) => result.keys.contains(element.id));
+        ret.addAll(result.values);
+      }
     }
 
     return {for (var element in ret) element.id: element};
   }
 
   ChatUIKitProfile contactProfile(String userId) {
-    ChatUIKitProfile? profile = _contactsCache[userId];
-    if (profile == null) {
-      profile = ChatUIKitProfile.contact(id: userId);
-      contactsHandler?.call([profile]);
-    }
-    return profile;
+    Map<String, ChatUIKitProfile> map = contactProfiles([userId]);
+    return map.values.first;
   }
 
   Map<String, ChatUIKitProfile> groupMemberProfiles(
@@ -165,24 +174,22 @@ class ChatUIKitProvider {
     }
 
     if (needProviders.isNotEmpty) {
-      groupMembersHandler?.call(groupId, needProviders);
+      List<ChatUIKitProfile>? tmp =
+          groupMembersHandler?.call(groupId, needProviders);
+      if (tmp?.isNotEmpty == true) {
+        var result = {for (var element in tmp!) element.id: element};
+        _groupMembersCache[groupId] = result;
+        ret.removeWhere((element) => result.keys.contains(element.id));
+        ret.addAll(result.values);
+      }
     }
 
     return {for (var element in ret) element.id: element};
   }
 
   ChatUIKitProfile groupMemberProfile(String groupId, String userId) {
-    if (_groupMembersCache[groupId] == null) {
-      _groupMembersCache[groupId] = {};
-    }
-
-    ChatUIKitProfile? profile = _groupMembersCache[groupId]?[userId];
-
-    if (profile == null) {
-      profile = ChatUIKitProfile.groupMember(id: userId);
-      groupMembersHandler?.call(groupId, [profile]);
-    }
-    return profile;
+    Map<String, ChatUIKitProfile> map = groupMemberProfiles(groupId, [userId]);
+    return map.values.first;
   }
 
   void addContactProfiles(List<ChatUIKitProfile> list) {

@@ -47,17 +47,19 @@ class _ChatUIKitImageMessageWidgetState
   @override
   void onSuccess(String msgId, Message msg) {
     if (msgId == message.msgId) {
-      downloading = false;
-      setState(() {});
+      safeSetState(() {
+        downloading = false;
+      });
     }
   }
 
   @override
   void onError(String msgId, Message msg, ChatError error) {
     if (msgId == message.msgId) {
-      downloading = false;
-      downloadError = true;
-      setState(() {});
+      safeSetState(() {
+        downloading = false;
+        downloadError = true;
+      });
     }
   }
 
@@ -231,5 +233,11 @@ class _ChatUIKitImageMessageWidgetState
         ),
       ),
     );
+  }
+
+  void safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
   }
 }
