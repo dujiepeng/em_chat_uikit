@@ -1,13 +1,15 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit_example/home_page.dart';
 import 'package:em_chat_uikit_example/login_page.dart';
-import 'package:em_chat_uikit_example/pages/download_page.dart';
+import 'package:em_chat_uikit_example/pages/help/download_page.dart';
 import 'package:em_chat_uikit_example/welcome_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await ChatUIKit.instance.init(appkey: appKey, debugMode: true);
   runApp(const MyApp());
 }
 

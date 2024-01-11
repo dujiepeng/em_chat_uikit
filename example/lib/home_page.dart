@@ -1,9 +1,10 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:em_chat_uikit_example/pages/contact_page.dart';
-import 'package:em_chat_uikit_example/pages/conversation_page.dart';
-import 'package:em_chat_uikit_example/pages/my_page.dart';
-import 'package:em_chat_uikit_example/toast_page.dart';
-import 'package:em_chat_uikit_example/user_provider_widget.dart';
+import 'package:em_chat_uikit_example/pages/contact/contact_page.dart';
+import 'package:em_chat_uikit_example/pages/conversation/conversation_page.dart';
+import 'package:em_chat_uikit_example/pages/me/my_page.dart';
+import 'package:em_chat_uikit_example/pages/tool/toast_page.dart';
+import 'package:em_chat_uikit_example/pages/tool/user_provider_widget.dart';
+
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {

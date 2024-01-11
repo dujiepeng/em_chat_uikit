@@ -427,6 +427,10 @@ class MessageListViewController extends ChangeNotifier
       }
     }
     final msg = await ChatUIKit.instance.sendMessage(message: willSendMsg);
+    userMap[ChatUIKit.instance.currentUserId()!] = UserData(
+      nickname: ChatUIKitProvider.instance.currentUserData?.nickname,
+      avatarUrl: ChatUIKitProvider.instance.currentUserData?.avatarUrl,
+    );
     msgList.insert(0, msg);
     hasNew = true;
     lastActionType = MessageLastActionType.send;

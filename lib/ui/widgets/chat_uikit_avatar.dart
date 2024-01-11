@@ -37,10 +37,14 @@ class _ChatUIKitAvatarState extends State<ChatUIKitAvatar> {
             ),
           ),
         ),
-        child: ChatUIKitImageLoader.defaultAvatar(
-          height: widget.size,
-          width: widget.size,
-        ));
+        child: widget.avatarUrl?.isNotEmpty == true
+            ? ChatUIKitImageLoader.networkImage(
+                image: widget.avatarUrl,
+              )
+            : ChatUIKitImageLoader.defaultAvatar(
+                height: widget.size,
+                width: widget.size,
+              ));
     return content;
   }
 }

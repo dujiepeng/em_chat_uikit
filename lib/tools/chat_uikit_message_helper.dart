@@ -21,6 +21,7 @@ extension MessageHelper on Message {
   void addNickname(String? nickname) {
     if (nickname?.isNotEmpty == true) {
       attributes ??= {};
+      attributes![msgUserInfoKey] ??= {};
       attributes![msgUserInfoKey][userNicknameKey] = nickname;
     }
   }
@@ -28,6 +29,7 @@ extension MessageHelper on Message {
   void addAvatarURL(String? avatarUrl) {
     if (avatarUrl?.isNotEmpty == true) {
       attributes ??= {};
+      attributes![msgUserInfoKey] ??= {};
       attributes![msgUserInfoKey][userAvatarKey] = avatarUrl;
     }
   }

@@ -60,6 +60,12 @@ flutter:
     - assets/images/chat.png
     - assets/images/contact.png
     - assets/images/me.png
+    - assets/images/info.png
+    - assets/images/notifications.png
+    - assets/images/online.png
+    - assets/images/personal.png
+    - assets/images/secret.png
+    - assets/images/settings.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

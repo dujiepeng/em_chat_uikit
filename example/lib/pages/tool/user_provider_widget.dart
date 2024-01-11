@@ -17,6 +17,11 @@ class _UserProviderWidgetState extends State<UserProviderWidget> {
     ChatUIKitProvider.instance.contactsHandler = _contactsHandler;
     ChatUIKitProvider.instance.conversationsHandler = _conversationsHandler;
     ChatUIKitProvider.instance.groupMembersHandler = _groupMembersHandler;
+
+    ChatUIKitProvider.instance.currentUserData = const UserData(
+        nickname: '张三',
+        avatarUrl:
+            'https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/muslim_man_avatar-512.png');
   }
 
   @override

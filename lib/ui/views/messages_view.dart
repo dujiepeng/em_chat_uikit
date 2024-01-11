@@ -467,13 +467,20 @@ class _MessagesViewState extends State<MessagesView> {
         message,
       );
       String? from = map?[alertRecallMessageFromKey];
-      ChatUIKitProfile? profile =
-          ChatUIKitProvider.instance.contactProfile(from ?? '');
+      String? showName;
+      if (ChatUIKit.instance.currentUserId() == from) {
+        showName = ChatUIKitLocal.messagesViewRecallInfoYou.getString(context);
+      } else {
+        ChatUIKitProfile profile =
+            ChatUIKitProvider.instance.contactProfile(from ?? '');
+        showName = profile.showName;
+      }
+
       content ??= ChatUIKitMessageListViewAlertItem(
         infos: [
           MessageAlertAction(
             text:
-                '${profile.showName}${ChatUIKitLocal.messagesViewRecallInfo.getString(context)}',
+                '$showName${ChatUIKitLocal.messagesViewRecallInfo.getString(context)}',
           ),
         ],
       );

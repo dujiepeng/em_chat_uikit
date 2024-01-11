@@ -49,7 +49,7 @@ class ChatUIKitProvider {
 
   final List<ChatUIKitProviderObserver> _observers = [];
 
-  ChatUIKitProfile? currentUserProfile;
+  UserData? currentUserData;
 
   void addObserver(ChatUIKitProviderObserver observer) {
     _observers.add(observer);

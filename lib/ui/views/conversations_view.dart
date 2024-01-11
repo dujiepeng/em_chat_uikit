@@ -63,22 +63,18 @@ class ConversationsView extends StatefulWidget {
   State<ConversationsView> createState() => _ConversationsViewState();
 }
 
-class _ConversationsViewState extends State<ConversationsView>
-     {
+class _ConversationsViewState extends State<ConversationsView> {
   late ConversationListViewController controller;
   @override
   void initState() {
     super.initState();
     controller = widget.controller ?? ConversationListViewController();
-
   }
 
   @override
   void dispose() {
     super.dispose();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +98,11 @@ class _ConversationsViewState extends State<ConversationsView>
                 ),
                 leading: Container(
                   margin: const EdgeInsets.fromLTRB(12, 6, 12, 6),
-                  child: const ChatUIKitAvatar(size: 32),
+                  child: ChatUIKitAvatar(
+                    size: 32,
+                    avatarUrl:
+                        ChatUIKitProvider.instance.currentUserData?.avatarUrl,
+                  ),
                 ),
                 trailing: IconButton(
                   iconSize: 24,
