@@ -212,7 +212,8 @@ class _GroupAddMembersViewState extends State<GroupAddMembersView> {
         return ValueListenableBuilder(
           valueListenable: selectedProfiles,
           builder: (context, value, child) {
-            return SearchContactsView(
+            return SearchUsersView(
+              searchData: list,
               itemBuilder: (context, profile, searchKeyword) {
                 return InkWell(
                   onTap: () {
@@ -266,7 +267,6 @@ class _GroupAddMembersViewState extends State<GroupAddMembersView> {
               },
               searchHideText: ChatUIKitLocal.groupAddMembersViewSearchContact
                   .getString(context),
-              searchData: list,
             );
           },
         );

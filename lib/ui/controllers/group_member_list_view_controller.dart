@@ -3,12 +3,12 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 class GroupMemberListViewController with ChatUIKitListViewControllerBase {
   GroupMemberListViewController({
     required this.groupId,
-    this.owner,
+    this.includeOwner = true,
     this.pageSize = 200,
   });
   final String groupId;
   final int pageSize;
-  final String? owner;
+  final bool includeOwner;
   String? cursor;
 
   @override
@@ -19,8 +19,11 @@ class GroupMemberListViewController with ChatUIKitListViewControllerBase {
       List<String> ret = await fetchAllMembers();
 
       List<String> userIds = ret;
-      if (owner != null) {
-        userIds.insert(0, owner!);
+      if (includeOwner) {
+        Group? group = await ChatUIKit.instance.getGroup(groupId: groupId);
+        if (group?.owner?.isNotEmpty == true) {
+          userIds.insert(0, group!.owner!);
+        }
       }
       List<ContactItemModel> tmp = mappers(userIds);
       list.clear();

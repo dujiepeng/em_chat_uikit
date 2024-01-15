@@ -410,45 +410,47 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
                   .getString(context)),
         ),
         if (group?.permissionType == GroupPermissionType.Owner) ...[
-          Container(height: 20),
+          Container(
+            height: 20,
+            color: theme.color.isDark
+                ? theme.color.neutralColor3
+                : theme.color.neutralColor95,
+          ),
           InkWell(
             onTap: () {
               changeGroupName();
             },
             child: ChatUIKitDetailsListViewItem(
               title: ChatUIKitLocal.groupDetailViewGroupName.getString(context),
-              trailing: SizedBox(
-                width: 100,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        group?.name ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        textScaleFactor: 1.0,
-                        maxLines: 1,
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                          color: theme.color.isDark
-                              ? theme.color.neutralColor6
-                              : theme.color.neutralColor5,
-                          fontSize: theme.font.labelLarge.fontSize,
-                          fontWeight: theme.font.labelLarge.fontWeight,
-                        ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Text(
+                      group?.name ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      textScaleFactor: 1.0,
+                      maxLines: 1,
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                        color: theme.color.isDark
+                            ? theme.color.neutralColor6
+                            : theme.color.neutralColor5,
+                        fontSize: theme.font.labelLarge.fontSize,
+                        fontWeight: theme.font.labelLarge.fontWeight,
                       ),
                     ),
-                    const SizedBox(width: 2),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      color: theme.color.isDark
-                          ? theme.color.neutralColor5
-                          : theme.color.neutralColor7,
-                      size: 18,
-                    )
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 2),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    color: theme.color.isDark
+                        ? theme.color.neutralColor5
+                        : theme.color.neutralColor7,
+                    size: 18,
+                  )
+                ],
               ),
             ),
           ),
@@ -459,37 +461,34 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
             child: ChatUIKitDetailsListViewItem(
               title:
                   ChatUIKitLocal.groupDetailViewDescription.getString(context),
-              trailing: SizedBox(
-                width: 100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        group?.description ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                        maxLines: 1,
-                        textScaleFactor: 1.0,
-                        style: TextStyle(
-                          color: theme.color.isDark
-                              ? theme.color.neutralColor6
-                              : theme.color.neutralColor5,
-                          fontSize: theme.font.labelLarge.fontSize,
-                          fontWeight: theme.font.labelLarge.fontWeight,
-                        ),
+              trailing: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Text(
+                      group?.description ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      maxLines: 1,
+                      textScaleFactor: 1.0,
+                      style: TextStyle(
+                        color: theme.color.isDark
+                            ? theme.color.neutralColor6
+                            : theme.color.neutralColor5,
+                        fontSize: theme.font.labelLarge.fontSize,
+                        fontWeight: theme.font.labelLarge.fontWeight,
                       ),
                     ),
-                    const SizedBox(width: 2),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      color: theme.color.isDark
-                          ? theme.color.neutralColor5
-                          : theme.color.neutralColor7,
-                      size: 18,
-                    )
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 2),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    color: theme.color.isDark
+                        ? theme.color.neutralColor5
+                        : theme.color.neutralColor7,
+                    size: 18,
+                  )
+                ],
               ),
             ),
           ),
@@ -523,9 +522,10 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
       ],
     );
     if (ret == true) {
-      Conversation conversation = await ChatUIKit.instance.createConversation(
-          conversationId: widget.profile.id, type: ConversationType.GroupChat);
-      await conversation.deleteAllMessages();
+      await ChatUIKit.instance.deleteLocalConversation(
+        conversationId: widget.profile.id,
+      );
+
       widget.onMessageDidClear?.call();
     }
   }

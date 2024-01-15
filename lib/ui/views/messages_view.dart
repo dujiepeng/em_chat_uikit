@@ -829,26 +829,29 @@ class _MessagesViewState extends State<MessagesView> {
         ));
       }
 
-      items.add(ChatUIKitBottomSheetItem.normal(
-        icon: ChatUIKitImageLoader.messageLongPressReply(
-          color: theme.color.isDark
-              ? theme.color.neutralColor7
-              : theme.color.neutralColor3,
-        ),
-        style: TextStyle(
-          color: theme.color.isDark
-              ? theme.color.neutralColor98
-              : theme.color.neutralColor1,
-          fontWeight: theme.font.bodyLarge.fontWeight,
-          fontSize: theme.font.bodyLarge.fontSize,
-        ),
-        label: ChatUIKitLocal.messagesViewLongPressActionsTitleReply
-            .getString(context),
-        onTap: () async {
-          Navigator.of(context).pop();
-          replyMessaged(message);
-        },
-      ));
+      if (message.status == MessageStatus.SUCCESS) {
+        items.add(ChatUIKitBottomSheetItem.normal(
+          icon: ChatUIKitImageLoader.messageLongPressReply(
+            color: theme.color.isDark
+                ? theme.color.neutralColor7
+                : theme.color.neutralColor3,
+          ),
+          style: TextStyle(
+            color: theme.color.isDark
+                ? theme.color.neutralColor98
+                : theme.color.neutralColor1,
+            fontWeight: theme.font.bodyLarge.fontWeight,
+            fontSize: theme.font.bodyLarge.fontSize,
+          ),
+          label: ChatUIKitLocal.messagesViewLongPressActionsTitleReply
+              .getString(context),
+          onTap: () async {
+            Navigator.of(context).pop();
+            replyMessaged(message);
+          },
+        ));
+      }
+
       if (message.bodyType == MessageType.TXT &&
           message.direction == MessageDirection.SEND) {
         items.add(ChatUIKitBottomSheetItem.normal(

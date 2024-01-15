@@ -55,9 +55,9 @@ class ChatUIKitRoute {
         arguments as NewRequestDetailsViewArguments,
       );
     },
-    ChatUIKitRouteNames.searchContactsView: (context, arguments) {
-      return SearchContactsView.arguments(
-        arguments as SearchContactsViewArguments,
+    ChatUIKitRouteNames.searchUsersView: (context, arguments) {
+      return SearchUsersView.arguments(
+        arguments as SearchUsersViewArguments,
       );
     },
     ChatUIKitRouteNames.groupMembersView: (context, arguments) {
@@ -121,7 +121,6 @@ class ChatUIKitRoute {
       );
     }),
   };
-
 
   static popToRoot(BuildContext context) {
     Navigator.of(context).popUntil((route) => route.isFirst);

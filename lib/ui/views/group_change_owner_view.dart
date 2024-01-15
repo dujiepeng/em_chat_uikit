@@ -60,7 +60,10 @@ class _GroupChangeOwnerViewState extends State<GroupChangeOwnerView> {
   void initState() {
     super.initState();
     controller = widget.controller ??
-        GroupMemberListViewController(groupId: widget.groupId);
+        GroupMemberListViewController(
+          groupId: widget.groupId,
+          includeOwner: false,
+        );
   }
 
   @override

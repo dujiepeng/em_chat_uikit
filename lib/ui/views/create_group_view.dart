@@ -187,7 +187,7 @@ class _CreateGroupViewState extends State<CreateGroupView> {
         return ValueListenableBuilder(
           valueListenable: selectedProfiles,
           builder: (context, value, child) {
-            return SearchContactsView(
+            return SearchUsersView(
               itemBuilder: (context, profile, searchKeyword) {
                 return InkWell(
                   onTap: () {

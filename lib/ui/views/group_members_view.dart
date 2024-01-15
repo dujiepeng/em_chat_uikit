@@ -154,18 +154,19 @@ class _GroupMembersViewState extends State<GroupMembersView>
                 ),
               ),
       body: SafeArea(
-          child: GroupMemberListView(
-        groupId: widget.profile.id,
-        controller: controller,
-        itemBuilder: widget.listViewItemBuilder,
-        searchHideText: widget.fakeSearchHideText,
-        background: widget.listViewBackground,
-        onTap: widget.onTap ??
-            (context, model) {
-              onMemberTap(context, model.profile);
-            },
-        onSearchTap: widget.onSearchTap ?? onSearchTap,
-      )),
+        child: GroupMemberListView(
+          groupId: widget.profile.id,
+          controller: controller,
+          itemBuilder: widget.listViewItemBuilder,
+          searchHideText: widget.fakeSearchHideText,
+          background: widget.listViewBackground,
+          onTap: widget.onTap ??
+              (context, model) {
+                onMemberTap(context, model.profile);
+              },
+          onSearchTap: widget.onSearchTap ?? onSearchTap,
+        ),
+      ),
     );
 
     return content;

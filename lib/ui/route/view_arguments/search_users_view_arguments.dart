@@ -1,14 +1,19 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/widgets.dart';
 
-class SearchContactsViewArguments implements ChatUIKitViewArguments {
-  SearchContactsViewArguments({
+class SearchUsersViewArguments implements ChatUIKitViewArguments {
+  SearchUsersViewArguments({
     required this.searchData,
     required this.searchHideText,
     this.onTap,
     this.itemBuilder,
     this.appBar,
     this.enableAppBar = true,
+    this.enableMulti = false,
+    this.selected,
+    this.title,
+    this.showBackButton = true,
+    this.selectedTitle,
     this.attributes,
   });
 
@@ -19,10 +24,15 @@ class SearchContactsViewArguments implements ChatUIKitViewArguments {
       String? searchKeyword)? itemBuilder;
   final ChatUIKitAppBar? appBar;
   final bool enableAppBar;
+  final bool enableMulti;
+  final List<String>? selected;
+  final String? title;
+  final bool showBackButton;
+  final String? selectedTitle;
   @override
   String? attributes;
 
-  SearchContactsViewArguments copyWith({
+  SearchUsersViewArguments copyWith({
     List<NeedSearch>? searchData,
     String? searchHideText,
     void Function(BuildContext context, ChatUIKitProfile profile)? onTap,
@@ -33,7 +43,7 @@ class SearchContactsViewArguments implements ChatUIKitViewArguments {
     bool? enableAppBar,
     String? attributes,
   }) {
-    return SearchContactsViewArguments(
+    return SearchUsersViewArguments(
       searchData: searchData ?? this.searchData,
       searchHideText: searchHideText ?? this.searchHideText,
       onTap: onTap ?? this.onTap,

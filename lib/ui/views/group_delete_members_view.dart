@@ -58,7 +58,10 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
   void initState() {
     super.initState();
     controller = widget.controller ??
-        GroupMemberListViewController(groupId: widget.groupId);
+        GroupMemberListViewController(
+          groupId: widget.groupId,
+          includeOwner: false,
+        );
   }
 
   @override
@@ -183,7 +186,7 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
         return ValueListenableBuilder(
           valueListenable: selectedProfiles,
           builder: (context, value, child) {
-            return SearchContactsView(
+            return SearchUsersView(
               itemBuilder: (context, profile, searchKeyword) {
                 return InkWell(
                   onTap: () {

@@ -49,7 +49,9 @@ class _GroupMemberListViewState extends State<GroupMemberListView> {
     super.initState();
 
     controller = widget.controller ??
-        GroupMemberListViewController(groupId: widget.groupId);
+        GroupMemberListViewController(
+          groupId: widget.groupId,
+        );
     controller.fetchItemList();
   }
 

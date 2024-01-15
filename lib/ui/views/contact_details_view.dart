@@ -350,9 +350,9 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
     );
 
     if (ret == true) {
-      Conversation conversation = await ChatUIKit.instance.createConversation(
-          conversationId: profile!.id, type: ConversationType.Chat);
-      await conversation.deleteAllMessages();
+      await ChatUIKit.instance.deleteLocalConversation(
+        conversationId: widget.profile.id,
+      );
       widget.onMessageDidClear?.call();
     }
   }

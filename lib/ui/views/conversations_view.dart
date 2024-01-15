@@ -147,7 +147,7 @@ class _ConversationsViewState extends State<ConversationsView> {
       isScrollControlled: true,
       context: context,
       builder: (context) {
-        return SearchContactsView(
+        return SearchUsersView(
           onTap: (ctx, profile) {
             Navigator.of(ctx).pop(profile);
           },

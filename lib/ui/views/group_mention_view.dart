@@ -130,7 +130,6 @@ class _GroupMentionViewState extends State<GroupMentionView> {
     for (var item in data) {
       list.add(item);
     }
-    final theme = ChatUIKitTheme.of(context);
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -138,58 +137,30 @@ class _GroupMentionViewState extends State<GroupMentionView> {
         return ValueListenableBuilder(
           valueListenable: selectedProfiles,
           builder: (context, value, child) {
-            return SearchContactsView(
-              itemBuilder: (context, profile, searchKeyword) {
-                return InkWell(
-                  onTap: () {
-                    tapContactInfo(profile);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 19.5, right: 15.5),
-                    child: Row(
-                      children: [
-                        value.contains(profile)
-                            ? Icon(
-                                Icons.check_box,
-                                size: 21,
-                                color: theme.color.isDark
-                                    ? theme.color.primaryColor6
-                                    : theme.color.primaryColor5,
-                              )
-                            : Icon(
-                                Icons.check_box_outline_blank,
-                                size: 21,
-                                color: theme.color.isDark
-                                    ? theme.color.neutralColor4
-                                    : theme.color.neutralColor7,
-                              ),
-                        ChatUIKitSearchListViewItem(
-                          profile: profile,
-                          highlightWord: searchKeyword,
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+            return SearchUsersView(
               searchHideText:
                   ChatUIKitLocal.groupMentionViewSearchHint.getString(context),
               searchData: list,
+              itemBuilder: (context, profile, searchKeyword) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop(profile);
+                  },
+                  child: ChatUIKitSearchListViewItem(
+                    profile: profile,
+                    highlightWord: searchKeyword,
+                  ),
+                );
+              },
             );
           },
         );
       },
-    ).then((value) {});
-  }
-
-  void tapContactInfo(ChatUIKitProfile profile) {
-    List<ChatUIKitProfile> list = selectedProfiles.value;
-    if (list.contains(profile)) {
-      list.remove(profile);
-    } else {
-      list.add(profile);
-    }
-    selectedProfiles.value = [...list];
+    ).then((value) {
+      if (value is ChatUIKitProfile) {
+        Navigator.of(context).pop(value);
+      }
+    });
   }
 }
 

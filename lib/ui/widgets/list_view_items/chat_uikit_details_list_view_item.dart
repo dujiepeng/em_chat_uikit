@@ -10,30 +10,54 @@ class ChatUIKitDetailsListViewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
-    return SizedBox(
-      child: Column(children: [
-        ListTile(
-          title: Text(
-            title,
-            textScaleFactor: 1.0,
-            style: TextStyle(
-              fontWeight: theme.font.titleMedium.fontWeight,
-              fontSize: theme.font.titleMedium.fontSize,
-              color: theme.color.isDark
-                  ? theme.color.neutralColor100
-                  : theme.color.neutralColor1,
+    Widget content = SizedBox(
+      height: 54,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 53.5,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  textScaleFactor: 1.0,
+                  style: TextStyle(
+                    fontWeight: theme.font.titleMedium.fontWeight,
+                    fontSize: theme.font.titleMedium.fontSize,
+                    color: theme.color.isDark
+                        ? theme.color.neutralColor100
+                        : theme.color.neutralColor1,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: trailing ?? const SizedBox(),
+                  ),
+                )
+              ],
             ),
           ),
-          trailing: trailing,
-        ),
-        Container(
-          height: borderHeight,
-          color: theme.color.isDark
-              ? theme.color.neutralColor2
-              : theme.color.neutralColor9,
-          margin: const EdgeInsets.only(left: 16),
-        )
-      ]),
+          Divider(
+            height: borderHeight,
+            thickness: borderHeight,
+            color: theme.color.isDark
+                ? theme.color.neutralColor2
+                : theme.color.neutralColor9,
+          )
+        ],
+      ),
     );
+
+    content = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: content,
+    );
+
+    return content;
   }
 }
