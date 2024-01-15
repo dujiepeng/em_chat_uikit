@@ -18,10 +18,15 @@ class MessageListShareUserData extends InheritedWidget {
 }
 
 class UserData {
-  const UserData({this.nickname, this.avatarUrl});
+  UserData({
+    this.nickname,
+    this.avatarUrl,
+    this.time = 0,
+  });
 
   final String? nickname;
   final String? avatarUrl;
+  final int time;
 
   UserData copyWith({String? nickname, String? avatarUrl}) {
     return UserData(

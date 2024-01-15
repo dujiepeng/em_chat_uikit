@@ -162,6 +162,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         ? Text(
             group?.description ?? '',
             overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
             textScaleFactor: 1.0,
             maxLines: 3,
             style: TextStyle(

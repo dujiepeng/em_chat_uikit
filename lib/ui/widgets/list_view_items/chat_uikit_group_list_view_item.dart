@@ -46,12 +46,13 @@ class ChatUIKitGroupListViewItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         content,
-        Container(
+        Divider(
           height: borderHeight,
+          thickness: borderHeight,
+          indent: 68,
           color: theme.color.isDark
               ? theme.color.neutralColor2
               : theme.color.neutralColor9,
-          margin: const EdgeInsets.only(left: 16),
         )
       ],
     );

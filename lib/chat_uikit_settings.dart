@@ -2,8 +2,7 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 class ChatUIKitSettings {
-  static CornerRadius inputBarRadius = CornerRadius.large;
-  static CornerRadius avatarRadius = CornerRadius.large;
+  static CornerRadius avatarRadius = CornerRadius.medium;
   static CornerRadius searchBarRadius = ChatUIKitSettings.avatarRadius;
   static CornerRadius alertRadius = CornerRadius.medium;
   static ChatUIKitRectangleType alertRectangleType =

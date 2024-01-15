@@ -73,7 +73,19 @@ class MessageListViewController extends ChangeNotifier
     }
     if (list.isNotEmpty) {
       lastMessageId = list.first.msgId;
+      for (var msg in list) {
+        UserData? userData = userMap[msg.from!];
+        if ((userData?.time ?? 0) < msg.serverTime) {
+          userData = UserData(
+            nickname: msg.nickname,
+            avatarUrl: msg.avatarUrl,
+            time: msg.serverTime,
+          );
+          userMap[msg.from!] = userData;
+        }
+      }
       msgList.addAll(list.reversed);
+
       lastActionType = MessageLastActionType.load;
       notifyListeners();
     }

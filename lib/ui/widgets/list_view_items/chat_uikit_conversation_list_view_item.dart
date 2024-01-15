@@ -30,7 +30,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
             margin: const EdgeInsets.only(right: 12),
             child: ChatUIKitAvatar(
               avatarUrl: info.avatarUrl,
-              size: 40,
+              size: 50,
             ),
           )
         : const SizedBox();
@@ -235,12 +235,13 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: [
         Expanded(child: content),
-        Container(
+        Divider(
           height: borderHeight,
+          thickness: borderHeight,
+          indent: 78,
           color: theme.color.isDark
               ? theme.color.neutralColor2
               : theme.color.neutralColor9,
-          margin: const EdgeInsets.only(left: 16),
         )
       ],
     );
