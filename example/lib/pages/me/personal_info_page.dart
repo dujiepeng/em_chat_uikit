@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit_example/pages/tool/user_data_store.dart';
 import 'package:flutter/material.dart';
 
 class PersonalInfoPage extends StatefulWidget {
@@ -8,7 +9,30 @@ class PersonalInfoPage extends StatefulWidget {
   State<PersonalInfoPage> createState() => _PersonalInfoPageState();
 }
 
-class _PersonalInfoPageState extends State<PersonalInfoPage> {
+class _PersonalInfoPageState extends State<PersonalInfoPage>
+    with ChatUIKitProviderObserver {
+  UserData? _userData;
+
+  @override
+  void initState() {
+    super.initState();
+    ChatUIKitProvider.instance.addObserver(this);
+    _userData = ChatUIKitProvider.instance.currentUserData;
+  }
+
+  @override
+  void dispose() {
+    ChatUIKitProvider.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void onCurrentUserDataUpdate(UserData? userData) {
+    setState(() {
+      _userData = userData;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
@@ -30,16 +54,15 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
           children: [
             PersonalInfoItem(
               title: '头像',
-              imageWidget: ChatUIKitAvatar(
-                avatarUrl:
-                    ChatUIKitProvider.instance.currentUserData?.avatarUrl,
+              imageWidget: ChatUIKitAvatar.current(
+                avatarUrl: _userData?.avatarUrl,
                 size: 40,
               ),
               onTap: pushChangeAvatarPage,
             ),
             PersonalInfoItem(
               title: '昵称',
-              trailing: ChatUIKitProvider.instance.currentUserData?.nickname ??
+              trailing: _userData?.nickname ??
                   ChatUIKit.instance.currentUserId() ??
                   '',
               onTap: pushChangeNicknamePage,
@@ -84,6 +107,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
             data = data.copyWith(nickname: value);
           }
           ChatUIKitProvider.instance.currentUserData = data;
+          UserDataStore().saveUserData(data);
           setState(() {});
         }
       },

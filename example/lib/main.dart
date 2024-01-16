@@ -12,6 +12,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ChatUIKit.instance.init(appkey: appKey, debugMode: true);
+
   runApp(const MyApp());
 }
 

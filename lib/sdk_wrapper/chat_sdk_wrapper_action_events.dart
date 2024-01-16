@@ -11,6 +11,7 @@ enum ChatSDKWrapperActionEvent {
   markAllConversationsAsRead,
   markConversationAsRead,
   getUnreadMessageCount,
+  getAppointUnreadCount,
   updateMessage,
   importMessages,
   downloadAttachment,

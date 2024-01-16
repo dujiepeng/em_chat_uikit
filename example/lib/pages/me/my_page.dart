@@ -9,7 +9,29 @@ class MyPage extends StatefulWidget {
   State<MyPage> createState() => _MyPageState();
 }
 
-class _MyPageState extends State<MyPage> {
+class _MyPageState extends State<MyPage> with ChatUIKitProviderObserver {
+  UserData? _userData;
+
+  @override
+  void initState() {
+    super.initState();
+    ChatUIKitProvider.instance.addObserver(this);
+    _userData = ChatUIKitProvider.instance.currentUserData;
+  }
+
+  @override
+  void dispose() {
+    ChatUIKitProvider.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void onCurrentUserDataUpdate(UserData? userData) {
+    setState(() {
+      _userData = userData;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
@@ -30,15 +52,13 @@ class _MyPageState extends State<MyPage> {
 
   Widget _buildContent() {
     final theme = ChatUIKitTheme.of(context);
-    Widget avatar = ChatUIKitAvatar(
-      avatarUrl: ChatUIKitProvider.instance.currentUserData?.avatarUrl,
+    Widget avatar = ChatUIKitAvatar.current(
+      avatarUrl: _userData?.avatarUrl,
       size: 100,
     );
 
     Widget name = Text(
-      ChatUIKitProvider.instance.currentUserData?.nickname ??
-          ChatUIKit.instance.currentUserId() ??
-          '',
+      _userData?.nickname ?? ChatUIKit.instance.currentUserId() ?? '',
       textScaleFactor: 1.0,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:em_chat_uikit/chat_uikit.dart';
 
 const String convLoadFinishedKey =
     'EaseChatUIKit_conversation_load_more_finished';

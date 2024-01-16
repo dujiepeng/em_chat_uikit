@@ -51,6 +51,7 @@ class MessageListViewController extends ChangeNotifier
     userMap[ChatUIKit.instance.currentUserId()!] = UserData(
       nickname: ChatUIKitProvider.instance.currentUserData?.nickname,
       avatarUrl: ChatUIKitProvider.instance.currentUserData?.avatarUrl,
+      time: DateTime.now().millisecondsSinceEpoch,
     );
   }
 

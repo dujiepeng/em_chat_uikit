@@ -90,7 +90,7 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
             showBackButton: false,
             leading: Container(
               margin: const EdgeInsets.fromLTRB(12, 6, 12, 6),
-              child: ChatUIKitAvatar(
+              child: ChatUIKitAvatar.current(
                 size: 32,
                 avatarUrl:
                     ChatUIKitProvider.instance.currentUserData?.avatarUrl,

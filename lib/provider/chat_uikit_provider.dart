@@ -13,6 +13,10 @@ abstract mixin class ChatUIKitProviderObserver {
     String groupId,
     Map<String, ChatUIKitProfile> map,
   ) {}
+
+  void onCurrentUserDataUpdate(
+    UserData? userData,
+  ) {}
 }
 
 typedef ChatUIKitProviderGroupMembersHandler = List<ChatUIKitProfile>? Function(
@@ -49,7 +53,18 @@ class ChatUIKitProvider {
 
   final List<ChatUIKitProviderObserver> _observers = [];
 
-  UserData? currentUserData;
+  UserData? _currentUserData;
+
+  set currentUserData(UserData? userData) {
+    _currentUserData = userData;
+    for (var observer in _observers) {
+      observer.onCurrentUserDataUpdate(userData);
+    }
+  }
+
+  UserData? get currentUserData {
+    return _currentUserData;
+  }
 
   void addObserver(ChatUIKitProviderObserver observer) {
     _observers.add(observer);

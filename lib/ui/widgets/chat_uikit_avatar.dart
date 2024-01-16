@@ -3,24 +3,61 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 class ChatUIKitAvatar extends StatefulWidget {
-  const ChatUIKitAvatar({
+  ChatUIKitAvatar.current({
+    this.size = 32,
+    this.cornerRadius,
+    this.avatarUrl,
+    super.key,
+  }) {
+    isCurrent = true;
+  }
+
+  ChatUIKitAvatar({
     this.avatarUrl,
     this.size = 32,
     this.cornerRadius,
     super.key,
-  });
+  }) {
+    isCurrent = false;
+  }
   final double size;
   final CornerRadius? cornerRadius;
   final String? avatarUrl;
+  late final bool isCurrent;
 
   @override
   State<ChatUIKitAvatar> createState() => _ChatUIKitAvatarState();
 }
 
-class _ChatUIKitAvatarState extends State<ChatUIKitAvatar> {
+class _ChatUIKitAvatarState extends State<ChatUIKitAvatar>
+    with ChatUIKitProviderObserver {
+  String? avatarUrl;
+
   @override
   void initState() {
     super.initState();
+    if (widget.isCurrent) {
+      ChatUIKitProvider.instance.addObserver(this);
+    }
+    avatarUrl = widget.avatarUrl;
+  }
+
+  @override
+  void dispose() {
+    if (widget.isCurrent) {
+      ChatUIKitProvider.instance.removeObserver(this);
+    }
+    super.dispose();
+  }
+
+  @override
+  void onCurrentUserDataUpdate(UserData? userData) {
+    if (userData?.avatarUrl?.isNotEmpty == true &&
+        avatarUrl != userData?.avatarUrl) {
+      setState(() {
+        avatarUrl = userData?.avatarUrl;
+      });
+    }
   }
 
   @override
@@ -38,10 +75,10 @@ class _ChatUIKitAvatarState extends State<ChatUIKitAvatar> {
             ),
           ),
         ),
-        child: widget.avatarUrl?.isNotEmpty == true
+        child: avatarUrl?.isNotEmpty == true
             ? ChatUIKitImageLoader.networkImage(
                 size: widget.size,
-                image: widget.avatarUrl!,
+                image: avatarUrl!,
                 usePackageName: !(placeholder?.isNotEmpty == true),
                 placeholder: placeholder ?? 'assets/images/avatar.png',
                 placeholderWidget: ChatUIKitImageLoader.defaultAvatar(

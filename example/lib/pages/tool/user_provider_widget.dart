@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+
 import 'package:em_chat_uikit_example/pages/tool/remote_avatars.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,7 @@ class UserProviderWidget extends StatefulWidget {
 }
 
 class _UserProviderWidgetState extends State<UserProviderWidget> {
+  late SharedPreferences sharedPreferences;
   @override
   void initState() {
     super.initState();

@@ -1,5 +1,4 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:flutter/rendering.dart';
 
 class ConversationListViewController extends ChatUIKitListViewControllerBase {
   ConversationListViewController({
@@ -99,9 +98,8 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
           ChatUIKitContext.instance.setConversationLoadFinished();
           hasMore = false;
         }
-      } catch (e) {
-        debugPrint('fetchConversations: $e');
-      }
+        // ignore: empty_catches
+      } catch (e) {}
     }
 
     await updateMuteType(items);
@@ -120,9 +118,8 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
       ChatUIKitContext.instance.addConversationMute(
         map.map((key, value) => MapEntry(key, 1)),
       );
-    } catch (e) {
-      debugPrint('updateMuteType: $e');
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   Future<List<ConversationInfo>> mappers(

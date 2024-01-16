@@ -89,7 +89,7 @@ class ChatUIKitNewRequestListViewItem extends StatelessWidget {
         ),
       ],
     );
-    content = Container(
+    content = Padding(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 5),
       child: content,
     );
@@ -98,12 +98,13 @@ class ChatUIKitNewRequestListViewItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         content,
-        Container(
+        Divider(
+          indent: 68,
           height: borderHeight,
+          thickness: borderHeight,
           color: theme.color.isDark
               ? theme.color.neutralColor2
               : theme.color.neutralColor9,
-          margin: const EdgeInsets.only(left: 16),
         )
       ],
     );

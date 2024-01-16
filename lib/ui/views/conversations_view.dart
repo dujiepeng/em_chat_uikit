@@ -98,7 +98,7 @@ class _ConversationsViewState extends State<ConversationsView> {
                 ),
                 leading: Container(
                   margin: const EdgeInsets.fromLTRB(12, 6, 12, 6),
-                  child: ChatUIKitAvatar(
+                  child: ChatUIKitAvatar.current(
                     size: 32,
                     avatarUrl:
                         ChatUIKitProvider.instance.currentUserData?.avatarUrl,

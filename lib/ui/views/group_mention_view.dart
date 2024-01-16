@@ -185,7 +185,7 @@ class MentionAllItem extends StatelessWidget {
       textScaleFactor: 1.0,
     );
 
-    Widget avatar = const ChatUIKitAvatar(
+    Widget avatar = ChatUIKitAvatar(
       size: 40,
     );
 
