@@ -28,6 +28,9 @@ class _HomePageState extends State<HomePage>
         ChatSDKActionEventsObserver {
   int _currentIndex = 0;
 
+  ValueNotifier<int> unreadMessageCount = ValueNotifier(0);
+  ValueNotifier<int> contactRequestCount = ValueNotifier(0);
+
   @override
   void initState() {
     super.initState();
@@ -89,11 +92,11 @@ class _HomePageState extends State<HomePage>
           CustomBottomNavigationBarItem(
             label: '会话',
             image: 'assets/images/chat.png',
-            unreadCountWidget: FutureBuilder(
-              future: ChatUIKit.instance.getUnreadMessageCount(),
-              builder: (context, snapshot) {
+            unreadCountWidget: ValueListenableBuilder(
+              valueListenable: unreadMessageCount,
+              builder: (context, value, child) {
                 return ChatUIKitBadge(
-                  snapshot.hasData ? snapshot.data ?? 0 : 0,
+                  value,
                   textColor: theme.color.neutralColor98,
                   backgroundColor: theme.color.isDark
                       ? theme.color.errorColor6
@@ -111,12 +114,17 @@ class _HomePageState extends State<HomePage>
           CustomBottomNavigationBarItem(
             label: '联系人',
             image: 'assets/images/contact.png',
-            unreadCountWidget: ChatUIKitBadge(
-              ChatUIKit.instance.contactRequestCount(),
-              textColor: theme.color.neutralColor98,
-              backgroundColor: theme.color.isDark
-                  ? theme.color.errorColor6
-                  : theme.color.errorColor5,
+            unreadCountWidget: ValueListenableBuilder(
+              valueListenable: contactRequestCount,
+              builder: (context, value, child) {
+                return ChatUIKitBadge(
+                  value,
+                  textColor: theme.color.neutralColor98,
+                  backgroundColor: theme.color.isDark
+                      ? theme.color.errorColor6
+                      : theme.color.errorColor5,
+                );
+              },
             ),
             isSelect: _currentIndex == 1,
             borderColor: theme.color.isDark
@@ -149,16 +157,31 @@ class _HomePageState extends State<HomePage>
   @override
   // 用于刷新消息未读数
   void onMessagesReceived(List<Message> messages) {
-    // for (var element in messages) {
-    //   debugPrint('onMessagesReceived ${element.toJson().toString()}');
-    // }
-    setState(() {});
+    ChatUIKit.instance
+        .getUnreadMessageCount(withoutIds: UserDataStore().unNotifyGroupIds)
+        .then((value) {
+      unreadMessageCount.value = value;
+    });
+  }
+
+  @override
+  void onConversationsUpdate() {
+    ChatUIKit.instance
+        .getUnreadMessageCount(withoutIds: UserDataStore().unNotifyGroupIds)
+        .then((value) {
+      unreadMessageCount.value = value;
+    });
   }
 
   @override
   // 用于刷新好友申请未读数
   void onContactRequestReceived(String username, String? reason) {
-    setState(() {});
+    contactRequestCount.value = ChatUIKit.instance.contactRequestCount();
+  }
+
+  @override
+  void onContactAdded(String username) {
+    contactRequestCount.value = ChatUIKit.instance.contactRequestCount();
   }
 
   @override

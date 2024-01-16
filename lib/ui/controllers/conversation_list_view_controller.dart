@@ -54,7 +54,6 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
     }
   }
 
-
   @override
   Future<List<ChatUIKitListItemModelBase>> fetchMoreItemList() async {
     List<ChatUIKitListItemModelBase> list = [];

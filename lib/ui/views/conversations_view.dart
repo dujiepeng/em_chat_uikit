@@ -148,6 +148,7 @@ class _ConversationsViewState extends State<ConversationsView> {
       context: context,
       builder: (context) {
         return SearchUsersView(
+          showBackButton: false,
           onTap: (ctx, profile) {
             Navigator.of(ctx).pop(profile);
           },

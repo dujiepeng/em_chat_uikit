@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit_example/pages/conversation/custom_conversation_page.dart';
 import 'package:em_chat_uikit_example/pages/tool/user_data_store.dart';
 
 import 'package:flutter/material.dart';
@@ -71,7 +72,7 @@ class _ConversationPageState extends State<ConversationPage> {
                   onTap: () async {
                     UserDataStore().unNotifyGroupIds.add(info.profile.id);
                     Navigator.pop(context);
-                    controller!.reload();
+                    ChatUIKit.instance.onConversationsUpdate();
                   },
                 )
               ];
@@ -82,9 +83,10 @@ class _ConversationPageState extends State<ConversationPage> {
       listViewItemBuilder: (context, info) {
         if (info.attribute != null) {
           int timestamp = json.decode(info.attribute!)['custom'];
-          return FutureBuilder(
+          Widget content = FutureBuilder(
             future: ChatUIKit.instance.appointNewMessageConversationCount(
-                UserDataStore().unNotifyGroupIds),
+              UserDataStore().unNotifyGroupIds,
+            ),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 int count = snapshot.data as int;
@@ -102,6 +104,21 @@ class _ConversationPageState extends State<ConversationPage> {
               }
             },
           );
+
+          content = InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const CustomConversationPage();
+                  },
+                ),
+              ).then((value) => ChatUIKit.instance.onConversationsUpdate());
+            },
+            child: content,
+          );
+
+          return content;
         }
         return null;
       },
