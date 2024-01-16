@@ -53,7 +53,7 @@ class _ConversationListViewState extends State<ConversationListView>
     controller.fetchItemList();
 
     controller.loadingType.addListener(() {
-       setState(() {});
+      setState(() {});
     });
   }
 
@@ -128,7 +128,8 @@ class _ConversationListViewState extends State<ConversationListView>
       },
       searchHideText: widget.searchHideText,
       findChildIndexCallback: (key) {
-        final ValueKey<String> valueKey = key as ValueKey<String>;
+        if (key is! ValueKey<String>) return null;
+        final ValueKey<String> valueKey = key;
         int index = controller.list.indexWhere((info) {
           if (info is ConversationInfo) {
             return info.profile.id == valueKey.value;

@@ -343,19 +343,18 @@ class ChatUIKitImageLoader {
   }
 
   static Widget networkImage({
-    String? image,
+    required String image,
+    required String placeholder,
     Widget? placeholderWidget,
+    bool usePackageName = true,
     double? size,
     BoxFit fit = BoxFit.fill,
   }) {
-    if (image == null) {
-      return placeholderWidget ?? Container();
-    }
-
     return FadeInImage(
       width: size,
       height: size,
-      placeholder: const NetworkImage(''),
+      placeholder:
+          AssetImage(placeholder, package: usePackageName ? packageName : null),
       placeholderFit: fit,
       placeholderErrorBuilder: (context, error, stackTrace) {
         return placeholderWidget ?? Container();

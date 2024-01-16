@@ -72,7 +72,7 @@ class ChatUIKitMessageListViewAlertItem extends StatelessWidget {
       }
     }
 
-    return RichText(
+    Widget content = RichText(
       textScaleFactor: 1.0,
       text: TextSpan(
         style: defaultStyle,
@@ -80,5 +80,9 @@ class ChatUIKitMessageListViewAlertItem extends StatelessWidget {
       ),
       textAlign: textAlign,
     );
+
+    content = SizedBox(height: 30, child: Center(child: content));
+
+    return content;
   }
 }

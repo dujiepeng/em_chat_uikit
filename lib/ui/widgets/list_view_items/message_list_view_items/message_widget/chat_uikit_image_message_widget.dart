@@ -78,6 +78,8 @@ class _ChatUIKitImageMessageWidgetState
     String? thumbnailLocalPath = message.thumbnailLocalPath;
     double width = message.width;
     double height = message.height;
+    if (width == 0) width = maxImageWidth;
+    if (height == 0) height = maxImageHeight;
     double aspectRatio = width / height;
 
     if (aspectRatio < 0.1) {
@@ -118,18 +120,21 @@ class _ChatUIKitImageMessageWidgetState
         final file = File(thumbnailLocalPath!);
         bool exists = file.existsSync();
         if (exists) {
-          // precacheImage(FileImage(file), context);
           content = Image(
+            // image: FileImage(file),
             image: ResizeImage(
               FileImage(file),
               width: width.toInt(),
               height: height.toInt(),
+              policy: ResizeImagePolicy.fit,
             ),
+            width: width,
+            height: height,
             gaplessPlayback: true,
             excludeFromSemantics: true,
             alignment: left ? Alignment.centerLeft : Alignment.centerRight,
-            fit: width > height ? BoxFit.fitHeight : BoxFit.fitWidth,
-            filterQuality: FilterQuality.low,
+            fit: BoxFit.cover,
+            filterQuality: FilterQuality.high,
           );
         }
       }
@@ -139,16 +144,18 @@ class _ChatUIKitImageMessageWidgetState
           final file = File(localPath!);
           bool exists = file.existsSync();
           if (exists) {
-            // precacheImage(FileImage(file), context);
             content = Image(
               image: ResizeImage(
                 FileImage(file),
                 width: width.toInt(),
                 height: height.toInt(),
+                policy: ResizeImagePolicy.fit,
               ),
+              width: width,
+              height: height,
               gaplessPlayback: true,
               alignment: left ? Alignment.centerLeft : Alignment.centerRight,
-              fit: width > height ? BoxFit.fitHeight : BoxFit.fitWidth,
+              fit: BoxFit.cover,
               filterQuality: FilterQuality.low,
             );
           }

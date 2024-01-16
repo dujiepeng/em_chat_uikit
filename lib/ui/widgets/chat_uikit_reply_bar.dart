@@ -331,7 +331,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
                     ),
                   ),
                   TextSpan(
-                    text: widget.message.cardNickname ??
+                    text: widget.message.cardUserNickname ??
                         widget.message.cardUserId,
                     style: TextStyle(
                       fontWeight: theme.font.bodyMedium.fontWeight,
@@ -364,7 +364,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
               height: 36,
             ),
             gaplessPlayback: true,
-            fit: BoxFit.fill,
+            fit: BoxFit.cover,
             filterQuality: FilterQuality.low,
           );
         }
@@ -379,7 +379,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
             height: 36,
           ),
           gaplessPlayback: true,
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
           filterQuality: FilterQuality.low,
         );
       }
@@ -394,7 +394,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
               height: 36,
             ),
             gaplessPlayback: true,
-            fit: BoxFit.fill,
+            fit: BoxFit.cover,
             filterQuality: FilterQuality.low,
           );
         }
@@ -456,7 +456,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
               height: 36,
             ),
             gaplessPlayback: true,
-            fit: BoxFit.fill,
+            fit: BoxFit.cover,
             filterQuality: FilterQuality.low,
           );
         }
@@ -471,7 +471,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
             height: 36,
           ),
           gaplessPlayback: true,
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
           filterQuality: FilterQuality.low,
         );
       }

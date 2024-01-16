@@ -73,6 +73,8 @@ class _ChatUIKitVideoMessageWidgetState
     String? thumbnailLocalPath = message.thumbnailLocalPath;
     double width = message.width;
     double height = message.height;
+    if (width == 0) width = maxImageWidth;
+    if (height == 0) height = maxImageHeight;
     double aspectRatio = width / height;
 
     if (aspectRatio < 0.1) {
@@ -116,12 +118,15 @@ class _ChatUIKitVideoMessageWidgetState
               FileImage(file),
               width: width.toInt(),
               height: height.toInt(),
+              policy: ResizeImagePolicy.fit,
             ),
+            width: width,
+            height: height,
             gaplessPlayback: true,
             excludeFromSemantics: true,
             alignment: left ? Alignment.centerLeft : Alignment.centerRight,
-            fit: width > height ? BoxFit.fitHeight : BoxFit.fitWidth,
-            filterQuality: FilterQuality.low,
+            fit: BoxFit.cover,
+            filterQuality: FilterQuality.high,
           );
         }
       }

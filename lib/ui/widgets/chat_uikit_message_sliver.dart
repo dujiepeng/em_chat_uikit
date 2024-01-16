@@ -370,6 +370,8 @@ class ChatMessageRenderSliverList extends RenderSliverMultiBoxAdaptor {
     assert(child.parent == this);
     final SliverMultiBoxAdaptorParentData childParentData =
         child.parentData as SliverMultiBoxAdaptorParentData;
+
+    childParentData.layoutOffset ??= 0;
     // 做偏移
     return childParentData.layoutOffset! + trailingOffset;
   }

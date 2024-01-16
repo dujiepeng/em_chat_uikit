@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import '../universal/defines.dart';
 
 class ChatUIKitInsertMessageTool {
   static insertCreateGroupMessage({

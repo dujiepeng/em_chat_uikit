@@ -5,6 +5,8 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
+import '../../universal/defines.dart';
+
 enum MessageLastActionType {
   send,
   receive,
@@ -417,12 +419,12 @@ class MessageListViewController extends ChangeNotifier
   }
 
   Future<void> sendCardMessage(ChatUIKitProfile cardProfile) async {
-    Map<String, String> param = {cardContactUserId: cardProfile.id};
+    Map<String, String> param = {cardUserIdKey: cardProfile.id};
     if (profile.name != null) {
-      param[cardContactNickname] = cardProfile.name!;
+      param[cardNicknameKey] = cardProfile.name!;
     }
     if (profile.avatarUrl != null) {
-      param[cardContactAvatar] = cardProfile.avatarUrl!;
+      param[cardAvatarKey] = cardProfile.avatarUrl!;
     }
 
     final message = Message.createCustomSendMessage(

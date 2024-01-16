@@ -6,6 +6,8 @@ import 'package:em_chat_uikit/ui/custom/chat_uikit_emoji_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../universal/defines.dart';
+
 typedef MessageItemTapCallback = bool? Function(
     BuildContext context, Message message);
 
@@ -206,7 +208,7 @@ class _MessagesViewState extends State<MessagesView> {
       forceLeft: widget.forceLeft,
       bubbleContentBuilder: widget.bubbleContentBuilder,
       bubbleBuilder: widget.bubbleBuilder,
-      quoteBuilder: widget.quoteBuilder ?? quoteWidget,
+      quoteBuilder: widget.quoteBuilder,
       profile: widget.profile,
       controller: controller,
       showAvatar: widget.showAvatar,
@@ -598,13 +600,6 @@ class _MessagesViewState extends State<MessagesView> {
     return content;
   }
 
-  Widget quoteWidget(QuoteModel model) {
-    return ChatUIKitQuoteWidget(
-      model: model,
-      bubbleStyle: widget.bubbleStyle,
-    );
-  }
-
   Widget inputBar() {
     final theme = ChatUIKitTheme.of(context);
     return ChatUIKitInputBar(
@@ -994,12 +989,11 @@ class _MessagesViewState extends State<MessagesView> {
 
     if (message.bodyType == MessageType.CUSTOM && message.isCardMessage) {
       String? userId =
-          (message.body as CustomMessageBody).params?[cardContactUserId];
+          (message.body as CustomMessageBody).params?[cardUserIdKey];
       String avatar =
-          (message.body as CustomMessageBody).params?[cardContactAvatar] ?? '';
+          (message.body as CustomMessageBody).params?[cardAvatarKey] ?? '';
       String name =
-          (message.body as CustomMessageBody).params?[cardContactNickname] ??
-              '';
+          (message.body as CustomMessageBody).params?[cardNicknameKey] ?? '';
       if (userId?.isNotEmpty == true) {
         ChatUIKitProfile profile = ChatUIKitProfile(
           id: userId!,

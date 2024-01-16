@@ -29,8 +29,9 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
   }
 
   void loadMessage() async {
-    message =
-        await ChatUIKit.instance.loadMessage(messageId: widget.model.msgId);
+    message = await ChatUIKit.instance.loadMessage(
+      messageId: model.msgId,
+    );
     fetched = true;
     setState(() {});
   }
@@ -190,20 +191,8 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
           child: Builder(
             builder: (context) {
               Widget? content;
-              if (message.thumbnailRemotePath?.isNotEmpty == true) {
-                content = Image(
-                  gaplessPlayback: true,
-                  image: ResizeImage(
-                    NetworkImage(message.thumbnailRemotePath!),
-                    width: 36,
-                    height: 36,
-                  ),
-                  fit: BoxFit.fill,
-                );
-              }
 
-              if (message.thumbnailLocalPath?.isNotEmpty == true &&
-                  content == null) {
+              if (message.thumbnailLocalPath?.isNotEmpty == true) {
                 File file = File(message.thumbnailLocalPath!);
                 if (file.existsSync()) {
                   content = Image(
@@ -212,10 +201,23 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
                       FileImage(file),
                       width: 36,
                       height: 36,
+                      policy: ResizeImagePolicy.fit,
                     ),
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   );
                 }
+              }
+              if (message.thumbnailRemotePath?.isNotEmpty == true &&
+                  content == null) {
+                content = Image(
+                  gaplessPlayback: true,
+                  image: ResizeImage(
+                    NetworkImage(message.thumbnailRemotePath!),
+                    width: 36,
+                    height: 36,
+                  ),
+                  fit: BoxFit.cover,
+                );
               }
 
               if (message.localPath?.isNotEmpty == true) {
@@ -227,8 +229,9 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
                       FileImage(file),
                       width: 36,
                       height: 36,
+                      policy: ResizeImagePolicy.fit,
                     ),
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   );
                 }
               }
@@ -342,8 +345,9 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
               FileImage(file),
               width: 36,
               height: 36,
+              policy: ResizeImagePolicy.fit,
             ),
-            fit: BoxFit.fill,
+            fit: BoxFit.cover,
           );
         }
       }
@@ -355,8 +359,9 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
             NetworkImage(message.thumbnailRemotePath!),
             width: 36,
             height: 36,
+            policy: ResizeImagePolicy.fit,
           ),
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
         );
       }
 
@@ -608,7 +613,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
                     ),
                   ),
                   TextSpan(
-                    text: message.cardNickname ?? message.cardUserId,
+                    text: message.cardUserNickname ?? message.cardUserId,
                     style: TextStyle(
                       fontWeight: theme.font.bodyMedium.fontWeight,
                       fontSize: theme.font.bodyMedium.fontSize,

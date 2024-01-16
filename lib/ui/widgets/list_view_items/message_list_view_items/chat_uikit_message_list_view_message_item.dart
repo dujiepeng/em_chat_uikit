@@ -92,7 +92,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
       content = bubbleBuilder?.call(context, msgWidget, message) ??
           ChatUIKitMessageListViewBubble(
             key: ValueKey(message.localTime),
-            needSmallCorner: message.getQuote() == null,
+            needSmallCorner: message.getQuote == null,
             style: bubbleStyle,
             isLeft: left,
             child: msgWidget,
@@ -112,24 +112,28 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         textDirection: left ? TextDirection.rtl : TextDirection.ltr,
         children: [
-          ChatUIKitMessageStatusWidget(
-            onErrorTap: onErrorTap,
-            size: 16,
-            statusType: () {
-              if (message.status == MessageStatus.CREATE ||
-                  message.status == MessageStatus.PROGRESS) {
-                return MessageStatusType.loading;
-              } else if (message.status == MessageStatus.FAIL) {
-                return MessageStatusType.fail;
-              } else {
-                if (message.hasDeliverAck) {
-                  return MessageStatusType.deliver;
-                } else if (message.hasReadAck) {
-                  return MessageStatusType.read;
+          SizedBox(
+            width: 16,
+            height: 16,
+            child: ChatUIKitMessageStatusWidget(
+              onErrorTap: onErrorTap,
+              size: 16,
+              statusType: () {
+                if (message.status == MessageStatus.CREATE ||
+                    message.status == MessageStatus.PROGRESS) {
+                  return MessageStatusType.loading;
+                } else if (message.status == MessageStatus.FAIL) {
+                  return MessageStatusType.fail;
+                } else {
+                  if (message.hasDeliverAck) {
+                    return MessageStatusType.deliver;
+                  } else if (message.hasReadAck) {
+                    return MessageStatusType.read;
+                  }
+                  return MessageStatusType.succeed;
                 }
-                return MessageStatusType.succeed;
-              }
-            }(),
+              }(),
+            ),
           ),
           const SizedBox(width: 4),
           Flexible(flex: 1, fit: FlexFit.loose, child: content),
@@ -144,7 +148,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
         showNickname
             ? _nickname(theme, context, isLeft: left)
             : const SizedBox(),
-        quoteWidget(model: message.getQuote(), isLeft: left),
+        if (message.hasQuote) quoteWidget(message.getQuote!, isLeft: left),
         content,
         SizedBox(
           height: 16,
@@ -220,7 +224,10 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
   }
 
   Widget _buildVoiceMessage(
-      BuildContext context, Message message, bool isLeft) {
+    BuildContext context,
+    Message message,
+    bool isLeft,
+  ) {
     Widget? content = bubbleContentBuilder?.call(context, message);
     content ??= ChatUIKitVoiceMessageWidget(
       message: message,
@@ -321,20 +328,15 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
     return content;
   }
 
-  Widget quoteWidget({QuoteModel? model, bool isLeft = false}) {
-    Widget? content;
-    if (model != null) {
-      content = quoteBuilder?.call(model);
-      content = Padding(
-        padding: EdgeInsets.only(
-          left: isLeft ? getArrowWidth : 0,
-          right: !isLeft ? getArrowWidth : 0,
-        ),
-        child: content,
-      );
-    }
-
-    content ??= const SizedBox();
+  Widget quoteWidget(QuoteModel model, {bool isLeft = false}) {
+    Widget? content = quoteBuilder?.call(model);
+    content = Padding(
+      padding: EdgeInsets.only(
+        left: isLeft ? getArrowWidth : 0,
+        right: !isLeft ? getArrowWidth : 0,
+      ),
+      child: content,
+    );
 
     return content;
   }

@@ -1,14 +1,18 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
+enum CornerRadius { extraSmall, small, medium, large }
+
 class ChatUIKitSettings {
   static CornerRadius avatarRadius = CornerRadius.medium;
   static CornerRadius searchBarRadius = ChatUIKitSettings.avatarRadius;
+  static String? avatarPlaceholder;
   static CornerRadius alertRadius = CornerRadius.medium;
   static ChatUIKitRectangleType alertRectangleType =
       ChatUIKitRectangleType.filletCorner;
 
   static bool showConversationListAvatar = true;
+  static bool showConversationListUnreadCount = true;
   static String? conversationListMuteImage;
 
   /// 撤回消息的时间限制，单位秒

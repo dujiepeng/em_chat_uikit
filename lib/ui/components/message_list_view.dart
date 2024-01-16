@@ -66,13 +66,13 @@ class _MessageListViewState extends State<MessageListView> {
         widget.controller ?? MessageListViewController(profile: widget.profile);
     controller.addListener(() {
       if (controller.lastActionType == MessageLastActionType.load) {
-        safeSetState(() {});
+        setState(() {});
       }
 
       if ((controller.lastActionType == MessageLastActionType.receive &&
               scrollController.offset == 0) ||
           controller.lastActionType == MessageLastActionType.send) {
-        safeSetState(() {});
+        setState(() {});
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           scrollController.animateTo(
             0,
@@ -85,12 +85,6 @@ class _MessageListViewState extends State<MessageListView> {
     fetchMessages();
     controller.sendConversationsReadAck();
     controller.clearMentionIfNeed();
-  }
-
-  void safeSetState(VoidCallback fn) {
-    if (mounted) {
-      setState(fn);
-    }
   }
 
   @override
@@ -117,11 +111,15 @@ class _MessageListViewState extends State<MessageListView> {
         ChatMessageSliver(
           delegate: SliverChildBuilderDelegate(
             findChildIndexCallback: (key) {
-              final ValueKey<String> valueKey = key as ValueKey<String>;
-              int index = controller.msgList
-                  .indexWhere((msg) => msg.msgId == valueKey.value);
+              if (key is ValueKey<int>) {
+                final ValueKey<int> valueKey = key;
+                int index = controller.msgList
+                    .indexWhere((msg) => msg.localTime == valueKey.value);
 
-              return index > -1 ? index : null;
+                return index > -1 ? index : null;
+              } else {
+                return null;
+              }
             },
             (context, index) {
               return _item(controller.msgList[index]);
@@ -142,7 +140,7 @@ class _MessageListViewState extends State<MessageListView> {
         if (notification is ScrollUpdateNotification) {
           if (controller.hasNew && scrollController.offset < 20) {
             controller.hasNew = false;
-            safeSetState(() {});
+            setState(() {});
           }
           if (scrollController.position.maxScrollExtent -
                   scrollController.offset <
@@ -180,12 +178,15 @@ class _MessageListViewState extends State<MessageListView> {
         message,
       );
       content ??= ChatUIKitMessageListViewAlertItem(
+        key: ValueKey(message.localTime),
         infos: [
           MessageAlertAction(
             text: ChatUIKitTimeFormatter.instance.formatterHandler?.call(
                     context, ChatUIKitTimeType.message, message.serverTime) ??
-                ChatUIKitTimeTool.getChatTimeStr(message.serverTime,
-                    needTime: true),
+                ChatUIKitTimeTool.getChatTimeStr(
+                  message.serverTime,
+                  needTime: true,
+                ),
           )
         ],
       );
@@ -200,8 +201,8 @@ class _MessageListViewState extends State<MessageListView> {
 
     Widget? content = widget.itemBuilder?.call(context, message);
     content ??= ChatUIKitMessageListViewMessageItem(
-      forceLeft: widget.forceLeft,
       key: ValueKey(message.localTime),
+      forceLeft: widget.forceLeft,
       bubbleContentBuilder: widget.bubbleContentBuilder,
       bubbleBuilder: widget.bubbleBuilder,
       onErrorTap: () {
@@ -209,7 +210,11 @@ class _MessageListViewState extends State<MessageListView> {
       },
       bubbleStyle: widget.bubbleStyle,
       showAvatar: widget.showAvatar,
-      quoteBuilder: widget.quoteBuilder,
+      quoteBuilder: (model) {
+        Widget? content = widget.quoteBuilder?.call(model);
+        content ??= quoteWidget(model);
+        return content;
+      },
       showNickname: widget.showNickname,
       onAvatarTap: () {
         widget.onAvatarTap?.call(message);
@@ -221,7 +226,6 @@ class _MessageListViewState extends State<MessageListView> {
         widget.onDoubleTap?.call(message);
       },
       onBubbleLongPressed: () {
-        debugPrint('onBubbleLongPressed');
         widget.onItemLongPress?.call(message);
       },
       onBubbleTap: () {
@@ -245,6 +249,7 @@ class _MessageListViewState extends State<MessageListView> {
     );
 
     content = Align(
+      key: ValueKey(message.localTime),
       alignment: widget.forceLeft == true
           ? Alignment.centerLeft
           : message.direction == MessageDirection.SEND
@@ -254,5 +259,13 @@ class _MessageListViewState extends State<MessageListView> {
     );
 
     return content;
+  }
+
+  Widget quoteWidget(QuoteModel model) {
+    return ChatUIKitQuoteWidget(
+      key: ValueKey(model.msgId),
+      model: model,
+      bubbleStyle: widget.bubbleStyle,
+    );
   }
 }

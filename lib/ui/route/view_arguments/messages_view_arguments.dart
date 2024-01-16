@@ -111,6 +111,7 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     )? onItemLongPressActionsItemsHandler,
     CustomTextEditingController? inputBarTextEditingController,
     bool? enableAppBar,
+    bool? forceLeft,
     String? attributes,
   }) {
     return MessagesViewArguments(
@@ -146,6 +147,7 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
       enableAppBar: enableAppBar ?? this.enableAppBar,
       inputBarTextEditingController:
           inputBarTextEditingController ?? this.inputBarTextEditingController,
+      forceLeft: forceLeft ?? this.forceLeft,
       attributes: attributes ?? this.attributes,
     );
   }

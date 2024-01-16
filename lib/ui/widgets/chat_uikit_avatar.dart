@@ -25,6 +25,7 @@ class _ChatUIKitAvatarState extends State<ChatUIKitAvatar> {
 
   @override
   Widget build(BuildContext context) {
+    String? placeholder = ChatUIKitSettings.avatarPlaceholder;
     Widget content = Container(
         width: widget.size,
         height: widget.size,
@@ -40,7 +41,9 @@ class _ChatUIKitAvatarState extends State<ChatUIKitAvatar> {
         child: widget.avatarUrl?.isNotEmpty == true
             ? ChatUIKitImageLoader.networkImage(
                 size: widget.size,
-                image: widget.avatarUrl,
+                image: widget.avatarUrl!,
+                usePackageName: !(placeholder?.isNotEmpty == true),
+                placeholder: placeholder ?? 'assets/images/avatar.png',
                 placeholderWidget: ChatUIKitImageLoader.defaultAvatar(
                   height: widget.size,
                   width: widget.size,

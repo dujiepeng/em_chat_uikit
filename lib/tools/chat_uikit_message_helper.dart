@@ -2,8 +2,7 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
-double defaultWidth = 225;
-double defaultHeight = 300;
+import '../universal/defines.dart';
 
 extension MessageHelper on Message {
   MessageType get bodyType => body.type;
@@ -148,21 +147,23 @@ extension MessageHelper on Message {
   }
 
   double get width {
+    double ret = 0.0;
     if (bodyType == MessageType.IMAGE) {
-      return (body as ImageMessageBody).width ?? defaultWidth;
+      ret = (body as ImageMessageBody).width ?? 0;
     } else if (bodyType == MessageType.VIDEO) {
-      return (body as VideoMessageBody).width ?? defaultWidth;
+      ret = (body as VideoMessageBody).width ?? 0;
     }
-    return 0;
+    return ret;
   }
 
   double get height {
+    double ret = 0.0;
     if (bodyType == MessageType.IMAGE) {
-      return (body as ImageMessageBody).height ?? defaultHeight;
+      ret = (body as ImageMessageBody).height ?? 0;
     } else if (bodyType == MessageType.VIDEO) {
-      return (body as VideoMessageBody).height ?? defaultHeight;
+      ret = (body as VideoMessageBody).height ?? 0;
     }
-    return 0;
+    return ret;
   }
 
   bool get isCardMessage {
@@ -179,7 +180,7 @@ extension MessageHelper on Message {
     if (bodyType == MessageType.CUSTOM) {
       final customBody = body as CustomMessageBody;
       if (customBody.event == cardMessageKey) {
-        return customBody.params?[cardNickname];
+        return customBody.params?[cardNicknameKey];
       }
     }
     return null;
@@ -189,19 +190,17 @@ extension MessageHelper on Message {
     if (bodyType == MessageType.CUSTOM) {
       final customBody = body as CustomMessageBody;
       if (customBody.event == cardMessageKey) {
-        return customBody.params?[cardContactAvatar];
+        return customBody.params?[cardAvatarKey];
       }
     }
     return null;
   }
 
-  get cardNickname => null;
-
   String? get cardUserId {
     if (bodyType == MessageType.CUSTOM) {
       final customBody = body as CustomMessageBody;
       if (customBody.event == cardMessageKey) {
-        return customBody.params?[cardContactUserId];
+        return customBody.params?[cardUserIdKey];
       }
     }
     return null;
@@ -361,7 +360,11 @@ extension MessageHelper on Message {
     return QuoteModel.fromMessage(this);
   }
 
-  QuoteModel? getQuote() {
+  bool get hasQuote {
+    return attributes?[quoteKey] != null;
+  }
+
+  QuoteModel? get getQuote {
     Map? quoteMap = attributes?[quoteKey];
     if (quoteMap != null) {
       return QuoteModel(
