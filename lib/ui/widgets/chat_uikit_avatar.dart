@@ -43,6 +43,14 @@ class _ChatUIKitAvatarState extends State<ChatUIKitAvatar>
   }
 
   @override
+  void didUpdateWidget(covariant ChatUIKitAvatar oldWidget) {
+    if (oldWidget.avatarUrl != avatarUrl) {
+      avatarUrl = widget.avatarUrl;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void dispose() {
     if (widget.isCurrent) {
       ChatUIKitProvider.instance.removeObserver(this);
