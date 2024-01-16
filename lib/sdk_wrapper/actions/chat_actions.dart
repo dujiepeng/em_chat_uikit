@@ -136,6 +136,27 @@ mixin ChatActions on ChatWrapper {
     });
   }
 
+  Future<int> appointNewMessageConversationCount(
+    List<String> appointIds,
+  ) async {
+    return checkResult(
+        ChatSDKWrapperActionEvent.haveNewMessageConversationCount, () async {
+      int unreadCount = 0;
+      List<Conversation>? list =
+          await Client.getInstance.chatManager.loadAllConversations();
+
+      for (var conversation in list) {
+        if (appointIds.contains(conversation.id)) {
+          if (await conversation.unreadCount() > 0) {
+            unreadCount += 1;
+          }
+        }
+      }
+
+      return unreadCount;
+    });
+  }
+
   Future<void> updateMessage({required Message message}) async {
     return checkResult(ChatSDKWrapperActionEvent.updateMessage, () async {
       return Client.getInstance.chatManager.updateMessage(message);

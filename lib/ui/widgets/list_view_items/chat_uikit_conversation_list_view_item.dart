@@ -5,11 +5,14 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
   const ChatUIKitConversationListViewItem(
     this.info, {
     this.showAvatar,
+    this.subTitleLabel,
+    this.unreadCount,
     this.showNewMessageTime = true,
     this.showTitle = true,
     this.showSubTitle = true,
     this.showUnreadCount = true,
     this.showNoDisturb = true,
+    this.timestamp,
     super.key,
   });
 
@@ -20,6 +23,9 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
   final bool showSubTitle;
   final bool showUnreadCount;
   final bool showNoDisturb;
+  final String? subTitleLabel;
+  final String? unreadCount;
+  final int? timestamp;
 
   @override
   Widget build(BuildContext context) {
@@ -66,25 +72,24 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
           )
         : const SizedBox();
 
-    Widget timeLabel =
-        showNewMessageTime && info.lastMessage?.serverTime != null
-            ? Text(
-                ChatUIKitTimeFormatter.instance.formatterHandler?.call(
-                        context,
-                        ChatUIKitTimeType.conversation,
-                        info.lastMessage?.serverTime ?? 0) ??
-                    ChatUIKitTimeTool.getChatTimeStr(
-                        info.lastMessage?.serverTime ?? 0),
-                textScaleFactor: 1.0,
-                style: TextStyle(
-                  color: theme.color.isDark
-                      ? theme.color.neutralColor6
-                      : theme.color.neutralColor5,
-                  fontSize: theme.font.bodySmall.fontSize,
-                  fontWeight: theme.font.bodySmall.fontWeight,
-                ),
-              )
-            : const SizedBox();
+    Widget timeLabel = showNewMessageTime
+        ? Text(
+            ChatUIKitTimeFormatter.instance.formatterHandler?.call(
+                    context,
+                    ChatUIKitTimeType.conversation,
+                    timestamp ?? info.lastMessage?.serverTime ?? 0) ??
+                ChatUIKitTimeTool.getChatTimeStr(
+                    timestamp ?? info.lastMessage?.serverTime ?? 0),
+            textScaleFactor: 1.0,
+            style: TextStyle(
+              color: theme.color.isDark
+                  ? theme.color.neutralColor6
+                  : theme.color.neutralColor5,
+              fontSize: theme.font.bodySmall.fontSize,
+              fontWeight: theme.font.bodySmall.fontWeight,
+            ),
+          )
+        : const SizedBox();
 
     Widget titleRow = Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -104,43 +109,53 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
       ],
     );
 
-    Widget subTitle = showSubTitle
-        ? RichText(
-            textScaleFactor: 1.0,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            text: TextSpan(
-              style: TextStyle(
-                color: theme.color.isDark
-                    ? theme.color.neutralColor6
-                    : theme.color.neutralColor5,
-                fontSize: theme.font.labelMedium.fontSize,
-                fontWeight: theme.font.labelMedium.fontWeight,
-              ),
-              children: [
-                if (info.hasMention)
-                  TextSpan(
-                    text:
-                        '[${ChatUIKitLocal.conversationListItemMention.getString(context)}]',
-                  ),
-                TextSpan(text: () {
-                  String str = '';
-                  if (info.profile.type == ChatUIKitProfileType.groupChat) {
-                    str += info.lastMessage?.nickname ??
-                        info.lastMessage?.from ??
-                        "";
-                    if (str.isNotEmpty) {
-                      str = "$str: ";
-                    }
-                  }
+    final style = TextStyle(
+      color: theme.color.isDark
+          ? theme.color.neutralColor6
+          : theme.color.neutralColor5,
+      fontSize: theme.font.labelMedium.fontSize,
+      fontWeight: theme.font.labelMedium.fontWeight,
+    );
 
-                  str += info.lastMessage?.showInfo(context: context) ?? '';
-                  return str;
-                }())
-              ],
-            ),
-          )
-        : const SizedBox();
+    Widget? subTitle;
+    if (!showSubTitle) {
+      subTitle = const SizedBox();
+    } else {
+      subTitle = subTitleLabel?.isNotEmpty == true
+          ? Text(
+              subTitleLabel!,
+              style: style,
+            )
+          : RichText(
+              textScaleFactor: 1.0,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              text: TextSpan(
+                style: style,
+                children: [
+                  if (info.hasMention)
+                    TextSpan(
+                      text:
+                          '[${ChatUIKitLocal.conversationListItemMention.getString(context)}]',
+                    ),
+                  TextSpan(text: () {
+                    String str = '';
+                    if (info.profile.type == ChatUIKitProfileType.groupChat) {
+                      str += info.lastMessage?.nickname ??
+                          info.lastMessage?.from ??
+                          "";
+                      if (str.isNotEmpty) {
+                        str = "$str: ";
+                      }
+                    }
+
+                    str += info.lastMessage?.showInfo(context: context) ?? '';
+                    return str;
+                  }())
+                ],
+              ),
+            );
+    }
 
     Widget unreadCount;
     if (info.noDisturb) {

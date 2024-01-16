@@ -1,11 +1,16 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
+typedef ConversationListViewShowHandler = List<ConversationInfo> Function(
+    List<ConversationInfo> conversations);
+
 class ConversationListViewController extends ChatUIKitListViewControllerBase {
   ConversationListViewController({
     this.pageSize = 50,
+    this.willShowHandler,
     bool search = false,
   });
   final int pageSize;
+  final ConversationListViewShowHandler? willShowHandler;
 
   String? cursor;
 
@@ -22,6 +27,7 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
       List<ConversationInfo> tmp = await mappers(items);
       list.clear();
       list.addAll(tmp);
+      list = willShowHandler?.call(list.cast<ConversationInfo>()) ?? list;
       if (list.isEmpty) {
         loadingType.value = ChatUIKitListViewType.empty;
       } else {
@@ -40,12 +46,14 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
     List<ConversationInfo> tmp = await mappers(items);
     list.clear();
     list.addAll(tmp);
+    list = willShowHandler?.call(list.cast<ConversationInfo>()) ?? list;
     if (list.isEmpty) {
       loadingType.value = ChatUIKitListViewType.empty;
     } else {
       loadingType.value = ChatUIKitListViewType.normal;
     }
   }
+
 
   @override
   Future<List<ChatUIKitListItemModelBase>> fetchMoreItemList() async {

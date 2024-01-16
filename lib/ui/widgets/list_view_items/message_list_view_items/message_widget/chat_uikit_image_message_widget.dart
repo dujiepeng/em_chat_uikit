@@ -121,7 +121,6 @@ class _ChatUIKitImageMessageWidgetState
         bool exists = file.existsSync();
         if (exists) {
           content = Image(
-            // image: FileImage(file),
             image: ResizeImage(
               FileImage(file),
               width: width.toInt(),

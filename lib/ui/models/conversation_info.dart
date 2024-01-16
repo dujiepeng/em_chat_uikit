@@ -8,6 +8,7 @@ class ConversationInfo with ChatUIKitListItemModelBase, NeedSearch {
   final bool pinned;
   final bool noDisturb;
   final bool hasMention;
+  final String? attribute;
   @override
   ChatUIKitProfile profile;
 
@@ -18,6 +19,7 @@ class ConversationInfo with ChatUIKitListItemModelBase, NeedSearch {
     this.noDisturb = false,
     this.pinned = false,
     this.hasMention = false,
+    this.attribute,
   });
 
   static Future<ConversationInfo> fromConversation(

@@ -9,12 +9,12 @@ abstract mixin class ChatUIKitTimeTool {
     if (dateTime.year == now.year &&
         dateTime.month == now.month &&
         dateTime.day == now.day) {
-      return '${dateTime.hour}:${dateTime.minute}';
+      return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
     } else {
       if (needTime) {
-        return '${getMTM(dateTime.month)} ${dateTime.day} ${dateTime.hour}:${dateTime.minute}';
+        return '${getMTM(dateTime.month)} ${dateTime.day.toString().padLeft(2, '0')} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
       } else {
-        return '${getMTM(dateTime.month)} ${dateTime.day}';
+        return '${getMTM(dateTime.month)} ${dateTime.day.toString().padLeft(2, '0')}';
       }
     }
   }

@@ -149,6 +149,9 @@ class _HomePageState extends State<HomePage>
   @override
   // 用于刷新消息未读数
   void onMessagesReceived(List<Message> messages) {
+    // for (var element in messages) {
+    //   debugPrint('onMessagesReceived ${element.toJson().toString()}');
+    // }
     setState(() {});
   }
 
