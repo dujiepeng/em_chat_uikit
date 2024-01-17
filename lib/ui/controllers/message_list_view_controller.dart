@@ -42,7 +42,7 @@ class MessageListViewController extends ChangeNotifier
   }) {
     ChatUIKit.instance.addObserver(this);
     conversationType = () {
-      if (profile.type == ChatUIKitProfileType.groupChat) {
+      if (profile.type == ChatUIKitProfileType.group) {
         return ConversationType.GroupChat;
       } else {
         return ConversationType.Chat;
@@ -213,8 +213,7 @@ class MessageListViewController extends ChangeNotifier
   }
 
   Future<void> _clearMention(List<Message> msgs) async {
-    if (profile.type == ChatUIKitProfileType.groupChat ||
-        profile.type == ChatUIKitProfileType.groupMember) {
+    if (profile.type == ChatUIKitProfileType.group) {
       return;
     }
     if (msgs.any((element) => element.hasMention)) {
@@ -223,8 +222,7 @@ class MessageListViewController extends ChangeNotifier
   }
 
   ChatType get chatType {
-    if (profile.type == ChatUIKitProfileType.groupChat ||
-        profile.type == ChatUIKitProfileType.groupMember) {
+    if (profile.type == ChatUIKitProfileType.group) {
       return ChatType.GroupChat;
     } else {
       return ChatType.Chat;
@@ -466,8 +464,7 @@ class MessageListViewController extends ChangeNotifier
   }
 
   Future<void> clearMentionIfNeed() async {
-    if (profile.type == ChatUIKitProfileType.groupChat ||
-        profile.type == ChatUIKitProfileType.groupMember) {
+    if (profile.type == ChatUIKitProfileType.group) {
       Conversation? conv = await ChatUIKit.instance.getConversation(
         conversationId: profile.id,
         type: ConversationType.GroupChat,

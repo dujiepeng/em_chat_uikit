@@ -1,15 +1,9 @@
 enum ChatUIKitProfileType {
-  /// Profile type for chat
-  singleChat,
-
-  /// Profile type for groupChat
-  groupChat,
-
   /// Profile type for contact
   contact,
 
   /// Profile type for group
-  groupMember,
+  group,
 }
 
 class ChatUIKitProfile {
@@ -44,7 +38,7 @@ class ChatUIKitProfile {
           extension: extension,
         );
 
-  ChatUIKitProfile.groupChat({
+  ChatUIKitProfile.group({
     required String id,
     String? name,
     String? avatarUrl,
@@ -53,33 +47,7 @@ class ChatUIKitProfile {
           id: id,
           name: name,
           avatarUrl: avatarUrl,
-          type: ChatUIKitProfileType.groupChat,
-          extension: extension,
-        );
-
-  ChatUIKitProfile.groupMember({
-    required String id,
-    String? name,
-    String? avatarUrl,
-    Map<String, String>? extension,
-  }) : this(
-          id: id,
-          name: name,
-          avatarUrl: avatarUrl,
-          type: ChatUIKitProfileType.groupMember,
-          extension: extension,
-        );
-
-  ChatUIKitProfile.singleChat({
-    required String id,
-    String? name,
-    String? avatarUrl,
-    Map<String, String>? extension,
-  }) : this(
-          id: id,
-          name: name,
-          avatarUrl: avatarUrl,
-          type: ChatUIKitProfileType.singleChat,
+          type: ChatUIKitProfileType.group,
           extension: extension,
         );
 

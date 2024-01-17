@@ -89,6 +89,17 @@ class _ConversationListViewState extends State<ConversationListView>
   }
 
   @override
+  void onMessagesRecalled(List<Message> recalled, List<Message> replaces) {
+    List<String> recalledIds = recalled.map((e) => e.msgId).toList();
+    bool has = controller.list.cast<ConversationInfo>().any((element) {
+      return recalledIds.contains(element.lastMessage?.msgId ?? "");
+    });
+    if (mounted && has) {
+      controller.reload();
+    }
+  }
+
+  @override
   void onConversationsUpdate() {
     controller.reload();
   }
@@ -139,7 +150,6 @@ class _ConversationListViewState extends State<ConversationListView>
             }
           });
         }
-        debugPrint('index: $index');
 
         return index > -1 ? index : null;
       },

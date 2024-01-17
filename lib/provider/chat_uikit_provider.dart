@@ -104,9 +104,9 @@ class ChatUIKitProvider {
       ChatUIKitProfile? profile = _conversationsCache[conversationId];
       if (profile == null) {
         if (map[conversationId] == ConversationType.GroupChat) {
-          profile = ChatUIKitProfile.groupChat(id: conversationId);
+          profile = ChatUIKitProfile.group(id: conversationId);
         } else {
-          profile = ChatUIKitProfile.singleChat(id: conversationId);
+          profile = ChatUIKitProfile.contact(id: conversationId);
         }
         needProviders.add(profile);
       }
@@ -133,9 +133,9 @@ class ChatUIKitProvider {
     ChatUIKitProfile? profile = _conversationsCache[conversationId];
     if (profile == null) {
       if (type == ConversationType.GroupChat) {
-        profile = ChatUIKitProfile.groupChat(id: conversationId);
+        profile = ChatUIKitProfile.group(id: conversationId);
       } else {
-        profile = ChatUIKitProfile.singleChat(id: conversationId);
+        profile = ChatUIKitProfile.contact(id: conversationId);
       }
       conversationsHandler?.call([profile]);
     }
@@ -182,7 +182,7 @@ class ChatUIKitProvider {
       }
       ChatUIKitProfile? profile = _groupMembersCache[groupId]![userId];
       if (profile == null) {
-        profile = ChatUIKitProfile.groupMember(id: userId);
+        profile = ChatUIKitProfile.contact(id: userId);
         needProviders.add(profile);
       }
       ret.add(profile);

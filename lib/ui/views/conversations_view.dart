@@ -215,7 +215,7 @@ class _ConversationsViewState extends State<ConversationsView> {
             : ChatUIKitLocal.conversationListLongPressMenuMute
                 .getString(context),
         onTap: () async {
-          final type = info.profile.type == ChatUIKitProfileType.groupChat
+          final type = info.profile.type == ChatUIKitProfileType.group
               ? ConversationType.GroupChat
               : ConversationType.Chat;
 
@@ -397,7 +397,7 @@ class _ConversationsViewState extends State<ConversationsView> {
       await ChatUIKitInsertMessageTool.insertCreateGroupMessage(
         group: group,
       );
-      pushNewConversation(ChatUIKitProfile.groupMember(
+      pushNewConversation(ChatUIKitProfile.group(
         id: group.groupId,
         name: group.name,
       ));

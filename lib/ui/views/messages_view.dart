@@ -153,7 +153,7 @@ class _MessagesViewState extends State<MessagesView> {
         setState(() {});
       }
       if (inputBarTextEditingController.needMention) {
-        if (widget.profile.type == ChatUIKitProfileType.groupChat) {
+        if (widget.profile.type == ChatUIKitProfileType.group) {
           needMention();
         }
       }

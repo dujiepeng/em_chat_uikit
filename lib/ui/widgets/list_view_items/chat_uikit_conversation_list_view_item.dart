@@ -140,7 +140,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
                     ),
                   TextSpan(text: () {
                     String str = '';
-                    if (info.profile.type == ChatUIKitProfileType.groupChat) {
+                    if (info.profile.type == ChatUIKitProfileType.group) {
                       str += info.lastMessage?.nickname ??
                           info.lastMessage?.from ??
                           "";
