@@ -162,7 +162,6 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
         if (widget.enableSearchBar)
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              findChildIndexCallback: widget.findChildIndexCallback,
               (context, index) {
                 return fakeSearchBar();
               },
@@ -196,6 +195,7 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
 
               return widget.itemBuilder(context, model);
             },
+            findChildIndexCallback: widget.findChildIndexCallback,
             childCount: widget.list.length,
           ),
         ),

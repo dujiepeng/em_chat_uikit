@@ -222,7 +222,8 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         avatar,
-        Expanded(
+        Flexible(
+          flex: 1,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,

@@ -16,8 +16,8 @@ class ChatUIKitAvatar extends StatefulWidget {
     this.avatarUrl,
     this.size = 32,
     this.cornerRadius,
-    super.key,
-  }) {
+    ValueKey? key,
+  }) : super(key: key ?? ValueKey(avatarUrl)) {
     isCurrent = false;
   }
   final double size;
@@ -39,6 +39,7 @@ class _ChatUIKitAvatarState extends State<ChatUIKitAvatar>
     if (widget.isCurrent) {
       ChatUIKitProvider.instance.addObserver(this);
     }
+
     avatarUrl = widget.avatarUrl;
   }
 

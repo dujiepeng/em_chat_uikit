@@ -128,15 +128,18 @@ class _ConversationListViewState extends State<ConversationListView>
       },
       searchHideText: widget.searchHideText,
       findChildIndexCallback: (key) {
-        if (key is! ValueKey<String>) return null;
-        final ValueKey<String> valueKey = key;
-        int index = controller.list.indexWhere((info) {
-          if (info is ConversationInfo) {
-            return info.profile.id == valueKey.value;
-          } else {
-            return false;
-          }
-        });
+        int index = -1;
+        if (key is ValueKey<String>) {
+          final ValueKey<String> valueKey = key;
+          index = controller.list.indexWhere((info) {
+            if (info is ConversationInfo) {
+              return info.profile.id == valueKey.value;
+            } else {
+              return false;
+            }
+          });
+        }
+        debugPrint('index: $index');
 
         return index > -1 ? index : null;
       },
@@ -157,8 +160,12 @@ class _ConversationListViewState extends State<ConversationListView>
             },
             child: ChatUIKitConversationListViewItem(
               model,
-              key: ValueKey(model.profile.id),
             ),
+          );
+
+          item = SizedBox(
+            key: ValueKey(model.profile.id),
+            child: item,
           );
 
           return item;

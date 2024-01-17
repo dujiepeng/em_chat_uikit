@@ -351,6 +351,7 @@ class ChatUIKitImageLoader {
     BoxFit fit = BoxFit.fill,
   }) {
     return FadeInImage(
+      key: ValueKey(image),
       width: size,
       height: size,
       placeholder:

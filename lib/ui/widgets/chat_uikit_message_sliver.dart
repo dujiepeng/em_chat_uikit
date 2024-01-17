@@ -69,6 +69,7 @@ class ChatMessageRenderSliverList extends RenderSliverMultiBoxAdaptor {
       }
     }
 
+    // du.
     _trailingOffset = null;
 
     // We have at least one child.
@@ -302,7 +303,7 @@ class ChatMessageRenderSliverList extends RenderSliverMultiBoxAdaptor {
 
     assert(debugAssertChildListIsNonEmptyAndContiguous());
     final double estimatedMaxScrollOffset;
-
+    // du.
     endScrollOffset = () {
       if (endScrollOffset < constraints.remainingPaintExtent) {
         final double distance =
@@ -340,6 +341,7 @@ class ChatMessageRenderSliverList extends RenderSliverMultiBoxAdaptor {
     final double targetEndScrollOffsetForPaint =
         constraints.scrollOffset + constraints.remainingPaintExtent;
 
+    // du.
     //fix hitTest
     paintExtent += trailingOffset;
 
@@ -367,12 +369,8 @@ class ChatMessageRenderSliverList extends RenderSliverMultiBoxAdaptor {
 
   @override
   double? childScrollOffset(RenderObject child) {
-    assert(child.parent == this);
-    final SliverMultiBoxAdaptorParentData childParentData =
-        child.parentData as SliverMultiBoxAdaptorParentData;
-
-    childParentData.layoutOffset ??= 0;
-    // 做偏移
-    return childParentData.layoutOffset! + trailingOffset;
+    double? offset = super.childScrollOffset(child);
+    if (offset == null) return trailingOffset;
+    return offset + trailingOffset;
   }
 }

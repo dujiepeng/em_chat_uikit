@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
@@ -111,10 +113,12 @@ class _MessageListViewState extends State<MessageListView> {
         ChatMessageSliver(
           delegate: SliverChildBuilderDelegate(
             findChildIndexCallback: (key) {
+              if (Platform.isAndroid) return null;
               if (key is ValueKey<int>) {
                 final ValueKey<int> valueKey = key;
-                int index = controller.msgList
-                    .indexWhere((msg) => msg.localTime == valueKey.value);
+                int index = controller.msgList.indexWhere(
+                  (msg) => msg.localTime == valueKey.value,
+                );
 
                 return index > -1 ? index : null;
               } else {
@@ -122,7 +126,10 @@ class _MessageListViewState extends State<MessageListView> {
               }
             },
             (context, index) {
-              return _item(controller.msgList[index]);
+              return SizedBox(
+                key: ValueKey(controller.msgList[index].localTime),
+                child: _item(controller.msgList[index]),
+              );
             },
             childCount: controller.msgList.length,
           ),
