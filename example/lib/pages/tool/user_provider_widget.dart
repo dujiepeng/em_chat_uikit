@@ -34,8 +34,7 @@ class _UserProviderWidgetState extends State<UserProviderWidget> {
     for (var i = 0; i < profiles.length; i++) {
       list.add(
         profiles[i].copy(
-            name: '${profiles[i].id}_nick',
-            avatarUrl: RemoteAvatars.getRandomAvatar),
+            name: profiles[i].id, avatarUrl: RemoteAvatars.getRandomAvatar),
       );
     }
     return list;
@@ -48,8 +47,7 @@ class _UserProviderWidgetState extends State<UserProviderWidget> {
     for (var i = 0; i < profiles.length; i++) {
       list.add(
         profiles[i].copy(
-            name: '${profiles[i].id}_nick',
-            avatarUrl: RemoteAvatars.getRandomAvatar),
+            name: profiles[i].id, avatarUrl: RemoteAvatars.getRandomAvatar),
       );
     }
     return list;

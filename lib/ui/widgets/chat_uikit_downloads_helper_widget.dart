@@ -11,14 +11,32 @@ typedef ChatUIKitDownloadBuilder = Widget Function(
   int progress,
 );
 
+class ChatUIKitDownloadController {
+  ChatUIKitDownloadController();
+  VoidCallback? callback;
+  void download() {
+    callback?.call();
+  }
+
+  void _sendHandler(VoidCallback callback) {
+    this.callback = callback;
+  }
+
+  void _dispose() {
+    callback = null;
+  }
+}
+
 class ChatUIKitDownloadsHelperWidget extends StatefulWidget {
   const ChatUIKitDownloadsHelperWidget({
     required this.builder,
     required this.message,
+    this.controller,
     super.key,
   });
 
   final ChatUIKitDownloadBuilder builder;
+  final ChatUIKitDownloadController? controller;
   final Message message;
 
   @override
@@ -32,24 +50,44 @@ class _ChatUIKitDownloadsHelperWidgetState
       ValueNotifier(ChatUIKitMessageDownloadState.idle);
   ValueNotifier<int> progress = ValueNotifier(0);
 
+  Message? message;
+  late ChatUIKitDownloadController? controller;
+
   @override
   void initState() {
     super.initState();
     ChatUIKit.instance.addObserver(this);
+    message = widget.message;
+    controller = widget.controller ?? ChatUIKitDownloadController();
+    updateControllerCallback();
+  }
+
+  void updateControllerCallback() {
+    controller?._sendHandler(downloadMessage);
+  }
+
+  @override
+  void didUpdateWidget(covariant ChatUIKitDownloadsHelperWidget oldWidget) {
+    if (controller != widget.controller) {
+      oldWidget.controller?._dispose();
+      updateControllerCallback();
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   void downloadMessage() {
-    File file = File(widget.message.localPath!);
+    File file = File(message!.localPath!);
     if (file.existsSync()) {
       isDownloading.value = ChatUIKitMessageDownloadState.success;
       return;
     }
-    ChatUIKit.instance.downloadAttachment(message: widget.message);
+    ChatUIKit.instance.downloadAttachment(message: message!);
     isDownloading.value = ChatUIKitMessageDownloadState.downloading;
   }
 
   @override
   void dispose() {
+    controller?._dispose();
     ChatUIKit.instance.removeObserver(this);
     super.dispose();
   }
@@ -72,8 +110,8 @@ class _ChatUIKitDownloadsHelperWidgetState
             if (state == ChatUIKitMessageDownloadState.success) {
               return widget.builder(
                 context,
-                widget.message.localPath,
-                widget.message.displayName,
+                message!.localPath,
+                message!.displayName,
                 state,
                 100,
               );
@@ -85,7 +123,7 @@ class _ChatUIKitDownloadsHelperWidgetState
                   return widget.builder(
                     context,
                     null,
-                    widget.message.displayName,
+                    message!.displayName,
                     state,
                     progress,
                   );
@@ -93,7 +131,7 @@ class _ChatUIKitDownloadsHelperWidgetState
                 child: widget.builder(
                   context,
                   null,
-                  widget.message.displayName,
+                  message!.displayName,
                   state,
                   0,
                 ),
@@ -102,7 +140,7 @@ class _ChatUIKitDownloadsHelperWidgetState
             return widget.builder(
               context,
               null,
-              widget.message.displayName,
+              message!.displayName,
               state,
               0,
             );
@@ -112,21 +150,21 @@ class _ChatUIKitDownloadsHelperWidgetState
 
   @override
   void onSuccess(String msgId, Message msg) {
-    if (msgId == widget.message.msgId) {
+    if (msgId == message!.msgId) {
       isDownloading.value = ChatUIKitMessageDownloadState.success;
     }
   }
 
   @override
   void onError(String msgId, Message msg, ChatError error) {
-    if (msgId == widget.message.msgId) {
+    if (msgId == message!.msgId) {
       isDownloading.value = ChatUIKitMessageDownloadState.error;
     }
   }
 
   @override
   void onProgress(String msgId, int progress) {
-    if (msgId == widget.message.msgId) {
+    if (msgId == message!.msgId) {
       this.progress.value = progress;
     }
   }

@@ -69,15 +69,16 @@ abstract class ChatUIKitWrapperBase {
     Future<T> Function() method,
   ) async {
     T result;
+    ChatError? error;
     try {
       _onEventBegin(actionEvent);
       result = await method.call();
       return result;
     } on ChatError catch (e) {
-      _onEventError(actionEvent, e);
+      error = e;
       rethrow;
     } finally {
-      _onEventEnd(actionEvent);
+      _onEventEnd(actionEvent, error);
     }
   }
 
@@ -89,18 +90,10 @@ abstract class ChatUIKitWrapperBase {
     }
   }
 
-  void _onEventEnd(ChatSDKWrapperActionEvent event) {
+  void _onEventEnd(ChatSDKWrapperActionEvent event, ChatError? error) {
     for (var observer in observers) {
       if (observer is ChatSDKActionEventsObserver) {
-        observer.onEventEnd(event);
-      }
-    }
-  }
-
-  void _onEventError(ChatSDKWrapperActionEvent event, ChatError error) {
-    for (var observer in observers) {
-      if (observer is ChatSDKActionEventsObserver) {
-        observer.onEventErrorHandler(event, error);
+        observer.onEventEnd(event, error);
       }
     }
   }

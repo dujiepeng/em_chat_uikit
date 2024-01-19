@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   // 用于刷新消息和联系人未读数
-  void onEventEnd(ChatSDKWrapperActionEvent event) {
+  void onEventEnd(ChatSDKWrapperActionEvent event, ChatError? error) {
     if (event == ChatSDKWrapperActionEvent.acceptContactRequest ||
         event == ChatSDKWrapperActionEvent.declineContactRequest ||
         event == ChatSDKWrapperActionEvent.markConversationAsRead ||

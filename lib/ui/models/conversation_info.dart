@@ -29,12 +29,15 @@ class ConversationInfo with ChatUIKitListItemModelBase, NeedSearch {
     int unreadCount = await conversation.unreadCount();
     Message? lastMessage = await conversation.latestMessage();
 
+    bool noDisturb =
+        ChatUIKitContext.instance.conversationIsMute(conversation.id);
+
     ConversationInfo info = ConversationInfo(
       profile: profile,
       unreadCount: unreadCount,
       lastMessage: lastMessage,
       pinned: conversation.isPinned,
-      noDisturb: ChatUIKitContext.instance.conversationIsMute(conversation.id),
+      noDisturb: noDisturb,
       hasMention: conversation.ext?[hasMentionKey] == hasMentionValue,
     );
     return info;

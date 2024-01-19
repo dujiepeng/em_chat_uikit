@@ -46,11 +46,6 @@ class _ToastPageState extends State<ToastPage>
   }
 
   @override
-  void onEventErrorHandler(ChatSDKWrapperActionEvent event, ChatError error) {
-    EasyLoading.showError(error.description);
-  }
-
-  @override
   void onEventBegin(ChatSDKWrapperActionEvent event) {
     if (event == ChatSDKWrapperActionEvent.acceptContactRequest ||
         event == ChatSDKWrapperActionEvent.fetchGroupMemberAttributes ||
@@ -66,7 +61,7 @@ class _ToastPageState extends State<ToastPage>
   }
 
   @override
-  void onEventEnd(ChatSDKWrapperActionEvent event) {
+  void onEventEnd(ChatSDKWrapperActionEvent event, ChatError? error) {
     if (event == ChatSDKWrapperActionEvent.acceptContactRequest ||
         event == ChatSDKWrapperActionEvent.fetchGroupMemberAttributes ||
         event == ChatSDKWrapperActionEvent.setGroupMemberAttributes ||
@@ -77,6 +72,9 @@ class _ToastPageState extends State<ToastPage>
         event == ChatSDKWrapperActionEvent.createGroup ||
         event == ChatSDKWrapperActionEvent.clearSilentMode) {
       EasyLoading.dismiss();
+      if (error != null) {
+        EasyLoading.showError(error.description);
+      }
     }
   }
 }

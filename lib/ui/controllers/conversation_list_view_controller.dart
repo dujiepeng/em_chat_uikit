@@ -21,7 +21,8 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
     try {
       if (items.isEmpty &&
           !ChatUIKitContext.instance.isConversationLoadFinished()) {
-        items = await fetchConversations();
+        await fetchConversations();
+        items = await ChatUIKit.instance.getAllConversations();
       }
       items = await clearEmpty(items);
       List<ConversationInfo> tmp = await mappers(items);
@@ -54,11 +55,11 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
     }
   }
 
-  @override
-  Future<List<ChatUIKitListItemModelBase>> fetchMoreItemList() async {
-    List<ChatUIKitListItemModelBase> list = [];
-    return list;
-  }
+  // @override
+  // Future<List<ChatUIKitListItemModelBase>> fetchMoreItemList() async {
+  //   List<ChatUIKitListItemModelBase> list = [];
+  //   return list;
+  // }
 
   Future<List<Conversation>> clearEmpty(List<Conversation> list) async {
     List<Conversation> tmp = [];
@@ -76,11 +77,13 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
     List<Conversation> items = [];
     if (!hasFetchPinned) {
       CursorResult<Conversation> result =
-          await ChatUIKit.instance.fetchPinnedConversations(pageSize: 50);
+          await ChatUIKit.instance.fetchPinnedConversations(
+        pageSize: 50,
+      );
       items.addAll(result.data);
       hasFetchPinned = true;
     }
-    if (items.isEmpty) {
+    try {
       CursorResult<Conversation> result =
           await ChatUIKit.instance.fetchConversations(
         pageSize: pageSize,
@@ -92,22 +95,8 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
         ChatUIKitContext.instance.setConversationLoadFinished();
         hasMore = false;
       }
-    } else {
-      try {
-        CursorResult<Conversation> result =
-            await ChatUIKit.instance.fetchConversations(
-          pageSize: pageSize,
-          cursor: cursor,
-        );
-        cursor = result.cursor;
-        items.addAll(result.data);
-        if (result.data.length < pageSize) {
-          ChatUIKitContext.instance.setConversationLoadFinished();
-          hasMore = false;
-        }
-        // ignore: empty_catches
-      } catch (e) {}
-    }
+      // ignore: empty_catches
+    } catch (e) {}
 
     await updateMuteType(items);
 
@@ -120,11 +109,8 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
 
   Future<void> updateMuteType(List<Conversation> items) async {
     try {
-      Map<String, ChatSilentModeResult> map =
-          await ChatUIKit.instance.fetchSilentModel(conversations: items);
-      ChatUIKitContext.instance.addConversationMute(
-        map.map((key, value) => MapEntry(key, 1)),
-      );
+      await ChatUIKit.instance.fetchSilentModel(conversations: items);
+
       // ignore: empty_catches
     } catch (e) {}
   }
@@ -139,8 +125,10 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
         ChatUIKitProvider.instance.conversationProfiles(map);
     List<ConversationInfo> list = [];
     for (var item in conversations) {
-      ConversationInfo info =
-          await ConversationInfo.fromConversation(item, profilesMap[item.id]!);
+      ConversationInfo info = await ConversationInfo.fromConversation(
+        item,
+        profilesMap[item.id]!,
+      );
       list.add(info);
     }
     return list;

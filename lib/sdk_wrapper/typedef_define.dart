@@ -48,3 +48,4 @@ typedef GroupStyle = chat.EMGroupStyle;
 typedef PresenceEventHandler = chat.EMPresenceEventHandler;
 typedef Presence = chat.EMPresence;
 typedef GroupPermissionType = chat.EMGroupPermissionType;
+

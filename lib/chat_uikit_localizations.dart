@@ -422,7 +422,7 @@ mixin ChatUIKitLocal {
     replayBarTitleVoice: '语音 ',
     replayBarTitleVideo: '视频',
     replayBarTitleImage: '图片',
-    replayBarTitle:'正在回复 ',
+    replayBarTitle: '正在回复 ',
     bottomSheetCancel: '取消',
   };
 
@@ -530,8 +530,8 @@ mixin ChatUIKitLocal {
     groupsViewTitle: 'Groups',
     changInfoViewSave: 'Save',
     changInfoViewInputHint: 'input',
-    messagesViewRecallInfo: 'recalled a message',
-    messagesViewRecallInfoYou: 'You ',
+    messagesViewRecallInfo: ' recalled a message',
+    messagesViewRecallInfoYou: 'You',
     messagesViewAlertGroupInfoTitle: 'create a group',
     messagesViewEditMessageTitle: 'Editing',
     messagesViewMoreActionsTitleAlbum: 'Album',
@@ -591,7 +591,7 @@ mixin ChatUIKitLocal {
     replayBarTitleVoice: 'Voice ',
     replayBarTitleVideo: 'Video',
     replayBarTitleImage: 'Image',
-    replayBarTitle:'Replying ',
+    replayBarTitle: 'Replying ',
     bottomSheetCancel: 'Cancel',
   };
 }

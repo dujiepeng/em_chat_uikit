@@ -11,7 +11,10 @@ mixin ChatUIKitNotificationActions on ChatSDKWrapper {
       type: type,
       param: param,
     );
-    ChatUIKitContext.instance.addConversationMute({conversationId: 1});
+    ChatUIKitContext.instance.addConversationMute({
+      conversationId:
+          param.remindType == ChatPushRemindType.MENTION_ONLY ? 1 : 0
+    });
     onConversationsUpdate();
   }
 
@@ -23,14 +26,16 @@ mixin ChatUIKitNotificationActions on ChatSDKWrapper {
         await super.fetchSilentModel(conversations: conversations);
 
     List<ChatSilentModeResult> list = map.values
-        .where((element) => element.remindType == ChatPushRemindType.ALL)
+        .where(
+            (element) => element.remindType != ChatPushRemindType.MENTION_ONLY)
         .toList();
 
     List<String> needClearIds = list.map((e) => e.conversationId).toList();
     ChatUIKitContext.instance.deleteConversationMute(needClearIds);
 
     list = map.values
-        .where((element) => element.remindType != ChatPushRemindType.ALL)
+        .where(
+            (element) => element.remindType == ChatPushRemindType.MENTION_ONLY)
         .toList();
 
     List<String> needAddIds = list.map((e) => e.conversationId).toList();
