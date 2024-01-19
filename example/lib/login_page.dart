@@ -63,7 +63,9 @@ class _LoginPageState extends State<LoginPage> {
 
   void login(String userId, String password) async {
     EasyLoading.show(status: 'Loading...');
-    ChatUIKit.instance.login(userId: userId, password: password).then((value) {
+    ChatUIKit.instance
+        .loginWithPassword(userId: userId, password: password)
+        .then((value) {
       Navigator.of(context).pushReplacementNamed('/home');
     }).catchError((e) {
       EasyLoading.showError(e.toString());

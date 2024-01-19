@@ -14,6 +14,9 @@ class ContactListViewController with ChatUIKitListViewControllerBase {
       if (items.isEmpty && !ChatUIKitContext.instance.isContactLoadFinished()) {
         items = await _fetchContacts();
       }
+      for (var element in items) {
+        ChatUIKitContext.instance.removeRequest(element);
+      }
       List<ContactItemModel> tmp = mappers(items);
       list.clear();
       list.addAll(tmp);
@@ -25,12 +28,6 @@ class ContactListViewController with ChatUIKitListViewControllerBase {
     } catch (e) {
       loadingType.value = ChatUIKitListViewType.error;
     }
-  }
-
-  @override
-  Future<List<ChatUIKitListItemModelBase>> fetchMoreItemList() async {
-    List<ChatUIKitListItemModelBase> list = [];
-    return list;
   }
 
   Future<List<String>> _fetchContacts() async {
@@ -54,6 +51,9 @@ class ContactListViewController with ChatUIKitListViewControllerBase {
   Future<void> reload() async {
     loadingType.value = ChatUIKitListViewType.refresh;
     List<String> items = await ChatUIKit.instance.getAllContacts();
+    for (var element in items) {
+      ChatUIKitContext.instance.removeRequest(element);
+    }
     List<ContactItemModel> tmp = mappers(items);
     list.clear();
     list.addAll(tmp);

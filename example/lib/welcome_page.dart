@@ -19,7 +19,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
   void startShowTimer() async {
     await Future.delayed(const Duration(seconds: 2)).then((value) {
-      if (ChatUIKit.instance.isLogin()) {
+      if (ChatUIKit.instance.isLogged()) {
         Navigator.of(context).pushReplacementNamed('/home');
       } else {
         Navigator.of(context).pushReplacementNamed('/login');

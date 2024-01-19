@@ -24,28 +24,36 @@ class ChatUIKit extends ChatSDKWrapper
   }
 
   @override
-  Future<void> init({
-    required String appkey,
-    bool autoLogin = true,
-    bool debugMode = false,
-    bool requireDeliveryAck = false,
-  }) async {
-    await super.init(
-      appkey: appkey,
-      autoLogin: autoLogin,
-      debugMode: debugMode,
-      requireDeliveryAck: requireDeliveryAck,
-    );
+  Future<void> init({required Options options}) async {
+    await super.init(options: options);
     ChatUIKitContext.instance.currentUserId = currentUserId();
   }
 
+  /// Login
+  ///
+  /// Param [userId] : userId
+  ///
+  /// Param [password] : user password
   @override
-  Future<void> login({
+  Future<void> loginWithPassword({
     required String userId,
     required String password,
   }) async {
     try {
-      await super.login(userId: userId, password: password);
+      await super.loginWithPassword(userId: userId, password: password);
+      ChatUIKitContext.instance.currentUserId = userId;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> loginWithToken({
+    required String userId,
+    required String token,
+  }) async {
+    try {
+      await super.loginWithToken(userId: userId, token: token);
       ChatUIKitContext.instance.currentUserId = userId;
     } catch (e) {
       rethrow;

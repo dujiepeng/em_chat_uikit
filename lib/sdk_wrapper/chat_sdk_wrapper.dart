@@ -121,40 +121,61 @@ class ChatSDKWrapper extends ChatUIKitWrapperBase
   }
 
   Future<void> init({
-    required String appkey,
-    bool autoLogin = true,
-    bool debugMode = false,
-    bool requireDeliveryAck = false,
+    required Options options,
   }) async {
     WidgetsFlutterBinding.ensureInitialized();
-    final options = Options(
-        appKey: appkey,
-        autoLogin: autoLogin,
-        debugMode: debugMode,
-        requireDeliveryAck: requireDeliveryAck);
+
     await Client.getInstance.init(options);
     Client.getInstance.startCallback();
   }
 
-  Future<void> login({
+  /// Login with password
+  ///
+  /// Param [userId] : userId
+  ///
+  /// Param [password] : user password
+  Future<void> loginWithPassword({
     required String userId,
     required String password,
   }) async {
-    return checkResult(ChatSDKWrapperActionEvent.acceptContactRequest,
-        () async {
+    return checkResult(ChatSDKWrapperActionEvent.loginWithPassword, () async {
       await Client.getInstance.loginWithPassword(userId, password);
       await Client.getInstance.startCallback();
     });
   }
 
-  Future<void> logout() async {
-    await Client.getInstance.logout();
+  /// Login with token
+  ///
+  /// Param [userId] : userId
+  ///
+  /// Param [token] : user token
+  Future<void> loginWithToken({
+    required String userId,
+    required String token,
+  }) async {
+    return checkResult(ChatSDKWrapperActionEvent.loginWithToken, () async {
+      await Client.getInstance.loginWithToken(userId, token);
+      await Client.getInstance.startCallback();
+    });
   }
 
-  bool isLogin() {
+  /// Logout
+  Future<void> logout() async {
+    return checkResult(ChatSDKWrapperActionEvent.logout, () async {
+      await Client.getInstance.logout();
+    });
+  }
+
+  /// Get current is logged
+  ///
+  /// Return: true is logged, false is not logged
+  bool isLogged() {
     return Client.getInstance.currentUserId != null;
   }
 
+  /// Get current user id
+  ///
+  /// Return: current user id
   String? currentUserId() {
     return Client.getInstance.currentUserId;
   }

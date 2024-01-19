@@ -1,4 +1,7 @@
 enum ChatSDKWrapperActionEvent {
+  loginWithPassword,
+  loginWithToken,
+  logout,
   sendMessage,
   recallMessage,
   loadMessage,
