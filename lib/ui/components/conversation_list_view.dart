@@ -3,7 +3,7 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:flutter/material.dart';
 
 typedef ChatUIKitConversationItemBuilder = Widget? Function(
-    BuildContext context, ConversationInfo model);
+    BuildContext context, ConversationModel model);
 
 class ConversationListView extends StatefulWidget {
   const ConversationListView({
@@ -22,10 +22,11 @@ class ConversationListView extends StatefulWidget {
     super.key,
   });
 
-  final void Function(List<ConversationInfo> data)? onSearchTap;
+  final void Function(List<ConversationModel> data)? onSearchTap;
   final ChatUIKitConversationItemBuilder? itemBuilder;
-  final void Function(BuildContext context, ConversationInfo info)? onTap;
-  final void Function(BuildContext context, ConversationInfo info)? onLongPress;
+  final void Function(BuildContext context, ConversationModel info)? onTap;
+  final void Function(BuildContext context, ConversationModel info)?
+      onLongPress;
   final List<Widget>? beforeWidgets;
   final List<Widget>? afterWidgets;
 
@@ -91,7 +92,7 @@ class _ConversationListViewState extends State<ConversationListView>
   @override
   void onMessagesRecalled(List<Message> recalled, List<Message> replaces) {
     List<String> recalledIds = recalled.map((e) => e.msgId).toList();
-    bool has = controller.list.cast<ConversationInfo>().any((element) {
+    bool has = controller.list.cast<ConversationModel>().any((element) {
       return recalledIds.contains(element.lastMessage?.msgId ?? "");
     });
     if (mounted && has) {
@@ -129,9 +130,9 @@ class _ConversationListViewState extends State<ConversationListView>
       afterWidgets: widget.afterWidgets,
       background: widget.background,
       onSearchTap: (data) {
-        List<ConversationInfo> list = [];
+        List<ConversationModel> list = [];
         for (var item in data) {
-          if (item is ConversationInfo) {
+          if (item is ConversationModel) {
             list.add(item);
           }
         }
@@ -143,7 +144,7 @@ class _ConversationListViewState extends State<ConversationListView>
         if (key is ValueKey<String>) {
           final ValueKey<String> valueKey = key;
           index = controller.list.indexWhere((info) {
-            if (info is ConversationInfo) {
+            if (info is ConversationModel) {
               return info.profile.id == valueKey.value;
             } else {
               return false;
@@ -154,7 +155,7 @@ class _ConversationListViewState extends State<ConversationListView>
         return index > -1 ? index : null;
       },
       itemBuilder: (context, model) {
-        if (model is ConversationInfo) {
+        if (model is ConversationModel) {
           Widget? item;
           if (widget.itemBuilder != null) {
             item = widget.itemBuilder!(context, model);

@@ -1,7 +1,6 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit_example/home_page.dart';
 import 'package:em_chat_uikit_example/login_page.dart';
-import 'package:em_chat_uikit_example/pages/help/download_page.dart';
 import 'package:em_chat_uikit_example/pages/me/change_avatar_page.dart';
 import 'package:em_chat_uikit_example/pages/me/personal_info_page.dart';
 import 'package:em_chat_uikit_example/pages/tool/chat_route_filter.dart';

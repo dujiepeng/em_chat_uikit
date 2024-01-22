@@ -2,7 +2,7 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import '../../universal/defines.dart';
 
-class ConversationInfo with ChatUIKitListItemModelBase, NeedSearch {
+class ConversationModel with ChatUIKitListItemModelBase, NeedSearch {
   final Message? lastMessage;
   final int unreadCount;
   final bool pinned;
@@ -12,7 +12,7 @@ class ConversationInfo with ChatUIKitListItemModelBase, NeedSearch {
   @override
   ChatUIKitProfile profile;
 
-  ConversationInfo({
+  ConversationModel({
     required this.profile,
     this.lastMessage,
     this.unreadCount = 0,
@@ -22,7 +22,7 @@ class ConversationInfo with ChatUIKitListItemModelBase, NeedSearch {
     this.attribute,
   });
 
-  static Future<ConversationInfo> fromConversation(
+  static Future<ConversationModel> fromConversation(
     Conversation conversation,
     ChatUIKitProfile profile,
   ) async {
@@ -32,7 +32,7 @@ class ConversationInfo with ChatUIKitListItemModelBase, NeedSearch {
     bool noDisturb =
         ChatUIKitContext.instance.conversationIsMute(conversation.id);
 
-    ConversationInfo info = ConversationInfo(
+    ConversationModel info = ConversationModel(
       profile: profile,
       unreadCount: unreadCount,
       lastMessage: lastMessage,

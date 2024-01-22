@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class ChatRouteFilter {
   static RouteSettings chatRouteSettings(RouteSettings settings) {
-    // 拦截 ChatUIKitRouteNames.messagesView
+    // 拦截 ChatUIKitRouteNames.messagesView, 之后对要跳转的页面的 `RouteSettings` 进行自定义，之后返回。
     if (settings.name == ChatUIKitRouteNames.messagesView) {
       return messagesView(settings);
     }

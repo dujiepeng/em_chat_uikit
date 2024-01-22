@@ -1,7 +1,7 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
-typedef ConversationListViewShowHandler = List<ConversationInfo> Function(
-    List<ConversationInfo> conversations);
+typedef ConversationListViewShowHandler = List<ConversationModel> Function(
+    List<ConversationModel> conversations);
 
 class ConversationListViewController extends ChatUIKitListViewControllerBase {
   ConversationListViewController({
@@ -25,10 +25,10 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
         items = await ChatUIKit.instance.getAllConversations();
       }
       items = await clearEmpty(items);
-      List<ConversationInfo> tmp = await mappers(items);
+      List<ConversationModel> tmp = await mappers(items);
       list.clear();
       list.addAll(tmp);
-      list = willShowHandler?.call(list.cast<ConversationInfo>()) ?? list;
+      list = willShowHandler?.call(list.cast<ConversationModel>()) ?? list;
       if (list.isEmpty) {
         loadingType.value = ChatUIKitListViewType.empty;
       } else {
@@ -44,10 +44,10 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
     loadingType.value = ChatUIKitListViewType.refresh;
     List<Conversation> items = await ChatUIKit.instance.getAllConversations();
     items = await clearEmpty(items);
-    List<ConversationInfo> tmp = await mappers(items);
+    List<ConversationModel> tmp = await mappers(items);
     list.clear();
     list.addAll(tmp);
-    list = willShowHandler?.call(list.cast<ConversationInfo>()) ?? list;
+    list = willShowHandler?.call(list.cast<ConversationModel>()) ?? list;
     if (list.isEmpty) {
       loadingType.value = ChatUIKitListViewType.empty;
     } else {
@@ -115,7 +115,7 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
     } catch (e) {}
   }
 
-  Future<List<ConversationInfo>> mappers(
+  Future<List<ConversationModel>> mappers(
       List<Conversation> conversations) async {
     Map<String, ConversationType> map = {
       for (var element in conversations) element.id: element.type
@@ -123,9 +123,9 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
 
     Map<String, ChatUIKitProfile> profilesMap =
         ChatUIKitProvider.instance.conversationProfiles(map);
-    List<ConversationInfo> list = [];
+    List<ConversationModel> list = [];
     for (var item in conversations) {
-      ConversationInfo info = await ConversationInfo.fromConversation(
+      ConversationModel info = await ConversationModel.fromConversation(
         item,
         profilesMap[item.id]!,
       );

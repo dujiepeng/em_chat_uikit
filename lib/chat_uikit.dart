@@ -82,7 +82,7 @@ export 'ui/controllers/group_member_list_view_controller.dart';
 export 'ui/controllers/message_list_view_controller.dart';
 
 export 'ui/models/chat_uikit_list_item_model_base.dart';
-export 'ui/models/conversation_info.dart';
+export 'ui/models/conversation_model.dart';
 export 'ui/models/contact_item_model.dart';
 export 'ui/models/group_item_model.dart';
 export 'ui/models/new_request_item_model.dart';

@@ -21,14 +21,14 @@ class ConversationsViewArguments implements ChatUIKitViewArguments {
 
   final ConversationListViewController? controller;
   final ChatUIKitAppBar? appBar;
-  final void Function(List<ConversationInfo> data)? onSearchTap;
+  final void Function(List<ConversationModel> data)? onSearchTap;
   final List<Widget>? beforeWidgets;
   final List<Widget>? afterWidgets;
   final ChatUIKitConversationItemBuilder? listViewItemBuilder;
-  final void Function(BuildContext context, ConversationInfo model)? onTap;
+  final void Function(BuildContext context, ConversationModel model)? onTap;
   final List<ChatUIKitBottomSheetItem> Function(
     BuildContext context,
-    ConversationInfo info,
+    ConversationModel info,
     List<ChatUIKitBottomSheetItem> defaultActions,
   )? onLongPress;
   final String? fakeSearchHideText;
@@ -42,14 +42,14 @@ class ConversationsViewArguments implements ChatUIKitViewArguments {
   ConversationsViewArguments copyWith({
     ConversationListViewController? controller,
     ChatUIKitAppBar? appBar,
-    void Function(List<ConversationInfo> data)? onSearchTap,
+    void Function(List<ConversationModel> data)? onSearchTap,
     List<NeedAlphabeticalWidget>? beforeWidgets,
     List<NeedAlphabeticalWidget>? afterWidgets,
     ChatUIKitListItemBuilder? listViewItemBuilder,
-    void Function(BuildContext context, ConversationInfo model)? onTap,
+    void Function(BuildContext context, ConversationModel model)? onTap,
     final List<ChatUIKitBottomSheetItem> Function(
       BuildContext context,
-      ConversationInfo info,
+      ConversationModel info,
       List<ChatUIKitBottomSheetItem> defaultActions,
     )? onLongPress,
     String? fakeSearchHideText,

@@ -42,14 +42,14 @@ class ConversationsView extends StatefulWidget {
 
   final ConversationListViewController? controller;
   final ChatUIKitAppBar? appBar;
-  final void Function(List<ConversationInfo> data)? onSearchTap;
+  final void Function(List<ConversationModel> data)? onSearchTap;
   final List<Widget>? beforeWidgets;
   final List<Widget>? afterWidgets;
   final ChatUIKitConversationItemBuilder? listViewItemBuilder;
-  final void Function(BuildContext context, ConversationInfo info)? onTap;
+  final void Function(BuildContext context, ConversationModel info)? onTap;
   final List<ChatUIKitBottomSheetItem> Function(
     BuildContext context,
-    ConversationInfo info,
+    ConversationModel info,
     List<ChatUIKitBottomSheetItem> defaultActions,
   )? onLongPress;
   final String? fakeSearchHideText;
@@ -124,10 +124,10 @@ class _ConversationsViewState extends State<ConversationsView> {
           searchHideText: widget.fakeSearchHideText,
           background: widget.listViewBackground,
           onTap: widget.onTap ??
-              (BuildContext context, ConversationInfo info) {
+              (BuildContext context, ConversationModel info) {
                 pushToMessagePage(info);
               },
-          onLongPress: (BuildContext context, ConversationInfo info) {
+          onLongPress: (BuildContext context, ConversationModel info) {
             longPressed(info);
           },
           onSearchTap: widget.onSearchTap ?? onSearchTap,
@@ -138,7 +138,7 @@ class _ConversationsViewState extends State<ConversationsView> {
     return content;
   }
 
-  void onSearchTap(List<ConversationInfo> data) {
+  void onSearchTap(List<ConversationModel> data) {
     List<NeedSearch> list = [];
     for (var item in data) {
       list.add(item);
@@ -175,7 +175,7 @@ class _ConversationsViewState extends State<ConversationsView> {
     });
   }
 
-  void pushToMessagePage(ConversationInfo info) {
+  void pushToMessagePage(ConversationModel info) {
     Navigator.of(context)
         .pushNamed(
       ChatUIKitRouteNames.messagesView,
@@ -190,7 +190,7 @@ class _ConversationsViewState extends State<ConversationsView> {
     });
   }
 
-  void longPressed(ConversationInfo info) async {
+  void longPressed(ConversationModel info) async {
     List<ChatUIKitBottomSheetItem> list = defaultLongPressActions(info);
 
     list = widget.onLongPress
@@ -206,7 +206,7 @@ class _ConversationsViewState extends State<ConversationsView> {
   }
 
   List<ChatUIKitBottomSheetItem> defaultLongPressActions(
-      ConversationInfo info) {
+      ConversationModel info) {
     return [
       ChatUIKitBottomSheetItem.normal(
         label: info.noDisturb
