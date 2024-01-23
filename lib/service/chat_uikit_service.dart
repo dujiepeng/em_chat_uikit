@@ -5,6 +5,7 @@ import 'package:em_chat_uikit/service/actions/chat_uikit_events_actions.dart';
 import 'package:em_chat_uikit/service/actions/chat_uikit_notification_actions.dart';
 
 import 'package:em_chat_uikit/service/observers/chat_uikit_contact_observers.dart';
+import 'package:flutter/widgets.dart';
 
 class ChatUIKit extends ChatSDKWrapper
     with
@@ -16,6 +17,7 @@ class ChatUIKit extends ChatSDKWrapper
         ChatUIKitEventsObservers {
   static ChatUIKit? _instance;
   static ChatUIKit get instance {
+    WidgetsFlutterBinding.ensureInitialized();
     return _instance ??= ChatUIKit();
   }
 
@@ -26,7 +28,7 @@ class ChatUIKit extends ChatSDKWrapper
   @override
   Future<void> init({required Options options}) async {
     await super.init(options: options);
-    ChatUIKitContext.instance.currentUserId = currentUserId();
+    ChatUIKitContext.instance.currentUserId = currentUserId;
   }
 
   /// Login

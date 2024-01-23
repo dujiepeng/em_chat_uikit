@@ -159,14 +159,16 @@ class _ConversationsViewState extends State<ConversationsView> {
       },
     ).then((value) {
       if (value != null && value is ChatUIKitProfile) {
-        Navigator.of(context)
-            .pushNamed(
-          ChatUIKitRouteNames.messagesView,
-          arguments: MessagesViewArguments(
-            profile: value,
-          ),
-        )
-            .then((value) {
+        Future(() {
+          if (ChatUIKitRoute.hasInit) {
+            return ChatUIKitRoute.pushNamed(
+                context,
+                ChatUIKitRouteNames.messagesView,
+                MessagesViewArguments(profile: value));
+          } else {
+            return ChatUIKitRoute.push(context, MessagesView(profile: value));
+          }
+        }).then((value) {
           if (mounted) {
             controller.reload();
           }
@@ -176,14 +178,20 @@ class _ConversationsViewState extends State<ConversationsView> {
   }
 
   void pushToMessagePage(ConversationModel info) {
-    Navigator.of(context)
-        .pushNamed(
-      ChatUIKitRouteNames.messagesView,
-      arguments: MessagesViewArguments(
-        profile: info.profile,
-      ),
-    )
-        .then((value) {
+    Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        return ChatUIKitRoute.pushNamed(
+          context,
+          ChatUIKitRouteNames.messagesView,
+          MessagesViewArguments(profile: info.profile),
+        );
+      } else {
+        return ChatUIKitRoute.push(
+          context,
+          MessagesView(profile: info.profile),
+        );
+      }
+    }).then((value) {
       if (mounted) {
         controller.reload();
       }
@@ -387,12 +395,21 @@ class _ConversationsViewState extends State<ConversationsView> {
   }
 
   void newGroup() async {
-    final group = await Navigator.of(context).pushNamed(
-      ChatUIKitRouteNames.createGroupView,
-      arguments: CreateGroupViewArguments(
-        attributes: widget.attributes,
-      ),
-    );
+    final group = await Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        return ChatUIKitRoute.pushNamed(
+          context,
+          ChatUIKitRouteNames.createGroupView,
+          CreateGroupViewArguments(attributes: widget.attributes),
+        );
+      } else {
+        return ChatUIKitRoute.push(
+          context,
+          CreateGroupView(attributes: widget.attributes),
+        );
+      }
+    });
+
     if (group is Group) {
       await ChatUIKitInsertMessageTool.insertCreateGroupMessage(
         group: group,
@@ -405,14 +422,20 @@ class _ConversationsViewState extends State<ConversationsView> {
   }
 
   void pushNewConversation(ChatUIKitProfile profile) {
-    Navigator.of(context)
-        .pushNamed(
-      ChatUIKitRouteNames.messagesView,
-      arguments: MessagesViewArguments(
-        profile: profile,
-      ),
-    )
-        .then((value) {
+    Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        return ChatUIKitRoute.pushNamed(
+          context,
+          ChatUIKitRouteNames.messagesView,
+          MessagesViewArguments(profile: profile),
+        );
+      } else {
+        return ChatUIKitRoute.push(
+          context,
+          MessagesView(profile: profile),
+        );
+      }
+    }).then((value) {
       if (mounted) {
         controller.reload();
       }

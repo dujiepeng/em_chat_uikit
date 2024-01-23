@@ -25,7 +25,7 @@ class GroupDetailsView extends StatefulWidget {
     this.onMessageDidClear,
     super.key,
   });
-  final List<ChatUIKitActionItem> actions;
+  final List<ChatUIKitActionModel> actions;
   final ChatUIKitProfile profile;
   final ChatUIKitAppBar? appBar;
   final bool enableAppBar;
@@ -41,7 +41,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
   ValueNotifier<bool> isNotDisturb = ValueNotifier<bool>(false);
   int memberCount = 0;
   Group? group;
-  late final List<ChatUIKitActionItem>? actions;
+  late final List<ChatUIKitActionModel>? actions;
   @override
   void initState() {
     super.initState();
@@ -311,14 +311,26 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         content,
         InkWell(
           onTap: () {
-            Navigator.of(context).pushNamed(
-              ChatUIKitRouteNames.groupMembersView,
-              arguments: GroupMembersViewArguments(
-                profile: widget.profile,
-                enableMemberOperation:
-                    group?.permissionType == GroupPermissionType.Owner,
-              ),
-            );
+            if (ChatUIKitRoute.hasInit) {
+              ChatUIKitRoute.pushNamed(
+                context,
+                ChatUIKitRouteNames.groupMembersView,
+                GroupMembersViewArguments(
+                  profile: widget.profile,
+                  enableMemberOperation:
+                      group?.permissionType == GroupPermissionType.Owner,
+                ),
+              );
+            } else {
+              ChatUIKitRoute.push(
+                context,
+                GroupMembersView(
+                  profile: widget.profile,
+                  enableMemberOperation:
+                      group?.permissionType == GroupPermissionType.Owner,
+                ),
+              );
+            }
           },
           child: ChatUIKitDetailsListViewItem(
             title: ChatUIKitLocal.groupDetailViewMember.getString(context),
@@ -711,13 +723,26 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
   }
 
   void changeOwner() async {
-    final ret = await Navigator.of(context).pushNamed(
-      ChatUIKitRouteNames.groupChangeOwnerView,
-      arguments: GroupChangeOwnerViewArguments(
-        groupId: widget.profile.id,
-        attributes: widget.attributes,
-      ),
-    );
+    final ret = await Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        return ChatUIKitRoute.pushNamed(
+          context,
+          ChatUIKitRouteNames.groupChangeOwnerView,
+          GroupChangeOwnerViewArguments(
+            groupId: widget.profile.id,
+            attributes: widget.attributes,
+          ),
+        );
+      } else {
+        return ChatUIKitRoute.push(
+          context,
+          GroupChangeOwnerView(
+            groupId: widget.profile.id,
+            attributes: widget.attributes,
+          ),
+        );
+      }
+    });
 
     if (ret == true) {
       fetchGroup();
@@ -736,7 +761,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
                     Map<String, String> map = await ChatUIKit.instance
                         .fetchGroupMemberAttributes(
                             groupId: group!.groupId,
-                            userId: ChatUIKit.instance.currentUserId());
+                            userId: ChatUIKit.instance.currentUserId);
                     return map[userGroupName];
                   }
                   return null;
@@ -746,7 +771,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         if (value is String) {
           ChatUIKit.instance.setGroupMemberAttributes(
               groupId: group!.groupId,
-              userId: ChatUIKit.instance.currentUserId(),
+              userId: ChatUIKit.instance.currentUserId,
               attributes: {userGroupName: value}).then((_) {
             // fetchMembersAttrs();
           }).catchError(
@@ -760,19 +785,40 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
   }
 */
   void changeGroupName() {
-    Navigator.of(context)
-        .pushNamed(ChatUIKitRouteNames.changeInfoView,
-            arguments: ChangeInfoViewArguments(
-                title:
-                    ChatUIKitLocal.groupDetailViewGroupName.getString(context),
-                maxLength: 32,
-                inputTextCallback: () async {
-                  if (group?.groupId != null) {
-                    return group!.name ?? '';
-                  }
-                  return null;
-                }))
-        .then((value) {
+    Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        return ChatUIKitRoute.pushNamed(
+          context,
+          ChatUIKitRouteNames.changeInfoView,
+          ChangeInfoViewArguments(
+            title: ChatUIKitLocal.groupDetailViewGroupName.getString(context),
+            maxLength: 32,
+            attributes: widget.attributes,
+            inputTextCallback: () async {
+              if (group?.groupId != null) {
+                return group!.name ?? '';
+              }
+              return null;
+            },
+          ),
+        );
+      } else {
+        return ChatUIKitRoute.push(
+          context,
+          ChangeInfoView(
+            title: ChatUIKitLocal.groupDetailViewGroupName.getString(context),
+            maxLength: 32,
+            attributes: widget.attributes,
+            inputTextCallback: () async {
+              if (group?.groupId != null) {
+                return group!.name ?? '';
+              }
+              return null;
+            },
+          ),
+        );
+      }
+    }).then((value) {
       if (value is String) {
         ChatUIKit.instance
             .changeGroupName(groupId: group!.groupId, name: value)
@@ -786,23 +832,40 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
   }
 
   void changeGroupDesc() {
-    Navigator.of(context)
-        .pushNamed(
-      ChatUIKitRouteNames.changeInfoView,
-      arguments: ChangeInfoViewArguments(
-        title: ChatUIKitLocal.groupDetailViewDescription.getString(context),
-        maxLength: 256,
-        inputTextCallback: () async {
-          if (group?.groupId != null) {
-            if (group?.groupId != null) {
-              return group!.description ?? '';
-            }
-          }
-          return null;
-        },
-      ),
-    )
-        .then((value) {
+    Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        return ChatUIKitRoute.pushNamed(
+          context,
+          ChatUIKitRouteNames.changeInfoView,
+          ChangeInfoViewArguments(
+            title: ChatUIKitLocal.groupDetailViewDescription.getString(context),
+            maxLength: 256,
+            attributes: widget.attributes,
+            inputTextCallback: () async {
+              if (group?.groupId != null) {
+                return group!.description ?? '';
+              }
+              return null;
+            },
+          ),
+        );
+      } else {
+        return ChatUIKitRoute.push(
+          context,
+          ChangeInfoView(
+            title: ChatUIKitLocal.groupDetailViewDescription.getString(context),
+            maxLength: 256,
+            attributes: widget.attributes,
+            inputTextCallback: () async {
+              if (group?.groupId != null) {
+                return group!.description ?? '';
+              }
+              return null;
+            },
+          ),
+        );
+      }
+    }).then((value) {
       if (value is String) {
         ChatUIKit.instance
             .changeGroupDescription(groupId: group!.groupId, desc: value)

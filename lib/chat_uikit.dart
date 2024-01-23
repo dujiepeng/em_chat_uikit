@@ -144,4 +144,4 @@ export 'ui/route/view_arguments/create_group_view_arguments.dart';
 export 'ui/route/view_arguments/group_mention_view_arguments.dart';
 export 'ui/route/view_arguments/report_message_view_arguments.dart';
 
-export 'universal/chat_uikit_action_item.dart';
+export 'universal/chat_uikit_action_model.dart';

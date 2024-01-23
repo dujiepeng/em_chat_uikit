@@ -19,7 +19,7 @@ class UserDataStore {
 
   Future<void> init() async {
     _sharedPreferences ??= await SharedPreferences.getInstance();
-    String? currentUser = ChatUIKit.instance.currentUserId();
+    String? currentUser = ChatUIKit.instance.currentUserId;
     if (currentUser?.isNotEmpty == true) {
       String? info = _sharedPreferences?.getString(currentUser!);
       if (info != null) {
@@ -34,7 +34,7 @@ class UserDataStore {
   }
 
   Future<void> saveUserData(UserData userData) async {
-    String? currentUser = ChatUIKit.instance.currentUserId();
+    String? currentUser = ChatUIKit.instance.currentUserId;
     if (currentUser?.isNotEmpty == true) {
       _sharedPreferences ??= await SharedPreferences.getInstance();
       _sharedPreferences?.setString(

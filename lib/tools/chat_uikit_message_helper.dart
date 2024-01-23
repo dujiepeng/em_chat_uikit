@@ -239,7 +239,7 @@ extension MessageHelper on Message {
 
             String? from = map?[alertRecallMessageFromKey];
             String? showName;
-            if (ChatUIKit.instance.currentUserId() == from) {
+            if (ChatUIKit.instance.currentUserId == from) {
               showName =
                   ChatUIKitLocal.messagesViewRecallInfoYou.getString(context!);
             } else {
@@ -270,7 +270,7 @@ extension MessageHelper on Message {
     if (attributes?[mentionKey] is List) {
       List mentionList = attributes?[mentionKey];
       if (mentionList.isNotEmpty) {
-        ret = mentionList.contains(ChatUIKit.instance.currentUserId());
+        ret = mentionList.contains(ChatUIKit.instance.currentUserId);
       }
     } else if (attributes?[mentionKey] is String) {
       if (attributes?[mentionKey] == mentionAllValue) {

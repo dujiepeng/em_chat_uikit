@@ -115,29 +115,55 @@ class _GroupsViewState extends State<GroupsView> {
   }
 
   void tapGroupInfo(BuildContext context, GroupItemModel model) {
-    Navigator.of(context)
-        .pushNamed(
-      ChatUIKitRouteNames.groupDetailsView,
-      arguments: GroupDetailsViewArguments(
-        profile: model.profile,
-        actions: [
-          ChatUIKitActionItem(
-            title: ChatUIKitLocal.groupDetailViewSend.getString(context),
-            icon: 'assets/images/chat.png',
-            onTap: (context) {
-              Navigator.of(context).pushNamed(
-                ChatUIKitRouteNames.messagesView,
-                arguments: MessagesViewArguments(
-                  profile: model.profile,
-                  attributes: widget.attributes,
-                ),
-              );
-            },
+    Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        return ChatUIKitRoute.pushNamed(
+          context,
+          ChatUIKitRouteNames.groupDetailsView,
+          GroupDetailsViewArguments(
+            profile: model.profile,
+            actions: [
+              ChatUIKitActionModel(
+                title: ChatUIKitLocal.groupDetailViewSend.getString(context),
+                icon: 'assets/images/chat.png',
+                onTap: (context) {
+                  ChatUIKitRoute.pushNamed(
+                    context,
+                    ChatUIKitRouteNames.messagesView,
+                    MessagesViewArguments(
+                      profile: model.profile,
+                      attributes: widget.attributes,
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
-        ],
-      ),
-    )
-        .then((value) {
+        );
+      } else {
+        return ChatUIKitRoute.push(
+          context,
+          GroupDetailsView(
+            profile: model.profile,
+            actions: [
+              ChatUIKitActionModel(
+                title: ChatUIKitLocal.groupDetailViewSend.getString(context),
+                icon: 'assets/images/chat.png',
+                onTap: (context) {
+                  ChatUIKitRoute.push(
+                    context,
+                    MessagesView(
+                      profile: model.profile,
+                      attributes: widget.attributes,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      }
+    }).then((value) {
       if (value != null && value == true) {
         controller.list.removeWhere((element) {
           return element is GroupItemModel &&

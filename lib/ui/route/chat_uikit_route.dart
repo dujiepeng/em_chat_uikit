@@ -8,7 +8,16 @@ typedef ChatUIKitWidgetBuilder = Widget Function(
 );
 
 class ChatUIKitRoute {
-  static final Map<String, ChatUIKitWidgetBuilder> _uikitRoutes =
+  static ChatUIKitRoute? _instance;
+  static bool hasInit = false;
+
+  factory ChatUIKitRoute() => _instance ??= ChatUIKitRoute._();
+
+  ChatUIKitRoute._() {
+    hasInit = true;
+  }
+
+  final Map<String, ChatUIKitWidgetBuilder> _uikitRoutes =
       <String, ChatUIKitWidgetBuilder>{
     ChatUIKitRouteNames.changeInfoView: (context, arguments) {
       return ChangeInfoView.arguments(
@@ -126,7 +135,7 @@ class ChatUIKitRoute {
     Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
-  static Route? generateRoute<T extends Object>(RouteSettings settings) {
+  Route? generateRoute<T extends Object>(RouteSettings settings) {
     if (settings.arguments is ChatUIKitViewArguments) {
       ChatUIKitWidgetBuilder? builder = _uikitRoutes[settings.name];
       if (builder != null) {
@@ -143,5 +152,27 @@ class ChatUIKitRoute {
     } else {
       return null;
     }
+  }
+
+  static Future<T?> pushNamed<T extends Object?>(
+    BuildContext context,
+    String pushNamed,
+    ChatUIKitViewArguments arguments,
+  ) {
+    return Navigator.of(context).pushNamed(
+      pushNamed,
+      arguments: arguments,
+    );
+  }
+
+  static Future<T?> push<T extends Object?>(
+      BuildContext context, Widget widget) {
+    return Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return widget;
+        },
+      ),
+    );
   }
 }

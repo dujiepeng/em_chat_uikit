@@ -113,13 +113,28 @@ class _NewRequestsViewState extends State<NewRequestsView>
 
   // 暂定不需要跳进详情页面
   void onItemTap(BuildContext context, NewRequestItemModel model) {
-    Navigator.of(context)
-        .pushNamed(ChatUIKitRouteNames.newRequestDetailsView,
-            arguments: NewRequestDetailsViewArguments(
-              profile: model.profile,
-              isReceivedRequest: true,
-            ))
-        .then((value) {
+    Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        ChatUIKitRoute.pushNamed(
+          context,
+          ChatUIKitRouteNames.newRequestDetailsView,
+          NewRequestDetailsViewArguments(
+            profile: model.profile,
+            isReceivedRequest: true,
+            attributes: widget.attributes,
+          ),
+        );
+      } else {
+        ChatUIKitRoute.push(
+          context,
+          NewRequestDetailsView(
+            profile: model.profile,
+            isReceivedRequest: true,
+            attributes: widget.attributes,
+          ),
+        );
+      }
+    }).then((value) {
       if (value == true) {
         if (mounted) {
           controller.reload();

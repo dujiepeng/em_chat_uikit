@@ -58,7 +58,7 @@ class _MyPageState extends State<MyPage> with ChatUIKitProviderObserver {
     );
 
     Widget name = Text(
-      _userData?.nickname ?? ChatUIKit.instance.currentUserId() ?? '',
+      _userData?.nickname ?? ChatUIKit.instance.currentUserId ?? '',
       textScaleFactor: 1.0,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
@@ -72,7 +72,7 @@ class _MyPageState extends State<MyPage> with ChatUIKitProviderObserver {
     );
 
     Widget easeId = Text(
-      'ID: ${ChatUIKit.instance.currentUserId()}',
+      'ID: ${ChatUIKit.instance.currentUserId}',
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
       textScaleFactor: 1.0,
@@ -93,7 +93,7 @@ class _MyPageState extends State<MyPage> with ChatUIKitProviderObserver {
         InkWell(
           onTap: () {
             Clipboard.setData(
-                ClipboardData(text: ChatUIKit.instance.currentUserId() ?? ''));
+                ClipboardData(text: ChatUIKit.instance.currentUserId ?? ''));
             ChatUIKit.instance.sendChatUIKitEvent(
               ChatUIKitEvent.userIdCopied,
             );

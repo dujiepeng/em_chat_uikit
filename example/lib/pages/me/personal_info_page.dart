@@ -62,9 +62,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage>
             ),
             PersonalInfoItem(
               title: '昵称',
-              trailing: _userData?.nickname ??
-                  ChatUIKit.instance.currentUserId() ??
-                  '',
+              trailing:
+                  _userData?.nickname ?? ChatUIKit.instance.currentUserId ?? '',
               onTap: pushChangeNicknamePage,
               enableArrow: true,
             ),
@@ -90,7 +89,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage>
           return Future(
             () {
               return ChatUIKitProvider.instance.currentUserData?.nickname ??
-                  ChatUIKit.instance.currentUserId() ??
+                  ChatUIKit.instance.currentUserId ??
                   '';
             },
           );

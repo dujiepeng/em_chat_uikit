@@ -123,8 +123,6 @@ class ChatSDKWrapper extends ChatUIKitWrapperBase
   Future<void> init({
     required Options options,
   }) async {
-    WidgetsFlutterBinding.ensureInitialized();
-
     await Client.getInstance.init(options);
     Client.getInstance.startCallback();
   }
@@ -176,7 +174,7 @@ class ChatSDKWrapper extends ChatUIKitWrapperBase
   /// Get current user id
   ///
   /// Return: current user id
-  String? currentUserId() {
+  String? get currentUserId {
     return Client.getInstance.currentUserId;
   }
 }

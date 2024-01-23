@@ -55,7 +55,7 @@ class _CurrentUserInfoViewState extends State<CurrentUserInfoView> {
 
     Widget name = Text(
       ChatUIKitProvider.instance.currentUserData?.nickname ??
-          ChatUIKit.instance.currentUserId() ??
+          ChatUIKit.instance.currentUserId ??
           '',
       overflow: TextOverflow.ellipsis,
       textScaleFactor: 1.0,

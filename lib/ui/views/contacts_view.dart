@@ -131,12 +131,22 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
       ChatUIKitListViewMoreItem(
         title: ChatUIKitLocal.contactsViewNewRequests.getString(context),
         onTap: () {
-          Navigator.of(context).pushNamed(
-            ChatUIKitRouteNames.newRequestsView,
-            arguments: NewRequestsViewArguments(
-              attributes: widget.attributes,
-            ),
-          );
+          if (ChatUIKitRoute.hasInit) {
+            ChatUIKitRoute.pushNamed(
+              context,
+              ChatUIKitRouteNames.newRequestsView,
+              NewRequestsViewArguments(
+                attributes: widget.attributes,
+              ),
+            );
+          } else {
+            ChatUIKitRoute.push(
+              context,
+              NewRequestsView(
+                attributes: widget.attributes,
+              ),
+            );
+          }
         },
         trailing: Padding(
           padding: const EdgeInsets.only(right: 5),
@@ -144,18 +154,27 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
         ),
       ),
       ChatUIKitListViewMoreItem(
-        title: ChatUIKitLocal.contactsViewGroups.getString(context),
-        onTap: () {
-          Navigator.of(context)
-              .pushNamed(
-            ChatUIKitRouteNames.groupsView,
-            arguments: GroupsViewArguments(),
-          )
-              .then((value) {
-            ChatUIKit.instance.onConversationsUpdate();
-          });
-        },
-      ),
+          title: ChatUIKitLocal.contactsViewGroups.getString(context),
+          onTap: () {
+            Future(() {
+              if (ChatUIKitRoute.hasInit) {
+                return ChatUIKitRoute.pushNamed(
+                  context,
+                  ChatUIKitRouteNames.groupsView,
+                  GroupsViewArguments(attributes: widget.attributes),
+                );
+              } else {
+                return ChatUIKitRoute.push(
+                  context,
+                  GroupsView(
+                    attributes: widget.attributes,
+                  ),
+                );
+              }
+            }).then((value) {
+              ChatUIKit.instance.onConversationsUpdate();
+            });
+          }),
     ];
   }
 
@@ -180,33 +199,51 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
   }
 
   void tapContactInfo(BuildContext context, ContactItemModel model) {
-    Navigator.of(context)
-        .pushNamed(
-      ChatUIKitRouteNames.contactDetailsView,
-      arguments: ContactDetailsViewArguments(
-        profile: model.profile,
-        actions: [
-          ChatUIKitActionItem(
-            title: ChatUIKitLocal.contactDetailViewSend.getString(context),
-            icon: 'assets/images/chat.png',
-            onTap: (context) {
-              Navigator.of(context).pushNamed(
-                ChatUIKitRouteNames.messagesView,
-                arguments: MessagesViewArguments(
-                  profile: model.profile,
-                  attributes: widget.attributes,
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    )
-        .then(
-      (value) {
-        ChatUIKit.instance.onConversationsUpdate();
-      },
-    );
+    Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        return ChatUIKitRoute.pushNamed(
+          context,
+          ChatUIKitRouteNames.contactDetailsView,
+          ContactDetailsViewArguments(profile: model.profile, actions: [
+            ChatUIKitActionModel(
+              title: ChatUIKitLocal.contactDetailViewSend.getString(context),
+              icon: 'assets/images/chat.png',
+              onTap: (context) {
+                ChatUIKitRoute.pushNamed(
+                  context,
+                  ChatUIKitRouteNames.messagesView,
+                  MessagesViewArguments(
+                    profile: model.profile,
+                    attributes: widget.attributes,
+                  ),
+                );
+              },
+            ),
+          ]),
+        );
+      } else {
+        return ChatUIKitRoute.push(
+          context,
+          ContactDetailsView(profile: model.profile, actions: [
+            ChatUIKitActionModel(
+              title: ChatUIKitLocal.contactDetailViewSend.getString(context),
+              icon: 'assets/images/chat.png',
+              onTap: (context) {
+                ChatUIKitRoute.push(
+                  context,
+                  MessagesView(
+                    profile: model.profile,
+                    attributes: widget.attributes,
+                  ),
+                );
+              },
+            ),
+          ]),
+        );
+      }
+    }).then((value) {
+      ChatUIKit.instance.onConversationsUpdate();
+    });
   }
 
   void addContact() async {

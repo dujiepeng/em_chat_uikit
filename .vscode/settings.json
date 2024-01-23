@@ -2,5 +2,6 @@
     "editor.fontSize": 10,
     "cSpell.words": [
         "autofocus"
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "automatic"
 }

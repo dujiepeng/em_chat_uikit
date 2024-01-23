@@ -25,7 +25,7 @@ class ContactDetailsView extends StatefulWidget {
   });
 
   final ChatUIKitProfile profile;
-  final List<ChatUIKitActionItem> actions;
+  final List<ChatUIKitActionModel> actions;
   final VoidCallback? onMessageDidClear;
   final ChatUIKitAppBar? appBar;
   final bool enableAppBar;
@@ -38,7 +38,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
     with ChatUIKitProviderObserver {
   ValueNotifier<bool> isNotDisturb = ValueNotifier<bool>(false);
   ChatUIKitProfile? profile;
-  late final List<ChatUIKitActionItem>? actions;
+  late final List<ChatUIKitActionModel>? actions;
   @override
   void initState() {
     super.initState();

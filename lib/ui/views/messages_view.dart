@@ -174,12 +174,26 @@ class _MessagesViewState extends State<MessagesView> {
 
   void needMention() {
     if (controller.conversationType == ConversationType.GroupChat) {
-      Navigator.of(context)
-          .pushNamed(
-        ChatUIKitRouteNames.groupMentionView,
-        arguments: GroupMentionViewArguments(groupId: controller.profile.id),
-      )
-          .then((value) {
+      Future(() {
+        if (ChatUIKitRoute.hasInit) {
+          return ChatUIKitRoute.pushNamed(
+            context,
+            ChatUIKitRouteNames.groupMentionView,
+            GroupMentionViewArguments(
+              groupId: controller.profile.id,
+              attributes: widget.attributes,
+            ),
+          );
+        } else {
+          return ChatUIKitRoute.push(
+            context,
+            GroupMentionView(
+              groupId: controller.profile.id,
+              attributes: widget.attributes,
+            ),
+          );
+        }
+      }).then((value) {
         if (value != null) {
           if (value == true) {
             inputBarTextEditingController.atAll();
@@ -318,14 +332,14 @@ class _MessagesViewState extends State<MessagesView> {
           : widget.appBar ??
               ChatUIKitAppBar(
                 title: widget.profile.showName,
-                leading: InkWell(
-                  onTap: () {
-                    pushNextPage(widget.profile);
-                  },
-                  child: ChatUIKitAvatar(
-                    avatarUrl: widget.profile.avatarUrl,
-                  ),
-                ),
+                // leading: InkWell(
+                //   onTap: () {
+                //     pushNextPage(widget.profile);
+                //   },
+                //   child: ChatUIKitAvatar(
+                //     avatarUrl: widget.profile.avatarUrl,
+                //   ),
+                // ),
               ),
       // body: content,
       body: content,
@@ -463,7 +477,7 @@ class _MessagesViewState extends State<MessagesView> {
       );
       String? from = map?[alertRecallMessageFromKey];
       String? showName;
-      if (ChatUIKit.instance.currentUserId() == from) {
+      if (ChatUIKit.instance.currentUserId == from) {
         showName = ChatUIKitLocal.messagesViewRecallInfoYou.getString(context);
       } else {
         ChatUIKitProfile profile =
@@ -966,21 +980,47 @@ class _MessagesViewState extends State<MessagesView> {
 
   void bubbleTab(Message message) async {
     if (message.bodyType == MessageType.IMAGE) {
-      Navigator.of(context).pushNamed(
-        ChatUIKitRouteNames.showImageView,
-        arguments: ShowImageViewArguments(
-          message: message,
-          attributes: widget.attributes,
-        ),
-      );
+      Future(() {
+        if (ChatUIKitRoute.hasInit) {
+          return ChatUIKitRoute.pushNamed(
+            context,
+            ChatUIKitRouteNames.showImageView,
+            ShowImageViewArguments(
+              message: message,
+              attributes: widget.attributes,
+            ),
+          );
+        } else {
+          return ChatUIKitRoute.push(
+            context,
+            ShowImageView(
+              message: message,
+              attributes: widget.attributes,
+            ),
+          );
+        }
+      });
     } else if (message.bodyType == MessageType.VIDEO) {
-      Navigator.of(context).pushNamed(
-        ChatUIKitRouteNames.showVideoView,
-        arguments: ShowVideoViewArguments(
-          message: message,
-          attributes: widget.attributes,
-        ),
-      );
+      Future(() {
+        if (ChatUIKitRoute.hasInit) {
+          return ChatUIKitRoute.pushNamed(
+            context,
+            ChatUIKitRouteNames.showVideoView,
+            ShowVideoViewArguments(
+              message: message,
+              attributes: widget.attributes,
+            ),
+          );
+        } else {
+          return ChatUIKitRoute.push(
+            context,
+            ShowVideoView(
+              message: message,
+              attributes: widget.attributes,
+            ),
+          );
+        }
+      });
     }
 
     if (message.bodyType == MessageType.VOICE) {
@@ -1198,19 +1238,13 @@ class _MessagesViewState extends State<MessagesView> {
         ChatUIKit.instance
             .sendChatUIKitEvent(ChatUIKitEvent.messageDownloading);
       } else {
-        if (message.localPath?.endsWith('aac') == true) {
-          try {
-            await playVoice(message.localPath!);
-            _playingMessage = message;
-            // ignore: empty_catches
-          } catch (e) {
-            debugPrint('playVoice: $e');
-          }
-        } else {
-          _playingMessage = null;
-          ChatUIKit.instance.sendChatUIKitEvent(
-            ChatUIKitEvent.voiceTypeNotSupported,
-          );
+        try {
+          debugPrint('playVoice: ${message.localPath}');
+          await playVoice(message.localPath!);
+          _playingMessage = message;
+          // ignore: empty_catches
+        } catch (e) {
+          debugPrint('playVoice: $e');
         }
       }
     }
@@ -1249,14 +1283,30 @@ class _MessagesViewState extends State<MessagesView> {
     Map<String, String> reasons =
         ChatUIKitSettings.reportMessageReason.call(context);
     List<String> reasonKeys = reasons.keys.toList();
-    final reportReason = await Navigator.of(context).pushNamed(
-      ChatUIKitRouteNames.reportMessageView,
-      arguments: ReportMessageViewArguments(
-        messageId: message.msgId,
-        reportReasons: reasonKeys.map((e) => reasons[e]!).toList(),
-        attributes: widget.attributes,
-      ),
-    );
+
+    final reportReason = await Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        return ChatUIKitRoute.pushNamed(
+          context,
+          ChatUIKitRouteNames.reportMessageView,
+          ReportMessageViewArguments(
+            messageId: message.msgId,
+            reportReasons: reasonKeys.map((e) => reasons[e]!).toList(),
+            attributes: widget.attributes,
+          ),
+        );
+      } else {
+        return ChatUIKitRoute.push(
+          context,
+          ReportMessageView(
+            messageId: message.msgId,
+            reportReasons: reasonKeys.map((e) => reasons[e]!).toList(),
+            attributes: widget.attributes,
+          ),
+        );
+      }
+    });
+
     if (reportReason != null && reportReason is String) {
       String? tag;
       for (var entry in reasons.entries) {
@@ -1278,7 +1328,7 @@ class _MessagesViewState extends State<MessagesView> {
     clearAllType();
 
     // 如果是自己
-    if (profile.id == ChatUIKit.instance.currentUserId()) {
+    if (profile.id == ChatUIKit.instance.currentUserId) {
       pushToCurrentUser(profile);
     }
     // 如果是当前聊天对象
@@ -1330,7 +1380,7 @@ class _MessagesViewState extends State<MessagesView> {
         },
         profile: widget.profile,
         actions: [
-          ChatUIKitActionItem(
+          ChatUIKitActionModel(
             title: ChatUIKitLocal.contactDetailViewSend.getString(context),
             icon: 'assets/images/chat.png',
             onTap: (context) {
@@ -1355,7 +1405,7 @@ class _MessagesViewState extends State<MessagesView> {
           setState(() {});
         },
         actions: [
-          ChatUIKitActionItem(
+          ChatUIKitActionModel(
             title: ChatUIKitLocal.groupDetailViewSend.getString(context),
             icon: 'assets/images/chat.png',
             onTap: (context) {
@@ -1375,7 +1425,7 @@ class _MessagesViewState extends State<MessagesView> {
         profile: profile,
         attributes: widget.attributes,
         actions: [
-          ChatUIKitActionItem(
+          ChatUIKitActionModel(
             title: ChatUIKitLocal.contactDetailViewSend.getString(context),
             icon: 'assets/images/chat.png',
             onTap: (ctx) {

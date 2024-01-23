@@ -1,3 +1,6 @@
+import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:flutter/widgets.dart';
+
 mixin ChatUIKitLocal {
   static const String conversationsViewMenuAddContact =
       'new_chat_button_click_menu_add_contacts';
@@ -594,4 +597,50 @@ mixin ChatUIKitLocal {
     replayBarTitle: 'Replying ',
     bottomSheetCancel: 'Cancel',
   };
+}
+
+class ChatUIKitLocalizations {
+  final defaultLocale = [
+    const MapLocale('zh', ChatUIKitLocal.zh),
+    const MapLocale('en', ChatUIKitLocal.en),
+  ];
+
+  static final ChatUIKitLocalizations _instance = ChatUIKitLocalizations._();
+  factory ChatUIKitLocalizations() => _instance;
+  final FlutterLocalization _localization = FlutterLocalization.instance;
+  ChatUIKitLocalizations._() {
+    WidgetsFlutterBinding.ensureInitialized();
+    _localization.init(
+      mapLocales: defaultLocale,
+      initLanguageCode: 'en',
+    );
+  }
+
+  Iterable<Locale> get supportedLocales => _localization.supportedLocales;
+  Iterable<LocalizationsDelegate<dynamic>> get localizationsDelegates =>
+      _localization.localizationsDelegates;
+
+  void addLocales(List<MapLocale> locales) {
+    _localization.init(
+      mapLocales: defaultLocale + locales,
+      initLanguageCode: 'en',
+    );
+  }
+
+  Locale? localeResolutionCallback(
+    Locale? locale,
+    Iterable<Locale> supportedLocales,
+  ) {
+    Locale? ret;
+    int index = supportedLocales.toList().lastIndexWhere(
+        (element) => element.languageCode == locale?.languageCode);
+    if (index == -1) {
+      ret = supportedLocales
+          .firstWhere((element) => element.languageCode == 'en');
+    } else {
+      ret = supportedLocales.elementAt(index);
+    }
+
+    return ret;
+  }
 }

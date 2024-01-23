@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class ChatUIKitRecordConfig {
   const ChatUIKitRecordConfig({
-    this.encoder = AudioEncoder.aacLc,
+    this.encoder = AudioEncoder.aacEld,
     this.bitRate = 128000,
     this.samplingRate = 44100,
     this.numChannels = 2,
@@ -129,7 +129,7 @@ class ChatUIKitRecordBar extends StatefulWidget {
 }
 
 class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
-  late final Record _audioRecorder;
+  late final AudioRecorder _audioRecorder;
   bool voiceShow = false;
   bool isClose = false;
   late final Directory _directory;
@@ -144,7 +144,7 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
   @override
   void initState() {
     super.initState();
-    _audioRecorder = Record();
+    _audioRecorder = AudioRecorder();
     getTemporaryDirectory().then((value) => _directory = value);
   }
 
@@ -476,10 +476,15 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
       fileName =
           "${DateTime.now().millisecondsSinceEpoch.toString()}.${extensionName()}";
       await _audioRecorder.start(
+        RecordConfig(
+          bitRate: widget.recordConfig.bitRate,
+          sampleRate: widget.recordConfig.samplingRate,
+          numChannels: widget.recordConfig.numChannels,
+        ),
         path: "${_directory.path}/$fileName",
-        bitRate: widget.recordConfig.bitRate,
-        samplingRate: widget.recordConfig.samplingRate,
-        numChannels: widget.recordConfig.numChannels,
+        // bitRate: widget.recordConfig.bitRate,
+        // samplingRate: widget.recordConfig.samplingRate,
+        // numChannels: widget.recordConfig.numChannels,
       );
 
       startRecordTimer();
@@ -567,7 +572,7 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
       case AudioEncoder.aacLc:
       case AudioEncoder.aacEld:
       case AudioEncoder.aacHe:
-        return 'aac';
+        return Platform.isAndroid ? 'm4a' : 'aac';
       case AudioEncoder.amrNb:
       case AudioEncoder.amrWb:
         return 'amr';

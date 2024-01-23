@@ -48,11 +48,13 @@ class MessageListViewController extends ChangeNotifier
         return ConversationType.Chat;
       }
     }();
-    userMap[ChatUIKit.instance.currentUserId()!] = UserData(
-      nickname: ChatUIKitProvider.instance.currentUserData?.nickname,
-      avatarUrl: ChatUIKitProvider.instance.currentUserData?.avatarUrl,
-      time: DateTime.now().millisecondsSinceEpoch,
-    );
+    if (ChatUIKit.instance.currentUserId != null) {
+      userMap[ChatUIKit.instance.currentUserId!] = UserData(
+        nickname: ChatUIKitProvider.instance.currentUserData?.nickname,
+        avatarUrl: ChatUIKitProvider.instance.currentUserData?.avatarUrl,
+        time: DateTime.now().millisecondsSinceEpoch,
+      );
+    }
   }
 
   @override
@@ -444,7 +446,7 @@ class MessageListViewController extends ChangeNotifier
       }
     }
     final msg = await ChatUIKit.instance.sendMessage(message: willSendMsg);
-    userMap[ChatUIKit.instance.currentUserId()!] = UserData(
+    userMap[ChatUIKit.instance.currentUserId!] = UserData(
       nickname: ChatUIKitProvider.instance.currentUserData?.nickname,
       avatarUrl: ChatUIKitProvider.instance.currentUserData?.avatarUrl,
     );

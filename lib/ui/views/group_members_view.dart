@@ -211,7 +211,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
 
   void onMemberTap(BuildContext context, ChatUIKitProfile profile) async {
     // 如果是自己
-    if (profile.id == ChatUIKit.instance.currentUserId()) {
+    if (profile.id == ChatUIKit.instance.currentUserId) {
       pushToCurrentUser(profile);
       return;
     }
@@ -226,38 +226,76 @@ class _GroupMembersViewState extends State<GroupMembersView>
 
   // 处理点击自己头像和点击自己名片
   void pushToCurrentUser(ChatUIKitProfile profile) {
-    Navigator.of(context).pushNamed(
-      ChatUIKitRouteNames.currentUserInfoView,
-      arguments: CurrentUserInfoViewArguments(
-        profile: profile,
-        attributes: widget.attributes,
-      ),
-    );
+    if (ChatUIKitRoute.hasInit) {
+      ChatUIKitRoute.pushNamed(
+        context,
+        ChatUIKitRouteNames.currentUserInfoView,
+        CurrentUserInfoViewArguments(
+          profile: profile,
+          attributes: widget.attributes,
+        ),
+      );
+    } else {
+      ChatUIKitRoute.push(
+        context,
+        CurrentUserInfoView(
+          profile: profile,
+          attributes: widget.attributes,
+        ),
+      );
+    }
   }
 
   void pushContactDetails(ChatUIKitProfile profile) {
-    Navigator.of(context).pushNamed(
-      ChatUIKitRouteNames.contactDetailsView,
-      arguments: ContactDetailsViewArguments(
-        profile: profile,
-        attributes: widget.attributes,
-        actions: [
-          ChatUIKitActionItem(
-            title: ChatUIKitLocal.groupDetailViewSend.getString(context),
-            icon: 'assets/images/chat.png',
-            onTap: (context) {
-              Navigator.of(context).pushNamed(
-                ChatUIKitRouteNames.messagesView,
-                arguments: MessagesViewArguments(
-                  profile: profile,
-                  attributes: widget.attributes,
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
+    if (ChatUIKitRoute.hasInit) {
+      ChatUIKitRoute.pushNamed(
+        context,
+        ChatUIKitRouteNames.contactDetailsView,
+        ContactDetailsViewArguments(
+          profile: profile,
+          attributes: widget.attributes,
+          actions: [
+            ChatUIKitActionModel(
+              title: ChatUIKitLocal.groupDetailViewSend.getString(context),
+              icon: 'assets/images/chat.png',
+              onTap: (context) {
+                ChatUIKitRoute.pushNamed(
+                  context,
+                  ChatUIKitRouteNames.messagesView,
+                  MessagesViewArguments(
+                    profile: profile,
+                    attributes: widget.attributes,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    } else {
+      ChatUIKitRoute.push(
+        context,
+        ContactDetailsView(
+          profile: profile,
+          attributes: widget.attributes,
+          actions: [
+            ChatUIKitActionModel(
+              title: ChatUIKitLocal.groupDetailViewSend.getString(context),
+              icon: 'assets/images/chat.png',
+              onTap: (context) {
+                ChatUIKitRoute.push(
+                  context,
+                  MessagesView(
+                    profile: profile,
+                    attributes: widget.attributes,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   void pushNewRequestDetails(ChatUIKitProfile profile) {
@@ -280,64 +318,86 @@ class _GroupMembersViewState extends State<GroupMembersView>
       }
     }
 
-    await Navigator.of(context)
-        .pushNamed(
+    Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        return ChatUIKitRoute.pushNamed(
+          context,
           ChatUIKitRouteNames.groupAddMembersView,
-          arguments: GroupAddMembersViewArguments(
+          GroupAddMembersViewArguments(
             groupId: widget.profile.id,
             inGroupMembers: members,
+            attributes: widget.attributes,
           ),
-        )
-        .then((value) {
-          if (value != null && value is List<ChatUIKitProfile>) {
-            List<ContactItemModel> models = [];
-            List<String> userIds = [];
-            for (var item in value) {
-              userIds.add(item.id);
-              models.add(ContactItemModel(profile: item));
-            }
-            ChatUIKit.instance.addGroupMembers(
-              groupId: widget.profile.id,
-              members: userIds,
-            );
+        );
+      } else {
+        return ChatUIKitRoute.push(
+          context,
+          GroupAddMembersView(
+            groupId: widget.profile.id,
+            inGroupMembers: members,
+            attributes: widget.attributes,
+          ),
+        );
+      }
+    }).then((value) {
+      if (value != null && value is List<ChatUIKitProfile>) {
+        List<ContactItemModel> models = [];
+        List<String> userIds = [];
+        for (var item in value) {
+          userIds.add(item.id);
+          models.add(ContactItemModel(profile: item));
+        }
+        ChatUIKit.instance.addGroupMembers(
+          groupId: widget.profile.id,
+          members: userIds,
+        );
 
-            controller.list.addAll(models);
-            controller.refresh();
-          }
-        })
-        .then((value) {})
-        .catchError((e) {});
+        controller.list.addAll(models);
+        controller.refresh();
+      }
+    }).catchError((e) {});
   }
 
   void pushToRemoveMember() {
-    Navigator.of(context)
-        .pushNamed(
+    Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        return ChatUIKitRoute.pushNamed(
+          context,
           ChatUIKitRouteNames.groupDeleteMembersView,
-          arguments:
-              GroupDeleteMembersViewArguments(groupId: widget.profile.id),
-        )
-        .then((value) {
-          if (value != null && value is List<ChatUIKitProfile>) {
-            List<String> userIds = [];
-            for (var item in value) {
-              userIds.add(item.id);
-            }
-            ChatUIKit.instance.deleteGroupMembers(
-              groupId: widget.profile.id,
-              members: userIds,
-            );
+          GroupDeleteMembersViewArguments(
+            groupId: widget.profile.id,
+            attributes: widget.attributes,
+          ),
+        );
+      } else {
+        return ChatUIKitRoute.push(
+          context,
+          GroupDeleteMembersView(
+            groupId: widget.profile.id,
+            attributes: widget.attributes,
+          ),
+        );
+      }
+    }).then((value) {
+      if (value != null && value is List<ChatUIKitProfile>) {
+        List<String> userIds = [];
+        for (var item in value) {
+          userIds.add(item.id);
+        }
+        ChatUIKit.instance.deleteGroupMembers(
+          groupId: widget.profile.id,
+          members: userIds,
+        );
 
-            for (var userId in userIds) {
-              controller.list.removeWhere((element) {
-                return (element is ContactItemModel &&
-                    element.profile.id == userId);
-              });
-            }
-            controller.refresh();
-          }
-        })
-        .then((value) {})
-        .catchError((e) {});
+        for (var userId in userIds) {
+          controller.list.removeWhere((element) {
+            return (element is ContactItemModel &&
+                element.profile.id == userId);
+          });
+        }
+        controller.refresh();
+      }
+    }).catchError((e) {});
   }
 
   void onSearchTap(List<ContactItemModel> data) async {
