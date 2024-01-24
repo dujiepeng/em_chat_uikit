@@ -80,6 +80,7 @@ class _ConversationsViewState extends State<ConversationsView> {
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
     Widget content = Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: theme.color.isDark
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,

@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit_example/notifications/theme_notification.dart';
 import 'package:em_chat_uikit_example/pages/contact/contact_page.dart';
 import 'package:em_chat_uikit_example/pages/conversation/conversation_page.dart';
 import 'package:em_chat_uikit_example/pages/me/my_page.dart';
@@ -45,11 +46,7 @@ class _HomePageState extends State<HomePage>
   }
 
   List<Widget> _pages(BuildContext context) {
-    return [
-      const ConversationPage(),
-      const ContactPage(),
-      const MyPage(),
-    ];
+    return const [ConversationPage(), ContactPage(), MyPage()];
   }
 
   @override
@@ -64,24 +61,22 @@ class _HomePageState extends State<HomePage>
       bottomNavigationBar: BottomNavigationBar(
         elevation: 1,
         selectedLabelStyle: TextStyle(
-          fontSize: ChatUIKitTheme.of(context).font.labelExtraSmall.fontSize,
-          fontWeight:
-              ChatUIKitTheme.of(context).font.labelExtraSmall.fontWeight,
+          fontSize: theme.font.labelExtraSmall.fontSize,
+          fontWeight: theme.font.labelExtraSmall.fontWeight,
         ),
         unselectedLabelStyle: TextStyle(
-          fontSize: ChatUIKitTheme.of(context).font.labelExtraSmall.fontSize,
-          fontWeight:
-              ChatUIKitTheme.of(context).font.labelExtraSmall.fontWeight,
+          fontSize: theme.font.labelExtraSmall.fontSize,
+          fontWeight: theme.font.labelExtraSmall.fontWeight,
         ),
-        backgroundColor: ChatUIKitTheme.of(context).color.isDark
-            ? ChatUIKitTheme.of(context).color.neutralColor1
-            : ChatUIKitTheme.of(context).color.neutralColor98,
-        selectedItemColor: ChatUIKitTheme.of(context).color.isDark
-            ? ChatUIKitTheme.of(context).color.primaryColor6
-            : ChatUIKitTheme.of(context).color.primaryColor5,
-        unselectedItemColor: ChatUIKitTheme.of(context).color.isDark
-            ? ChatUIKitTheme.of(context).color.neutralColor3
-            : ChatUIKitTheme.of(context).color.neutralColor5,
+        backgroundColor: theme.color.isDark
+            ? theme.color.neutralColor1
+            : theme.color.neutralColor98,
+        selectedItemColor: theme.color.isDark
+            ? theme.color.primaryColor6
+            : theme.color.primaryColor5,
+        unselectedItemColor: theme.color.isDark
+            ? theme.color.neutralColor3
+            : theme.color.neutralColor5,
         onTap: (value) {
           setState(() {
             _currentIndex = value;
@@ -147,6 +142,16 @@ class _HomePageState extends State<HomePage>
     content = ToastPage(child: content);
 
     content = UserProviderWidget(child: content);
+
+    content = NotificationListener(
+      onNotification: (notification) {
+        if (notification is ThemeNotification) {
+          setState(() {});
+        }
+        return false;
+      },
+      child: content,
+    );
 
     return content;
   }

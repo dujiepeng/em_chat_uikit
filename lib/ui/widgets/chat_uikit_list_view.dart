@@ -225,10 +225,18 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
       child: content,
     );
 
+    content = Container(
+      color: theme.color.isDark
+          ? theme.color.neutralColor1
+          : theme.color.neutralColor98,
+      child: content,
+    );
+
     return content;
   }
 
   Widget fakeSearchBar() {
+    final theme = ChatUIKitTheme.of(context);
     return SizedBox(
       height: 44,
       child: InkWell(
@@ -247,9 +255,9 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
           decoration: BoxDecoration(
             borderRadius:
                 BorderRadius.circular(CornerRadiusHelper.searchBarRadius(36)),
-            color: ChatUIKitTheme.of(context).color.isDark
-                ? ChatUIKitTheme.of(context).color.neutralColor2
-                : ChatUIKitTheme.of(context).color.neutralColor95,
+            color: theme.color.isDark
+                ? theme.color.neutralColor2
+                : theme.color.neutralColor95,
           ),
           height: 36,
           child: Center(
@@ -259,7 +267,7 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
                 ChatUIKitImageLoader.search(
                   width: 22,
                   height: 22,
-                  color: ChatUIKitTheme.of(context).color.neutralColor3,
+                  color: theme.color.neutralColor3,
                 ),
                 const SizedBox(width: 4),
                 Text(
@@ -268,9 +276,9 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
                           .getString(context),
                   textScaleFactor: 1.0,
                   style: TextStyle(
-                    color: ChatUIKitTheme.of(context).color.isDark
-                        ? ChatUIKitTheme.of(context).color.neutralColor4
-                        : ChatUIKitTheme.of(context).color.neutralColor6,
+                    color: theme.color.isDark
+                        ? theme.color.neutralColor4
+                        : theme.color.neutralColor6,
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,

@@ -1,6 +1,7 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit_example/home_page.dart';
 import 'package:em_chat_uikit_example/login_page.dart';
+import 'package:em_chat_uikit_example/notifications/theme_notification.dart';
 import 'package:em_chat_uikit_example/pages/me/change_avatar_page.dart';
 import 'package:em_chat_uikit_example/pages/me/personal_info_page.dart';
 import 'package:em_chat_uikit_example/pages/tool/chat_route_filter.dart';
@@ -26,8 +27,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool isLight = true;
   final ChatUIKitLocalizations _localization = ChatUIKitLocalizations();
+  bool isLight = true;
   @override
   void initState() {
     super.initState();
@@ -35,7 +36,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // isLight = !isLight;
     ChatUIKitSettings.avatarRadius = CornerRadius.medium;
 
     return MaterialApp(
@@ -48,12 +48,26 @@ class _MyAppState extends State<MyApp> {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
       ),
-      builder: EasyLoading.init(builder: (context, child) {
-        return ChatUIKitTheme(
-          color: isLight ? ChatUIKitColor.light() : ChatUIKitColor.dark(),
-          child: child!,
-        );
-      }),
+      builder: EasyLoading.init(
+        builder: (context, child) {
+          return NotificationListener(
+            onNotification: (notification) {
+              if (notification is ThemeNotification) {
+                setState(() {
+                  ThemeNotification.isLight = !ThemeNotification.isLight;
+                });
+              }
+              return false;
+            },
+            child: ChatUIKitTheme(
+              color: ThemeNotification.isLight
+                  ? ChatUIKitColor.light()
+                  : ChatUIKitColor.dark(),
+              child: child!,
+            ),
+          );
+        },
+      ),
       home: const WelcomePage(),
       onGenerateRoute: (settings) {
         RouteSettings newSettings = ChatRouteFilter.chatRouteSettings(settings);

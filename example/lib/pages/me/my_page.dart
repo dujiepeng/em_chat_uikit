@@ -1,4 +1,6 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:em_chat_uikit_example/notifications/theme_notification.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,7 +13,7 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> with ChatUIKitProviderObserver {
   UserData? _userData;
-
+  bool isLight = true;
   @override
   void initState() {
     super.initState();
@@ -150,6 +152,16 @@ class _MyPageState extends State<MyPage> with ChatUIKitProviderObserver {
             title: '通用',
           ),
         ),
+        ListItem(
+          imageWidget: Image.asset('assets/images/settings.png'),
+          title: '切换主题',
+          trailingWidget: CupertinoSwitch(
+              value: ThemeNotification.isLight,
+              onChanged: (value) {
+                ThemeNotification().dispatch(context);
+                setState(() {});
+              }),
+        ),
         InkWell(
           onTap: nonsupport,
           child: ListItem(
@@ -169,7 +181,7 @@ class _MyPageState extends State<MyPage> with ChatUIKitProviderObserver {
           child: ListItem(
             imageWidget: Image.asset('assets/images/info.png'),
             title: '关于',
-            trailing: 'Easemob UIKit v2.0.0',
+            trailingString: 'Easemob UIKit v2.0.0',
           ),
         ),
         const SizedBox(height: 16),
@@ -250,14 +262,16 @@ class ListItem extends StatelessWidget {
   const ListItem({
     required this.imageWidget,
     required this.title,
-    this.trailing,
+    this.trailingString,
+    this.trailingWidget,
     this.enableArrow = false,
     super.key,
   });
 
   final Widget imageWidget;
   final String title;
-  final String? trailing;
+  final String? trailingString;
+  final Widget? trailingWidget;
   final bool enableArrow;
 
   @override
@@ -285,18 +299,20 @@ class ListItem extends StatelessWidget {
             ),
           ),
           Expanded(child: Container()),
-          Text(
-            trailing ?? '',
-            textAlign: TextAlign.right,
-            textScaleFactor: 1.0,
-            style: TextStyle(
-              fontSize: theme.font.labelMedium.fontSize,
-              fontWeight: theme.font.labelMedium.fontWeight,
-              color: theme.color.isDark
-                  ? theme.color.neutralColor7
-                  : theme.color.neutralColor5,
+          if (trailingWidget != null) trailingWidget!,
+          if (trailingWidget == null)
+            Text(
+              trailingString ?? '',
+              textAlign: TextAlign.right,
+              textScaleFactor: 1.0,
+              style: TextStyle(
+                fontSize: theme.font.labelMedium.fontSize,
+                fontWeight: theme.font.labelMedium.fontWeight,
+                color: theme.color.isDark
+                    ? theme.color.neutralColor7
+                    : theme.color.neutralColor5,
+              ),
             ),
-          ),
           if (enableArrow) const Icon(Icons.arrow_forward_ios, size: 16),
         ],
       ),

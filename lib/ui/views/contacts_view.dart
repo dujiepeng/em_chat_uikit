@@ -70,6 +70,12 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
   }
 
   @override
+  void dispose() {
+    ChatUIKit.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = ChatUIKitTheme.of(context);
     Widget content = Scaffold(
@@ -283,16 +289,9 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
   }
 
   @override
-  void dispose() {
-    ChatUIKit.instance.removeObserver(this);
-
-    super.dispose();
-  }
-
-  @override
   // 用于更新好友请求未读数
   void onContactRequestReceived(String userId, String? reason) {
-    safeSetState(() {});
+    setState(() {});
   }
 
   // 用户更新好友请求未读数
@@ -309,12 +308,6 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
   void onContactDeleted(String userId) {
     if (mounted) {
       controller.reload();
-    }
-  }
-
-  void safeSetState(VoidCallback fn) {
-    if (mounted) {
-      setState(fn);
     }
   }
 }
