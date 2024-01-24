@@ -41,8 +41,9 @@ class GroupChangeOwnerView extends StatefulWidget {
   final void Function(List<ContactItemModel> data)? onSearchTap;
 
   final ChatUIKitContactItemBuilder? listViewItemBuilder;
-  final void Function(ContactItemModel model)? onItemTap;
-  final void Function(ContactItemModel model)? onItemLongPress;
+  final void Function(BuildContext context, ContactItemModel model)? onItemTap;
+  final void Function(BuildContext context, ContactItemModel model)?
+      onItemLongPress;
   final String? fakeSearchHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
@@ -99,7 +100,28 @@ class _GroupChangeOwnerViewState extends State<GroupChangeOwnerView> {
       body: GroupMemberListView(
         groupId: widget.groupId,
         controller: controller,
-        itemBuilder: widget.listViewItemBuilder,
+        itemBuilder: (context, model) {
+          Widget? content = widget.listViewItemBuilder?.call(context, model);
+          content ??= () {
+            Widget? item;
+            item ??= InkWell(
+              onTap: () {
+                if (widget.onItemTap != null) {
+                  widget.onItemTap?.call(context, model);
+                } else {
+                  showConfirmDialog(context, model);
+                }
+              },
+              onLongPress: () {
+                widget.onItemTap?.call(context, model);
+              },
+              child: ChatUIKitContactListViewItem(model),
+            );
+
+            return item;
+          }();
+          return content;
+        },
         searchHideText: widget.fakeSearchHideText,
         background: widget.listViewBackground,
         onTap: showConfirmDialog,

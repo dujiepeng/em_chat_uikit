@@ -150,6 +150,15 @@ mixin ChatUIKitLocal {
   static const groupDeleteMembersViewSearchMember =
       'group_delete_member_view_search_member';
   static const groupDeleteMembersViewDelete = 'group_delete_member_view_delete';
+
+  static const groupDeleteMembersViewAlertTitle =
+      'group_delete_member_view_alert_title';
+  static const groupDeleteMembersViewAlertSubTitle =
+      'group_delete_member_view_alert_sub_title';
+  static const groupDeleteMembersViewAlertButtonConfirm =
+      'group_delete_member_view_alert_button_confirm';
+  static const groupDeleteMembersViewAlertButtonCancel =
+      'group_delete_member_view_alert_button_cancel';
   static const groupMembersViewTitle = 'group_members_view_title';
   static const groupMembersSearch = 'group_members_view_search';
   static const groupChangeOwnerViewTitle = 'group_change_owner_view_title';
@@ -357,6 +366,10 @@ mixin ChatUIKitLocal {
     groupDeleteMembersViewTitle: '移除群成员',
     groupDeleteMembersViewSearchMember: '搜索',
     groupDeleteMembersViewDelete: '删除',
+    groupDeleteMembersViewAlertTitle: '移除群成员',
+    groupDeleteMembersViewAlertSubTitle: '你确定要移除该群成员吗？',
+    groupDeleteMembersViewAlertButtonConfirm: '移除',
+    groupDeleteMembersViewAlertButtonCancel: '取消',
     groupMembersViewTitle: '群成员',
     groupMembersSearch: '搜索群成员',
     groupChangeOwnerViewTitle: '选择新群主',
@@ -522,6 +535,11 @@ mixin ChatUIKitLocal {
     groupDeleteMembersViewTitle: 'Remove Group Members',
     groupDeleteMembersViewSearchMember: 'Search Members',
     groupDeleteMembersViewDelete: 'Delete',
+    groupDeleteMembersViewAlertTitle: 'Remove Group Members',
+    groupDeleteMembersViewAlertSubTitle:
+        'Are you sure you want to remove this group member(s)?',
+    groupDeleteMembersViewAlertButtonConfirm: 'Confirm',
+    groupDeleteMembersViewAlertButtonCancel: 'Cancel',
     groupMembersViewTitle: 'Group Members',
     groupMembersSearch: 'Search Members',
     groupChangeOwnerViewTitle: 'Select new owner',

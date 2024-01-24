@@ -99,7 +99,7 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
                     if (selectedProfiles.value.isEmpty) {
                       return;
                     }
-                    Navigator.of(context).pop(selectedProfiles.value);
+                    ensureDelete();
                   },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(24, 5, 24, 5),
@@ -114,8 +114,12 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
                           textScaleFactor: 1.0,
                           style: TextStyle(
                             color: theme.color.isDark
-                                ? theme.color.primaryColor6
-                                : theme.color.primaryColor5,
+                                ? value.isEmpty
+                                    ? theme.color.neutralColor5
+                                    : theme.color.primaryColor6
+                                : value.isEmpty
+                                    ? theme.color.neutralColor7
+                                    : theme.color.primaryColor5,
                             fontWeight: theme.font.labelMedium.fontWeight,
                             fontSize: theme.font.labelMedium.fontSize,
                           ),
@@ -238,5 +242,27 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
       list.add(profile);
     }
     selectedProfiles.value = [...list];
+  }
+
+  void ensureDelete() async {
+    showChatUIKitDialog(
+      context: context,
+      title: ChatUIKitLocal.groupDeleteMembersViewAlertTitle.getString(context),
+      content:
+          ChatUIKitLocal.groupDeleteMembersViewAlertSubTitle.getString(context),
+      items: [
+        ChatUIKitDialogItem.cancel(
+            label: ChatUIKitLocal.groupDeleteMembersViewAlertButtonCancel
+                .getString(context)),
+        ChatUIKitDialogItem.confirm(
+            label: ChatUIKitLocal.groupDeleteMembersViewAlertButtonConfirm
+                .getString(context),
+            onTap: () async => Navigator.of(context).pop(true))
+      ],
+    ).then((value) {
+      if (value == true) {
+        Navigator.of(context).pop(selectedProfiles.value);
+      }
+    });
   }
 }
