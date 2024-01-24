@@ -67,7 +67,7 @@ class _ConversationListViewState extends State<ConversationListView>
   }
 
   @override
-  void onConversationProfilesUpdate(
+  void onProfilesUpdate(
     Map<String, ChatUIKitProfile> map,
   ) {
     controller.reload();

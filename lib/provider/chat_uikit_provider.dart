@@ -1,16 +1,7 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
 abstract mixin class ChatUIKitProviderObserver {
-  void onContactProfilesUpdate(
-    Map<String, ChatUIKitProfile> map,
-  ) {}
-
-  void onConversationProfilesUpdate(
-    Map<String, ChatUIKitProfile> map,
-  ) {}
-
-  void onGroupMemberProfilesUpdate(
-    String groupId,
+  void onProfilesUpdate(
     Map<String, ChatUIKitProfile> map,
   ) {}
 
@@ -19,15 +10,7 @@ abstract mixin class ChatUIKitProviderObserver {
   ) {}
 }
 
-typedef ChatUIKitProviderGroupMembersHandler = List<ChatUIKitProfile>? Function(
-    String groupId, List<ChatUIKitProfile> profiles);
-
-typedef ChatUIKitProviderContactsHandler = List<ChatUIKitProfile>? Function(
-  List<ChatUIKitProfile> profiles,
-);
-
-typedef ChatUIKitProviderConversationsHandler = List<ChatUIKitProfile>?
-    Function(
+typedef ChatUIKitProviderProfileHandler = List<ChatUIKitProfile>? Function(
   List<ChatUIKitProfile> profiles,
 );
 
@@ -40,16 +23,10 @@ class ChatUIKitProvider {
 
   ChatUIKitProvider._internal();
 
-  ChatUIKitProviderGroupMembersHandler? groupMembersHandler;
-  ChatUIKitProviderContactsHandler? contactsHandler;
-  ChatUIKitProviderConversationsHandler? conversationsHandler;
+  ChatUIKitProviderProfileHandler? profilesHandler;
 
   // 缓存 profile, 不需要存；
-  final Map<String, ChatUIKitProfile> _conversationsCache = {};
-  // 缓存 profile, 不需要存；
-  final Map<String, ChatUIKitProfile> _contactsCache = {};
-// 缓存 profile, 不需要存；
-  final Map<String, Map<String, ChatUIKitProfile>> _groupMembersCache = {};
+  final Map<String, ChatUIKitProfile> _profilesCache = {};
 
   final List<ChatUIKitProviderObserver> _observers = [];
 
@@ -78,159 +55,53 @@ class ChatUIKitProvider {
     _observers.clear();
   }
 
-  void clearContactCache() {
-    _contactsCache.clear();
-  }
-
-  void clearConversationCache() {
-    _conversationsCache.clear();
-  }
-
-  void clearGroupMemberCache() {
-    _groupMembersCache.clear();
+  void clearProfilesCache() {
+    _profilesCache.clear();
   }
 
   void clearAllCache() {
-    _contactsCache.clear();
-    _conversationsCache.clear();
-    _groupMembersCache.clear();
+    _profilesCache.clear();
   }
 
-  Map<String, ChatUIKitProfile> conversationProfiles(
-      Map<String, ConversationType> map) {
+  Map<String, ChatUIKitProfile> getProfiles(List<ChatUIKitProfile> profiles) {
     List<ChatUIKitProfile> ret = [];
     List<ChatUIKitProfile> needProviders = [];
-    for (var conversationId in map.keys) {
-      ChatUIKitProfile? profile = _conversationsCache[conversationId];
-      if (profile == null) {
-        if (map[conversationId] == ConversationType.GroupChat) {
-          profile = ChatUIKitProfile.group(id: conversationId);
-        } else {
-          profile = ChatUIKitProfile.contact(id: conversationId);
-        }
+
+    for (var profile in profiles) {
+      ChatUIKitProfile? cachedProfile = _profilesCache[profile.id];
+      if (cachedProfile == null) {
         needProviders.add(profile);
-      }
-      ret.add(profile);
-    }
-
-    if (needProviders.isNotEmpty) {
-      List<ChatUIKitProfile>? tmp = conversationsHandler?.call(needProviders);
-      if (tmp?.isNotEmpty == true) {
-        var result = {for (var element in tmp!) element.id: element};
-        _conversationsCache.addAll(result);
-        ret.removeWhere((element) => result.keys.contains(element.id));
-        ret.addAll(result.values);
-      }
-    }
-
-    return {for (var element in ret) element.id: element};
-  }
-
-  ChatUIKitProfile conversationProfile(
-    String conversationId,
-    ConversationType type,
-  ) {
-    ChatUIKitProfile? profile = _conversationsCache[conversationId];
-    if (profile == null) {
-      if (type == ConversationType.GroupChat) {
-        profile = ChatUIKitProfile.group(id: conversationId);
       } else {
-        profile = ChatUIKitProfile.contact(id: conversationId);
+        ret.add(cachedProfile);
       }
-      conversationsHandler?.call([profile]);
-    }
-    return profile;
-  }
-
-  Map<String, ChatUIKitProfile> contactProfiles(List<String> list) {
-    List<ChatUIKitProfile> ret = [];
-    List<ChatUIKitProfile> needProviders = [];
-    for (var userId in list) {
-      ChatUIKitProfile? profile = _contactsCache[userId];
-      if (profile == null) {
-        profile = ChatUIKitProfile.contact(id: userId);
-        needProviders.add(profile);
-      }
-      ret.add(profile);
     }
 
     if (needProviders.isNotEmpty) {
-      List<ChatUIKitProfile>? tmp = contactsHandler?.call(needProviders);
+      List<ChatUIKitProfile>? tmp = profilesHandler?.call(needProviders);
       if (tmp?.isNotEmpty == true) {
+        needProviders.removeWhere(
+            (element) => tmp!.map((e) => e.id).contains(element.id));
         var result = {for (var element in tmp!) element.id: element};
-        _contactsCache.addAll(result);
+        addProfiles(result.values.toList());
         ret.removeWhere((element) => result.keys.contains(element.id));
         ret.addAll(result.values);
       }
+      ret.addAll(needProviders);
     }
 
     return {for (var element in ret) element.id: element};
   }
 
-  ChatUIKitProfile contactProfile(String userId) {
-    Map<String, ChatUIKitProfile> map = contactProfiles([userId]);
-    return map.values.first;
+  ChatUIKitProfile getProfile(ChatUIKitProfile profile) {
+    return getProfiles([profile])[profile.id]!;
   }
 
-  Map<String, ChatUIKitProfile> groupMemberProfiles(
-      String groupId, List<String> list) {
-    List<ChatUIKitProfile> ret = [];
-    List<ChatUIKitProfile> needProviders = [];
-    for (var userId in list) {
-      if (_groupMembersCache[groupId] == null) {
-        _groupMembersCache[groupId] = {};
-      }
-      ChatUIKitProfile? profile = _groupMembersCache[groupId]![userId];
-      if (profile == null) {
-        profile = ChatUIKitProfile.contact(id: userId);
-        needProviders.add(profile);
-      }
-      ret.add(profile);
-    }
-
-    if (needProviders.isNotEmpty) {
-      List<ChatUIKitProfile>? tmp =
-          groupMembersHandler?.call(groupId, needProviders);
-      if (tmp?.isNotEmpty == true) {
-        var result = {for (var element in tmp!) element.id: element};
-        _groupMembersCache[groupId] = result;
-        ret.removeWhere((element) => result.keys.contains(element.id));
-        ret.addAll(result.values);
-      }
-    }
-
-    return {for (var element in ret) element.id: element};
-  }
-
-  ChatUIKitProfile groupMemberProfile(String groupId, String userId) {
-    Map<String, ChatUIKitProfile> map = groupMemberProfiles(groupId, [userId]);
-    return map.values.first;
-  }
-
-  void addContactProfiles(List<ChatUIKitProfile> list) {
+  void addProfiles(List<ChatUIKitProfile> list) {
     var result = {for (var element in list) element.id: element};
-    _contactsCache.addAll(result);
+    _profilesCache.addAll(result);
 
     for (var observer in _observers) {
-      observer.onContactProfilesUpdate(result);
-    }
-  }
-
-  void addConversationProfiles(List<ChatUIKitProfile> list) {
-    var result = {for (var element in list) element.id: element};
-    _conversationsCache.addAll(result);
-
-    for (var observer in _observers) {
-      observer.onConversationProfilesUpdate(result);
-    }
-  }
-
-  void addGroupMemberProfiles(String groupId, List<ChatUIKitProfile> list) {
-    var result = {for (var element in list) element.id: element};
-    _groupMembersCache[groupId]?.addAll(result);
-
-    for (var observer in _observers) {
-      observer.onGroupMemberProfilesUpdate(groupId, result);
+      observer.onProfilesUpdate(result);
     }
   }
 }

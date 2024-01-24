@@ -11,31 +11,33 @@ class ChatUIKitProfile {
   final String? name;
   final String? avatarUrl;
   final ChatUIKitProfileType? type;
-  final int updateTime;
   final Map<String, String>? extension;
+  final int timestamp;
 
   String get showName => name?.isNotEmpty == true ? name! : id;
 
   ChatUIKitProfile({
     required this.id,
+    required this.type,
     this.name,
     this.avatarUrl,
-    this.type,
     this.extension,
-    int? updateTime,
-  }) : updateTime = updateTime ?? -1;
+    this.timestamp = 0,
+  });
 
   ChatUIKitProfile.contact({
     required String id,
     String? name,
     String? avatarUrl,
     Map<String, String>? extension,
+    int timestamp = 0,
   }) : this(
           id: id,
           name: name,
           avatarUrl: avatarUrl,
           type: ChatUIKitProfileType.contact,
           extension: extension,
+          timestamp: timestamp,
         );
 
   ChatUIKitProfile.group({
@@ -43,26 +45,29 @@ class ChatUIKitProfile {
     String? name,
     String? avatarUrl,
     Map<String, String>? extension,
+    int timestamp = 0,
   }) : this(
           id: id,
           name: name,
           avatarUrl: avatarUrl,
           type: ChatUIKitProfileType.group,
           extension: extension,
+          timestamp: timestamp,
         );
 
   ChatUIKitProfile copy({
     String? name,
     String? avatarUrl,
     Map<String, String>? extension,
+    int timestamp = 0,
   }) {
     return ChatUIKitProfile(
       id: id,
       name: name ?? this.name,
       avatarUrl: avatarUrl ?? this.avatarUrl,
       type: type,
-      updateTime: DateTime.now().millisecondsSinceEpoch,
       extension: extension ?? this.extension,
+      timestamp: timestamp,
     );
   }
 }

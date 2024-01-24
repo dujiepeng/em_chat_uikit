@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
+import 'package:flutter/foundation.dart';
 
 typedef ConversationListViewShowHandler = List<ConversationModel> Function(
     List<ConversationModel> conversations);
@@ -35,6 +36,7 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
         loadingType.value = ChatUIKitListViewType.normal;
       }
     } catch (e) {
+      debugPrintStack();
       loadingType.value = ChatUIKitListViewType.error;
     }
   }
@@ -117,12 +119,20 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
 
   Future<List<ConversationModel>> mappers(
       List<Conversation> conversations) async {
-    Map<String, ConversationType> map = {
-      for (var element in conversations) element.id: element.type
-    };
+    List<ChatUIKitProfile> tmp = () {
+      List<ChatUIKitProfile> ret = [];
+      for (var item in conversations) {
+        if (item.type == ConversationType.GroupChat) {
+          ret.add(ChatUIKitProfile.group(id: item.id));
+        } else if (item.type == ConversationType.Chat) {
+          ret.add(ChatUIKitProfile.contact(id: item.id));
+        }
+      }
+      return ret;
+    }();
 
     Map<String, ChatUIKitProfile> profilesMap =
-        ChatUIKitProvider.instance.conversationProfiles(map);
+        ChatUIKitProvider.instance.getProfiles(tmp);
     List<ConversationModel> list = [];
     for (var item in conversations) {
       ConversationModel info = await ConversationModel.fromConversation(

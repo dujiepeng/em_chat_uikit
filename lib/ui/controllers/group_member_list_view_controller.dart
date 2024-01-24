@@ -86,7 +86,13 @@ class GroupMemberListViewController with ChatUIKitListViewControllerBase {
   List<ContactItemModel> mappers(List<String> contacts) {
     List<ContactItemModel> mapperList = [];
     Map<String, ChatUIKitProfile> map =
-        ChatUIKitProvider.instance.groupMemberProfiles(groupId, contacts);
+        ChatUIKitProvider.instance.getProfiles(() {
+      List<ChatUIKitProfile> profile = [];
+      for (var item in contacts) {
+        profile.add(ChatUIKitProfile.contact(id: item));
+      }
+      return profile;
+    }());
     for (var item in contacts) {
       ContactItemModel info = ContactItemModel.fromProfile(map[item]!);
       mapperList.add(info);

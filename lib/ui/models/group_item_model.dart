@@ -19,12 +19,7 @@ class GroupItemModel with ChatUIKitListItemModelBase, NeedSearch {
     return profile.avatarUrl;
   }
 
-  static GroupItemModel fromGroup(Group group) {
-    // 因为不需要向用户要群组的Profile,所以单独创建一个profile。
-    ChatUIKitProfile profile = ChatUIKitProfile.group(
-      id: group.groupId,
-      name: group.name,
-    );
+  static GroupItemModel fromProfile(ChatUIKitProfile profile) {
     return GroupItemModel(profile: profile);
   }
 }

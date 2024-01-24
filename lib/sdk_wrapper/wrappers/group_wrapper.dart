@@ -288,4 +288,20 @@ mixin GroupWrapper on ChatUIKitWrapperBase {
       }
     }
   }
+
+  void onGroupCreatedByMyself(Group group) {
+    for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
+      if (observer is GroupObserver) {
+        observer.onGroupCreatedByMyself(group);
+      }
+    }
+  }
+
+  void onGroupInfoChangedByMeSelf(Group group) {
+    for (var observer in List<ChatUIKitObserverBase>.of(observers)) {
+      if (observer is GroupObserver) {
+        observer.onGroupInfoChangedByMeSelf(group);
+      }
+    }
+  }
 }

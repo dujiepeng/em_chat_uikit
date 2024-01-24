@@ -49,18 +49,24 @@ class GroupsView extends StatefulWidget {
 
 class _GroupsViewState extends State<GroupsView> {
   late final GroupListViewController controller;
+  ValueNotifier<int> joinedCount = ValueNotifier(0);
 
-  int? joinedCount;
   @override
   void initState() {
     super.initState();
     controller = widget.controller ?? GroupListViewController();
     ChatUIKit.instance.fetchJoinedGroupCount().then((value) {
       if (mounted) {
-        joinedCount = value;
+        joinedCount.value = value;
         safeSetState(() {});
       }
     }).catchError((e) {});
+  }
+
+  @override
+  void dispose() {
+    joinedCount.dispose();
+    super.dispose();
   }
 
   void safeSetState(VoidCallback fn) {
@@ -86,29 +92,35 @@ class _GroupsViewState extends State<GroupsView> {
                   onTap: () {
                     Navigator.maybePop(context);
                   },
-                  child: Text(
-                    "${ChatUIKitLocal.groupsViewTitle.getString(context)}${joinedCount != null ? '($joinedCount)' : ''}",
-                    textScaleFactor: 1.0,
-                    style: TextStyle(
-                      fontWeight: theme.font.titleMedium.fontWeight,
-                      fontSize: theme.font.titleMedium.fontSize,
-                      color: theme.color.isDark
-                          ? theme.color.neutralColor98
-                          : theme.color.neutralColor1,
-                    ),
+                  child: ValueListenableBuilder<int>(
+                    valueListenable: joinedCount,
+                    builder: (context, value, child) {
+                      return Text(
+                        "${ChatUIKitLocal.groupsViewTitle.getString(context)}${value != 0 ? '($value)' : ''}",
+                        textScaleFactor: 1.0,
+                        style: TextStyle(
+                          fontWeight: theme.font.titleMedium.fontWeight,
+                          fontSize: theme.font.titleMedium.fontSize,
+                          color: theme.color.isDark
+                              ? theme.color.neutralColor98
+                              : theme.color.neutralColor1,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
       body: SafeArea(
-          child: GroupListView(
-        controller: controller,
-        itemBuilder: widget.listViewItemBuilder,
-        searchHideText: widget.fakeSearchHideText,
-        background: widget.listViewBackground,
-        errorMessage: widget.loadErrorMessage,
-        onTap: widget.onTap ?? tapGroupInfo,
-        onLongPress: widget.onLongPress,
-      )),
+        child: GroupListView(
+          controller: controller,
+          itemBuilder: widget.listViewItemBuilder,
+          searchHideText: widget.fakeSearchHideText,
+          background: widget.listViewBackground,
+          errorMessage: widget.loadErrorMessage,
+          onTap: widget.onTap ?? tapGroupInfo,
+          onLongPress: widget.onLongPress,
+        ),
+      ),
     );
 
     return content;
@@ -164,12 +176,15 @@ class _GroupsViewState extends State<GroupsView> {
         );
       }
     }).then((value) {
-      if (value != null && value == true) {
-        controller.list.removeWhere((element) {
-          return element is GroupItemModel &&
-              element.profile.id == model.profile.id;
-        });
-        controller.refresh();
+      ChatUIKitRouteBackModel? model = ChatUIKitRoute.lastModel;
+      if (model != null) {
+        if (model.type == ChatUIKitRouteBackType.remove) {
+          controller.list.removeWhere((element) {
+            return element is GroupItemModel &&
+                element.profile.id == model.profileId;
+          });
+          controller.refresh();
+        }
       }
     });
   }

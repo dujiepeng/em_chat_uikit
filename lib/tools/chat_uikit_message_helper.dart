@@ -7,6 +7,16 @@ import '../universal/defines.dart';
 extension MessageHelper on Message {
   MessageType get bodyType => body.type;
 
+  ChatUIKitProfile get fromProfile {
+    return ChatUIKitProvider.instance.getProfile(
+      ChatUIKitProfile.contact(
+        id: from!,
+        avatarUrl: avatarUrl,
+        name: nickname,
+      ),
+    );
+  }
+
   String? get avatarUrl {
     Map? userInfo = attributes?[msgUserInfoKey];
     return userInfo?[userAvatarKey];
@@ -243,8 +253,9 @@ extension MessageHelper on Message {
               showName =
                   ChatUIKitLocal.messagesViewRecallInfoYou.getString(context!);
             } else {
-              ChatUIKitProfile profile =
-                  ChatUIKitProvider.instance.contactProfile(from ?? '');
+              ChatUIKitProfile profile = ChatUIKitProvider.instance.getProfile(
+                ChatUIKitProfile.contact(id: from!),
+              );
               showName = profile.showName;
             }
             return '$showName${ChatUIKitLocal.messagesViewRecallInfo.getString(context!)}';

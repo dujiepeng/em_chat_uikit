@@ -4,7 +4,7 @@ const String userAvatarKey = "avatarURL";
 const String userNicknameKey = "nickname";
 const String cardMessageKey = "userCard";
 const String cardNicknameKey = "nickname";
-const String cardUserIdKey = "userId";
+const String cardUserIdKey = "uid";
 const String cardAvatarKey = "avatar";
 
 const String quoteKey = 'msgQuote';

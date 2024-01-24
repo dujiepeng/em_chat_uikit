@@ -76,11 +76,13 @@ class _MessageListViewState extends State<MessageListView> {
           controller.lastActionType == MessageLastActionType.send) {
         setState(() {});
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          scrollController.animateTo(
-            0,
-            duration: const Duration(milliseconds: 100),
-            curve: Curves.linear,
-          );
+          if (scrollController.positions.isNotEmpty) {
+            scrollController.animateTo(
+              0,
+              duration: const Duration(milliseconds: 100),
+              curve: Curves.linear,
+            );
+          }
         });
       }
     });

@@ -11,15 +11,20 @@ class UserProviderWidget extends StatefulWidget {
   State<UserProviderWidget> createState() => _UserProviderWidgetState();
 }
 
-class _UserProviderWidgetState extends State<UserProviderWidget> {
+class _UserProviderWidgetState extends State<UserProviderWidget>
+    with GroupObserver {
   late SharedPreferences sharedPreferences;
   @override
   void initState() {
     super.initState();
+    ChatUIKit.instance.addObserver(this);
+    ChatUIKitProvider.instance.profilesHandler = _profilesHandler;
+  }
 
-    ChatUIKitProvider.instance.contactsHandler = _contactsHandler;
-    ChatUIKitProvider.instance.conversationsHandler = _conversationsHandler;
-    ChatUIKitProvider.instance.groupMembersHandler = _groupMembersHandler;
+  @override
+  void dispose() {
+    ChatUIKit.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
@@ -27,36 +32,36 @@ class _UserProviderWidgetState extends State<UserProviderWidget> {
     return widget.child;
   }
 
-  List<ChatUIKitProfile>? _contactsHandler(
+  List<ChatUIKitProfile>? _profilesHandler(
     List<ChatUIKitProfile> profiles,
   ) {
     List<ChatUIKitProfile> list = [];
-    for (var i = 0; i < profiles.length; i++) {
-      list.add(
-        profiles[i].copy(
-            name: profiles[i].id, avatarUrl: RemoteAvatars.getRandomAvatar),
-      );
+
+    for (var profile in profiles) {
+      if (profile.type == ChatUIKitProfileType.contact) {
+        list.add(
+          profile.copy(
+            name: profile.showName,
+            avatarUrl: RemoteAvatars.getRandomAvatar,
+          ),
+        );
+      }
     }
+
     return list;
   }
 
-  List<ChatUIKitProfile>? _conversationsHandler(
-    List<ChatUIKitProfile> profiles,
-  ) {
-    List<ChatUIKitProfile> list = [];
-    for (var i = 0; i < profiles.length; i++) {
-      list.add(
-        profiles[i].copy(
-            name: profiles[i].id, avatarUrl: RemoteAvatars.getRandomAvatar),
-      );
-    }
-    return list;
+  @override
+  void onGroupInfoChangedByMeSelf(Group group) {
+    ChatUIKitProvider.instance.addProfiles(
+      [ChatUIKitProfile.group(id: group.groupId, name: group.name)],
+    );
   }
 
-  List<ChatUIKitProfile>? _groupMembersHandler(
-    String groupId,
-    List<ChatUIKitProfile> profiles,
-  ) {
-    return null;
+  @override
+  void onGroupCreatedByMyself(Group group) {
+    ChatUIKitProvider.instance.addProfiles(
+      [ChatUIKitProfile.group(id: group.groupId, name: group.name)],
+    );
   }
 }

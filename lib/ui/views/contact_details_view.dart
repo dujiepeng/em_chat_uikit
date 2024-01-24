@@ -74,30 +74,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
   }
 
   @override
-  void onContactProfilesUpdate(
-    Map<String, ChatUIKitProfile> map,
-  ) {
-    if (map.keys.contains(profile?.id)) {
-      safeSetState(() {
-        profile = map[profile?.id];
-      });
-    }
-  }
-
-  @override
-  void onConversationProfilesUpdate(
-    Map<String, ChatUIKitProfile> map,
-  ) {
-    if (map.keys.contains(profile?.id)) {
-      safeSetState(() {
-        profile = map[profile?.id];
-      });
-    }
-  }
-
-  @override
-  void onGroupMemberProfilesUpdate(
-    String groupId,
+  void onProfilesUpdate(
     Map<String, ChatUIKitProfile> map,
   ) {
     if (map.keys.contains(profile?.id)) {

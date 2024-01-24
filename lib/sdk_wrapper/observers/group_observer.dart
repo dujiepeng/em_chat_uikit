@@ -1,5 +1,3 @@
-
-
 import 'package:em_chat_uikit/sdk_wrapper/chat_sdk_wrapper.dart';
 
 abstract mixin class GroupObserver implements ChatUIKitObserverBase {
@@ -38,4 +36,6 @@ abstract mixin class GroupObserver implements ChatUIKitObserverBase {
   void onUserRemovedFromGroup(String groupId, String? groupName) {}
   void onAttributesChangedOfGroupMember(String groupId, String userId,
       Map<String, String>? attributes, String? operatorId) {}
+  void onGroupCreatedByMyself(Group group) {}
+  void onGroupInfoChangedByMeSelf(Group group) {}
 }

@@ -48,10 +48,34 @@ class GroupListViewController with ChatUIKitListViewControllerBase {
     refresh();
   }
 
+  void addNewGroup(String groupId) async {
+    Group? group = await ChatUIKit.instance.getGroup(groupId: groupId);
+    if (group == null) return;
+    GroupItemModel info = GroupItemModel.fromProfile(
+      ChatUIKitProfile.group(
+        id: group.groupId,
+        name: group.name,
+      ),
+    );
+    list.insert(0, info);
+    refresh();
+  }
+
   List<GroupItemModel> mappers(List<Group> groups) {
     List<GroupItemModel> list = [];
-    for (var item in groups) {
-      GroupItemModel info = GroupItemModel.fromGroup(item);
+    Map<String, ChatUIKitProfile> map =
+        ChatUIKitProvider.instance.getProfiles(() {
+      List<ChatUIKitProfile> list = [];
+      for (var item in groups) {
+        list.add(ChatUIKitProfile.group(
+          id: item.groupId,
+          name: item.name,
+        ));
+      }
+      return list;
+    }());
+    for (var item in map.entries) {
+      GroupItemModel info = GroupItemModel.fromProfile(item.value);
       list.add(info);
     }
     return list;

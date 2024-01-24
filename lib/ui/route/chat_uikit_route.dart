@@ -7,9 +7,38 @@ typedef ChatUIKitWidgetBuilder = Widget Function(
   Object? arguments,
 );
 
+enum ChatUIKitRouteBackType { add, remove, update }
+
+class ChatUIKitRouteBackModel {
+  ChatUIKitRouteBackModel.update(this.profileId)
+      : type = ChatUIKitRouteBackType.update;
+
+  ChatUIKitRouteBackModel.add(this.profileId)
+      : type = ChatUIKitRouteBackType.add;
+
+  ChatUIKitRouteBackModel.remove(this.profileId)
+      : type = ChatUIKitRouteBackType.remove;
+
+  const ChatUIKitRouteBackModel({
+    required this.type,
+    required this.profileId,
+  });
+
+  ChatUIKitRouteBackModel copy() {
+    return ChatUIKitRouteBackModel(
+      type: type,
+      profileId: profileId,
+    );
+  }
+
+  final ChatUIKitRouteBackType type;
+  final String profileId;
+}
+
 class ChatUIKitRoute {
   static ChatUIKitRoute? _instance;
   static bool hasInit = false;
+  static ChatUIKitRouteBackModel? _lastBackModel;
 
   factory ChatUIKitRoute() => _instance ??= ChatUIKitRoute._();
 
@@ -131,8 +160,40 @@ class ChatUIKitRoute {
     }),
   };
 
-  static popToRoot(BuildContext context) {
+  static ChatUIKitRouteBackModel? get lastModel {
+    ChatUIKitRouteBackModel? ret = _lastBackModel?.copy();
+    _lastBackModel = null;
+    return ret;
+  }
+
+  static popToRoot(
+    BuildContext context, {
+    ChatUIKitRouteBackModel? model,
+  }) {
+    _lastBackModel = model;
     Navigator.of(context).popUntil((route) => route.isFirst);
+  }
+
+  static popToGroupsView(
+    BuildContext context, {
+    ChatUIKitRouteBackModel? model,
+  }) {
+    _lastBackModel = model;
+    Navigator.of(context).popUntil((route) {
+      return route.settings.name == ChatUIKitRouteNames.groupsView ||
+          route.isFirst;
+    });
+  }
+
+  static popToContactsView(
+    BuildContext context, {
+    ChatUIKitRouteBackModel? model,
+  }) {
+    _lastBackModel = model;
+    Navigator.of(context).popUntil((route) {
+      return route.settings.name == ChatUIKitRouteNames.contactsView ||
+          route.isFirst;
+    });
   }
 
   Route? generateRoute<T extends Object>(RouteSettings settings) {

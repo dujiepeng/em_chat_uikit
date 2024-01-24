@@ -37,10 +37,11 @@ class GroupDetailsView extends StatefulWidget {
 }
 
 class _GroupDetailsViewState extends State<GroupDetailsView>
-    with GroupObserver {
+    with GroupObserver, MultiObserver, ChatUIKitProviderObserver {
   ValueNotifier<bool> isNotDisturb = ValueNotifier<bool>(false);
   int memberCount = 0;
   Group? group;
+  ChatUIKitProfile? profile;
   late final List<ChatUIKitActionModel>? actions;
   @override
   void initState() {
@@ -49,40 +50,83 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         'The number of actions in the list cannot exceed 5');
 
     ChatUIKit.instance.addObserver(this);
+    ChatUIKitProvider.instance.addObserver(this);
     actions = widget.actions;
+    profile = widget.profile;
+    fetchGroupInfos();
+  }
+
+  void fetchGroupInfos() {
     isNotDisturb.value =
-        ChatUIKitContext.instance.conversationIsMute(widget.profile.id);
-    // fetchSilentInfo();
+        ChatUIKitContext.instance.conversationIsMute(profile!.id);
     fetchGroup();
-    // fetchMembersAttrs();
   }
 
   @override
   void dispose() {
     ChatUIKit.instance.removeObserver(this);
+    ChatUIKitProvider.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
+  void onProfilesUpdate(Map<String, ChatUIKitProfile> map) {
+    if (map.keys.contains(profile!.id)) {
+      profile = map[profile!.id];
+      safeSetState(() {});
+    }
+  }
+
+  @override
   void onMemberJoinedFromGroup(String groupId, String member) {
-    if (groupId == widget.profile.id) {
+    if (groupId == profile!.id) {
       memberCount += 1;
     }
   }
 
   @override
   void onMemberExitedFromGroup(String groupId, String member) {
-    if (groupId == widget.profile.id) {
+    if (groupId == profile!.id) {
       memberCount -= 1;
+    }
+  }
+
+  @override
+  void onSpecificationDidUpdate(Group group) {
+    if (group.groupId == profile!.id) {
+      fetchGroup();
+    }
+  }
+
+  @override
+  void onGroupEvent(
+      MultiDevicesEvent event, String groupId, List<String>? userIds) {
+    if (groupId == profile!.id) {
+      if (event == MultiDevicesEvent.GROUP_LEAVE) {
+        ChatUIKitRoute.popToGroupsView(
+          context,
+          model: ChatUIKitRouteBackModel.remove(profile!.id),
+        );
+      }
+
+      if (event == MultiDevicesEvent.GROUP_DESTROY) {
+        ChatUIKitRoute.popToGroupsView(
+          context,
+          model: ChatUIKitRouteBackModel.remove(profile!.id),
+        );
+      }
+
+      if (event == MultiDevicesEvent.GROUP_ASSIGN_OWNER) {
+        fetchGroup();
+      }
     }
   }
 
   void fetchGroup() async {
     try {
       // 本地不准，暂时不使用本地数据。
-      // group = await ChatUIKit.instance.getGroup(groupId: widget.profile.id);
-      group =
-          await ChatUIKit.instance.fetchGroupInfo(groupId: widget.profile.id);
+      // group = await ChatUIKit.instance.getGroup(groupId: profile!.id);
+      group = await ChatUIKit.instance.fetchGroupInfo(groupId: profile!.id);
       memberCount = group?.memberCount ?? 0;
       safeSetState(() {});
       // ignore: empty_catches
@@ -91,19 +135,11 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
 
   void fetchSilentInfo() async {
     Conversation conversation = await ChatUIKit.instance.createConversation(
-        conversationId: widget.profile.id, type: ConversationType.GroupChat);
+        conversationId: profile!.id, type: ConversationType.GroupChat);
     Map<String, ChatSilentModeResult> map = await ChatUIKit.instance
         .fetchSilentModel(conversations: [conversation]);
     isNotDisturb.value = map.values.first.remindType != ChatPushRemindType.ALL;
   }
-
-/*
-  void fetchMembersAttrs() async {
-    await ChatUIKit.instance.fetchGroupMemberAttributes(
-      groupId: widget.profile.id,
-    );
-  }
-*/
 
   void safeSetState(VoidCallback fn) {
     if (mounted) {
@@ -145,7 +181,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     Widget avatar = statusAvatar();
 
     Widget name = Text(
-      widget.profile.showName,
+      profile!.showName,
       overflow: TextOverflow.ellipsis,
       textScaleFactor: 1.0,
       maxLines: 1,
@@ -176,7 +212,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         : const SizedBox();
 
     Widget easeId = Text(
-      'ID: ${widget.profile.id}',
+      'ID: ${profile!.id}',
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
       textScaleFactor: 1.0,
@@ -196,7 +232,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         const SizedBox(width: 2),
         InkWell(
           onTap: () {
-            Clipboard.setData(ClipboardData(text: widget.profile.id));
+            Clipboard.setData(ClipboardData(text: profile!.id));
             ChatUIKit.instance.sendChatUIKitEvent(ChatUIKitEvent.groupIdCopied);
           },
           child: Icon(
@@ -368,21 +404,6 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
             ),
           ),
         ),
-        // InkWell(
-        //   onTap: () {
-        //     changeGroupNickname();
-        //   },
-        //   child: ChatUIKitDetailsListViewItem(
-        //     title: '我在本群昵称',
-        //     trailing: Icon(
-        //       Icons.arrow_forward_ios,
-        //       color: theme.color.isDark
-        //           ? theme.color.neutralColor5
-        //           : theme.color.neutralColor7,
-        //       size: 18,
-        //     ),
-        //   ),
-        // ),
         ChatUIKitDetailsListViewItem(
           title: ChatUIKitLocal.groupDetailViewDoNotDisturb.getString(context),
           trailing: ValueListenableBuilder(
@@ -399,13 +420,13 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
                 onChanged: (value) async {
                   if (value == true) {
                     await ChatUIKit.instance.setSilentMode(
-                        conversationId: widget.profile.id,
+                        conversationId: profile!.id,
                         type: ConversationType.GroupChat,
                         param: ChatSilentModeParam.remindType(
                             ChatPushRemindType.MENTION_ONLY));
                   } else {
                     await ChatUIKit.instance.clearSilentMode(
-                        conversationId: widget.profile.id,
+                        conversationId: profile!.id,
                         type: ConversationType.GroupChat);
                   }
                   safeSetState(() {
@@ -536,7 +557,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     );
     if (ret == true) {
       await ChatUIKit.instance.deleteLocalConversation(
-        conversationId: widget.profile.id,
+        conversationId: profile!.id,
       );
 
       widget.onMessageDidClear?.call();
@@ -586,80 +607,9 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
   Widget statusAvatar() {
     // 暂时不需要订阅
     return ChatUIKitAvatar(
-      avatarUrl: widget.profile.avatarUrl,
+      avatarUrl: profile!.avatarUrl,
       size: 100,
     );
-    // final theme = ChatUIKitTheme.of(context);
-    // return FutureBuilder(
-    //   future:
-    //       ChatUIKit.instance.fetchPresenceStatus(members: [widget.profile.id]),
-    //   builder: (context, snapshot) {
-    //     if (snapshot.hasData == false) {
-    //       return ChatUIKitAvatar(
-    //         avatarUrl: widget.profile.avatarUrl,
-    //         size: 100,
-    //       );
-    //     }
-    //     Widget content;
-    //     if (snapshot.data?.isNotEmpty == true) {
-    //       Presence presence = snapshot.data![0];
-    //       if (presence.statusDetails?.values.any((element) => element != 0) ==
-    //           true) {
-    //         content = Stack(
-    //           children: [
-    //             const SizedBox(width: 110, height: 110),
-    //             ChatUIKitAvatar(
-    //               avatarUrl: widget.profile.avatarUrl,
-    //               size: 100,
-    //             ),
-    //             Positioned(
-    //               right: 0,
-    //               bottom: 0,
-    //               child: Container(
-    //                 width: 15,
-    //                 height: 20,
-    //                 color: theme.color.isDark
-    //                     ? theme.color.primaryColor1
-    //                     : theme.color.primaryColor98,
-    //               ),
-    //             ),
-    //             Positioned(
-    //               right: 5,
-    //               bottom: 10,
-    //               child: Container(
-    //                 width: 22,
-    //                 height: 22,
-    //                 decoration: BoxDecoration(
-    //                   color: theme.color.isDark
-    //                       ? theme.color.secondaryColor6
-    //                       : theme.color.secondaryColor5,
-    //                   border: Border.all(
-    //                     color: theme.color.isDark
-    //                         ? theme.color.primaryColor1
-    //                         : theme.color.primaryColor98,
-    //                     width: 4,
-    //                   ),
-    //                   borderRadius: BorderRadius.circular(15),
-    //                 ),
-    //               ),
-    //             ),
-    //           ],
-    //         );
-    //       } else {
-    //         content = ChatUIKitAvatar(
-    //           avatarUrl: widget.profile.avatarUrl,
-    //           size: 100,
-    //         );
-    //       }
-    //     } else {
-    //       content = ChatUIKitAvatar(
-    //         avatarUrl: widget.profile.avatarUrl,
-    //         size: 100,
-    //       );
-    //     }
-    //     return content;
-    //   },
-    // );
   }
 
   void destroyGroup() async {
@@ -686,8 +636,11 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
       ],
     );
     if (ret == true) {
-      ChatUIKit.instance.destroyGroup(groupId: widget.profile.id).then((value) {
-        ChatUIKitRoute.popToRoot(context);
+      ChatUIKit.instance.destroyGroup(groupId: profile!.id).then((value) {
+        ChatUIKitRoute.popToGroupsView(
+          context,
+          model: ChatUIKitRouteBackModel.remove(profile!.id),
+        );
       }).catchError((e) {});
     }
   }
@@ -716,8 +669,11 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
       ],
     );
     if (ret == true) {
-      ChatUIKit.instance.leaveGroup(groupId: widget.profile.id).then((value) {
-        ChatUIKitRoute.popToRoot(context);
+      ChatUIKit.instance.leaveGroup(groupId: profile!.id).then((value) {
+        ChatUIKitRoute.popToGroupsView(
+          context,
+          model: ChatUIKitRouteBackModel.remove(profile!.id),
+        );
       }).catchError((e) {});
     }
   }
@@ -729,7 +685,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
           context,
           ChatUIKitRouteNames.groupChangeOwnerView,
           GroupChangeOwnerViewArguments(
-            groupId: widget.profile.id,
+            groupId: profile!.id,
             attributes: widget.attributes,
           ),
         );
@@ -737,7 +693,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
         return ChatUIKitRoute.push(
           context,
           GroupChangeOwnerView(
-            groupId: widget.profile.id,
+            groupId: profile!.id,
             attributes: widget.attributes,
           ),
         );
@@ -749,41 +705,6 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
     }
   }
 
-/*
-  void changeGroupNickname() {
-    Navigator.of(context)
-        .pushNamed(ChatUIKitRouteNames.changeInfoView,
-            arguments: ChangeInfoViewArguments(
-                title: '我在本群的昵称',
-                maxLength: 32,
-                inputTextCallback: () async {
-                  if (group?.groupId != null) {
-                    Map<String, String> map = await ChatUIKit.instance
-                        .fetchGroupMemberAttributes(
-                            groupId: group!.groupId,
-                            userId: ChatUIKit.instance.currentUserId);
-                    return map[userGroupName];
-                  }
-                  return null;
-                }))
-        .then((value) {
-      if (value != null) {
-        if (value is String) {
-          ChatUIKit.instance.setGroupMemberAttributes(
-              groupId: group!.groupId,
-              userId: ChatUIKit.instance.currentUserId,
-              attributes: {userGroupName: value}).then((_) {
-            // fetchMembersAttrs();
-          }).catchError(
-            (e) {
-              debugPrint(e.toString());
-            },
-          );
-        }
-      }
-    });
-  }
-*/
   void changeGroupName() {
     Future(() {
       if (ChatUIKitRoute.hasInit) {

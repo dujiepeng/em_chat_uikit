@@ -48,14 +48,17 @@ mixin GroupActions on GroupWrapper {
     String? inviteReason,
     required GroupOptions options,
   }) {
-    return checkResult(ChatSDKWrapperActionEvent.createGroup, () {
-      return Client.getInstance.groupManager.createGroup(
+    return checkResult(ChatSDKWrapperActionEvent.createGroup, () async {
+      Group group = await Client.getInstance.groupManager.createGroup(
         groupName: groupName,
         desc: desc,
         inviteMembers: inviteMembers,
         inviteReason: inviteReason,
         options: options,
       );
+
+      onGroupCreatedByMyself(group);
+      return group;
     });
   }
 
@@ -218,11 +221,16 @@ mixin GroupActions on GroupWrapper {
     required String groupId,
     required String name,
   }) {
-    return checkResult(ChatSDKWrapperActionEvent.changeGroupName, () {
-      return Client.getInstance.groupManager.changeGroupName(
+    return checkResult(ChatSDKWrapperActionEvent.changeGroupName, () async {
+      await Client.getInstance.groupManager.changeGroupName(
         groupId,
         name,
       );
+      Group? group = await Client.getInstance.groupManager.getGroupWithId(
+        groupId,
+      );
+
+      onGroupInfoChangedByMeSelf(group!);
     });
   }
 

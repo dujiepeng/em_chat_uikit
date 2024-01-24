@@ -480,9 +480,11 @@ class _MessagesViewState extends State<MessagesView> {
       if (ChatUIKit.instance.currentUserId == from) {
         showName = ChatUIKitLocal.messagesViewRecallInfoYou.getString(context);
       } else {
-        ChatUIKitProfile profile =
-            ChatUIKitProvider.instance.contactProfile(from ?? '');
-        showName = profile.showName;
+        if (from?.isNotEmpty == true) {
+          ChatUIKitProfile profile = ChatUIKitProvider.instance
+              .getProfile(ChatUIKitProfile.contact(id: from!));
+          showName = profile.showName;
+        }
       }
 
       content ??= ChatUIKitMessageListViewAlertItem(
@@ -507,9 +509,11 @@ class _MessagesViewState extends State<MessagesView> {
           MessageAlertAction(
             text: map?[alertCreateGroupMessageOwnerKey] ?? '',
             onTap: () {
-              ChatUIKitProfile profile = ChatUIKitProvider.instance
-                  .groupMemberProfile(message.conversationId!,
-                      map![alertCreateGroupMessageOwnerKey]!);
+              ChatUIKitProfile profile = ChatUIKitProvider.instance.getProfile(
+                ChatUIKitProfile.contact(
+                  id: map![alertCreateGroupMessageOwnerKey]!,
+                ),
+              );
               pushNextPage(profile);
             },
           ),
@@ -799,7 +803,6 @@ class _MessagesViewState extends State<MessagesView> {
   }
 
   void clearAllType() {
-    debugPrint('clearAllType');
     stopVoice();
     focusNode.unfocus();
     showEmoji = false;
@@ -970,9 +973,8 @@ class _MessagesViewState extends State<MessagesView> {
   }
 
   void avatarTap(Message message) async {
-    ChatUIKitProfile profile = ChatUIKitProvider.instance.conversationProfile(
-      message.from!,
-      ConversationType.values[message.chatType.index],
+    ChatUIKitProfile profile = ChatUIKitProvider.instance.getProfile(
+      ChatUIKitProfile.contact(id: message.from!),
     );
 
     pushNextPage(profile);
@@ -1039,6 +1041,7 @@ class _MessagesViewState extends State<MessagesView> {
           id: userId!,
           avatarUrl: avatar,
           name: name,
+          type: ChatUIKitProfileType.contact,
         );
         pushNextPage(profile);
       }

@@ -23,8 +23,9 @@ class NewRequestItemModel with ChatUIKitListItemModelBase, NeedSearch {
   }
 
   static NewRequestItemModel fromUserId(String userId, [String? reason]) {
-    ChatUIKitProfile profile =
-        ChatUIKitProvider.instance.contactProfile(userId);
+    ChatUIKitProfile profile = ChatUIKitProvider.instance.getProfile(
+      ChatUIKitProfile.contact(id: userId),
+    );
     return NewRequestItemModel(profile: profile, reason: reason);
   }
 }

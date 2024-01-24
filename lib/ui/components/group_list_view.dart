@@ -36,14 +36,33 @@ class GroupListView extends StatefulWidget {
   State<GroupListView> createState() => _GroupListViewState();
 }
 
-class _GroupListViewState extends State<GroupListView> {
+class _GroupListViewState extends State<GroupListView>
+    with MultiObserver, ChatUIKitProviderObserver, GroupObserver {
   late final GroupListViewController controller;
 
   @override
   void initState() {
     super.initState();
+    ChatUIKit.instance.addObserver(this);
+    ChatUIKitProvider.instance.addObserver(this);
     controller = widget.controller ?? GroupListViewController();
     controller.fetchItemList();
+  }
+
+  @override
+  void dispose() {
+    ChatUIKit.instance.removeObserver(this);
+    ChatUIKitProvider.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void onAutoAcceptInvitationFromGroup(
+    String groupId,
+    String inviter,
+    String? inviteMessage,
+  ) {
+    controller.addNewGroup(groupId);
   }
 
   @override

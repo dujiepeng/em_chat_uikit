@@ -2,8 +2,11 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
-typedef WillCreateHandler = Future<CreateGroupInfo> Function(
-    CreateGroupInfo? createGroupInfo, List<ChatUIKitProfile> selectedProfiles);
+typedef WillCreateHandler = Future<CreateGroupInfo?> Function(
+  BuildContext context,
+  CreateGroupInfo? createGroupInfo,
+  List<ChatUIKitProfile> selectedProfiles,
+);
 
 class CreateGroupView extends StatefulWidget {
   CreateGroupView.arguments(
@@ -245,9 +248,13 @@ class _CreateGroupViewState extends State<CreateGroupView> {
     CreateGroupInfo? info;
     if (widget.willCreateHandler != null) {
       info = await widget.willCreateHandler!(
+        context,
         widget.createGroupInfo,
         selectedProfiles.value,
       );
+      if (info == null) {
+        return;
+      }
     }
     List<String> userIds = selectedProfiles.value.map((e) => e.id).toList();
     ChatUIKit.instance

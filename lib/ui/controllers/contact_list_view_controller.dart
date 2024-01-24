@@ -39,7 +39,13 @@ class ContactListViewController with ChatUIKitListViewControllerBase {
   List<ContactItemModel> mappers(List<String> contacts) {
     List<ContactItemModel> list = [];
     Map<String, ChatUIKitProfile> map =
-        ChatUIKitProvider.instance.contactProfiles(contacts);
+        ChatUIKitProvider.instance.getProfiles(() {
+      List<ChatUIKitProfile> profile = [];
+      for (var item in contacts) {
+        profile.add(ChatUIKitProfile.contact(id: item));
+      }
+      return profile;
+    }());
     for (var item in contacts) {
       ContactItemModel info = ContactItemModel.fromProfile(map[item]!);
       list.add(info);

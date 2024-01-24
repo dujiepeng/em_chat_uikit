@@ -20,7 +20,7 @@ export 'sdk_wrapper/chat_sdk_wrapper.dart';
 export 'sdk_wrapper/chat_sdk_wrapper_action_events.dart';
 
 export 'service/chat_uikit_service.dart';
-export 'service/protocols/chat_uikit_profile.dart';
+export 'provider/chat_uikit_profile.dart';
 export 'service/chat_uikit_action_events.dart';
 export 'service/observers/chat_uikit_events_observers.dart';
 

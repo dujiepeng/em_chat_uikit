@@ -56,10 +56,14 @@ class _ContactListViewState extends State<ContactListView>
   }
 
   @override
-  void onContactProfilesUpdate(
+  void onProfilesUpdate(
     Map<String, ChatUIKitProfile> map,
   ) {
-    controller.reload();
+    if (controller.list
+        .cast<ContactItemModel>()
+        .any((element) => map.keys.contains(element.profile.id))) {
+      controller.reload();
+    }
   }
 
   @override

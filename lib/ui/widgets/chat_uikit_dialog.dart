@@ -327,23 +327,31 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                 InkWell(
                   onTap: () {
                     if (item.type == ChatUIKitDialogItemType.inputConfirm) {
-                      if (confirmCount == 1 && _controllers.length == 1) {
-                        if (_controllers.first.text.isNotEmpty == true) {
+                      if (item.onInputsTap == null) {
+                        Navigator.of(context).pop();
+                      } else {
+                        if (confirmCount == 1 && _controllers.length == 1) {
+                          if (_controllers.first.text.isNotEmpty == true) {
+                            List<String> inputs = [];
+                            for (var controller in _controllers) {
+                              inputs.add(controller.text);
+                            }
+                            item.onInputsTap?.call(inputs);
+                          }
+                        } else {
                           List<String> inputs = [];
                           for (var controller in _controllers) {
                             inputs.add(controller.text);
                           }
                           item.onInputsTap?.call(inputs);
                         }
-                      } else {
-                        List<String> inputs = [];
-                        for (var controller in _controllers) {
-                          inputs.add(controller.text);
-                        }
-                        item.onInputsTap?.call(inputs);
                       }
                     } else {
-                      item.onTap?.call();
+                      if (item.onTap != null) {
+                        item.onTap?.call();
+                      } else {
+                        Navigator.of(context).pop();
+                      }
                     }
                   },
                   child: Container(
