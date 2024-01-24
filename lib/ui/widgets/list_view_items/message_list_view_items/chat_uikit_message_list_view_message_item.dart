@@ -1,5 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-
+import 'package:em_chat_uikit/universal/defines.dart';
 import 'package:flutter/material.dart';
 
 typedef MessageItemBubbleBuilder = Widget? Function(
@@ -97,6 +97,26 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
             isLeft: left,
             child: msgWidget,
           );
+    }
+
+    if (message.bodyType == MessageType.VOICE) {
+      content = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          content,
+          if (message.direction == MessageDirection.RECEIVE &&
+              !(message.attributes?[voiceHasReadKey] == true))
+            Container(
+              margin: const EdgeInsets.only(left: 8),
+              width: 8,
+              height: 8,
+              decoration: const BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.all(Radius.circular(4)),
+              ),
+            )
+        ],
+      );
     }
     content = InkWell(
       onTap: onBubbleTap,
@@ -234,6 +254,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
       playing: isPlaying,
       forceLeft: isLeft,
     );
+
     return content;
   }
 

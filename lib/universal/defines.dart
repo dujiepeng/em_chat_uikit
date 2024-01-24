@@ -28,3 +28,5 @@ const String mentionKey = 'em_at_list';
 const String mentionAllValue = 'ALL';
 const String hasMentionKey = 'mention';
 const String hasMentionValue = 'mention';
+
+const String voiceHasReadKey = 'voiceHasRead';

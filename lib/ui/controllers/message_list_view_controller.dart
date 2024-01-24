@@ -206,12 +206,30 @@ class MessageListViewController extends ChangeNotifier
     }
   }
 
-  @override
-  void onProgress(String msgId, int progress) {}
+  // @override
+  // void onProgress(String msgId, int progress) {}
 
-  void addMessages(List<Message> msgs) {
-    msgList.insertAll(0, msgs.reversed);
-    notifyListeners();
+  // void addMessages(List<Message> msgs) {
+  //   msgList.insertAll(0, msgs.reversed);
+  //   notifyListeners();
+  // }
+
+  void replaceMessage(Message message) {
+    final index =
+        msgList.indexWhere((element) => element.msgId == message.msgId);
+    if (index != -1) {
+      msgList[index] = message;
+      notifyListeners();
+    }
+  }
+
+  void playMessage(Message message) {
+    if (message.bodyType == MessageType.VOICE) {
+      if (!message.voiceHasPlay) {
+        message.setVoiceHasPlay(true);
+        replaceMessage(message);
+      }
+    }
   }
 
   Future<void> _clearMention(List<Message> msgs) async {

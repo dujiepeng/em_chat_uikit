@@ -22,6 +22,16 @@ extension MessageHelper on Message {
     return userInfo?[userAvatarKey];
   }
 
+  bool get voiceHasPlay {
+    return attributes?[voiceHasReadKey] == true;
+  }
+
+  void setVoiceHasPlay(bool hasPlay) {
+    attributes ??= {};
+    attributes![voiceHasReadKey] = hasPlay;
+    ChatUIKit.instance.updateMessage(message: this);
+  }
+
   String? get nickname {
     Map? userInfo = attributes?[msgUserInfoKey];
     return userInfo?[userNicknameKey];
