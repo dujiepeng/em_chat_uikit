@@ -4,19 +4,22 @@ import 'dart:io';
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit/ui/widgets/chat_uikit_water_ripple.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sound_record/flutter_sound_record.dart' as audio_record;
+
+typedef ChatAudioRecord = audio_record.FlutterSoundRecord;
 
 class ChatUIKitRecordConfig {
   const ChatUIKitRecordConfig({
-    this.encoder = AudioEncoder.aacEld,
+    this.encoder = audio_record.AudioEncoder.AAC,
     this.bitRate = 128000,
-    this.samplingRate = 44100,
+    this.samplingRate = 44100.0,
     this.numChannels = 2,
   });
 
-  // only support accLc, aacEld, aacHe, amrNb, amrWb, opus, pcm8bit, pcm16bit
-  final AudioEncoder encoder;
+
+  final audio_record.AudioEncoder encoder;
   final int bitRate;
-  final int samplingRate;
+  final double samplingRate;
   final int numChannels;
 }
 
@@ -129,7 +132,7 @@ class ChatUIKitRecordBar extends StatefulWidget {
 }
 
 class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
-  late final AudioRecorder _audioRecorder;
+  late final ChatAudioRecord _audioRecorder;
   bool voiceShow = false;
   bool isClose = false;
   late final Directory _directory;
@@ -144,7 +147,7 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
   @override
   void initState() {
     super.initState();
-    _audioRecorder = AudioRecorder();
+    _audioRecorder = ChatAudioRecord();
     getTemporaryDirectory().then((value) => _directory = value);
   }
 
@@ -476,15 +479,10 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
       fileName =
           "${DateTime.now().millisecondsSinceEpoch.toString()}.${extensionName()}";
       await _audioRecorder.start(
-        RecordConfig(
-          bitRate: widget.recordConfig.bitRate,
-          sampleRate: widget.recordConfig.samplingRate,
-          numChannels: widget.recordConfig.numChannels,
-        ),
         path: "${_directory.path}/$fileName",
-        // bitRate: widget.recordConfig.bitRate,
-        // samplingRate: widget.recordConfig.samplingRate,
-        // numChannels: widget.recordConfig.numChannels,
+        encoder: widget.recordConfig.encoder,
+        bitRate: widget.recordConfig.bitRate,
+        samplingRate: widget.recordConfig.samplingRate,
       );
 
       startRecordTimer();
@@ -569,19 +567,15 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
 
   String extensionName() {
     switch (widget.recordConfig.encoder) {
-      case AudioEncoder.aacLc:
-      case AudioEncoder.aacEld:
-      case AudioEncoder.aacHe:
-        return Platform.isAndroid ? 'm4a' : 'aac';
-      case AudioEncoder.amrNb:
-      case AudioEncoder.amrWb:
-        return 'amr';
-      case AudioEncoder.opus:
+      case audio_record.AudioEncoder.AAC:
+      case audio_record.AudioEncoder.AAC_LD:
+      case audio_record.AudioEncoder.AAC_HE:
+        return 'm4a';
+      case audio_record.AudioEncoder.AMR_NB:
+      case audio_record.AudioEncoder.AMR_WB:
+        return '3gp';
+      case audio_record.AudioEncoder.OPUS:
         return 'opus';
-      case AudioEncoder.flac:
-        return 'flac';
-      case AudioEncoder.wav:
-        return 'wav';
       default:
         return '';
     }

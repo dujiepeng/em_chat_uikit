@@ -16,7 +16,8 @@ dependencies:
   # im_flutter_sdk:
   #   path: ../../../im_flutter_sdk
 
-  record: ^5.0.4
+  # record: ^5.0.4
+  flutter_sound_record: ^3.3.2
 
   shared_preferences: ^2.2.2
 

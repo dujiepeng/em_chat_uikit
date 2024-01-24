@@ -1239,7 +1239,6 @@ class _MessagesViewState extends State<MessagesView> {
             .sendChatUIKitEvent(ChatUIKitEvent.messageDownloading);
       } else {
         try {
-          debugPrint('playVoice: ${message.localPath}');
           await playVoice(message.localPath!);
           _playingMessage = message;
           // ignore: empty_catches

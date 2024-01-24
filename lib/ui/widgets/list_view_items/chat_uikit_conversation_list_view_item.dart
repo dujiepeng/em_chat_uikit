@@ -206,7 +206,6 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
     }
 
     unreadCount = SizedBox(
-      width: 20,
       height: 20,
       child: unreadCount,
     );
