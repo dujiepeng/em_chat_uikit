@@ -26,7 +26,7 @@ class ChatUIKitProvider {
   ChatUIKitProviderProfileHandler? profilesHandler;
 
   // 缓存 profile, 不需要存；
-  final Map<String, ChatUIKitProfile> _profilesCache = {};
+  final Map<String, ChatUIKitProfile> profilesCache = {};
 
   final List<ChatUIKitProviderObserver> _observers = [];
 
@@ -56,11 +56,11 @@ class ChatUIKitProvider {
   }
 
   void clearProfilesCache() {
-    _profilesCache.clear();
+    profilesCache.clear();
   }
 
   void clearAllCache() {
-    _profilesCache.clear();
+    profilesCache.clear();
   }
 
   Map<String, ChatUIKitProfile> getProfiles(List<ChatUIKitProfile> profiles) {
@@ -68,7 +68,7 @@ class ChatUIKitProvider {
     List<ChatUIKitProfile> needProviders = [];
 
     for (var profile in profiles) {
-      ChatUIKitProfile? cachedProfile = _profilesCache[profile.id];
+      ChatUIKitProfile? cachedProfile = profilesCache[profile.id];
       if (cachedProfile == null) {
         needProviders.add(profile);
       } else {
@@ -98,7 +98,7 @@ class ChatUIKitProvider {
 
   void addProfiles(List<ChatUIKitProfile> list) {
     var result = {for (var element in list) element.id: element};
-    _profilesCache.addAll(result);
+    profilesCache.addAll(result);
 
     for (var observer in _observers) {
       observer.onProfilesUpdate(result);

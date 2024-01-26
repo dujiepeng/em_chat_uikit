@@ -81,6 +81,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
                 ChatUIKitTimeTool.getChatTimeStr(
                     timestamp ?? info.lastMessage?.serverTime ?? 0),
             textScaleFactor: 1.0,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: theme.color.isDark
                   ? theme.color.neutralColor6
@@ -193,6 +194,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
               child: Text(
                 info.unreadCount > 99 ? '99+' : info.unreadCount.toString(),
                 textScaleFactor: 1.0,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: theme.color.isDark
                       ? theme.color.neutralColor1
@@ -239,24 +241,28 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
       color: info.pinned
           ? (theme.color.isDark
               ? theme.color.neutralColor2
-              : theme.color.neutralColor9)
+              : theme.color.neutralColor95)
           : theme.color.isDark
               ? theme.color.neutralColor1
               : theme.color.neutralColor98,
       child: content,
     );
 
-    content = Column(
-      mainAxisSize: MainAxisSize.max,
+    content = Stack(
       children: [
-        Expanded(child: content),
-        Divider(
-          height: borderHeight,
-          thickness: borderHeight,
-          indent: 78,
-          color: theme.color.isDark
-              ? theme.color.neutralColor2
-              : theme.color.neutralColor9,
+        content,
+        Positioned(
+          bottom: 0,
+          left: 78,
+          right: 0,
+          height: 0.5,
+          child: Divider(
+            height: borderHeight,
+            thickness: borderHeight,
+            color: theme.color.isDark
+                ? theme.color.neutralColor2
+                : theme.color.neutralColor9,
+          ),
         )
       ],
     );

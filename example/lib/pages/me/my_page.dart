@@ -158,6 +158,7 @@ class _MyPageState extends State<MyPage> with ChatUIKitProviderObserver {
           trailingWidget: CupertinoSwitch(
               value: ThemeNotification.isLight,
               onChanged: (value) {
+                ThemeNotification.isLight = !ThemeNotification.isLight;
                 ThemeNotification().dispatch(context);
                 setState(() {});
               }),

@@ -5,11 +5,22 @@ import 'package:em_chat_uikit/ui/custom/chat_uikit_emoji_data.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import '../../universal/defines.dart';
 
-typedef MessageItemTapCallback = bool? Function(
+typedef MessagesViewItemLongPressHandler = List<ChatUIKitBottomSheetItem>?
+    Function(
+  BuildContext context,
+  Message message,
+  List<ChatUIKitBottomSheetItem> defaultActions,
+);
+
+typedef MessageItemTapHandler = bool? Function(
     BuildContext context, Message message);
+
+typedef MessagesViewMorePressHandler = List<ChatUIKitBottomSheetItem>? Function(
+  BuildContext context,
+  List<ChatUIKitBottomSheetItem> defaultActions,
+);
 
 class MessagesView extends StatefulWidget {
   MessagesView.arguments(MessagesViewArguments arguments, {super.key})
@@ -17,6 +28,7 @@ class MessagesView extends StatefulWidget {
         controller = arguments.controller,
         inputBar = arguments.inputBar,
         appBar = arguments.appBar,
+        title = arguments.title,
         showAvatar = arguments.showAvatar,
         showNickname = arguments.showNickname,
         onItemTap = arguments.onItemTap,
@@ -30,16 +42,15 @@ class MessagesView extends StatefulWidget {
         itemBuilder = arguments.itemBuilder,
         alertItemBuilder = arguments.alertItemBuilder,
         onAvatarLongPress = arguments.onAvatarLongPressed,
-        moreActionItems = arguments.moreActionItems,
-        onItemLongPressActions = arguments.onItemLongPressActions,
+        morePressActions = arguments.morePressActions,
+        longPressActions = arguments.longPressActions,
         replyBarBuilder = arguments.replyBarBuilder,
         quoteBuilder = arguments.quoteBuilder,
-        onErrorTap = arguments.onErrorTap,
+        onErrorTapHandler = arguments.onErrorTapHandler,
         bubbleBuilder = arguments.bubbleBuilder,
         enableAppBar = arguments.enableAppBar,
         onMoreActionsItemsHandler = arguments.onMoreActionsItemsHandler,
-        onItemLongPressActionsItemsHandler =
-            arguments.onItemLongPressActionsItemsHandler,
+        onItemLongPressHandler = arguments.onItemLongPressHandler,
         bubbleContentBuilder = arguments.bubbleContentBuilder,
         inputBarTextEditingController = arguments.inputBarTextEditingController,
         forceLeft = arguments.forceLeft,
@@ -48,6 +59,8 @@ class MessagesView extends StatefulWidget {
   const MessagesView({
     required this.profile,
     this.appBar,
+    this.enableAppBar = true,
+    this.title,
     this.inputBar,
     this.controller,
     this.showAvatar = true,
@@ -63,16 +76,15 @@ class MessagesView extends StatefulWidget {
     this.itemBuilder,
     this.alertItemBuilder,
     this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
-    this.onItemLongPressActions,
-    this.moreActionItems,
+    this.longPressActions,
+    this.morePressActions,
     this.replyBarBuilder,
     this.quoteBuilder,
-    this.onErrorTap,
+    this.onErrorTapHandler,
     this.bubbleBuilder,
     this.bubbleContentBuilder,
-    this.enableAppBar = true,
     this.onMoreActionsItemsHandler,
-    this.onItemLongPressActionsItemsHandler,
+    this.onItemLongPressHandler,
     this.forceLeft,
     this.inputBarTextEditingController,
     this.attributes,
@@ -82,41 +94,34 @@ class MessagesView extends StatefulWidget {
   final ChatUIKitProfile profile;
   final MessageListViewController? controller;
   final ChatUIKitAppBar? appBar;
+  final bool enableAppBar;
+  final String? title;
   final Widget? inputBar;
   final bool showAvatar;
   final bool showNickname;
-  final MessageItemTapCallback? onItemTap;
-  final MessageItemTapCallback? onItemLongPress;
-  final MessageItemTapCallback? onDoubleTap;
-  final MessageItemTapCallback? onAvatarTap;
-  final MessageItemTapCallback? onAvatarLongPress;
-  final MessageItemTapCallback? onNicknameTap;
+  final MessageItemTapHandler? onItemTap;
+  final MessageItemTapHandler? onItemLongPress;
+  final MessageItemTapHandler? onDoubleTap;
+  final MessageItemTapHandler? onAvatarTap;
+  final MessageItemTapHandler? onAvatarLongPress;
+  final MessageItemTapHandler? onNicknameTap;
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
   final MessageItemBuilder? itemBuilder;
   final MessageItemBuilder? alertItemBuilder;
   final FocusNode? focusNode;
-  final List<ChatUIKitBottomSheetItem>? moreActionItems;
-  final List<ChatUIKitBottomSheetItem>? Function(
-    BuildContext context,
-    List<ChatUIKitBottomSheetItem> willShowList,
-  )? onMoreActionsItemsHandler;
-  final List<ChatUIKitBottomSheetItem>? onItemLongPressActions;
-  final List<ChatUIKitBottomSheetItem>? Function(
-    BuildContext context,
-    List<ChatUIKitBottomSheetItem> willShowList,
-    Message message,
-  )? onItemLongPressActionsItemsHandler;
+  final List<ChatUIKitBottomSheetItem>? morePressActions;
+  final MessagesViewMorePressHandler? onMoreActionsItemsHandler;
+  final List<ChatUIKitBottomSheetItem>? longPressActions;
+  final MessagesViewItemLongPressHandler? onItemLongPressHandler;
   final bool? forceLeft;
-
   final Widget? emojiWidget;
-  final Widget? Function(BuildContext context, Message message)?
-      replyBarBuilder;
-  final Widget Function(QuoteModel model)? quoteBuilder;
-  final void Function(Message message)? onErrorTap;
+  final MessageItemBuilder? replyBarBuilder;
+  final Widget Function(BuildContext context, QuoteModel model)? quoteBuilder;
+  final bool? Function(BuildContext context, Message message)?
+      onErrorTapHandler;
   final MessageItemBubbleBuilder? bubbleBuilder;
   final MessageBubbleContentBuilder? bubbleContentBuilder;
   final CustomTextEditingController? inputBarTextEditingController;
-  final bool enableAppBar;
   final String? attributes;
 
   @override
@@ -227,38 +232,38 @@ class _MessagesViewState extends State<MessagesView> {
       controller: controller,
       showAvatar: widget.showAvatar,
       showNickname: widget.showNickname,
-      onItemTap: (msg) async {
+      onItemTap: (ctx, msg) async {
         bool? ret = widget.onItemTap?.call(context, msg);
         await stopVoice();
         if (ret != true) {
           bubbleTab(msg);
         }
       },
-      onItemLongPress: (msg) async {
+      onItemLongPress: (context, msg) async {
         bool? ret = widget.onItemLongPress?.call(context, msg);
         stopVoice();
         if (ret != true) {
           onItemLongPress(msg);
         }
       },
-      onDoubleTap: (msg) async {
+      onDoubleTap: (context, msg) async {
         bool? ret = widget.onDoubleTap?.call(context, msg);
         stopVoice();
         if (ret != true) {}
       },
-      onAvatarTap: (msg) async {
+      onAvatarTap: (context, msg) async {
         bool? ret = widget.onAvatarTap?.call(context, msg);
         stopVoice();
         if (ret != true) {
           avatarTap(msg);
         }
       },
-      onAvatarLongPressed: (msg) async {
+      onAvatarLongPressed: (context, msg) async {
         bool? ret = widget.onAvatarLongPress?.call(context, msg);
         stopVoice();
         if (ret != true) {}
       },
-      onNicknameTap: (msg) async {
+      onNicknameTap: (context, msg) async {
         bool? ret = widget.onNicknameTap?.call(context, msg);
         stopVoice();
         if (ret != true) {}
@@ -266,7 +271,12 @@ class _MessagesViewState extends State<MessagesView> {
       bubbleStyle: widget.bubbleStyle,
       itemBuilder: widget.itemBuilder ?? voiceItemBuilder,
       alertItemBuilder: widget.alertItemBuilder ?? alertItem,
-      onErrorTap: widget.onErrorTap ?? onErrorTap,
+      onErrorTap: (message) {
+        bool ret = widget.onErrorTapHandler?.call(context, message) ?? false;
+        if (ret == false) {
+          onErrorTap(message);
+        }
+      },
     );
 
     content = NotificationListener(
@@ -331,7 +341,7 @@ class _MessagesViewState extends State<MessagesView> {
           ? null
           : widget.appBar ??
               ChatUIKitAppBar(
-                title: widget.profile.showName,
+                title: widget.title ?? widget.profile.showName,
                 // leading: InkWell(
                 //   onTap: () {
                 //     pushNextPage(widget.profile);
@@ -384,10 +394,10 @@ class _MessagesViewState extends State<MessagesView> {
     Widget content = ChatUIKitMessageListViewMessageItem(
       isPlaying: _playingMessage?.msgId == message.msgId,
       onErrorTap: () {
-        if (widget.onErrorTap == null) {
+        if (widget.onErrorTapHandler == null) {
           onErrorTap(message);
         } else {
-          widget.onErrorTap!.call(message);
+          widget.onErrorTapHandler!.call(context, message);
         }
       },
       bubbleStyle: widget.bubbleStyle,
@@ -592,6 +602,7 @@ class _MessagesViewState extends State<MessagesView> {
         Text(
           ChatUIKitLocal.messagesViewEditMessageTitle.getString(context),
           textScaleFactor: 1.0,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
               fontWeight: theme.font.labelSmall.fontWeight,
               fontSize: theme.font.labelSmall.fontSize,
@@ -675,7 +686,7 @@ class _MessagesViewState extends State<MessagesView> {
                 onTap: () {
                   clearAllType();
                   List<ChatUIKitBottomSheetItem>? items =
-                      widget.moreActionItems;
+                      widget.morePressActions;
                   if (items == null) {
                     items = [];
                     items.add(ChatUIKitBottomSheetItem.normal(
@@ -814,7 +825,7 @@ class _MessagesViewState extends State<MessagesView> {
   void onItemLongPress(Message message) {
     final theme = ChatUIKitTheme.of(context);
     clearAllType();
-    List<ChatUIKitBottomSheetItem>? items = widget.onItemLongPressActions;
+    List<ChatUIKitBottomSheetItem>? items = widget.longPressActions;
     if (items == null) {
       items = [];
       if (message.bodyType == MessageType.TXT) {
@@ -956,11 +967,11 @@ class _MessagesViewState extends State<MessagesView> {
       }
     }
 
-    if (widget.onItemLongPressActionsItemsHandler != null) {
-      items = widget.onItemLongPressActionsItemsHandler!.call(
+    if (widget.onItemLongPressHandler != null) {
+      items = widget.onItemLongPressHandler!.call(
         context,
-        items,
         message,
+        items,
       );
     }
     if (items != null) {
@@ -1360,100 +1371,214 @@ class _MessagesViewState extends State<MessagesView> {
   }
 
 // 处理点击自己头像和点击自己名片
-  void pushToCurrentUser(ChatUIKitProfile profile) {
-    Navigator.of(context).pushNamed(
-      ChatUIKitRouteNames.currentUserInfoView,
-      arguments: CurrentUserInfoViewArguments(
-        profile: profile,
-        attributes: widget.attributes,
-      ),
-    );
+  void pushToCurrentUser(ChatUIKitProfile profile) async {
+    Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        return ChatUIKitRoute.pushNamed(
+          context,
+          ChatUIKitRouteNames.currentUserInfoView,
+          CurrentUserInfoViewArguments(
+            profile: profile,
+            attributes: widget.attributes,
+          ),
+        );
+      } else {
+        return ChatUIKitRoute.push(
+          context,
+          CurrentUserInfoView(
+            profile: profile,
+            attributes: widget.attributes,
+          ),
+        );
+      }
+    });
   }
 
   // 处理当前聊天对象，点击appBar头像，点击对方消息头像，点击名片
   void pushCurrentChatter(ChatUIKitProfile profile) {
-    Navigator.of(context).pushNamed(
-      ChatUIKitRouteNames.contactDetailsView,
-      arguments: ContactDetailsViewArguments(
-        attributes: widget.attributes,
-        onMessageDidClear: () {
-          controller.clearMessages();
-          replyMessage = null;
-          setState(() {});
-        },
-        profile: widget.profile,
-        actions: [
-          ChatUIKitActionModel(
-            title: ChatUIKitLocal.contactDetailViewSend.getString(context),
-            icon: 'assets/images/chat.png',
-            onTap: (context) {
-              Navigator.of(context).pop();
+    Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        return ChatUIKitRoute.pushNamed(
+          context,
+          ChatUIKitRouteNames.contactDetailsView,
+          ContactDetailsViewArguments(
+            attributes: widget.attributes,
+            onMessageDidClear: () {
+              controller.clearMessages();
+              replyMessage = null;
+              setState(() {});
             },
+            profile: widget.profile,
+            actions: [
+              ChatUIKitActionModel(
+                title: ChatUIKitLocal.contactDetailViewSend.getString(context),
+                icon: 'assets/images/chat.png',
+                packageName: ChatUIKitImageLoader.packageName,
+                onTap: (context) {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        );
+      } else {
+        return ChatUIKitRoute.push(
+          context,
+          ContactDetailsView(
+            attributes: widget.attributes,
+            onMessageDidClear: () {
+              controller.clearMessages();
+              replyMessage = null;
+              setState(() {});
+            },
+            profile: widget.profile,
+            actions: [
+              ChatUIKitActionModel(
+                title: ChatUIKitLocal.contactDetailViewSend.getString(context),
+                icon: 'assets/images/chat.png',
+                packageName: ChatUIKitImageLoader.packageName,
+                onTap: (context) {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      }
+    });
   }
 
   // 处理当前聊天对象是群时
   void pushToGroupInfo(ChatUIKitProfile profile) {
-    Navigator.of(context).pushNamed(
-      ChatUIKitRouteNames.groupDetailsView,
-      arguments: GroupDetailsViewArguments(
-        profile: widget.profile,
-        attributes: widget.attributes,
-        onMessageDidClear: () {
-          controller.clearMessages();
-          replyMessage = null;
-          setState(() {});
-        },
-        actions: [
-          ChatUIKitActionModel(
-            title: ChatUIKitLocal.groupDetailViewSend.getString(context),
-            icon: 'assets/images/chat.png',
-            onTap: (context) {
-              Navigator.of(context).pop();
+    Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        return ChatUIKitRoute.pushNamed(
+          context,
+          ChatUIKitRouteNames.groupDetailsView,
+          GroupDetailsViewArguments(
+            profile: widget.profile,
+            attributes: widget.attributes,
+            onMessageDidClear: () {
+              controller.clearMessages();
+              replyMessage = null;
+              setState(() {});
             },
+            actions: [
+              ChatUIKitActionModel(
+                title: ChatUIKitLocal.groupDetailViewSend.getString(context),
+                icon: 'assets/images/chat.png',
+                packageName: ChatUIKitImageLoader.packageName,
+                onTap: (context) {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        );
+      } else {
+        return ChatUIKitRoute.push(
+          context,
+          GroupDetailsView(
+            profile: widget.profile,
+            attributes: widget.attributes,
+            onMessageDidClear: () {
+              controller.clearMessages();
+              replyMessage = null;
+              setState(() {});
+            },
+            actions: [
+              ChatUIKitActionModel(
+                title: ChatUIKitLocal.groupDetailViewSend.getString(context),
+                icon: 'assets/images/chat.png',
+                packageName: ChatUIKitImageLoader.packageName,
+                onTap: (context) {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      }
+    });
   }
 
   // 处理不是当前聊天对象的好友
   void pushNewContactDetail(ChatUIKitProfile profile) {
-    Navigator.of(context).pushNamed(
-      ChatUIKitRouteNames.contactDetailsView,
-      arguments: ContactDetailsViewArguments(
-        profile: profile,
-        attributes: widget.attributes,
-        actions: [
-          ChatUIKitActionModel(
-            title: ChatUIKitLocal.contactDetailViewSend.getString(context),
-            icon: 'assets/images/chat.png',
-            onTap: (ctx) {
-              Navigator.of(context).pushNamed(
-                ChatUIKitRouteNames.messagesView,
-                arguments: MessagesViewArguments(
-                  profile: profile,
-                  attributes: widget.attributes,
-                ),
-              );
-            },
+    Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        return ChatUIKitRoute.pushNamed(
+          context,
+          ChatUIKitRouteNames.contactDetailsView,
+          ContactDetailsViewArguments(
+            profile: profile,
+            attributes: widget.attributes,
+            actions: [
+              ChatUIKitActionModel(
+                title: ChatUIKitLocal.contactDetailViewSend.getString(context),
+                icon: 'assets/images/chat.png',
+                packageName: ChatUIKitImageLoader.packageName,
+                onTap: (ctx) {
+                  Navigator.of(context).pushNamed(
+                    ChatUIKitRouteNames.messagesView,
+                    arguments: MessagesViewArguments(
+                      profile: profile,
+                      attributes: widget.attributes,
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        );
+      } else {
+        return ChatUIKitRoute.push(
+          context,
+          ContactDetailsView(
+            profile: profile,
+            attributes: widget.attributes,
+            actions: [
+              ChatUIKitActionModel(
+                title: ChatUIKitLocal.contactDetailViewSend.getString(context),
+                icon: 'assets/images/chat.png',
+                packageName: ChatUIKitImageLoader.packageName,
+                onTap: (ctx) {
+                  Navigator.of(context).pushNamed(
+                    ChatUIKitRouteNames.messagesView,
+                    arguments: MessagesViewArguments(
+                      profile: profile,
+                      attributes: widget.attributes,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      }
+    });
   }
 
   // 处理名片信息非好友
   void pushRequestDetail(ChatUIKitProfile profile) {
-    Navigator.of(context).pushNamed(
-      ChatUIKitRouteNames.newRequestDetailsView,
-      arguments: NewRequestDetailsViewArguments(
-        profile: profile,
-        attributes: widget.attributes,
-      ),
-    );
+    Future(() {
+      if (ChatUIKitRoute.hasInit) {
+        return ChatUIKitRoute.pushNamed(
+          context,
+          ChatUIKitRouteNames.newRequestDetailsView,
+          NewRequestDetailsViewArguments(
+            profile: profile,
+            attributes: widget.attributes,
+          ),
+        );
+      } else {
+        return ChatUIKitRoute.push(
+          context,
+          NewRequestDetailsView(
+            profile: profile,
+            attributes: widget.attributes,
+          ),
+        );
+      }
+    });
   }
 }

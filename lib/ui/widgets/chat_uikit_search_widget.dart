@@ -195,6 +195,7 @@ class _ChatUIKitSearchWidgetState extends State<ChatUIKitSearchWidget> {
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Text(
                   ChatUIKitLocal.searchWidgetCancel.getString(context),
+                  overflow: TextOverflow.ellipsis,
                   textScaleFactor: 1.0,
                   style: TextStyle(
                     color: theme.color.isDark
@@ -245,6 +246,7 @@ class _ChatUIKitSearchWidgetState extends State<ChatUIKitSearchWidget> {
                 const SizedBox(width: 4),
                 Text(
                   widget.searchHideText,
+                  overflow: TextOverflow.ellipsis,
                   textScaleFactor: 1.0,
                   style: TextStyle(
                     color: ChatUIKitTheme.of(context).color.isDark

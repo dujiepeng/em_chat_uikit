@@ -90,6 +90,7 @@ class _CreateGroupViewState extends State<CreateGroupView> {
                   child: Text(
                     ChatUIKitLocal.createGroupViewTitle.getString(context),
                     textScaleFactor: 1.0,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: theme.color.isDark
                           ? theme.color.neutralColor98
@@ -117,6 +118,7 @@ class _CreateGroupViewState extends State<CreateGroupView> {
                                   .getString(context)
                               : '${ChatUIKitLocal.createGroupViewCreate.getString(context)}(${value.length})',
                           textScaleFactor: 1.0,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: theme.color.isDark
                                 ? theme.color.primaryColor6

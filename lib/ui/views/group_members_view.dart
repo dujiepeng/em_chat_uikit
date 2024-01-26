@@ -128,6 +128,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
                           ChatUIKitLocal.groupMembersViewTitle
                               .getString(context),
                           textScaleFactor: 1.0,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: theme.color.isDark
                                 ? theme.color.neutralColor98
@@ -140,6 +141,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
                         return Text(
                           '${ChatUIKitLocal.groupMembersViewTitle.getString(context)}(${memberCount.value})',
                           textScaleFactor: 1.0,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: theme.color.isDark
                                 ? theme.color.neutralColor98
@@ -258,6 +260,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
             ChatUIKitActionModel(
               title: ChatUIKitLocal.groupDetailViewSend.getString(context),
               icon: 'assets/images/chat.png',
+              packageName: ChatUIKitImageLoader.packageName,
               onTap: (context) {
                 ChatUIKitRoute.pushNamed(
                   context,
@@ -282,6 +285,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
             ChatUIKitActionModel(
               title: ChatUIKitLocal.groupDetailViewSend.getString(context),
               icon: 'assets/images/chat.png',
+              packageName: ChatUIKitImageLoader.packageName,
               onTap: (context) {
                 ChatUIKitRoute.push(
                   context,

@@ -24,6 +24,7 @@ class ChatUIKitDetailsListViewItem extends StatelessWidget {
                 Text(
                   title,
                   textScaleFactor: 1.0,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontWeight: theme.font.titleMedium.fontWeight,
                     fontSize: theme.font.titleMedium.fontSize,

@@ -74,6 +74,7 @@ class ChatUIKitMessageListViewAlertItem extends StatelessWidget {
 
     Widget content = RichText(
       textScaleFactor: 1.0,
+      overflow: TextOverflow.ellipsis,
       text: TextSpan(
         style: defaultStyle,
         children: list,

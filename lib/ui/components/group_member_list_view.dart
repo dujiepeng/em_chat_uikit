@@ -96,7 +96,7 @@ class _GroupMemberListViewState extends State<GroupMemberListView> {
                 }
                 widget.onSearchTap?.call(list);
               },
-              searchHideText: widget.searchHideText,
+              searchBarHideText: widget.searchHideText,
               itemBuilder: (context, model) {
                 if (model is ContactItemModel) {
                   Widget? item;

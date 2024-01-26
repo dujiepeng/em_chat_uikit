@@ -43,6 +43,7 @@ class HighlightTool {
       tmp.add(TextSpan(text: text.substring(index + keyword.length)));
 
       name = RichText(
+        overflow: TextOverflow.ellipsis,
         text: TextSpan(
           children: tmp,
           style: normalStyle,
@@ -53,6 +54,7 @@ class HighlightTool {
 
     name ??= Text(
       text,
+      overflow: TextOverflow.ellipsis,
       style: normalStyle,
       textScaleFactor: 1.0,
     );

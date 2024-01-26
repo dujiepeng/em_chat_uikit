@@ -19,6 +19,7 @@ class ChatUIKitTextMessageWidget extends StatelessWidget {
     Widget content = Text(
       message.textContent,
       textScaleFactor: 1.0,
+      overflow: TextOverflow.ellipsis,
       style: style ??
           (left
               ? TextStyle(
@@ -45,6 +46,7 @@ class ChatUIKitTextMessageWidget extends StatelessWidget {
           Text(
             '已编辑',
             textScaleFactor: 1.0,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontWeight: theme.font.bodyExtraSmall.fontWeight,
               fontSize: theme.font.bodyExtraSmall.fontSize,

@@ -59,7 +59,7 @@ class ChatUIKitProfile {
     String? name,
     String? avatarUrl,
     Map<String, String>? extension,
-    int timestamp = 0,
+    int? timestamp,
   }) {
     return ChatUIKitProfile(
       id: id,
@@ -67,7 +67,7 @@ class ChatUIKitProfile {
       avatarUrl: avatarUrl ?? this.avatarUrl,
       type: type,
       extension: extension ?? this.extension,
-      timestamp: timestamp,
+      timestamp: timestamp ?? this.timestamp,
     );
   }
 }

@@ -286,6 +286,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
                     color: theme.color.isDark
                         ? theme.color.primaryColor6
                         : theme.color.primaryColor5,
+                    package: action.packageName,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -382,6 +383,7 @@ class _GroupDetailsViewState extends State<GroupDetailsView>
                       return Text(
                         '$memberCount',
                         textScaleFactor: 1.0,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: theme.color.isDark
                               ? theme.color.neutralColor6

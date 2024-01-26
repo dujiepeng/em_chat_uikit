@@ -6,6 +6,7 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     required this.profile,
     this.controller,
     this.appBar,
+    this.title,
     this.inputBar,
     this.showAvatar = true,
     this.showNickname = true,
@@ -19,17 +20,17 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     this.emojiWidget,
     this.itemBuilder,
     this.alertItemBuilder,
-    this.moreActionItems,
-    this.onItemLongPressActions,
+    this.morePressActions,
+    this.longPressActions,
     this.bubbleStyle = ChatUIKitMessageListViewBubbleStyle.arrow,
     this.replyBarBuilder,
     this.quoteBuilder,
-    this.onErrorTap,
+    this.onErrorTapHandler,
     this.bubbleBuilder,
     this.enableAppBar = true,
     this.bubbleContentBuilder,
     this.onMoreActionsItemsHandler,
-    this.onItemLongPressActionsItemsHandler,
+    this.onItemLongPressHandler,
     this.inputBarTextEditingController,
     this.forceLeft,
     this.attributes,
@@ -38,37 +39,30 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
   final ChatUIKitProfile profile;
   final MessageListViewController? controller;
   final ChatUIKitAppBar? appBar;
+  final String? title;
   final Widget? inputBar;
   final bool showAvatar;
   final bool showNickname;
-  final MessageItemTapCallback? onItemTap;
-  final MessageItemTapCallback? onItemLongPress;
-  final MessageItemTapCallback? onDoubleTap;
-  final MessageItemTapCallback? onAvatarTap;
-  final MessageItemTapCallback? onAvatarLongPressed;
-  final MessageItemTapCallback? onNicknameTap;
+  final MessageItemTapHandler? onItemTap;
+  final MessageItemTapHandler? onItemLongPress;
+  final MessageItemTapHandler? onDoubleTap;
+  final MessageItemTapHandler? onAvatarTap;
+  final MessageItemTapHandler? onAvatarLongPressed;
+  final MessageItemTapHandler? onNicknameTap;
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
-  final List<ChatUIKitBottomSheetItem>? moreActionItems;
-  final List<ChatUIKitBottomSheetItem>? onItemLongPressActions;
+  final List<ChatUIKitBottomSheetItem>? morePressActions;
+  final List<ChatUIKitBottomSheetItem>? longPressActions;
   final MessageItemBuilder? itemBuilder;
   final MessageItemBuilder? alertItemBuilder;
   final FocusNode? focusNode;
   final Widget? emojiWidget;
-  final Widget? Function(BuildContext context, Message message)?
-      replyBarBuilder;
-  final Widget Function(QuoteModel model)? quoteBuilder;
-  final void Function(Message message)? onErrorTap;
+  final MessageItemBuilder? replyBarBuilder;
+  final Widget Function(BuildContext context, QuoteModel model)? quoteBuilder;
+  final bool Function(BuildContext context, Message message)? onErrorTapHandler;
   final MessageItemBubbleBuilder? bubbleBuilder;
   final MessageBubbleContentBuilder? bubbleContentBuilder;
-  final List<ChatUIKitBottomSheetItem>? Function(
-    BuildContext context,
-    List<ChatUIKitBottomSheetItem> willShowList,
-  )? onMoreActionsItemsHandler;
-  final List<ChatUIKitBottomSheetItem>? Function(
-    BuildContext context,
-    List<ChatUIKitBottomSheetItem> willShowList,
-    Message message,
-  )? onItemLongPressActionsItemsHandler;
+  final MessagesViewMorePressHandler? onMoreActionsItemsHandler;
+  final MessagesViewItemLongPressHandler? onItemLongPressHandler;
   final bool enableAppBar;
   final CustomTextEditingController? inputBarTextEditingController;
   bool? forceLeft;
@@ -80,35 +74,29 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
     MessageListViewController? controller,
     ChatUIKitAppBar? appBar,
     Widget? inputBar,
+    String? title,
     bool? showAvatar,
     bool? showNickname,
-    MessageItemTapCallback? onItemTap,
-    MessageItemTapCallback? onItemLongPress,
-    MessageItemTapCallback? onDoubleTap,
-    MessageItemTapCallback? onAvatarTap,
-    MessageItemTapCallback? onAvatarLongPressed,
-    MessageItemTapCallback? onNicknameTap,
+    MessageItemTapHandler? onItemTap,
+    MessageItemTapHandler? onItemLongPress,
+    MessageItemTapHandler? onDoubleTap,
+    MessageItemTapHandler? onAvatarTap,
+    MessageItemTapHandler? onAvatarLongPressed,
+    MessageItemTapHandler? onNicknameTap,
     ChatUIKitMessageListViewBubbleStyle? bubbleStyle,
-    List<ChatUIKitBottomSheetItem>? moreActionItems,
-    List<ChatUIKitBottomSheetItem>? onItemLongPressActions,
+    List<ChatUIKitBottomSheetItem>? morePressActions,
+    List<ChatUIKitBottomSheetItem>? longPressActions,
     MessageItemBuilder? itemBuilder,
     MessageItemBuilder? alertItemBuilder,
     FocusNode? focusNode,
     Widget? emojiWidget,
     Widget? Function(BuildContext context, Message message)? replyBarBuilder,
-    Widget Function(QuoteModel model)? quoteBuilder,
-    void Function(Message message)? onErrorTap,
+    Widget Function(BuildContext context, QuoteModel model)? quoteBuilder,
+    bool Function(BuildContext context, Message message)? onErrorTapHandler,
     MessageItemBubbleBuilder? bubbleBuilder,
     MessageBubbleContentBuilder? bubbleContentBuilder,
-    List<ChatUIKitBottomSheetItem>? Function(
-      BuildContext context,
-      List<ChatUIKitBottomSheetItem> willShowList,
-    )? onMoreActionsItemsHandler,
-    List<ChatUIKitBottomSheetItem>? Function(
-      BuildContext context,
-      List<ChatUIKitBottomSheetItem> willShowList,
-      Message message,
-    )? onItemLongPressActionsItemsHandler,
+    MessagesViewMorePressHandler? onMoreActionsItemsHandler,
+    MessagesViewItemLongPressHandler? onItemLongPressHandler,
     CustomTextEditingController? inputBarTextEditingController,
     bool? enableAppBar,
     bool? forceLeft,
@@ -118,6 +106,7 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
       profile: profile ?? this.profile,
       controller: controller ?? this.controller,
       appBar: appBar ?? this.appBar,
+      title: title ?? this.title,
       inputBar: inputBar ?? this.inputBar,
       showAvatar: showAvatar ?? this.showAvatar,
       showNickname: showNickname ?? this.showNickname,
@@ -128,22 +117,21 @@ class MessagesViewArguments implements ChatUIKitViewArguments {
       onAvatarLongPressed: onAvatarLongPressed ?? this.onAvatarLongPressed,
       onNicknameTap: onNicknameTap ?? this.onNicknameTap,
       bubbleStyle: bubbleStyle ?? this.bubbleStyle,
-      moreActionItems: moreActionItems ?? this.moreActionItems,
-      onItemLongPressActions:
-          onItemLongPressActions ?? this.onItemLongPressActions,
+      morePressActions: morePressActions ?? this.morePressActions,
+      longPressActions: longPressActions ?? this.longPressActions,
       itemBuilder: itemBuilder ?? this.itemBuilder,
       alertItemBuilder: alertItemBuilder ?? this.alertItemBuilder,
       focusNode: focusNode ?? this.focusNode,
       emojiWidget: emojiWidget ?? this.emojiWidget,
       replyBarBuilder: replyBarBuilder ?? this.replyBarBuilder,
       quoteBuilder: quoteBuilder ?? this.quoteBuilder,
-      onErrorTap: onErrorTap ?? this.onErrorTap,
+      onErrorTapHandler: onErrorTapHandler ?? this.onErrorTapHandler,
       bubbleBuilder: bubbleBuilder ?? this.bubbleBuilder,
       bubbleContentBuilder: bubbleContentBuilder ?? this.bubbleContentBuilder,
       onMoreActionsItemsHandler:
           onMoreActionsItemsHandler ?? this.onMoreActionsItemsHandler,
-      onItemLongPressActionsItemsHandler: onItemLongPressActionsItemsHandler ??
-          this.onItemLongPressActionsItemsHandler,
+      onItemLongPressHandler:
+          onItemLongPressHandler ?? this.onItemLongPressHandler,
       enableAppBar: enableAppBar ?? this.enableAppBar,
       inputBarTextEditingController:
           inputBarTextEditingController ?? this.inputBarTextEditingController,

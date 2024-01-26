@@ -85,6 +85,7 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
                     ChatUIKitLocal.groupDeleteMembersViewTitle
                         .getString(context),
                     textScaleFactor: 1.0,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: theme.color.isDark
                           ? theme.color.neutralColor98
@@ -112,6 +113,7 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
                                   .getString(context)
                               : '${ChatUIKitLocal.groupDeleteMembersViewDelete.getString(context)}(${value.length})',
                           textScaleFactor: 1.0,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: theme.color.isDark
                                 ? value.isEmpty

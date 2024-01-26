@@ -206,12 +206,14 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
                     color: theme.color.isDark
                         ? theme.color.primaryColor6
                         : theme.color.primaryColor5,
+                    package: action.packageName,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   action.title,
                   textScaleFactor: 1.0,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: theme.font.bodySmall.fontSize,
                     fontWeight: theme.font.bodySmall.fontWeight,

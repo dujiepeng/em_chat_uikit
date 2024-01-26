@@ -76,6 +76,7 @@ class ChatUIKitNewRequestListViewItem extends StatelessWidget {
               child: Text(
                 ChatUIKitLocal.newRequestItemAdd.getString(context),
                 textScaleFactor: 1.0,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: theme.color.isDark
                       ? theme.color.neutralColor1

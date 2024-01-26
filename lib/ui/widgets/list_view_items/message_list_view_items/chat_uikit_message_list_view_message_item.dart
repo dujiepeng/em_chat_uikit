@@ -53,7 +53,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
   final VoidCallback? onBubbleTap;
   final VoidCallback? onBubbleLongPressed;
   final VoidCallback? onBubbleDoubleTap;
-  final Widget Function(QuoteModel model)? quoteBuilder;
+  final Widget Function(BuildContext context, QuoteModel model)? quoteBuilder;
   final VoidCallback? onErrorTap;
   final MessageItemBubbleBuilder? bubbleBuilder;
   final MessageBubbleContentBuilder? bubbleContentBuilder;
@@ -168,7 +168,8 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
         showNickname
             ? _nickname(theme, context, isLeft: left)
             : const SizedBox(),
-        if (message.hasQuote) quoteWidget(message.getQuote!, isLeft: left),
+        if (message.hasQuote)
+          quoteWidget(context, message.getQuote!, isLeft: left),
         content,
         SizedBox(
           height: 16,
@@ -181,6 +182,7 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
               SizedBox(width: getArrowWidth),
               Text(
                 textScaleFactor: 1.0,
+                overflow: TextOverflow.ellipsis,
                 ChatUIKitTimeFormatter.instance.formatterHandler?.call(
                       context,
                       ChatUIKitTimeType.message,
@@ -349,8 +351,9 @@ class ChatUIKitMessageListViewMessageItem extends StatelessWidget {
     return content;
   }
 
-  Widget quoteWidget(QuoteModel model, {bool isLeft = false}) {
-    Widget? content = quoteBuilder?.call(model);
+  Widget quoteWidget(BuildContext context, QuoteModel model,
+      {bool isLeft = false}) {
+    Widget? content = quoteBuilder?.call(context, model);
     content = Padding(
       padding: EdgeInsets.only(
         left: isLeft ? getArrowWidth : 0,

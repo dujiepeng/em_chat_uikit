@@ -27,6 +27,7 @@ class ChatUIKitListViewMoreItem extends StatelessWidget
         Text(
           title,
           textScaleFactor: 1.0,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             color: theme.color.isDark
                 ? theme.color.neutralColor98

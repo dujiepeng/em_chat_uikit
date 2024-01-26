@@ -174,6 +174,7 @@ class _ChatUIKitAlphabeticalWidgetState
                   element.toUpperCase(),
                   textAlign: TextAlign.right,
                   textScaleFactor: 1.0,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: selected
                         ? (theme.color.isDark

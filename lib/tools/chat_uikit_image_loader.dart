@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 
-const String packageName = 'em_chat_uikit';
-
 class ChatUIKitImageLoader {
+  static String packageName = 'em_chat_uikit';
   static Widget chatIcon(
       {double width = 24, double height = 24, Color? color}) {
     return Image(
       gaplessPlayback: true,
       color: color,
-      image: ResizeImage(
-        const AssetImage('assets/images/chat.png', package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/chat.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -22,11 +19,9 @@ class ChatUIKitImageLoader {
     return Image(
       gaplessPlayback: true,
       color: color,
-      image: ResizeImage(
-        AssetImage('assets/images/voice_$frame.png', package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/voice_$frame.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -35,11 +30,9 @@ class ChatUIKitImageLoader {
     String name = imageName.substring(0, imageName.length);
     return Image(
       gaplessPlayback: true,
-      image: ResizeImage(
-        AssetImage('assets/images/emojis/$name.png', package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/emojis/$name.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -48,11 +41,9 @@ class ChatUIKitImageLoader {
     return Image(
       gaplessPlayback: true,
       color: color,
-      image: ResizeImage(
-        const AssetImage('assets/images/file_icon.png', package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/file_icon.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -62,22 +53,9 @@ class ChatUIKitImageLoader {
       width: width,
       height: height,
       color: color,
-      image: const AssetImage(
-        'assets/images/search.png',
-        package: packageName,
-      ),
+      image: AssetImage('assets/images/search.png', package: packageName),
       fit: BoxFit.fill,
     );
-    // return Image(
-    //   gaplessPlayback: true,
-    //   color: color,
-    //   image: ResizeImage(
-    //     const AssetImage('assets/images/search.png', package: packageName),
-    //     width: width.toInt(),
-    //     height: height.toInt(),
-    //   ),
-    //   fit: BoxFit.fill,
-    // );
   }
 
   static Widget listEmpty(
@@ -85,37 +63,21 @@ class ChatUIKitImageLoader {
     return Image(
       gaplessPlayback: true,
       color: color,
-      image: ResizeImage(
-        const AssetImage('assets/images/list_empty.png', package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/list_empty.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
-
-  // static Widget conversationTitle({double height = 24, Color? color}) {
-  //   return const Image(
-  //     gaplessPlayback: true,
-  //     image: ResizeImage(
-  //       AssetImage('assets/images/chat.png', package: packageName),
-  //       width: 60,
-  //       height: 30,
-  //     ),
-  //     fit: BoxFit.fill,
-  //   );
-  // }
 
   static Widget noDisturb(
       {double width = 20, double height = 20, Color? color}) {
     return Image(
       gaplessPlayback: true,
       color: color,
-      image: ResizeImage(
-        const AssetImage('assets/images/no_disturb.png', package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/no_disturb.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -125,11 +87,9 @@ class ChatUIKitImageLoader {
     return Image(
       gaplessPlayback: true,
       color: color,
-      image: ResizeImage(
-        const AssetImage('assets/images/avatar.png', package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/avatar.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -145,51 +105,24 @@ class ChatUIKitImageLoader {
 
   static Widget textKeyboard(
       {double width = 30, double height = 30, Color? color}) {
-    // return Image(
-    //   filterQuality: FilterQuality.high,
-    //   gaplessPlayback: true,
-    //   image: ResizeImage(
-    //     const AssetImage('assets/images/input_bar_keyboard.png',
-    //         package: packageName),
-    //     width: width.toInt(),
-    //     height: height.toInt(),
-    //   ),
-    //   fit: BoxFit.fill,
-    // );
-
     return Image(
       width: width,
       height: height,
       color: color,
-      image: const AssetImage(
-        'assets/images/input_bar_keyboard.png',
-        package: packageName,
-      ),
+      image: AssetImage('assets/images/input_bar_keyboard.png',
+          package: packageName),
       fit: BoxFit.fill,
     );
   }
 
   static Widget voiceKeyboard(
       {double width = 30, double height = 30, Color? color}) {
-    // return Image(
-    //   gaplessPlayback: true,
-    //   image: ResizeImage(
-    //     const AssetImage('assets/images/input_bar_voice.png',
-    //         package: packageName),
-    //     width: width.toInt(),
-    //     height: height.toInt(),
-    //   ),
-    //   fit: BoxFit.fill,
-    // );
-
     return Image(
       color: color,
       width: width,
       height: height,
-      image: const AssetImage(
-        'assets/images/input_bar_voice.png',
-        package: packageName,
-      ),
+      image:
+          AssetImage('assets/images/input_bar_voice.png', package: packageName),
       // fit: BoxFit.fill,
     );
   }
@@ -199,57 +132,35 @@ class ChatUIKitImageLoader {
     return Image(
       color: color,
       gaplessPlayback: true,
-      image: ResizeImage(
-        const AssetImage('assets/images/edit_bar.png', package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      image: AssetImage('assets/images/edit_bar.png', package: packageName),
+      width: width,
+      height: height,
       fit: BoxFit.fill,
     );
   }
 
   static Widget moreKeyboard(
       {double width = 30, double height = 30, Color? color}) {
-    // return Image(
-    //   gaplessPlayback: true,
-    //   image: ResizeImage(
-    //     const AssetImage('assets/images/input_bar_more.png',
-    //         package: packageName),
-    //     width: width.toInt(),
-    //     height: height.toInt(),
-    //   ),
-    //   fit: BoxFit.fill,
-    // );
     return Image(
       color: color,
       width: width,
       height: height,
       gaplessPlayback: true,
-      image: const AssetImage('assets/images/input_bar_more.png',
-          package: packageName),
-      // fit: BoxFit.fill,
+      image:
+          AssetImage('assets/images/input_bar_more.png', package: packageName),
+      fit: BoxFit.fill,
     );
   }
 
   static Widget faceKeyboard(
       {double width = 30, double height = 30, Color? color}) {
-    // return Image(
-    //   gaplessPlayback: true,
-    //   image: ResizeImage(
-    //     const AssetImage('assets/images/input_bar_face.png',
-    //         package: packageName),
-    //     width: width.toInt(),
-    //     height: height.toInt(),
-    //   ),
-    //   fit: BoxFit.fill,
-    // );
     return Image(
       color: color,
       width: width,
       height: height,
       gaplessPlayback: true,
-      image: const AssetImage('assets/images/input_bar_face.png',
-          package: packageName),
+      image:
+          AssetImage('assets/images/input_bar_face.png', package: packageName),
       // fit: BoxFit.fill,
     );
   }
@@ -259,12 +170,10 @@ class ChatUIKitImageLoader {
     return Image(
       color: color,
       gaplessPlayback: true,
-      image: ResizeImage(
-        const AssetImage('assets/images/input_bar_send.png',
-            package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image:
+          AssetImage('assets/images/input_bar_send.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -274,12 +183,10 @@ class ChatUIKitImageLoader {
     return Image(
       color: color,
       gaplessPlayback: true,
-      image: ResizeImage(
-        const AssetImage('assets/images/record_delete.png',
-            package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image:
+          AssetImage('assets/images/record_delete.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -289,11 +196,9 @@ class ChatUIKitImageLoader {
     return Image(
       color: color,
       gaplessPlayback: true,
-      image: ResizeImage(
-        const AssetImage('assets/images/record_send.png', package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/record_send.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -303,11 +208,9 @@ class ChatUIKitImageLoader {
     return Image(
       color: color,
       gaplessPlayback: true,
-      image: ResizeImage(
-        const AssetImage('assets/images/record_mic.png', package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/record_mic.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -317,12 +220,10 @@ class ChatUIKitImageLoader {
     return Image(
       color: color,
       gaplessPlayback: true,
-      image: ResizeImage(
-        const AssetImage('assets/images/image_default.png',
-            package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image:
+          AssetImage('assets/images/image_default.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -332,12 +233,10 @@ class ChatUIKitImageLoader {
     return Image(
       color: color,
       gaplessPlayback: true,
-      image: ResizeImage(
-        const AssetImage('assets/images/video_default.png',
-            package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image:
+          AssetImage('assets/images/video_default.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -373,11 +272,9 @@ class ChatUIKitImageLoader {
     return Image(
       gaplessPlayback: true,
       color: color,
-      image: ResizeImage(
-        const AssetImage('assets/images/image.png', package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/image.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -387,11 +284,9 @@ class ChatUIKitImageLoader {
     return Image(
       color: color,
       gaplessPlayback: true,
-      image: ResizeImage(
-        const AssetImage('assets/images/video.png', package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/video.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -401,11 +296,9 @@ class ChatUIKitImageLoader {
     return Image(
       color: color,
       gaplessPlayback: true,
-      image: ResizeImage(
-        const AssetImage('assets/images/camera.png', package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/camera.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -415,11 +308,9 @@ class ChatUIKitImageLoader {
     return Image(
       color: color,
       gaplessPlayback: true,
-      image: ResizeImage(
-        const AssetImage('assets/images/folder.png', package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/folder.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -429,11 +320,9 @@ class ChatUIKitImageLoader {
     return Image(
       gaplessPlayback: true,
       color: color,
-      image: ResizeImage(
-        const AssetImage('assets/images/person.png', package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/folder.png', package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -443,12 +332,10 @@ class ChatUIKitImageLoader {
     return Image(
       gaplessPlayback: true,
       color: color,
-      image: ResizeImage(
-        const AssetImage('assets/images/message_long_press_copy.png',
-            package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/message_long_press_copy.png',
+          package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -458,12 +345,10 @@ class ChatUIKitImageLoader {
     return Image(
       gaplessPlayback: true,
       color: color,
-      image: ResizeImage(
-        const AssetImage('assets/images/message_long_press_reply.png',
-            package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/message_long_press_reply.png',
+          package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -473,12 +358,10 @@ class ChatUIKitImageLoader {
     return Image(
       gaplessPlayback: true,
       color: color,
-      image: ResizeImage(
-        const AssetImage('assets/images/message_long_press_edit.png',
-            package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/message_long_press_edit.png',
+          package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -488,12 +371,10 @@ class ChatUIKitImageLoader {
     return Image(
       gaplessPlayback: true,
       color: color,
-      image: ResizeImage(
-        const AssetImage('assets/images/message_long_press_report.png',
-            package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/message_long_press_report.png',
+          package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -503,12 +384,10 @@ class ChatUIKitImageLoader {
     return Image(
       color: color,
       gaplessPlayback: true,
-      image: ResizeImage(
-        const AssetImage('assets/images/message_long_press_delete.png',
-            package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/message_long_press_report.png',
+          package: packageName),
       fit: BoxFit.fill,
     );
   }
@@ -518,12 +397,10 @@ class ChatUIKitImageLoader {
     return Image(
       color: color,
       gaplessPlayback: true,
-      image: ResizeImage(
-        const AssetImage('assets/images/message_long_press_recall.png',
-            package: packageName),
-        width: width.toInt(),
-        height: height.toInt(),
-      ),
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/message_long_press_recall.png',
+          package: packageName),
       fit: BoxFit.fill,
     );
   }

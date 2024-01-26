@@ -2,7 +2,7 @@ import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
 
-typedef ChatUIKitConversationItemBuilder = Widget? Function(
+typedef ConversationItemBuilder = Widget? Function(
     BuildContext context, ConversationModel model);
 
 class ConversationListView extends StatefulWidget {
@@ -12,30 +12,32 @@ class ConversationListView extends StatefulWidget {
     this.beforeWidgets,
     this.afterWidgets,
     this.onSearchTap,
-    this.searchHideText,
+    this.searchBarHideText,
     this.background,
     this.errorMessage,
     this.reloadMessage,
     this.onTap,
     this.onLongPress,
     this.enableLongPress = true,
+    this.enableSearchBar = true,
     super.key,
   });
 
   final void Function(List<ConversationModel> data)? onSearchTap;
-  final ChatUIKitConversationItemBuilder? itemBuilder;
+  final ConversationItemBuilder? itemBuilder;
   final void Function(BuildContext context, ConversationModel info)? onTap;
   final void Function(BuildContext context, ConversationModel info)?
       onLongPress;
   final List<Widget>? beforeWidgets;
   final List<Widget>? afterWidgets;
 
-  final String? searchHideText;
+  final String? searchBarHideText;
   final Widget? background;
   final String? errorMessage;
   final String? reloadMessage;
   final ConversationListViewController? controller;
   final bool enableLongPress;
+  final bool enableSearchBar;
 
   @override
   State<ConversationListView> createState() => _ConversationListViewState();
@@ -44,7 +46,7 @@ class ConversationListView extends StatefulWidget {
 class _ConversationListViewState extends State<ConversationListView>
     with ChatObserver, MultiObserver, ChatUIKitProviderObserver {
   late ConversationListViewController controller;
-  bool enableSearchBar = true;
+
   @override
   void initState() {
     super.initState();
@@ -123,7 +125,7 @@ class _ConversationListViewState extends State<ConversationListView>
       refresh: () {
         controller.fetchItemList();
       },
-      enableSearchBar: enableSearchBar,
+      enableSearchBar: widget.enableSearchBar,
       errorMessage: widget.errorMessage,
       reloadMessage: widget.reloadMessage,
       beforeWidgets: widget.beforeWidgets,
@@ -138,7 +140,7 @@ class _ConversationListViewState extends State<ConversationListView>
         }
         widget.onSearchTap?.call(list);
       },
-      searchHideText: widget.searchHideText,
+      searchBarHideText: widget.searchBarHideText,
       findChildIndexCallback: (key) {
         int index = -1;
         if (key is ValueKey<String>) {

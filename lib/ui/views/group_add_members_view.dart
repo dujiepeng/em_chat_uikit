@@ -84,6 +84,7 @@ class _GroupAddMembersViewState extends State<GroupAddMembersView> {
                   child: Text(
                     ChatUIKitLocal.groupAddMembersViewTitle.getString(context),
                     textScaleFactor: 1.0,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: theme.color.isDark
                           ? theme.color.neutralColor98
@@ -111,6 +112,7 @@ class _GroupAddMembersViewState extends State<GroupAddMembersView> {
                                   .getString(context)
                               : '${ChatUIKitLocal.groupAddMembersViewAdd.getString(context)}(${value.length})',
                           textScaleFactor: 1.0,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: theme.color.isDark
                                 ? theme.color.primaryColor6

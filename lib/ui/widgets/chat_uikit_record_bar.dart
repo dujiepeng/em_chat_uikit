@@ -16,7 +16,6 @@ class ChatUIKitRecordConfig {
     this.numChannels = 2,
   });
 
-
   final audio_record.AudioEncoder encoder;
   final int bitRate;
   final double samplingRate;
@@ -268,6 +267,7 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
       return Text(
         widget.hintText ?? ChatUIKitLocal.recordBarRecord.getString(context),
         textScaleFactor: 1.0,
+        overflow: TextOverflow.ellipsis,
         style: widget.hintTextStyle ?? style,
       );
     } else if (statusType == ChatUIKitVoiceBarStatusType.recording) {
@@ -275,12 +275,14 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
         widget.recordText ??
             ChatUIKitLocal.recordBarRecording.getString(context),
         textScaleFactor: 1.0,
+        overflow: TextOverflow.ellipsis,
         style: widget.recordTextStyle ?? style,
       );
     } else if (statusType == ChatUIKitVoiceBarStatusType.ready) {
       return Text(
         widget.playText ?? ChatUIKitLocal.recordBarPlay.getString(context),
         textScaleFactor: 1.0,
+        overflow: TextOverflow.ellipsis,
         style: widget.playTextStyle ?? style,
       );
     } else if (statusType == ChatUIKitVoiceBarStatusType.playing) {
@@ -288,6 +290,7 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
         widget.playingText ??
             ChatUIKitLocal.recordBarPlaying.getString(context),
         textScaleFactor: 1.0,
+        overflow: TextOverflow.ellipsis,
         style: widget.playingTextStyle ?? style,
       );
     }
@@ -303,6 +306,7 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
       content = Text(
           context.formatString(ChatUIKitLocal.recordBarAutoStop,
               ['${widget.maxDuration - recordCounter}']),
+          overflow: TextOverflow.ellipsis,
           textScaleFactor: 1.0,
           style: TextStyle(
             fontWeight: theme.font.bodySmall.fontWeight,
@@ -351,6 +355,7 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
                 return Text(
                   '${recordCounter}s',
                   textScaleFactor: 1.0,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       color: theme.color.isDark
                           ? theme.color.neutralColor98
@@ -362,6 +367,7 @@ class _ChatUIKitRecordBarState extends State<ChatUIKitRecordBar> {
                 return Text(
                   '${playCounter}s',
                   textScaleFactor: 1.0,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       color: theme.color.isDark
                           ? theme.color.neutralColor98

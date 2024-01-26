@@ -149,22 +149,26 @@ class ChatUIKitBottomSheet<T> extends StatelessWidget {
     );
 
     if (title != null) {
-      list.add(Container(
-        padding: const EdgeInsets.symmetric(vertical: 13),
-        child: Text(
-          title!,
-          textScaleFactor: 1.0,
-          style: titleStyle ??
-              TextStyle(
-                fontWeight:
-                    ChatUIKitTheme.of(context).font.labelMedium.fontWeight,
-                fontSize: ChatUIKitTheme.of(context).font.labelMedium.fontSize,
-                color: (ChatUIKitTheme.of(context).color.isDark
-                    ? ChatUIKitTheme.of(context).color.neutralColor6
-                    : ChatUIKitTheme.of(context).color.neutralColor5),
-              ),
+      list.add(
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 13),
+          child: Text(
+            title!,
+            overflow: TextOverflow.ellipsis,
+            textScaleFactor: 1.0,
+            style: titleStyle ??
+                TextStyle(
+                  fontWeight:
+                      ChatUIKitTheme.of(context).font.labelMedium.fontWeight,
+                  fontSize:
+                      ChatUIKitTheme.of(context).font.labelMedium.fontSize,
+                  color: (ChatUIKitTheme.of(context).color.isDark
+                      ? ChatUIKitTheme.of(context).color.neutralColor6
+                      : ChatUIKitTheme.of(context).color.neutralColor5),
+                ),
+          ),
         ),
-      ));
+      );
     }
 
     for (var element in items) {
@@ -198,19 +202,25 @@ class ChatUIKitBottomSheet<T> extends StatelessWidget {
                         margin: const EdgeInsets.fromLTRB(16, 4, 4, 4),
                         child: element.icon,
                       ),
-                      Text(
-                        element.label,
-                        textScaleFactor: 1.0,
-                        style: element.style ??
-                            (element.type == ChatUIKitBottomSheetItemType.normal
-                                ? normalStyle
-                                : destructive),
-                      ),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: Text(
+                          element.label,
+                          textScaleFactor: 1.0,
+                          overflow: TextOverflow.ellipsis,
+                          style: element.style ??
+                              (element.type ==
+                                      ChatUIKitBottomSheetItemType.normal
+                                  ? normalStyle
+                                  : destructive),
+                        ),
+                      )
                     ],
                   )
                 : Text(
                     element.label,
                     textScaleFactor: 1.0,
+                    overflow: TextOverflow.ellipsis,
                     style: element.style ??
                         (element.type == ChatUIKitBottomSheetItemType.normal
                             ? normalStyle
@@ -242,6 +252,7 @@ class ChatUIKitBottomSheet<T> extends StatelessWidget {
             child: Text(
               str,
               textScaleFactor: 1.0,
+              overflow: TextOverflow.ellipsis,
               style: cancelStyle ??
                   TextStyle(
                     fontWeight:

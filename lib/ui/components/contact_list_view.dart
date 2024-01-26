@@ -16,11 +16,12 @@ class ContactListView extends StatefulWidget {
     this.background,
     this.errorMessage,
     this.reloadMessage,
+    this.enableSearchBar = true,
     this.onTap,
     this.onLongPress,
     super.key,
   });
-
+  final bool enableSearchBar;
   final void Function(List<ContactItemModel> data)? onSearchTap;
   final List<Widget>? beforeWidgets;
   final List<Widget>? afterWidgets;
@@ -42,7 +43,6 @@ class _ContactListViewState extends State<ContactListView>
     with ChatUIKitProviderObserver {
   ScrollController scrollController = ScrollController();
   late final ContactListViewController controller;
-  bool enableSearchBar = true;
 
   @override
   void initState() {
@@ -80,7 +80,7 @@ class _ContactListViewState extends State<ContactListView>
       onTapCancel: () {},
       onTap: (context, alphabetical) {},
       beforeWidgets: widget.beforeWidgets,
-      listViewHasSearchBar: enableSearchBar,
+      listViewHasSearchBar: widget.enableSearchBar,
       list: controller.list,
       scrollController: scrollController,
       builder: (context, list) {
@@ -91,7 +91,7 @@ class _ContactListViewState extends State<ContactListView>
           refresh: () {
             controller.fetchItemList();
           },
-          enableSearchBar: enableSearchBar,
+          enableSearchBar: widget.enableSearchBar,
           errorMessage: widget.errorMessage,
           reloadMessage: widget.reloadMessage,
           beforeWidgets: widget.beforeWidgets,
@@ -106,7 +106,7 @@ class _ContactListViewState extends State<ContactListView>
             }
             widget.onSearchTap?.call(list);
           },
-          searchHideText: widget.searchHideText,
+          searchBarHideText: widget.searchHideText,
           itemBuilder: (context, model) {
             if (model is ContactItemModel) {
               Widget? item;

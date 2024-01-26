@@ -39,7 +39,7 @@ class ChatUIKitRoute {
   static ChatUIKitRoute? _instance;
   static bool hasInit = false;
   static ChatUIKitRouteBackModel? _lastBackModel;
-
+  static ChatUIKitRoute get instance => _instance ??= ChatUIKitRoute._();
   factory ChatUIKitRoute() => _instance ??= ChatUIKitRoute._();
 
   ChatUIKitRoute._() {

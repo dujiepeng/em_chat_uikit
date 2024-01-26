@@ -645,6 +645,8 @@ class ChatUIKitLocalizations {
     );
   }
 
+  Locale displayLanguageWhenNotSupported = const Locale('en');
+
   Locale? localeResolutionCallback(
     Locale? locale,
     Iterable<Locale> supportedLocales,
@@ -653,8 +655,7 @@ class ChatUIKitLocalizations {
     int index = supportedLocales.toList().lastIndexWhere(
         (element) => element.languageCode == locale?.languageCode);
     if (index == -1) {
-      ret = supportedLocales
-          .firstWhere((element) => element.languageCode == 'en');
+      ret = displayLanguageWhenNotSupported;
     } else {
       ret = supportedLocales.elementAt(index);
     }

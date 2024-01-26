@@ -1,5 +1,5 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:em_chat_uikit_example/pages/tool/user_data_store.dart';
+import 'package:em_chat_uikit_example/tool/user_data_store.dart';
 import 'package:flutter/material.dart';
 
 class PersonalInfoPage extends StatefulWidget {

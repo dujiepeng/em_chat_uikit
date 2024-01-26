@@ -213,6 +213,7 @@ class _SearchUsersViewState extends State<SearchUsersView> {
                                     ? widget.selectedTitle ?? ''
                                     : '${widget.selectedTitle ?? ''}(${value.length})',
                                 textScaleFactor: 1.0,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: theme.color.isDark
                                       ? theme.color.primaryColor6

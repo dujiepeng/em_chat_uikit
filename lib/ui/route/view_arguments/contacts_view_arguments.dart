@@ -5,14 +5,15 @@ class ContactsViewArguments implements ChatUIKitViewArguments {
   ContactsViewArguments({
     this.controller,
     this.appBar,
+    this.enableAppBar = true,
+    this.enableSearchBar = true,
     this.onSearchTap,
     this.listViewItemBuilder,
     this.onTap,
     this.onLongPress,
-    this.fakeSearchHideText,
+    this.searchHideText,
     this.listViewBackground,
     this.loadErrorMessage,
-    this.enableAppBar = true,
     this.beforeItems,
     this.afterItems,
     this.title,
@@ -21,6 +22,8 @@ class ContactsViewArguments implements ChatUIKitViewArguments {
 
   final ContactListViewController? controller;
   final ChatUIKitAppBar? appBar;
+  final bool enableAppBar;
+  final bool enableSearchBar;
   final void Function(List<ContactItemModel> data)? onSearchTap;
   final List<ChatUIKitListViewMoreItem>? beforeItems;
   final List<ChatUIKitListViewMoreItem>? afterItems;
@@ -28,11 +31,11 @@ class ContactsViewArguments implements ChatUIKitViewArguments {
   final void Function(BuildContext context, ContactItemModel model)? onTap;
   final void Function(BuildContext context, ContactItemModel model)?
       onLongPress;
-  final String? fakeSearchHideText;
+  final String? searchHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
   final String? title;
-  final bool enableAppBar;
+
   @override
   String? attributes;
 
@@ -43,20 +46,22 @@ class ContactsViewArguments implements ChatUIKitViewArguments {
     ChatUIKitContactItemBuilder? listViewItemBuilder,
     void Function(BuildContext context, ContactItemModel model)? onTap,
     void Function(BuildContext context, ContactItemModel model)? onLongPress,
-    String? fakeSearchHideText,
+    String? searchHideText,
     Widget? listViewBackground,
     String? loadErrorMessage,
+    bool? enableSearchBar,
     bool? enableAppBar,
     String? attributes,
   }) {
     return ContactsViewArguments(
       controller: controller ?? this.controller,
       appBar: appBar ?? this.appBar,
+      enableSearchBar: enableSearchBar ?? this.enableSearchBar,
       onSearchTap: onSearchTap ?? this.onSearchTap,
       listViewItemBuilder: listViewItemBuilder ?? this.listViewItemBuilder,
       onTap: onTap ?? this.onTap,
       onLongPress: onLongPress ?? this.onLongPress,
-      fakeSearchHideText: fakeSearchHideText ?? this.fakeSearchHideText,
+      searchHideText: searchHideText ?? this.searchHideText,
       listViewBackground: listViewBackground ?? this.listViewBackground,
       loadErrorMessage: loadErrorMessage ?? this.loadErrorMessage,
       enableAppBar: enableAppBar ?? this.enableAppBar,

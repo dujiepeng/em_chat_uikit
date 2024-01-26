@@ -1,6 +1,6 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:em_chat_uikit_example/pages/tool/remote_avatars.dart';
-import 'package:em_chat_uikit_example/pages/tool/user_data_store.dart';
+import 'package:em_chat_uikit_example/tool/remote_avatars.dart';
+import 'package:em_chat_uikit_example/tool/user_data_store.dart';
 import 'package:flutter/material.dart';
 
 class ChangeAvatarPage extends StatefulWidget {
@@ -72,6 +72,7 @@ class _ChangeAvatarPageState extends State<ChangeAvatarPage> {
                       child: Image.asset(
                         'assets/images/avatar_selected.png',
                         fit: BoxFit.fill,
+                        package: ChatUIKitImageLoader.packageName,
                       ),
                     ),
                   )

@@ -94,6 +94,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
     return widget.title ??
         RichText(
           textScaleFactor: 1.0,
+          overflow: TextOverflow.ellipsis,
           text: TextSpan(
             children: [
               TextSpan(
@@ -171,6 +172,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
         Expanded(
           child: Text(
             ChatUIKitLocal.replayBarTitleImage.getString(context),
+            overflow: TextOverflow.ellipsis,
             textScaleFactor: 1.0,
             style: TextStyle(
               fontWeight: theme.font.labelSmall.fontWeight,
@@ -198,6 +200,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
           child: Text(
             ChatUIKitLocal.replayBarTitleVideo.getString(context),
             textScaleFactor: 1.0,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontWeight: theme.font.labelSmall.fontWeight,
               fontSize: theme.font.labelSmall.fontSize,
@@ -226,6 +229,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
         Expanded(
           child: RichText(
             textScaleFactor: 1.0,
+            overflow: TextOverflow.ellipsis,
             text: TextSpan(
               children: [
                 TextSpan(
@@ -273,6 +277,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
         Expanded(
             child: RichText(
           textScaleFactor: 1.0,
+          overflow: TextOverflow.ellipsis,
           text: TextSpan(
             children: [
               TextSpan(
@@ -317,6 +322,7 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
           Expanded(
             child: RichText(
               textScaleFactor: 1.0,
+              overflow: TextOverflow.ellipsis,
               text: TextSpan(
                 children: [
                   TextSpan(

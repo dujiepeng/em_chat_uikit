@@ -9,6 +9,9 @@ typedef MessageItemBuilder = Widget? Function(
   Message message,
 );
 
+typedef MessageListItemTapHandler = void Function(
+    BuildContext context, Message message);
+
 class MessageListView extends StatefulWidget {
   const MessageListView({
     required this.profile,
@@ -33,18 +36,18 @@ class MessageListView extends StatefulWidget {
   });
   final ChatUIKitProfile profile;
   final MessageListViewController? controller;
-  final void Function(Message message)? onItemTap;
-  final void Function(Message message)? onItemLongPress;
-  final void Function(Message message)? onDoubleTap;
-  final void Function(Message message)? onAvatarTap;
-  final void Function(Message message)? onAvatarLongPressed;
-  final void Function(Message message)? onNicknameTap;
+  final MessageListItemTapHandler? onItemTap;
+  final MessageListItemTapHandler? onItemLongPress;
+  final MessageListItemTapHandler? onDoubleTap;
+  final MessageListItemTapHandler? onAvatarTap;
+  final MessageListItemTapHandler? onAvatarLongPressed;
+  final MessageListItemTapHandler? onNicknameTap;
   final ChatUIKitMessageListViewBubbleStyle bubbleStyle;
   final MessageItemBuilder? itemBuilder;
   final MessageItemBuilder? alertItemBuilder;
   final bool showAvatar;
   final bool showNickname;
-  final Widget Function(QuoteModel model)? quoteBuilder;
+  final Widget Function(BuildContext context, QuoteModel model)? quoteBuilder;
   final void Function(Message message)? onErrorTap;
   final MessageItemBubbleBuilder? bubbleBuilder;
   final MessageBubbleContentBuilder? bubbleContentBuilder;
@@ -219,29 +222,29 @@ class _MessageListViewState extends State<MessageListView> {
       },
       bubbleStyle: widget.bubbleStyle,
       showAvatar: widget.showAvatar,
-      quoteBuilder: (model) {
-        Widget? content = widget.quoteBuilder?.call(model);
+      quoteBuilder: (context, model) {
+        Widget? content = widget.quoteBuilder?.call(context, model);
         content ??= quoteWidget(model);
         return content;
       },
       showNickname: widget.showNickname,
       onAvatarTap: () {
-        widget.onAvatarTap?.call(message);
+        widget.onAvatarTap?.call(context, message);
       },
       onAvatarLongPressed: () {
-        widget.onAvatarLongPressed?.call(message);
+        widget.onAvatarLongPressed?.call(context, message);
       },
       onBubbleDoubleTap: () {
-        widget.onDoubleTap?.call(message);
+        widget.onDoubleTap?.call(context, message);
       },
       onBubbleLongPressed: () {
-        widget.onItemLongPress?.call(message);
+        widget.onItemLongPress?.call(context, message);
       },
       onBubbleTap: () {
-        widget.onItemTap?.call(message);
+        widget.onItemTap?.call(context, message);
       },
       onNicknameTap: () {
-        widget.onNicknameTap?.call(message);
+        widget.onNicknameTap?.call(context, message);
       },
       message: message,
     );

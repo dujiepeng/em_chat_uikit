@@ -65,6 +65,7 @@ class ChatUIKitCardMessageWidget extends StatelessWidget {
           child: Text(
             ChatUIKitLocal.messageListItemContactCard.getString(context),
             textScaleFactor: 1.0,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontWeight: theme.font.bodyExtraSmall.fontWeight,
               fontSize: theme.font.bodyExtraSmall.fontSize,

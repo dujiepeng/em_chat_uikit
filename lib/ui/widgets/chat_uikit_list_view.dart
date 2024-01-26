@@ -25,7 +25,7 @@ class ChatUIKitListView extends StatefulWidget {
     this.loadMore,
     this.refresh,
     this.onSearchTap,
-    this.searchHideText,
+    this.searchBarHideText,
     this.enableSearchBar = true,
     this.background,
     this.errorMessage,
@@ -47,7 +47,7 @@ class ChatUIKitListView extends StatefulWidget {
   final Widget? background;
   final void Function(List<ChatUIKitListItemModelBase> data)? onSearchTap;
   final bool enableSearchBar;
-  final String? searchHideText;
+  final String? searchBarHideText;
   final List<ChatUIKitListItemModelBase> list;
   final ChatUIKitListItemBuilder itemBuilder;
   final List<Widget>? beforeWidgets;
@@ -108,6 +108,7 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
               widget.errorMessage ??
                   ChatUIKitLocal.listViewLoadFailed.getString(context),
               textScaleFactor: 1.0,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: theme.color.isDark
                     ? theme.color.neutralColor7
@@ -133,6 +134,7 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
                   widget.reloadMessage ??
                       ChatUIKitLocal.listViewReload.getString(context),
                   textScaleFactor: 1.0,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: theme.color.isDark
                         ? theme.color.neutralColor98
@@ -270,19 +272,22 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
                   color: theme.color.neutralColor3,
                 ),
                 const SizedBox(width: 4),
-                Text(
-                  widget.searchHideText ??
-                      ChatUIKitLocal.conversationsViewSearchHint
-                          .getString(context),
-                  textScaleFactor: 1.0,
-                  style: TextStyle(
-                    color: theme.color.isDark
-                        ? theme.color.neutralColor4
-                        : theme.color.neutralColor6,
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Text(
+                    widget.searchBarHideText ??
+                        ChatUIKitLocal.conversationsViewSearchHint
+                            .getString(context),
+                    textScaleFactor: 1.0,
+                    style: TextStyle(
+                      color: theme.color.isDark
+                          ? theme.color.neutralColor4
+                          : theme.color.neutralColor6,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                )
+                ),
               ],
             ),
           ),

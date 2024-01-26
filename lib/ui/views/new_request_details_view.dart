@@ -128,6 +128,7 @@ class _NewRequestDetailsViewState extends State<NewRequestDetailsView> {
           widget.btnText ??
               ChatUIKitLocal.newRequestDetailsViewAddContact.getString(context),
           textScaleFactor: 1.0,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             fontSize: theme.font.headlineSmall.fontSize,
             fontWeight: theme.font.headlineSmall.fontWeight,

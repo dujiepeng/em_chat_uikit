@@ -98,6 +98,7 @@ class _GroupsViewState extends State<GroupsView> {
                       return Text(
                         "${ChatUIKitLocal.groupsViewTitle.getString(context)}${value != 0 ? '($value)' : ''}",
                         textScaleFactor: 1.0,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontWeight: theme.font.titleMedium.fontWeight,
                           fontSize: theme.font.titleMedium.fontSize,
@@ -138,6 +139,7 @@ class _GroupsViewState extends State<GroupsView> {
               ChatUIKitActionModel(
                 title: ChatUIKitLocal.groupDetailViewSend.getString(context),
                 icon: 'assets/images/chat.png',
+                packageName: ChatUIKitImageLoader.packageName,
                 onTap: (context) {
                   ChatUIKitRoute.pushNamed(
                     context,
@@ -161,6 +163,7 @@ class _GroupsViewState extends State<GroupsView> {
               ChatUIKitActionModel(
                 title: ChatUIKitLocal.groupDetailViewSend.getString(context),
                 icon: 'assets/images/chat.png',
+                packageName: ChatUIKitImageLoader.packageName,
                 onTap: (context) {
                   ChatUIKitRoute.push(
                     context,

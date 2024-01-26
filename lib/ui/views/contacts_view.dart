@@ -8,7 +8,7 @@ class ContactsView extends StatefulWidget {
     super.key,
   })  : listViewItemBuilder = arguments.listViewItemBuilder,
         onSearchTap = arguments.onSearchTap,
-        fakeSearchHideText = arguments.fakeSearchHideText,
+        searchHideText = arguments.searchHideText,
         listViewBackground = arguments.listViewBackground,
         onTap = arguments.onTap,
         onLongPress = arguments.onLongPress,
@@ -19,19 +19,21 @@ class ContactsView extends StatefulWidget {
         afterItems = arguments.afterItems,
         loadErrorMessage = arguments.loadErrorMessage,
         title = arguments.title,
+        enableSearchBar = arguments.enableSearchBar,
         attributes = arguments.attributes;
 
   const ContactsView({
-    this.listViewItemBuilder,
+    this.appBar,
+    this.enableAppBar = true,
+    this.enableSearchBar = true,
     this.onSearchTap,
-    this.fakeSearchHideText,
+    this.searchHideText,
     this.listViewBackground,
     this.onTap,
     this.onLongPress,
-    this.appBar,
+    this.listViewItemBuilder,
     this.controller,
     this.loadErrorMessage,
-    this.enableAppBar = true,
     this.beforeItems,
     this.afterItems,
     this.title,
@@ -41,18 +43,19 @@ class ContactsView extends StatefulWidget {
 
   final ContactListViewController? controller;
   final ChatUIKitAppBar? appBar;
+  final bool enableAppBar;
+  final String? title;
   final void Function(List<ContactItemModel> data)? onSearchTap;
+  final bool enableSearchBar;
   final List<ChatUIKitListViewMoreItem>? beforeItems;
   final List<ChatUIKitListViewMoreItem>? afterItems;
   final ChatUIKitContactItemBuilder? listViewItemBuilder;
   final void Function(BuildContext context, ContactItemModel model)? onTap;
   final void Function(BuildContext context, ContactItemModel model)?
       onLongPress;
-  final String? fakeSearchHideText;
+  final String? searchHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
-  final bool enableAppBar;
-  final String? title;
   final String? attributes;
 
   @override
@@ -119,11 +122,12 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
           itemBuilder: widget.listViewItemBuilder,
           beforeWidgets: widget.beforeItems ?? beforeWidgets,
           afterWidgets: widget.afterItems,
-          searchHideText: widget.fakeSearchHideText,
+          searchHideText: widget.searchHideText,
           background: widget.listViewBackground,
           onTap: widget.onTap ?? tapContactInfo,
           onLongPress: widget.onLongPress,
           onSearchTap: widget.onSearchTap ?? onSearchTap,
+          enableSearchBar: widget.enableSearchBar,
           errorMessage: widget.loadErrorMessage,
         ),
       ),
@@ -214,6 +218,7 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
             ChatUIKitActionModel(
               title: ChatUIKitLocal.contactDetailViewSend.getString(context),
               icon: 'assets/images/chat.png',
+              packageName: ChatUIKitImageLoader.packageName,
               onTap: (context) {
                 ChatUIKitRoute.pushNamed(
                   context,
@@ -234,6 +239,7 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
             ChatUIKitActionModel(
               title: ChatUIKitLocal.contactDetailViewSend.getString(context),
               icon: 'assets/images/chat.png',
+              packageName: ChatUIKitImageLoader.packageName,
               onTap: (context) {
                 ChatUIKitRoute.push(
                   context,

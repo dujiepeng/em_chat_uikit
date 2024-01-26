@@ -3,9 +3,9 @@ import 'package:em_chat_uikit_example/notifications/theme_notification.dart';
 import 'package:em_chat_uikit_example/pages/contact/contact_page.dart';
 import 'package:em_chat_uikit_example/pages/conversation/conversation_page.dart';
 import 'package:em_chat_uikit_example/pages/me/my_page.dart';
-import 'package:em_chat_uikit_example/pages/tool/toast_page.dart';
-import 'package:em_chat_uikit_example/pages/tool/user_data_store.dart';
-import 'package:em_chat_uikit_example/pages/tool/user_provider_widget.dart';
+import 'package:em_chat_uikit_example/tool/toast_page.dart';
+import 'package:em_chat_uikit_example/tool/user_data_store.dart';
+import 'package:em_chat_uikit_example/tool/user_provider_widget.dart';
 
 import 'package:flutter/material.dart';
 

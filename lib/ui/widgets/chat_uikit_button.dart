@@ -94,6 +94,7 @@ class ChatUIKitButton extends StatelessWidget {
           text,
           textAlign: TextAlign.center,
           textScaleFactor: 1.0,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             fontWeight: fontWeight,
             fontSize: fontSize,

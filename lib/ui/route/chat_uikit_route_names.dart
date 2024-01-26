@@ -2,7 +2,7 @@ class ChatUIKitRouteNames {
   static String changeInfoView = '/ChangeInfoView';
   static String contactDetailsView = '/ContactDetailsView';
   static String contactsView = '/ContactsView';
-  static String conversationView = '/ConversationView';
+  static String conversationsView = '/ConversationsView';
   static String createGroupView = '/CreateGroupView';
   static String groupChangeOwnerView = '/GroupChangeOwnerView';
   static String groupDetailsView = '/GroupDetailsView';
@@ -16,7 +16,6 @@ class ChatUIKitRouteNames {
   static String groupDeleteMembersView = '/GroupDeleteMembersView';
   static String groupAddMembersView = '/GroupAddMembersView';
   static String messagesView = '/MessagesView';
-  static String conversationsView = '/ConversationsView';
   static String showImageView = '/ShowImageView';
   static String showVideoView = '/ShowVideoView';
   static String currentUserInfoView = '/CurrentUserInfoView';

@@ -81,6 +81,7 @@ class _GroupMentionViewState extends State<GroupMentionView> {
                   child: Text(
                     '@${ChatUIKitLocal.groupMembersViewTitle.getString(context)}',
                     textScaleFactor: 1.0,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: theme.color.isDark
                           ? theme.color.neutralColor98
@@ -181,6 +182,7 @@ class MentionAllItem extends StatelessWidget {
 
     Widget name = Text(
       ChatUIKitLocal.groupMentionViewMentionAll.getString(context),
+      overflow: TextOverflow.ellipsis,
       style: normalStyle,
       textScaleFactor: 1.0,
     );

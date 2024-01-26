@@ -4,7 +4,7 @@ import 'package:em_chat_uikit_example/login_page.dart';
 import 'package:em_chat_uikit_example/notifications/theme_notification.dart';
 import 'package:em_chat_uikit_example/pages/me/change_avatar_page.dart';
 import 'package:em_chat_uikit_example/pages/me/personal_info_page.dart';
-import 'package:em_chat_uikit_example/pages/tool/chat_route_filter.dart';
+import 'package:em_chat_uikit_example/tool/chat_route_filter.dart';
 // import 'package:em_chat_uikit_example/pages/tool/chat_route_filter.dart';
 import 'package:em_chat_uikit_example/welcome_page.dart';
 
@@ -34,60 +34,56 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    ChatUIKitSettings.avatarRadius = CornerRadius.medium;
-
-    return MaterialApp(
-      supportedLocales: _localization.supportedLocales,
-      localizationsDelegates: _localization.localizationsDelegates,
-      localeResolutionCallback: _localization.localeResolutionCallback,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-      ),
-      builder: EasyLoading.init(
-        builder: (context, child) {
-          return NotificationListener(
-            onNotification: (notification) {
-              if (notification is ThemeNotification) {
-                setState(() {
-                  ThemeNotification.isLight = !ThemeNotification.isLight;
-                });
-              }
-              return false;
-            },
-            child: ChatUIKitTheme(
-              color: ThemeNotification.isLight
-                  ? ChatUIKitColor.light()
-                  : ChatUIKitColor.dark(),
-              child: child!,
-            ),
-          );
-        },
-      ),
-      home: const WelcomePage(),
-      onGenerateRoute: (settings) {
-        RouteSettings newSettings = ChatRouteFilter.chatRouteSettings(settings);
-        return ChatUIKitRoute().generateRoute(newSettings) ??
-            MaterialPageRoute(
-              builder: (context) {
-                if (settings.name == '/home') {
-                  return const HomePage();
-                } else if (settings.name == '/login') {
-                  return const LoginPage();
-                } else if (settings.name == '/personal_info') {
-                  return const PersonalInfoPage();
-                } else if (settings.name == '/change_avatar') {
-                  return const ChangeAvatarPage();
-                } else {
-                  return const WelcomePage();
-                }
-              },
-            );
+@override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    supportedLocales: _localization.supportedLocales,
+    localizationsDelegates: _localization.localizationsDelegates,
+    localeResolutionCallback: _localization.localeResolutionCallback,
+    theme: ThemeData(
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      useMaterial3: true,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+    ),
+    builder: EasyLoading.init(
+      builder: (context, child) {
+        return NotificationListener(
+          onNotification: (notification) {
+            if (notification is ThemeNotification) {
+              setState(() {});
+            }
+            return false;
+          },
+          child: ChatUIKitTheme(
+            color: ThemeNotification.isLight
+                ? ChatUIKitColor.light()
+                : ChatUIKitColor.dark(),
+            child: child!,
+          ),
+        );
       },
-    );
-  }
+    ),
+    home: const WelcomePage(),
+    onGenerateRoute: (settings) {
+      RouteSettings newSettings = ChatRouteFilter.chatRouteSettings(settings);
+      return ChatUIKitRoute().generateRoute(newSettings) ??
+          MaterialPageRoute(
+            builder: (context) {
+              if (settings.name == '/home') {
+                return const HomePage();
+              } else if (settings.name == '/login') {
+                return const LoginPage();
+              } else if (settings.name == '/personal_info') {
+                return const PersonalInfoPage();
+              } else if (settings.name == '/change_avatar') {
+                return const ChangeAvatarPage();
+              } else {
+                return const WelcomePage();
+              }
+            },
+          );
+    },
+  );
+}
 }

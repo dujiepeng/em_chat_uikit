@@ -20,6 +20,7 @@ class ChatUIKitNonsupportMessageWidget extends StatelessWidget {
     Widget content = Text(
       ChatUIKitLocal.nonSupportMessage.getString(context),
       textScaleFactor: 1.0,
+      overflow: TextOverflow.ellipsis,
       style: style ??
           (left
               ? TextStyle(

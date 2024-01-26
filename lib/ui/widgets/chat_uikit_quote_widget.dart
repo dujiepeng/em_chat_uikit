@@ -103,6 +103,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         Text(
           message.nickname ?? message.from ?? '',
           textScaleFactor: 1.0,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             color: theme.color.isDark
                 ? theme.color.neutralSpecialColor5
@@ -163,6 +164,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         Text(
           message.nickname ?? message.from ?? '',
           textScaleFactor: 1.0,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             color: theme.color.isDark
                 ? theme.color.neutralSpecialColor5
@@ -303,6 +305,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
           child: Text(
             ChatUIKitLocal.quoteWidgetTitleVideo.getString(context),
             textScaleFactor: 1.0,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontWeight: theme.font.labelMedium.fontWeight,
               fontSize: theme.font.labelMedium.fontSize,
@@ -320,6 +323,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         Text(
           message.nickname ?? message.from ?? '',
           textScaleFactor: 1.0,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             color: theme.color.isDark
                 ? theme.color.neutralSpecialColor5
@@ -567,6 +571,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
         Text(
           message.nickname ?? message.from ?? '',
           textScaleFactor: 1.0,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             color: theme.color.isDark
                 ? theme.color.neutralSpecialColor5
@@ -599,6 +604,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
           Flexible(
             child: RichText(
               textScaleFactor: 1.0,
+              overflow: TextOverflow.ellipsis,
               text: TextSpan(
                 children: [
                   TextSpan(
@@ -635,6 +641,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
           Text(
             message.nickname ?? message.from ?? '',
             textScaleFactor: 1.0,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: theme.color.isDark
                   ? theme.color.neutralSpecialColor5
@@ -656,6 +663,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
     return Text(
       ChatUIKitLocal.quoteWidgetTitleUnFind.getString(context),
       textScaleFactor: 1.0,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
         color: theme.color.isDark
             ? theme.color.neutralColor5
@@ -670,6 +678,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
     return Text(
       ChatUIKitLocal.nonSupportMessage.getString(context),
       textScaleFactor: 1.0,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
         color: theme.color.isDark
             ? theme.color.neutralColor5

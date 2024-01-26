@@ -5,21 +5,29 @@ import 'package:flutter/material.dart';
 typedef AppBarMoreActionsBuilder = List<ChatUIKitBottomSheetItem> Function(
     BuildContext context, List<ChatUIKitBottomSheetItem> items);
 
+typedef ConversationsViewItemLongPressHandler = List<ChatUIKitBottomSheetItem>?
+    Function(
+  BuildContext context,
+  ConversationModel info,
+  List<ChatUIKitBottomSheetItem> defaultActions,
+);
+
 class ConversationsView extends StatefulWidget {
   ConversationsView.arguments(ConversationsViewArguments arguments, {super.key})
       : listViewItemBuilder = arguments.listViewItemBuilder,
         beforeWidgets = arguments.beforeWidgets,
         afterWidgets = arguments.afterWidgets,
         onSearchTap = arguments.onSearchTap,
-        fakeSearchHideText = arguments.fakeSearchHideText,
+        searchBarHideText = arguments.searchBarHideText,
         listViewBackground = arguments.listViewBackground,
         onTap = arguments.onTap,
-        onLongPress = arguments.onLongPress,
+        onLongPressHandler = arguments.onLongPressHandler,
         appBar = arguments.appBar,
         controller = arguments.controller,
         appBarMoreActionsBuilder = arguments.appBarMoreActionsBuilder,
         enableAppBar = arguments.enableAppBar,
         title = arguments.title,
+        enableSearchBar = arguments.enableSearchBar,
         attributes = arguments.attributes;
 
   const ConversationsView({
@@ -27,13 +35,14 @@ class ConversationsView extends StatefulWidget {
     this.beforeWidgets,
     this.afterWidgets,
     this.onSearchTap,
-    this.fakeSearchHideText,
+    this.searchBarHideText,
     this.listViewBackground,
     this.onTap,
-    this.onLongPress,
+    this.onLongPressHandler,
     this.appBar,
     this.controller,
     this.enableAppBar = true,
+    this.enableSearchBar = true,
     this.appBarMoreActionsBuilder,
     this.title,
     this.attributes,
@@ -45,14 +54,11 @@ class ConversationsView extends StatefulWidget {
   final void Function(List<ConversationModel> data)? onSearchTap;
   final List<Widget>? beforeWidgets;
   final List<Widget>? afterWidgets;
-  final ChatUIKitConversationItemBuilder? listViewItemBuilder;
+  final ConversationItemBuilder? listViewItemBuilder;
   final void Function(BuildContext context, ConversationModel info)? onTap;
-  final List<ChatUIKitBottomSheetItem> Function(
-    BuildContext context,
-    ConversationModel info,
-    List<ChatUIKitBottomSheetItem> defaultActions,
-  )? onLongPress;
-  final String? fakeSearchHideText;
+  final ConversationsViewItemLongPressHandler? onLongPressHandler;
+  final String? searchBarHideText;
+  final bool enableSearchBar;
   final Widget? listViewBackground;
   final AppBarMoreActionsBuilder? appBarMoreActionsBuilder;
   final bool enableAppBar;
@@ -118,11 +124,12 @@ class _ConversationsViewState extends State<ConversationsView> {
               ),
       body: SafeArea(
         child: ConversationListView(
+          enableSearchBar: widget.enableSearchBar,
           controller: controller,
           itemBuilder: widget.listViewItemBuilder,
           beforeWidgets: widget.beforeWidgets,
           afterWidgets: widget.afterWidgets,
-          searchHideText: widget.fakeSearchHideText,
+          searchBarHideText: widget.searchBarHideText,
           background: widget.listViewBackground,
           onTap: widget.onTap ??
               (BuildContext context, ConversationModel info) {
@@ -202,7 +209,7 @@ class _ConversationsViewState extends State<ConversationsView> {
   void longPressed(ConversationModel info) async {
     List<ChatUIKitBottomSheetItem> list = defaultLongPressActions(info);
 
-    list = widget.onLongPress
+    list = widget.onLongPressHandler
             ?.call(context, info, defaultLongPressActions(info)) ??
         list;
 
