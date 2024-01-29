@@ -1,4 +1,5 @@
 import 'package:em_chat_uikit/sdk_wrapper/chat_sdk_wrapper.dart';
+import 'package:em_chat_uikit/sdk_wrapper/sdk_wrapper_tools.dart';
 
 mixin GroupActions on GroupWrapper {
   Future<Group?> getGroup({required String groupId}) {
@@ -253,8 +254,9 @@ mixin GroupActions on GroupWrapper {
   }
 
   Future<void> destroyGroup({required String groupId}) {
-    return checkResult(ChatSDKWrapperActionEvent.destroyGroup, () {
-      return Client.getInstance.groupManager.destroyGroup(groupId);
+    return checkResult(ChatSDKWrapperActionEvent.destroyGroup, () async {
+      await Client.getInstance.groupManager.destroyGroup(groupId);
+      SDKWrapperTools.insertGroupDestroyMessage(groupId);
     });
   }
 

@@ -4,16 +4,27 @@ import 'package:flutter/material.dart';
 enum CornerRadius { extraSmall, small, medium, large }
 
 class ChatUIKitSettings {
+  // 头像圆角
   static CornerRadius avatarRadius = CornerRadius.medium;
-  static CornerRadius searchBarRadius = ChatUIKitSettings.avatarRadius;
-  static String? avatarPlaceholder;
-  static CornerRadius alertRadius = CornerRadius.medium;
-  static ChatUIKitRectangleType alertRectangleType =
-      ChatUIKitRectangleType.filletCorner;
 
+  // 搜索框圆角
+  static CornerRadius searchBarRadius = CornerRadius.small;
+
+  // 头像默认占位图
+  static ImageProvider? avatarPlaceholder;
+
+  // Dialog 圆角
+  static ChatUIKitDialogRectangleType dialogRectangleType =
+      ChatUIKitDialogRectangleType.filletCorner;
+
+// 会话列表是否显示头像
   static bool showConversationListAvatar = true;
+
+  // 会话列表是否显示未读消息数
   static bool showConversationListUnreadCount = true;
-  static String? conversationListMuteImage;
+
+  // 会话列表显示的静音图标
+  static ImageProvider? conversationListMuteImage;
 
   /// 撤回消息的时间限制，单位秒
   static int recallExpandTime = 120;

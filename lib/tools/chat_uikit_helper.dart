@@ -7,13 +7,13 @@ extension CornerRadiusHelper on CornerRadius {
     double circularRadius = 0;
     switch (cornerRadius ?? ChatUIKitSettings.searchBarRadius) {
       case CornerRadius.extraSmall:
-        circularRadius = height / 16;
+        circularRadius = min(height / 16, 16);
         break;
       case CornerRadius.small:
-        circularRadius = height / 8;
+        circularRadius = min(height / 8, 8);
         break;
       case CornerRadius.medium:
-        circularRadius = height / 4;
+        circularRadius = min(height / 4, 4);
         break;
       case CornerRadius.large:
         circularRadius = height / 2;

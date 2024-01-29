@@ -8,7 +8,7 @@ class SearchUsersViewArguments implements ChatUIKitViewArguments {
     this.onTap,
     this.itemBuilder,
     this.appBar,
-    this.enableAppBar = true,
+    this.enableAppBar = false,
     this.enableMulti = false,
     this.selected,
     this.title,

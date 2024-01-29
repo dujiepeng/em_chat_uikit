@@ -1,7 +1,6 @@
 import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
-
 import '../universal/defines.dart';
 
 extension MessageHelper on Message {
@@ -227,7 +226,13 @@ extension MessageHelper on Message {
   }
 
   String showInfo({BuildContext? context}) {
-    String str = '';
+    String? title;
+    if (chatType == ChatType.GroupChat) {
+      title = "${nickname ?? from ?? ""}: ";
+    }
+
+    String? str;
+
     switch (body.type) {
       case MessageType.TXT:
         str = (body as TextMessageBody).content;
@@ -270,6 +275,26 @@ extension MessageHelper on Message {
             }
             return '$showName${ChatUIKitLocal.messagesViewRecallInfo.getString(context!)}';
           }
+          if (isCreateGroupAlert) {
+            Map<String, String>? map = (body as CustomMessageBody).params;
+            String? operator = map![alertCreateGroupMessageOwnerKey]!;
+            String? showName;
+            if (ChatUIKit.instance.currentUserId == operator) {
+              showName =
+                  ChatUIKitLocal.messagesViewRecallInfoYou.getString(context!);
+            } else {
+              ChatUIKitProfile profile = ChatUIKitProvider.instance.getProfile(
+                ChatUIKitProfile.contact(id: from!),
+              );
+              showName = profile.showName;
+            }
+            return '$showName ${ChatUIKitLocal.messagesViewAlertGroupInfoTitle.getString(context!)}';
+          }
+          if (isDestroyGroupAlert) {
+            return ChatUIKitLocal.messagesViewGroupDestroyInfo
+                .getString(context!);
+          }
+
           str = '[Custom]';
         }
 
@@ -277,7 +302,11 @@ extension MessageHelper on Message {
       default:
     }
 
-    return str;
+    if (title?.isNotEmpty == true) {
+      str = '$title$str';
+    }
+
+    return str ?? '';
   }
 
   bool get hasMention {
@@ -324,6 +353,15 @@ extension MessageHelper on Message {
   bool get isRecallAlert {
     if (bodyType == MessageType.CUSTOM) {
       if ((body as CustomMessageBody).event == alertRecalledKey) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool get isDestroyGroupAlert {
+    if (bodyType == MessageType.CUSTOM) {
+      if ((body as CustomMessageBody).event == alertGroupDestroyKey) {
         return true;
       }
     }

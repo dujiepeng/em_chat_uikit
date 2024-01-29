@@ -21,7 +21,7 @@ class ChatUIKitCardMessageWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(0, 12, 12, 12),
+          padding: const EdgeInsets.fromLTRB(6, 12, 12, 12),
           child: ChatUIKitAvatar(
             avatarUrl: message.cardUserAvatar,
             size: 44,
@@ -56,9 +56,13 @@ class ChatUIKitCardMessageWidget extends StatelessWidget {
         Divider(
           height: 1,
           thickness: 0,
-          color: theme.color.isDark
-              ? theme.color.primaryColor9
-              : theme.color.primaryColor8,
+          color: left
+              ? theme.color.isDark
+                  ? theme.color.neutralSpecialColor5
+                  : theme.color.neutralSpecialColor8
+              : theme.color.isDark
+                  ? theme.color.primaryColor9
+                  : theme.color.primaryColor8,
         ),
         Padding(
           padding: const EdgeInsets.only(top: 4),

@@ -48,6 +48,17 @@ class ChatUIKitImageLoader {
     );
   }
 
+    static Widget card({double width = 30, double height = 30, Color? color}) {
+    return Image(
+      gaplessPlayback: true,
+      color: color,
+      width: width,
+      height: height,
+      image: AssetImage('assets/images/person.png', package: packageName),
+      fit: BoxFit.fill,
+    );
+  }
+
   static Widget search({double width = 30, double height = 30, Color? color}) {
     return Image(
       width: width,
@@ -243,9 +254,8 @@ class ChatUIKitImageLoader {
 
   static Widget networkImage({
     required String image,
-    required String placeholder,
+    required ImageProvider placeholder,
     Widget? placeholderWidget,
-    bool usePackageName = true,
     double? size,
     BoxFit fit = BoxFit.fill,
   }) {
@@ -253,8 +263,7 @@ class ChatUIKitImageLoader {
       key: ValueKey(image),
       width: size,
       height: size,
-      placeholder:
-          AssetImage(placeholder, package: usePackageName ? packageName : null),
+      placeholder: placeholder,
       placeholderFit: fit,
       placeholderErrorBuilder: (context, error, stackTrace) {
         return placeholderWidget ?? Container();
@@ -322,7 +331,7 @@ class ChatUIKitImageLoader {
       color: color,
       width: width,
       height: height,
-      image: AssetImage('assets/images/folder.png', package: packageName),
+      image: AssetImage('assets/images/person.png', package: packageName),
       fit: BoxFit.fill,
     );
   }

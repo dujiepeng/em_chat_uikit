@@ -41,19 +41,25 @@ class ChatUIKitSearchListViewItem extends StatelessWidget {
       child: content,
     );
 
-    content = Column(
-      mainAxisSize: MainAxisSize.min,
+    content = Stack(
       children: [
         content,
-        Container(
-          height: borderHeight,
-          color: theme.color.isDark
-              ? theme.color.neutralColor2
-              : theme.color.neutralColor9,
-          margin: const EdgeInsets.only(left: 16),
+        Positioned(
+          bottom: 0,
+          left: 68,
+          right: 0,
+          height: 0.5,
+          child: Divider(
+            height: borderHeight,
+            thickness: borderHeight,
+            color: theme.color.isDark
+                ? theme.color.neutralColor2
+                : theme.color.neutralColor9,
+          ),
         )
       ],
     );
+
     return content;
   }
 }

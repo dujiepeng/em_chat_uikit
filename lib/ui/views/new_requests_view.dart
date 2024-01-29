@@ -10,7 +10,7 @@ class NewRequestsView extends StatefulWidget {
         listViewItemBuilder = argument.listViewItemBuilder,
         onTap = argument.onTap,
         onLongPress = argument.onLongPress,
-        fakeSearchHideText = argument.fakeSearchHideText,
+        searchBarHideText = argument.searchBarHideText,
         listViewBackground = argument.listViewBackground,
         enableAppBar = argument.enableAppBar,
         loadErrorMessage = argument.loadErrorMessage,
@@ -23,7 +23,7 @@ class NewRequestsView extends StatefulWidget {
     this.listViewItemBuilder,
     this.onTap,
     this.onLongPress,
-    this.fakeSearchHideText,
+    this.searchBarHideText,
     this.listViewBackground,
     this.loadErrorMessage,
     this.enableAppBar = true,
@@ -38,7 +38,7 @@ class NewRequestsView extends StatefulWidget {
   final void Function(BuildContext context, NewRequestItemModel model)? onTap;
   final void Function(BuildContext context, NewRequestItemModel model)?
       onLongPress;
-  final String? fakeSearchHideText;
+  final String? searchBarHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
   final bool enableAppBar;
@@ -100,7 +100,7 @@ class _NewRequestsViewState extends State<NewRequestsView>
           child: NewRequestsListView(
             controller: controller,
             itemBuilder: widget.listViewItemBuilder,
-            searchHideText: widget.fakeSearchHideText,
+            searchHideText: widget.searchBarHideText,
             background: widget.listViewBackground,
             errorMessage: widget.loadErrorMessage,
             // onTap: widget.onTap ?? onItemTap,
@@ -114,30 +114,17 @@ class _NewRequestsViewState extends State<NewRequestsView>
 
   // 暂定不需要跳进详情页面
   void onItemTap(BuildContext context, NewRequestItemModel model) {
-    Future(() {
-      if (ChatUIKitRoute.hasInit) {
-        ChatUIKitRoute.pushNamed(
-          context,
-          ChatUIKitRouteNames.newRequestDetailsView,
-          NewRequestDetailsViewArguments(
-            profile: model.profile,
-            isReceivedRequest: true,
-            attributes: widget.attributes,
-          ),
-        );
-      } else {
-        ChatUIKitRoute.push(
-          context,
-          NewRequestDetailsView(
-            profile: model.profile,
-            isReceivedRequest: true,
-            attributes: widget.attributes,
-          ),
-        );
-      }
-    }).then((value) {
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.newRequestDetailsView,
+      NewRequestDetailsViewArguments(
+        profile: model.profile,
+        isReceivedRequest: true,
+        attributes: widget.attributes,
+      ),
+    ).then((value) {
       if (value == true) {
-        if (mounted) {
+        if (mounted && value == true) {
           controller.reload();
         }
       }

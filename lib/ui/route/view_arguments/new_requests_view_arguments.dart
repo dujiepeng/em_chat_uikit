@@ -9,7 +9,7 @@ class NewRequestsViewArguments implements ChatUIKitViewArguments {
     this.listViewItemBuilder,
     this.onTap,
     this.onLongPress,
-    this.fakeSearchHideText,
+    this.searchBarHideText,
     this.listViewBackground,
     this.loadErrorMessage,
     this.enableAppBar = true,
@@ -23,7 +23,7 @@ class NewRequestsViewArguments implements ChatUIKitViewArguments {
   final void Function(BuildContext context, NewRequestItemModel model)? onTap;
   final void Function(BuildContext context, NewRequestItemModel model)?
       onLongPress;
-  final String? fakeSearchHideText;
+  final String? searchBarHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
   final bool enableAppBar;
@@ -38,7 +38,7 @@ class NewRequestsViewArguments implements ChatUIKitViewArguments {
     ChatUIKitNewRequestItemBuilder? listViewItemBuilder,
     void Function(BuildContext context, NewRequestItemModel model)? onTap,
     void Function(BuildContext context, NewRequestItemModel model)? onLongPress,
-    String? fakeSearchHideText,
+    String? searchBarHideText,
     Widget? listViewBackground,
     String? loadErrorMessage,
     bool? enableAppBar,
@@ -51,7 +51,7 @@ class NewRequestsViewArguments implements ChatUIKitViewArguments {
       listViewItemBuilder: listViewItemBuilder ?? this.listViewItemBuilder,
       onTap: onTap ?? this.onTap,
       onLongPress: onLongPress ?? this.onLongPress,
-      fakeSearchHideText: fakeSearchHideText ?? this.fakeSearchHideText,
+      searchBarHideText: searchBarHideText ?? this.searchBarHideText,
       listViewBackground: listViewBackground ?? this.listViewBackground,
       loadErrorMessage: loadErrorMessage ?? this.loadErrorMessage,
       enableAppBar: enableAppBar ?? this.enableAppBar,

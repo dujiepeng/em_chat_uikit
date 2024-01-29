@@ -28,4 +28,23 @@ class SDKWrapperTools {
     ChatUIKit.instance.insertMessage(message: alertMsg);
     return alertMsg;
   }
+
+  static void insertGroupDestroyMessage(String groupId) {
+    if (ChatUIKit.instance.options?.deleteMessagesAsExitGroup == true) {
+      return;
+    }
+    Message alertMsg = Message.createCustomSendMessage(
+      targetId: groupId,
+      event: alertGroupDestroyKey,
+      chatType: ChatType.GroupChat,
+    );
+    alertMsg.conversationId = groupId;
+    alertMsg.serverTime = DateTime.now().millisecondsSinceEpoch;
+    alertMsg.localTime = alertMsg.serverTime;
+    alertMsg.status = MessageStatus.SUCCESS;
+
+    ChatUIKit.instance.insertMessage(message: alertMsg);
+    // ignore: invalid_use_of_protected_member
+    ChatUIKit.instance.onMessagesReceived([alertMsg]);
+  }
 }

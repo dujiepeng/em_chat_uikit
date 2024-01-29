@@ -106,6 +106,21 @@ class _ContactListViewState extends State<ContactListView>
             }
             widget.onSearchTap?.call(list);
           },
+          findChildIndexCallback: (Key key) {
+            int index = -1;
+            if (key is ValueKey<String>) {
+              final ValueKey<String> valueKey = key;
+              index = controller.list.indexWhere((info) {
+                if (info is ContactItemModel) {
+                  return info.profile.id == valueKey.value;
+                } else {
+                  return false;
+                }
+              });
+            }
+            debugPrint('index:$index');
+            return index > -1 ? index : null;
+          },
           searchBarHideText: widget.searchHideText,
           itemBuilder: (context, model) {
             if (model is ContactItemModel) {
@@ -121,6 +136,11 @@ class _ContactListViewState extends State<ContactListView>
                   widget.onLongPress?.call(context, model);
                 },
                 child: ChatUIKitContactListViewItem(model),
+              );
+
+              item = SizedBox(
+                key: ValueKey(model.profile.id),
+                child: item,
               );
 
               return item;

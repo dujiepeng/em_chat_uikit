@@ -10,7 +10,7 @@ class GroupsView extends StatefulWidget {
         listViewItemBuilder = argument.listViewItemBuilder,
         onTap = argument.onTap,
         onLongPress = argument.onLongPress,
-        fakeSearchHideText = argument.fakeSearchHideText,
+        searchBarHideText = argument.searchBarHideText,
         listViewBackground = argument.listViewBackground,
         enableAppBar = argument.enableAppBar,
         loadErrorMessage = argument.loadErrorMessage,
@@ -23,7 +23,7 @@ class GroupsView extends StatefulWidget {
     this.listViewItemBuilder,
     this.onTap,
     this.onLongPress,
-    this.fakeSearchHideText,
+    this.searchBarHideText,
     this.listViewBackground,
     this.loadErrorMessage,
     this.enableAppBar = true,
@@ -37,7 +37,7 @@ class GroupsView extends StatefulWidget {
   final ChatUIKitGroupItemBuilder? listViewItemBuilder;
   final void Function(BuildContext context, GroupItemModel model)? onTap;
   final void Function(BuildContext context, GroupItemModel model)? onLongPress;
-  final String? fakeSearchHideText;
+  final String? searchBarHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
   final bool enableAppBar;
@@ -115,7 +115,7 @@ class _GroupsViewState extends State<GroupsView> {
         child: GroupListView(
           controller: controller,
           itemBuilder: widget.listViewItemBuilder,
-          searchHideText: widget.fakeSearchHideText,
+          searchHideText: widget.searchBarHideText,
           background: widget.listViewBackground,
           errorMessage: widget.loadErrorMessage,
           onTap: widget.onTap ?? tapGroupInfo,
@@ -128,57 +128,30 @@ class _GroupsViewState extends State<GroupsView> {
   }
 
   void tapGroupInfo(BuildContext context, GroupItemModel model) {
-    Future(() {
-      if (ChatUIKitRoute.hasInit) {
-        return ChatUIKitRoute.pushNamed(
-          context,
-          ChatUIKitRouteNames.groupDetailsView,
-          GroupDetailsViewArguments(
-            profile: model.profile,
-            actions: [
-              ChatUIKitActionModel(
-                title: ChatUIKitLocal.groupDetailViewSend.getString(context),
-                icon: 'assets/images/chat.png',
-                packageName: ChatUIKitImageLoader.packageName,
-                onTap: (context) {
-                  ChatUIKitRoute.pushNamed(
-                    context,
-                    ChatUIKitRouteNames.messagesView,
-                    MessagesViewArguments(
-                      profile: model.profile,
-                      attributes: widget.attributes,
-                    ),
-                  );
-                },
-              ),
-            ],
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.groupDetailsView,
+      GroupDetailsViewArguments(
+        profile: model.profile,
+        actions: [
+          ChatUIKitActionModel(
+            title: ChatUIKitLocal.groupDetailViewSend.getString(context),
+            icon: 'assets/images/chat.png',
+            packageName: ChatUIKitImageLoader.packageName,
+            onTap: (context) {
+              ChatUIKitRoute.pushOrPushNamed(
+                context,
+                ChatUIKitRouteNames.messagesView,
+                MessagesViewArguments(
+                  profile: model.profile,
+                  attributes: widget.attributes,
+                ),
+              );
+            },
           ),
-        );
-      } else {
-        return ChatUIKitRoute.push(
-          context,
-          GroupDetailsView(
-            profile: model.profile,
-            actions: [
-              ChatUIKitActionModel(
-                title: ChatUIKitLocal.groupDetailViewSend.getString(context),
-                icon: 'assets/images/chat.png',
-                packageName: ChatUIKitImageLoader.packageName,
-                onTap: (context) {
-                  ChatUIKitRoute.push(
-                    context,
-                    MessagesView(
-                      profile: model.profile,
-                      attributes: widget.attributes,
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        );
-      }
-    }).then((value) {
+        ],
+      ),
+    ).then((value) {
       ChatUIKitRouteBackModel? model = ChatUIKitRoute.lastModel;
       if (model != null) {
         if (model.type == ChatUIKitRouteBackType.remove) {

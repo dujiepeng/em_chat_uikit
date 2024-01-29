@@ -7,7 +7,7 @@ class GroupMembersView extends StatefulWidget {
       : profile = arguments.profile,
         listViewItemBuilder = arguments.listViewItemBuilder,
         onSearchTap = arguments.onSearchTap,
-        fakeSearchHideText = arguments.fakeSearchHideText,
+        searchBarHideText = arguments.searchBarHideText,
         listViewBackground = arguments.listViewBackground,
         onTap = arguments.onTap,
         onLongPress = arguments.onLongPress,
@@ -23,7 +23,7 @@ class GroupMembersView extends StatefulWidget {
     required this.profile,
     this.listViewItemBuilder,
     this.onSearchTap,
-    this.fakeSearchHideText,
+    this.searchBarHideText,
     this.listViewBackground,
     this.onTap,
     this.onLongPress,
@@ -46,7 +46,7 @@ class GroupMembersView extends StatefulWidget {
   final void Function(BuildContext context, ContactItemModel model)? onTap;
   final void Function(BuildContext context, ContactItemModel model)?
       onLongPress;
-  final String? fakeSearchHideText;
+  final String? searchBarHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
   final bool enableMemberOperation;
@@ -160,7 +160,7 @@ class _GroupMembersViewState extends State<GroupMembersView>
           groupId: widget.profile.id,
           controller: controller,
           itemBuilder: widget.listViewItemBuilder,
-          searchHideText: widget.fakeSearchHideText,
+          searchHideText: widget.searchBarHideText,
           background: widget.listViewBackground,
           onTap: widget.onTap ??
               (context, model) {
@@ -228,78 +228,42 @@ class _GroupMembersViewState extends State<GroupMembersView>
 
   // 处理点击自己头像和点击自己名片
   void pushToCurrentUser(ChatUIKitProfile profile) {
-    if (ChatUIKitRoute.hasInit) {
-      ChatUIKitRoute.pushNamed(
-        context,
-        ChatUIKitRouteNames.currentUserInfoView,
-        CurrentUserInfoViewArguments(
-          profile: profile,
-          attributes: widget.attributes,
-        ),
-      );
-    } else {
-      ChatUIKitRoute.push(
-        context,
-        CurrentUserInfoView(
-          profile: profile,
-          attributes: widget.attributes,
-        ),
-      );
-    }
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.currentUserInfoView,
+      CurrentUserInfoViewArguments(
+        profile: profile,
+        attributes: widget.attributes,
+      ),
+    );
   }
 
   void pushContactDetails(ChatUIKitProfile profile) {
-    if (ChatUIKitRoute.hasInit) {
-      ChatUIKitRoute.pushNamed(
-        context,
-        ChatUIKitRouteNames.contactDetailsView,
-        ContactDetailsViewArguments(
-          profile: profile,
-          attributes: widget.attributes,
-          actions: [
-            ChatUIKitActionModel(
-              title: ChatUIKitLocal.groupDetailViewSend.getString(context),
-              icon: 'assets/images/chat.png',
-              packageName: ChatUIKitImageLoader.packageName,
-              onTap: (context) {
-                ChatUIKitRoute.pushNamed(
-                  context,
-                  ChatUIKitRouteNames.messagesView,
-                  MessagesViewArguments(
-                    profile: profile,
-                    attributes: widget.attributes,
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      );
-    } else {
-      ChatUIKitRoute.push(
-        context,
-        ContactDetailsView(
-          profile: profile,
-          attributes: widget.attributes,
-          actions: [
-            ChatUIKitActionModel(
-              title: ChatUIKitLocal.groupDetailViewSend.getString(context),
-              icon: 'assets/images/chat.png',
-              packageName: ChatUIKitImageLoader.packageName,
-              onTap: (context) {
-                ChatUIKitRoute.push(
-                  context,
-                  MessagesView(
-                    profile: profile,
-                    attributes: widget.attributes,
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      );
-    }
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.contactDetailsView,
+      ContactDetailsViewArguments(
+        profile: profile,
+        attributes: widget.attributes,
+        actions: [
+          ChatUIKitActionModel(
+            title: ChatUIKitLocal.groupDetailViewSend.getString(context),
+            icon: 'assets/images/chat.png',
+            packageName: ChatUIKitImageLoader.packageName,
+            onTap: (context) {
+              ChatUIKitRoute.pushOrPushNamed(
+                context,
+                ChatUIKitRouteNames.messagesView,
+                MessagesViewArguments(
+                  profile: profile,
+                  attributes: widget.attributes,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   void pushNewRequestDetails(ChatUIKitProfile profile) {
@@ -322,28 +286,15 @@ class _GroupMembersViewState extends State<GroupMembersView>
       }
     }
 
-    Future(() {
-      if (ChatUIKitRoute.hasInit) {
-        return ChatUIKitRoute.pushNamed(
-          context,
-          ChatUIKitRouteNames.groupAddMembersView,
-          GroupAddMembersViewArguments(
-            groupId: widget.profile.id,
-            inGroupMembers: members,
-            attributes: widget.attributes,
-          ),
-        );
-      } else {
-        return ChatUIKitRoute.push(
-          context,
-          GroupAddMembersView(
-            groupId: widget.profile.id,
-            inGroupMembers: members,
-            attributes: widget.attributes,
-          ),
-        );
-      }
-    }).then((value) {
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.groupAddMembersView,
+      GroupAddMembersViewArguments(
+        groupId: widget.profile.id,
+        inGroupMembers: members,
+        attributes: widget.attributes,
+      ),
+    ).then((value) {
       if (value != null && value is List<ChatUIKitProfile>) {
         List<ContactItemModel> models = [];
         List<String> userIds = [];
@@ -363,26 +314,14 @@ class _GroupMembersViewState extends State<GroupMembersView>
   }
 
   void pushToRemoveMember() {
-    Future(() {
-      if (ChatUIKitRoute.hasInit) {
-        return ChatUIKitRoute.pushNamed(
-          context,
-          ChatUIKitRouteNames.groupDeleteMembersView,
-          GroupDeleteMembersViewArguments(
-            groupId: widget.profile.id,
-            attributes: widget.attributes,
-          ),
-        );
-      } else {
-        return ChatUIKitRoute.push(
-          context,
-          GroupDeleteMembersView(
-            groupId: widget.profile.id,
-            attributes: widget.attributes,
-          ),
-        );
-      }
-    }).then((value) {
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.groupDeleteMembersView,
+      GroupDeleteMembersViewArguments(
+        groupId: widget.profile.id,
+        attributes: widget.attributes,
+      ),
+    ).then((value) {
       if (value != null && value is List<ChatUIKitProfile>) {
         List<String> userIds = [];
         for (var item in value) {
@@ -410,29 +349,27 @@ class _GroupMembersViewState extends State<GroupMembersView>
       list.add(item);
     }
 
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return SearchGroupMembersView(
-          itemBuilder: (context, profile, searchKeyword) {
-            return InkWell(
-              onTap: () {
-                onMemberTap(context, profile);
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(left: 19.5, right: 15.5),
-                child: ChatUIKitSearchListViewItem(
-                  profile: profile,
-                  highlightWord: searchKeyword,
-                ),
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.searchGroupMembersView,
+      SearchGroupMembersViewArguments(
+        itemBuilder: (context, profile, searchKeyword) {
+          return InkWell(
+            onTap: () {
+              onMemberTap(context, profile);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 19.5, right: 15.5),
+              child: ChatUIKitSearchListViewItem(
+                profile: profile,
+                highlightWord: searchKeyword,
               ),
-            );
-          },
-          searchHideText: ChatUIKitLocal.groupMembersSearch.getString(context),
-          searchData: list,
-        );
-      },
-    ).then((value) {});
+            ),
+          );
+        },
+        searchHideText: ChatUIKitLocal.groupMembersSearch.getString(context),
+        searchData: list,
+      ),
+    );
   }
 }

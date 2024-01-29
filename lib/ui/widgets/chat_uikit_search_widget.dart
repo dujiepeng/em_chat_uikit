@@ -122,7 +122,7 @@ class _ChatUIKitSearchWidgetState extends State<ChatUIKitSearchWidget> {
                   children: [
                     ChatUIKitImageLoader.search(
                       width: 22,
-                      height: 24,
+                      height: 22,
                       color: ChatUIKitTheme.of(context).color.neutralColor3,
                     ),
                     const SizedBox(width: 6),

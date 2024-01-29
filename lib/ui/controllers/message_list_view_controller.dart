@@ -16,7 +16,7 @@ enum MessageLastActionType {
 
 class MessageListViewController extends ChangeNotifier
     with ChatObserver, MessageObserver {
-  final ChatUIKitProfile profile;
+  ChatUIKitProfile profile;
   final int pageSize;
   late final ConversationType conversationType;
   bool isEmpty = false;

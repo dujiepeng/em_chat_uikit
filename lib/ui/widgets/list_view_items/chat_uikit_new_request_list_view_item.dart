@@ -95,17 +95,21 @@ class ChatUIKitNewRequestListViewItem extends StatelessWidget {
       child: content,
     );
 
-    content = Column(
-      mainAxisSize: MainAxisSize.min,
+    content = Stack(
       children: [
         content,
-        Divider(
-          indent: 68,
-          height: borderHeight,
-          thickness: borderHeight,
-          color: theme.color.isDark
-              ? theme.color.neutralColor2
-              : theme.color.neutralColor9,
+        Positioned(
+          bottom: 0,
+          left: 68,
+          right: 0,
+          height: 0.5,
+          child: Divider(
+            height: borderHeight,
+            thickness: borderHeight,
+            color: theme.color.isDark
+                ? theme.color.neutralColor2
+                : theme.color.neutralColor9,
+          ),
         )
       ],
     );

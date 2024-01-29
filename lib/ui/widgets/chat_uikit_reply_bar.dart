@@ -178,8 +178,8 @@ class _ChatUIKitReplyBarState extends State<ChatUIKitReplyBar> {
               fontWeight: theme.font.labelSmall.fontWeight,
               fontSize: theme.font.labelSmall.fontSize,
               color: theme.color.isDark
-                  ? theme.color.neutralColor5
-                  : theme.color.neutralColor6,
+                  ? theme.color.neutralColor6
+                  : theme.color.neutralColor5,
             ),
           ),
         )

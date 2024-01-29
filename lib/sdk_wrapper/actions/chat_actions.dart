@@ -109,7 +109,7 @@ mixin ChatActions on ChatWrapper {
         conversationId,
       );
       Future<void>? ret = conv?.markAllMessagesAsRead();
-      // super.onConversationsUpdate();
+      super.onConversationsUpdate();
       return ret;
     });
   }

@@ -128,7 +128,8 @@ class MessagesView extends StatefulWidget {
   State<MessagesView> createState() => _MessagesViewState();
 }
 
-class _MessagesViewState extends State<MessagesView> {
+class _MessagesViewState extends State<MessagesView>
+    with ChatUIKitProviderObserver {
   late final MessageListViewController controller;
   late final CustomTextEditingController inputBarTextEditingController;
 
@@ -143,12 +144,13 @@ class _MessagesViewState extends State<MessagesView> {
   TextEditingController? editBarTextEditingController;
   Message? editMessage;
   Message? replyMessage;
-
+  ChatUIKitProfile? profile;
   Message? _playingMessage;
 
   @override
   void initState() {
     super.initState();
+    profile = widget.profile;
     inputBarTextEditingController =
         widget.inputBarTextEditingController ?? CustomTextEditingController();
     inputBarTextEditingController.addListener(() {
@@ -158,13 +160,14 @@ class _MessagesViewState extends State<MessagesView> {
         setState(() {});
       }
       if (inputBarTextEditingController.needMention) {
-        if (widget.profile.type == ChatUIKitProfileType.group) {
+        if (profile?.type == ChatUIKitProfileType.group) {
           needMention();
         }
       }
     });
+    ChatUIKitProvider.instance.addObserver(this);
     controller =
-        widget.controller ?? MessageListViewController(profile: widget.profile);
+        widget.controller ?? MessageListViewController(profile: profile!);
     focusNode = widget.focusNode ?? FocusNode();
     _picker = ImagePicker();
     _player = AudioPlayer();
@@ -179,26 +182,14 @@ class _MessagesViewState extends State<MessagesView> {
 
   void needMention() {
     if (controller.conversationType == ConversationType.GroupChat) {
-      Future(() {
-        if (ChatUIKitRoute.hasInit) {
-          return ChatUIKitRoute.pushNamed(
-            context,
-            ChatUIKitRouteNames.groupMentionView,
-            GroupMentionViewArguments(
-              groupId: controller.profile.id,
-              attributes: widget.attributes,
-            ),
-          );
-        } else {
-          return ChatUIKitRoute.push(
-            context,
-            GroupMentionView(
-              groupId: controller.profile.id,
-              attributes: widget.attributes,
-            ),
-          );
-        }
-      }).then((value) {
+      ChatUIKitRoute.pushOrPushNamed(
+        context,
+        ChatUIKitRouteNames.groupMentionView,
+        GroupMentionViewArguments(
+          groupId: controller.profile.id,
+          attributes: widget.attributes,
+        ),
+      ).then((value) {
         if (value != null) {
           if (value == true) {
             inputBarTextEditingController.atAll();
@@ -211,7 +202,24 @@ class _MessagesViewState extends State<MessagesView> {
   }
 
   @override
+  void onProfilesUpdate(
+    Map<String, ChatUIKitProfile> map,
+  ) {
+    if (map.keys.contains(controller.profile.id)) {
+      controller.profile = map[controller.profile.id]!;
+      profile = map[controller.profile.id]!;
+      setState(() {});
+    }
+  }
+
+  @override
+  void onCurrentUserDataUpdate(
+    UserData? userData,
+  ) {}
+
+  @override
   void dispose() {
+    ChatUIKitProvider.instance.removeObserver(this);
     editBarTextEditingController?.dispose();
     inputBarTextEditingController.dispose();
     _player.dispose();
@@ -228,7 +236,7 @@ class _MessagesViewState extends State<MessagesView> {
       bubbleContentBuilder: widget.bubbleContentBuilder,
       bubbleBuilder: widget.bubbleBuilder,
       quoteBuilder: widget.quoteBuilder,
-      profile: widget.profile,
+      profile: profile!,
       controller: controller,
       showAvatar: widget.showAvatar,
       showNickname: widget.showNickname,
@@ -282,13 +290,14 @@ class _MessagesViewState extends State<MessagesView> {
     content = NotificationListener(
       onNotification: (notification) {
         if (notification is ScrollUpdateNotification) {
-          if (showEmoji) {
-            showEmoji = false;
-            setState(() {});
-          }
-          if (focusNode.hasFocus) {
-            focusNode.unfocus();
-          }
+          clearAllType();
+          // if (showEmoji) {
+          //   showEmoji = false;
+          //   setState(() {});
+          // }
+          // if (focusNode.hasFocus) {
+          //   focusNode.unfocus();
+          // }
         }
         return false;
       },
@@ -341,7 +350,7 @@ class _MessagesViewState extends State<MessagesView> {
           ? null
           : widget.appBar ??
               ChatUIKitAppBar(
-                title: widget.title ?? widget.profile.showName,
+                title: widget.title ?? profile!.showName,
                 // leading: InkWell(
                 //   onTap: () {
                 //     pushNextPage(widget.profile);
@@ -531,14 +540,35 @@ class _MessagesViewState extends State<MessagesView> {
               text:
                   ' ${ChatUIKitLocal.messagesViewAlertGroupInfoTitle.getString(context)} '),
           MessageAlertAction(
-            text: map?[alertCreateGroupMessageGroupNameKey] ?? '',
+            text: () {
+              String? groupId = map?[alertCreateGroupMessageGroupNameKey];
+              if (groupId?.isNotEmpty == true) {
+                ChatUIKitProfile profile =
+                    ChatUIKitProvider.instance.getProfile(
+                  ChatUIKitProfile.group(id: groupId!),
+                );
+                return profile.showName;
+              }
+              return '';
+            }(),
             onTap: () {
-              pushNextPage(widget.profile);
+              pushNextPage(profile!);
             },
           ),
         ],
       );
       return content;
+    }
+
+    if (message.isDestroyGroupAlert) {
+      return ChatUIKitMessageListViewAlertItem(
+        infos: [
+          MessageAlertAction(
+            text:
+                ChatUIKitLocal.messagesViewGroupDestroyInfo.getString(context),
+          ),
+        ],
+      );
     }
 
     return const SizedBox();
@@ -637,7 +667,6 @@ class _MessagesViewState extends State<MessagesView> {
       textEditingController: inputBarTextEditingController,
       leading: InkWell(
         onTap: () async {
-          focusNode.unfocus();
           showEmoji = false;
           setState(() {});
           ChatUIKitRecordModel? model = await showChatUIKitRecordBar(
@@ -676,6 +705,7 @@ class _MessagesViewState extends State<MessagesView> {
               InkWell(
                 onTap: () {
                   showEmoji = !showEmoji;
+                  focusNode.requestFocus();
                   setState(() {});
                 },
                 child: ChatUIKitImageLoader.textKeyboard(),
@@ -993,47 +1023,23 @@ class _MessagesViewState extends State<MessagesView> {
 
   void bubbleTab(Message message) async {
     if (message.bodyType == MessageType.IMAGE) {
-      Future(() {
-        if (ChatUIKitRoute.hasInit) {
-          return ChatUIKitRoute.pushNamed(
-            context,
-            ChatUIKitRouteNames.showImageView,
-            ShowImageViewArguments(
-              message: message,
-              attributes: widget.attributes,
-            ),
-          );
-        } else {
-          return ChatUIKitRoute.push(
-            context,
-            ShowImageView(
-              message: message,
-              attributes: widget.attributes,
-            ),
-          );
-        }
-      });
+      ChatUIKitRoute.pushOrPushNamed(
+        context,
+        ChatUIKitRouteNames.showImageView,
+        ShowImageViewArguments(
+          message: message,
+          attributes: widget.attributes,
+        ),
+      );
     } else if (message.bodyType == MessageType.VIDEO) {
-      Future(() {
-        if (ChatUIKitRoute.hasInit) {
-          return ChatUIKitRoute.pushNamed(
-            context,
-            ChatUIKitRouteNames.showVideoView,
-            ShowVideoViewArguments(
-              message: message,
-              attributes: widget.attributes,
-            ),
-          );
-        } else {
-          return ChatUIKitRoute.push(
-            context,
-            ShowVideoView(
-              message: message,
-              attributes: widget.attributes,
-            ),
-          );
-        }
-      });
+      ChatUIKitRoute.pushOrPushNamed(
+        context,
+        ChatUIKitRouteNames.showVideoView,
+        ShowVideoViewArguments(
+          message: message,
+          attributes: widget.attributes,
+        ),
+      );
     }
 
     if (message.bodyType == MessageType.VOICE) {
@@ -1298,28 +1304,15 @@ class _MessagesViewState extends State<MessagesView> {
         ChatUIKitSettings.reportMessageReason.call(context);
     List<String> reasonKeys = reasons.keys.toList();
 
-    final reportReason = await Future(() {
-      if (ChatUIKitRoute.hasInit) {
-        return ChatUIKitRoute.pushNamed(
-          context,
-          ChatUIKitRouteNames.reportMessageView,
-          ReportMessageViewArguments(
-            messageId: message.msgId,
-            reportReasons: reasonKeys.map((e) => reasons[e]!).toList(),
-            attributes: widget.attributes,
-          ),
-        );
-      } else {
-        return ChatUIKitRoute.push(
-          context,
-          ReportMessageView(
-            messageId: message.msgId,
-            reportReasons: reasonKeys.map((e) => reasons[e]!).toList(),
-            attributes: widget.attributes,
-          ),
-        );
-      }
-    });
+    final reportReason = await ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.reportMessageView,
+      ReportMessageViewArguments(
+        messageId: message.msgId,
+        reportReasons: reasonKeys.map((e) => reasons[e]!).toList(),
+        attributes: widget.attributes,
+      ),
+    );
 
     if (reportReason != null && reportReason is String) {
       String? tag;
@@ -1372,213 +1365,107 @@ class _MessagesViewState extends State<MessagesView> {
 
 // 处理点击自己头像和点击自己名片
   void pushToCurrentUser(ChatUIKitProfile profile) async {
-    Future(() {
-      if (ChatUIKitRoute.hasInit) {
-        return ChatUIKitRoute.pushNamed(
-          context,
-          ChatUIKitRouteNames.currentUserInfoView,
-          CurrentUserInfoViewArguments(
-            profile: profile,
-            attributes: widget.attributes,
-          ),
-        );
-      } else {
-        return ChatUIKitRoute.push(
-          context,
-          CurrentUserInfoView(
-            profile: profile,
-            attributes: widget.attributes,
-          ),
-        );
-      }
-    });
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.currentUserInfoView,
+      CurrentUserInfoViewArguments(
+        profile: profile,
+        attributes: widget.attributes,
+      ),
+    );
   }
 
   // 处理当前聊天对象，点击appBar头像，点击对方消息头像，点击名片
   void pushCurrentChatter(ChatUIKitProfile profile) {
-    Future(() {
-      if (ChatUIKitRoute.hasInit) {
-        return ChatUIKitRoute.pushNamed(
-          context,
-          ChatUIKitRouteNames.contactDetailsView,
-          ContactDetailsViewArguments(
-            attributes: widget.attributes,
-            onMessageDidClear: () {
-              controller.clearMessages();
-              replyMessage = null;
-              setState(() {});
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.contactDetailsView,
+      ContactDetailsViewArguments(
+        attributes: widget.attributes,
+        onMessageDidClear: () {
+          controller.clearMessages();
+          replyMessage = null;
+          setState(() {});
+        },
+        profile: profile,
+        actions: [
+          ChatUIKitActionModel(
+            title: ChatUIKitLocal.contactDetailViewSend.getString(context),
+            icon: 'assets/images/chat.png',
+            packageName: ChatUIKitImageLoader.packageName,
+            onTap: (context) {
+              Navigator.of(context).pop();
             },
-            profile: widget.profile,
-            actions: [
-              ChatUIKitActionModel(
-                title: ChatUIKitLocal.contactDetailViewSend.getString(context),
-                icon: 'assets/images/chat.png',
-                packageName: ChatUIKitImageLoader.packageName,
-                onTap: (context) {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
           ),
-        );
-      } else {
-        return ChatUIKitRoute.push(
-          context,
-          ContactDetailsView(
-            attributes: widget.attributes,
-            onMessageDidClear: () {
-              controller.clearMessages();
-              replyMessage = null;
-              setState(() {});
-            },
-            profile: widget.profile,
-            actions: [
-              ChatUIKitActionModel(
-                title: ChatUIKitLocal.contactDetailViewSend.getString(context),
-                icon: 'assets/images/chat.png',
-                packageName: ChatUIKitImageLoader.packageName,
-                onTap: (context) {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        );
-      }
-    });
+        ],
+      ),
+    );
   }
 
   // 处理当前聊天对象是群时
   void pushToGroupInfo(ChatUIKitProfile profile) {
-    Future(() {
-      if (ChatUIKitRoute.hasInit) {
-        return ChatUIKitRoute.pushNamed(
-          context,
-          ChatUIKitRouteNames.groupDetailsView,
-          GroupDetailsViewArguments(
-            profile: widget.profile,
-            attributes: widget.attributes,
-            onMessageDidClear: () {
-              controller.clearMessages();
-              replyMessage = null;
-              setState(() {});
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.groupDetailsView,
+      GroupDetailsViewArguments(
+        profile: profile,
+        attributes: widget.attributes,
+        onMessageDidClear: () {
+          controller.clearMessages();
+          replyMessage = null;
+          setState(() {});
+        },
+        actions: [
+          ChatUIKitActionModel(
+            title: ChatUIKitLocal.groupDetailViewSend.getString(context),
+            icon: 'assets/images/chat.png',
+            packageName: ChatUIKitImageLoader.packageName,
+            onTap: (context) {
+              Navigator.of(context).pop();
             },
-            actions: [
-              ChatUIKitActionModel(
-                title: ChatUIKitLocal.groupDetailViewSend.getString(context),
-                icon: 'assets/images/chat.png',
-                packageName: ChatUIKitImageLoader.packageName,
-                onTap: (context) {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
           ),
-        );
-      } else {
-        return ChatUIKitRoute.push(
-          context,
-          GroupDetailsView(
-            profile: widget.profile,
-            attributes: widget.attributes,
-            onMessageDidClear: () {
-              controller.clearMessages();
-              replyMessage = null;
-              setState(() {});
-            },
-            actions: [
-              ChatUIKitActionModel(
-                title: ChatUIKitLocal.groupDetailViewSend.getString(context),
-                icon: 'assets/images/chat.png',
-                packageName: ChatUIKitImageLoader.packageName,
-                onTap: (context) {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        );
-      }
-    });
+        ],
+      ),
+    );
   }
 
   // 处理不是当前聊天对象的好友
   void pushNewContactDetail(ChatUIKitProfile profile) {
-    Future(() {
-      if (ChatUIKitRoute.hasInit) {
-        return ChatUIKitRoute.pushNamed(
-          context,
-          ChatUIKitRouteNames.contactDetailsView,
-          ContactDetailsViewArguments(
-            profile: profile,
-            attributes: widget.attributes,
-            actions: [
-              ChatUIKitActionModel(
-                title: ChatUIKitLocal.contactDetailViewSend.getString(context),
-                icon: 'assets/images/chat.png',
-                packageName: ChatUIKitImageLoader.packageName,
-                onTap: (ctx) {
-                  Navigator.of(context).pushNamed(
-                    ChatUIKitRouteNames.messagesView,
-                    arguments: MessagesViewArguments(
-                      profile: profile,
-                      attributes: widget.attributes,
-                    ),
-                  );
-                },
-              ),
-            ],
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.contactDetailsView,
+      ContactDetailsViewArguments(
+        profile: profile,
+        attributes: widget.attributes,
+        actions: [
+          ChatUIKitActionModel(
+            title: ChatUIKitLocal.contactDetailViewSend.getString(context),
+            icon: 'assets/images/chat.png',
+            packageName: ChatUIKitImageLoader.packageName,
+            onTap: (ctx) {
+              Navigator.of(context).pushNamed(
+                ChatUIKitRouteNames.messagesView,
+                arguments: MessagesViewArguments(
+                  profile: profile,
+                  attributes: widget.attributes,
+                ),
+              );
+            },
           ),
-        );
-      } else {
-        return ChatUIKitRoute.push(
-          context,
-          ContactDetailsView(
-            profile: profile,
-            attributes: widget.attributes,
-            actions: [
-              ChatUIKitActionModel(
-                title: ChatUIKitLocal.contactDetailViewSend.getString(context),
-                icon: 'assets/images/chat.png',
-                packageName: ChatUIKitImageLoader.packageName,
-                onTap: (ctx) {
-                  Navigator.of(context).pushNamed(
-                    ChatUIKitRouteNames.messagesView,
-                    arguments: MessagesViewArguments(
-                      profile: profile,
-                      attributes: widget.attributes,
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        );
-      }
-    });
+        ],
+      ),
+    );
   }
 
   // 处理名片信息非好友
   void pushRequestDetail(ChatUIKitProfile profile) {
-    Future(() {
-      if (ChatUIKitRoute.hasInit) {
-        return ChatUIKitRoute.pushNamed(
-          context,
-          ChatUIKitRouteNames.newRequestDetailsView,
-          NewRequestDetailsViewArguments(
-            profile: profile,
-            attributes: widget.attributes,
-          ),
-        );
-      } else {
-        return ChatUIKitRoute.push(
-          context,
-          NewRequestDetailsView(
-            profile: profile,
-            attributes: widget.attributes,
-          ),
-        );
-      }
-    });
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.newRequestDetailsView,
+      NewRequestDetailsViewArguments(
+        profile: profile,
+        attributes: widget.attributes,
+      ),
+    );
   }
 }

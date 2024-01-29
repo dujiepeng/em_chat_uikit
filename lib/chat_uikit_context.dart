@@ -14,6 +14,8 @@ class ChatUIKitContext {
   String? _currentUserId;
 
   Map<String, dynamic> cachedMap = {};
+  // 缓存，不存db；
+  bool _hasFetchedContacts = false;
 
   static ChatUIKitContext? _instance;
   static ChatUIKitContext get instance {
@@ -82,12 +84,11 @@ extension Request on ChatUIKitContext {
 
 extension ContactLoad on ChatUIKitContext {
   bool isContactLoadFinished() {
-    return cachedMap[contactLoadFinishedKey] ??= false;
+    return _hasFetchedContacts;
   }
 
   void setContactLoadFinished() {
-    cachedMap[contactLoadFinishedKey] = true;
-    _updateStore();
+    _hasFetchedContacts = true;
   }
 }
 

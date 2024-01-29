@@ -25,8 +25,12 @@ class ChatUIKit extends ChatSDKWrapper
     ChatUIKitContext.instance;
   }
 
+  Options? _options;
+  Options? get options => _options;
+
   @override
   Future<void> init({required Options options}) async {
+    _options = options;
     await super.init(options: options);
     ChatUIKitContext.instance.currentUserId = currentUserId;
   }

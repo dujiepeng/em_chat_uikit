@@ -24,7 +24,7 @@ class SearchUsersView extends StatefulWidget {
     required this.searchHideText,
     this.itemBuilder,
     this.onTap,
-    this.enableAppBar = true,
+    this.enableAppBar = false,
     this.enableMulti = false,
     this.appBar,
     this.selected,

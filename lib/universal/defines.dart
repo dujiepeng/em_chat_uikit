@@ -24,6 +24,9 @@ const String alertRecallMessageTypeKey = 'alertRecallMessageTypeKey';
 const String alertRecallMessageFromKey = 'alertRecallMessageFromKey';
 const String alertRecallMessageDirectionKey = 'alertRecallMessageDirectionKey';
 
+const String alertGroupDestroyKey = 'alertGroupDestroyKey';
+const String alertGroupDestroyByMyselfKey = 'alertGroupDestroyByMyselfKey';
+
 const String mentionKey = 'em_at_list';
 const String mentionAllValue = 'ALL';
 const String hasMentionKey = 'mention';

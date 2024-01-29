@@ -151,33 +151,26 @@ class _ConversationsViewState extends State<ConversationsView> {
     for (var item in data) {
       list.add(item);
     }
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return SearchUsersView(
-          showBackButton: false,
-          onTap: (ctx, profile) {
-            Navigator.of(ctx).pop(profile);
-          },
-          searchHideText:
-              ChatUIKitLocal.conversationsViewSearchHint.getString(context),
-          searchData: list,
-        );
-      },
+
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.searchUsersView,
+      SearchUsersViewArguments(
+        onTap: (ctx, profile) {
+          Navigator.of(ctx).pop(profile);
+        },
+        searchHideText:
+            ChatUIKitLocal.conversationsViewSearchHint.getString(context),
+        searchData: list,
+      ),
     ).then((value) {
       if (value != null && value is ChatUIKitProfile) {
-        Future(() {
-          if (ChatUIKitRoute.hasInit) {
-            return ChatUIKitRoute.pushNamed(
+        ChatUIKitRoute.pushOrPushNamed(
                 context,
                 ChatUIKitRouteNames.messagesView,
-                MessagesViewArguments(profile: value));
-          } else {
-            return ChatUIKitRoute.push(context, MessagesView(profile: value));
-          }
-        }).then((value) {
-          if (mounted) {
+                MessagesViewArguments(profile: value))
+            .then((value) {
+          if (mounted && value != null) {
             controller.reload();
           }
         });
@@ -186,21 +179,12 @@ class _ConversationsViewState extends State<ConversationsView> {
   }
 
   void pushToMessagePage(ConversationModel info) {
-    Future(() {
-      if (ChatUIKitRoute.hasInit) {
-        return ChatUIKitRoute.pushNamed(
-          context,
-          ChatUIKitRouteNames.messagesView,
-          MessagesViewArguments(profile: info.profile),
-        );
-      } else {
-        return ChatUIKitRoute.push(
-          context,
-          MessagesView(profile: info.profile),
-        );
-      }
-    }).then((value) {
-      if (mounted) {
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.messagesView,
+      MessagesViewArguments(profile: info.profile),
+    ).then((value) {
+      if (mounted && value != null) {
         controller.reload();
       }
     });
@@ -352,20 +336,15 @@ class _ConversationsViewState extends State<ConversationsView> {
   }
 
   void newConversations() async {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return SizedBox(
-          height: MediaQuery.sizeOf(context).height * 0.95,
-          child: SelectContactView(
-            backText: ChatUIKitLocal.conversationsViewMenuCreateNewChat
-                .getString(context),
-          ),
-        );
-      },
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.selectContactsView,
+      SelectContactViewArguments(
+        backText: ChatUIKitLocal.conversationsViewMenuCreateNewChat
+            .getString(context),
+      ),
     ).then((profile) {
-      if (profile != null) {
+      if (profile != null && profile is ChatUIKitProfile) {
         pushNewConversation(profile);
       }
     });
@@ -373,7 +352,6 @@ class _ConversationsViewState extends State<ConversationsView> {
 
   void addContact() async {
     String? userId = await showChatUIKitDialog(
-      borderType: ChatUIKitRectangleType.filletCorner,
       title: ChatUIKitLocal.addContactTitle.getString(context),
       content: ChatUIKitLocal.addContactSubTitle.getString(context),
       context: context,
@@ -403,20 +381,13 @@ class _ConversationsViewState extends State<ConversationsView> {
   }
 
   void newGroup() async {
-    final group = await Future(() {
-      if (ChatUIKitRoute.hasInit) {
-        return ChatUIKitRoute.pushNamed(
-          context,
-          ChatUIKitRouteNames.createGroupView,
-          CreateGroupViewArguments(attributes: widget.attributes),
-        );
-      } else {
-        return ChatUIKitRoute.push(
-          context,
-          CreateGroupView(attributes: widget.attributes),
-        );
-      }
-    });
+    final group = await ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.createGroupView,
+      CreateGroupViewArguments(
+        attributes: widget.attributes,
+      ),
+    );
 
     if (group is Group) {
       await ChatUIKitInsertMessageTool.insertCreateGroupMessage(
@@ -430,21 +401,12 @@ class _ConversationsViewState extends State<ConversationsView> {
   }
 
   void pushNewConversation(ChatUIKitProfile profile) {
-    Future(() {
-      if (ChatUIKitRoute.hasInit) {
-        return ChatUIKitRoute.pushNamed(
-          context,
-          ChatUIKitRouteNames.messagesView,
-          MessagesViewArguments(profile: profile),
-        );
-      } else {
-        return ChatUIKitRoute.push(
-          context,
-          MessagesView(profile: profile),
-        );
-      }
-    }).then((value) {
-      if (mounted) {
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.messagesView,
+      MessagesViewArguments(profile: profile),
+    ).then((value) {
+      if (mounted && value != null) {
         controller.reload();
       }
     });

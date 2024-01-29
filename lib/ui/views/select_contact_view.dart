@@ -6,7 +6,7 @@ class SelectContactView extends StatefulWidget {
   SelectContactView.arguments(SelectContactViewArguments arguments, {super.key})
       : listViewItemBuilder = arguments.listViewItemBuilder,
         onSearchTap = arguments.onSearchTap,
-        fakeSearchHideText = arguments.fakeSearchHideText,
+        searchBarHideText = arguments.searchBarHideText,
         listViewBackground = arguments.listViewBackground,
         onTap = arguments.onTap,
         onLongPress = arguments.onLongPress,
@@ -22,7 +22,7 @@ class SelectContactView extends StatefulWidget {
     this.title,
     this.listViewItemBuilder,
     this.onSearchTap,
-    this.fakeSearchHideText,
+    this.searchBarHideText,
     this.listViewBackground,
     this.onTap,
     this.onLongPress,
@@ -43,7 +43,7 @@ class SelectContactView extends StatefulWidget {
   final void Function(BuildContext context, ContactItemModel model)? onTap;
   final void Function(BuildContext context, ContactItemModel model)?
       onLongPress;
-  final String? fakeSearchHideText;
+  final String? searchBarHideText;
   final Widget? listViewBackground;
   final bool enableAppBar;
   final String? attributes;
@@ -98,7 +98,7 @@ class _SelectContactViewState extends State<SelectContactView> {
       body: ContactListView(
         controller: controller,
         itemBuilder: widget.listViewItemBuilder,
-        searchHideText: widget.fakeSearchHideText,
+        searchHideText: widget.searchBarHideText,
         background: widget.listViewBackground,
         onTap: widget.onTap ?? tapContactInfo,
         onSearchTap: widget.onSearchTap ?? onSearchTap,

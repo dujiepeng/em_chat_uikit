@@ -205,7 +205,9 @@ class _MessageListViewState extends State<MessageListView> {
       return content;
     }
 
-    if (message.isRecallAlert || message.isCreateGroupAlert) {
+    if (message.isRecallAlert ||
+        message.isCreateGroupAlert ||
+        message.isDestroyGroupAlert) {
       if (widget.alertItemBuilder != null) {
         return widget.alertItemBuilder!.call(context, message)!;
       }

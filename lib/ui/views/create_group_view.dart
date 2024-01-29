@@ -14,7 +14,7 @@ class CreateGroupView extends StatefulWidget {
     super.key,
   })  : listViewItemBuilder = arguments.listViewItemBuilder,
         onSearchTap = arguments.onSearchTap,
-        fakeSearchHideText = arguments.fakeSearchHideText,
+        searchBarHideText = arguments.searchBarHideText,
         listViewBackground = arguments.listViewBackground,
         onItemTap = arguments.onItemTap,
         onItemLongPress = arguments.onItemLongPress,
@@ -29,7 +29,7 @@ class CreateGroupView extends StatefulWidget {
     this.listViewItemBuilder,
     this.onSearchTap,
     this.createGroupInfo,
-    this.fakeSearchHideText,
+    this.searchBarHideText,
     this.listViewBackground,
     this.onItemTap,
     this.onItemLongPress,
@@ -49,7 +49,7 @@ class CreateGroupView extends StatefulWidget {
   final ChatUIKitContactItemBuilder? listViewItemBuilder;
   final void Function(ContactItemModel model)? onItemTap;
   final void Function(ContactItemModel model)? onItemLongPress;
-  final String? fakeSearchHideText;
+  final String? searchBarHideText;
   final Widget? listViewBackground;
   final bool enableAppBar;
   final WillCreateHandler? willCreateHandler;
@@ -162,13 +162,13 @@ class _CreateGroupViewState extends State<CreateGroupView> {
                                       ? theme.color.neutralColor4
                                       : theme.color.neutralColor7,
                                 ),
-                          ChatUIKitContactListViewItem(model)
+                          Expanded(child: ChatUIKitContactListViewItem(model))
                         ],
                       ),
                     ),
                   );
                 },
-            searchHideText: widget.fakeSearchHideText,
+            searchHideText: widget.searchBarHideText,
             background: widget.listViewBackground,
             onSearchTap: widget.onSearchTap ?? onSearchTap,
           );

@@ -15,10 +15,10 @@ Future<T?> showChatUIKitDialog<T>({
   double? leftRightPadding,
   Color barrierColor = Colors.black54,
   bool barrierDismissible = true,
-  ChatUIKitRectangleType? borderType,
+  ChatUIKitDialogRectangleType? borderType,
 }) async {
-  ChatUIKitRectangleType type =
-      borderType ?? ChatUIKitSettings.alertRectangleType;
+  ChatUIKitDialogRectangleType type =
+      borderType ?? ChatUIKitSettings.dialogRectangleType;
   return showDialog(
     barrierColor: barrierColor,
     barrierDismissible: barrierDismissible,
@@ -37,7 +37,7 @@ Future<T?> showChatUIKitDialog<T>({
   );
 }
 
-enum ChatUIKitRectangleType {
+enum ChatUIKitDialogRectangleType {
   circular,
   filletCorner,
   rightAngle,
@@ -104,7 +104,7 @@ class ChatUIKitDialog<T> extends StatefulWidget {
     this.hintsText,
     this.hiddenStyle,
     this.leftRightPadding = defaultLeftRightPadding,
-    this.borderType = ChatUIKitRectangleType.circular,
+    this.borderType = ChatUIKitDialogRectangleType.circular,
     super.key,
   });
 
@@ -113,7 +113,7 @@ class ChatUIKitDialog<T> extends StatefulWidget {
   final String? content;
   final TextStyle? contentStyle;
   final List<ChatUIKitDialogItem<T>> items;
-  final ChatUIKitRectangleType borderType;
+  final ChatUIKitDialogRectangleType borderType;
   final List<String>? hintsText;
   final double leftRightPadding;
 
@@ -172,11 +172,11 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.circular(() {
           switch (widget.borderType) {
-            case ChatUIKitRectangleType.circular:
+            case ChatUIKitDialogRectangleType.circular:
               return 20.0;
-            case ChatUIKitRectangleType.filletCorner:
+            case ChatUIKitDialogRectangleType.filletCorner:
               return 8.0;
-            case ChatUIKitRectangleType.rightAngle:
+            case ChatUIKitDialogRectangleType.rightAngle:
               return 0.0;
           }
         }()),
@@ -209,12 +209,11 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
               child: Text(
                 widget.title!,
                 textScaleFactor: 1.0,
-                overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: widget.titleStyle ??
                     TextStyle(
-                      fontWeight: themeFont.titleLarge.fontWeight,
-                      fontSize: themeFont.titleLarge.fontSize,
+                      fontWeight: themeFont.headlineMedium.fontWeight,
+                      fontSize: themeFont.headlineMedium.fontSize,
                       color: themeColor.isDark
                           ? themeColor.neutralColor98
                           : Colors.black,
@@ -230,7 +229,6 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
               child: Text(
                 widget.content!,
                 textScaleFactor: 1.0,
-                overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: widget.contentStyle ??
                     TextStyle(
@@ -255,13 +253,13 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                     decoration: BoxDecoration(
                       borderRadius: () {
                         if (widget.borderType ==
-                            ChatUIKitRectangleType.circular) {
+                            ChatUIKitDialogRectangleType.circular) {
                           return BorderRadius.circular(24);
                         } else if (widget.borderType ==
-                            ChatUIKitRectangleType.filletCorner) {
+                            ChatUIKitDialogRectangleType.filletCorner) {
                           return BorderRadius.circular(4);
                         } else if (widget.borderType ==
-                            ChatUIKitRectangleType.rightAngle) {
+                            ChatUIKitDialogRectangleType.rightAngle) {
                           return BorderRadius.circular(0);
                         }
                       }(),
@@ -361,13 +359,13 @@ class _ChatUIKitDialogState extends State<ChatUIKitDialog> {
                     decoration: BoxDecoration(
                       borderRadius: () {
                         if (widget.borderType ==
-                            ChatUIKitRectangleType.circular) {
+                            ChatUIKitDialogRectangleType.circular) {
                           return BorderRadius.circular(24);
                         } else if (widget.borderType ==
-                            ChatUIKitRectangleType.filletCorner) {
+                            ChatUIKitDialogRectangleType.filletCorner) {
                           return BorderRadius.circular(4);
                         } else if (widget.borderType ==
-                            ChatUIKitRectangleType.rightAngle) {
+                            ChatUIKitDialogRectangleType.rightAngle) {
                           return BorderRadius.circular(0);
                         }
                       }(),

@@ -52,7 +52,7 @@ class ChatUIKitListView extends StatefulWidget {
   final ChatUIKitListItemBuilder itemBuilder;
   final List<Widget>? beforeWidgets;
   final List<Widget>? afterWidgets;
-  final int? Function(Key)? findChildIndexCallback;
+  final int? Function(Key key)? findChildIndexCallback;
 
   @override
   State<ChatUIKitListView> createState() => _ChatUIKitListViewState();
@@ -222,7 +222,7 @@ class _ChatUIKitListViewState extends State<ChatUIKitListView> {
             }
           }
         }
-        return false;
+        return true;
       },
       child: content,
     );

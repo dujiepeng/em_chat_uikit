@@ -26,7 +26,7 @@ class ChatUIKitInsertMessageTool {
       chatType: ChatType.GroupChat,
       params: {
         alertCreateGroupMessageOwnerKey: creator?.showName ?? group.owner ?? '',
-        alertCreateGroupMessageGroupNameKey: group.name ?? group.groupId,
+        alertCreateGroupMessageGroupNameKey: group.groupId,
       },
     );
     alertMsg.conversationId = group.groupId;

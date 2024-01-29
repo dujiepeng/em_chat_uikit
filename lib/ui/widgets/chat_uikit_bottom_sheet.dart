@@ -154,7 +154,6 @@ class ChatUIKitBottomSheet<T> extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 13),
           child: Text(
             title!,
-            overflow: TextOverflow.ellipsis,
             textScaleFactor: 1.0,
             style: titleStyle ??
                 TextStyle(

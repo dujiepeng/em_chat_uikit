@@ -64,7 +64,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
             margin: const EdgeInsets.fromLTRB(2, 1, 0, 1),
             alignment: Alignment.center,
             child: ChatUIKitSettings.conversationListMuteImage != null
-                ? Image.asset(ChatUIKitSettings.conversationListMuteImage!)
+                ? Image(image: ChatUIKitSettings.conversationListMuteImage!)
                 : ChatUIKitImageLoader.noDisturb(
                     color: theme.color.isDark
                         ? theme.color.neutralColor5
@@ -136,23 +136,20 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
                 children: [
                   if (info.hasMention)
                     TextSpan(
-                      text:
-                          '[${ChatUIKitLocal.conversationListItemMention.getString(context)}]',
-                    ),
-                  TextSpan(text: () {
-                    String str = '';
-                    if (info.profile.type == ChatUIKitProfileType.group) {
-                      str += info.lastMessage?.nickname ??
-                          info.lastMessage?.from ??
-                          "";
-                      if (str.isNotEmpty) {
-                        str = "$str: ";
-                      }
-                    }
-
-                    str += info.lastMessage?.showInfo(context: context) ?? '';
-                    return str;
-                  }())
+                        text:
+                            '[${ChatUIKitLocal.conversationListItemMention.getString(context)}]',
+                        style: () {
+                          final style = TextStyle(
+                            color: theme.color.isDark
+                                ? theme.color.primaryColor6
+                                : theme.color.primaryColor5,
+                            fontSize: theme.font.labelMedium.fontSize,
+                            fontWeight: theme.font.labelMedium.fontWeight,
+                          );
+                          return style;
+                        }()),
+                  TextSpan(
+                      text: info.lastMessage?.showInfo(context: context) ?? '')
                 ],
               ),
             );
@@ -176,7 +173,9 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
         child: unreadCount,
       );
     } else {
-      unreadCount = showUnreadCount && info.unreadCount > 0
+      unreadCount = showUnreadCount &&
+              info.unreadCount > 0 &&
+              ChatUIKitSettings.showConversationListUnreadCount == true
           ? Container(
               padding: const EdgeInsets.fromLTRB(4, 1, 4, 1),
               constraints: const BoxConstraints(
@@ -253,7 +252,7 @@ class ChatUIKitConversationListViewItem extends StatelessWidget {
         content,
         Positioned(
           bottom: 0,
-          left: 78,
+          left: 78 - (ChatUIKitSettings.showConversationListAvatar ? 0 : 60),
           right: 0,
           height: 0.5,
           child: Divider(

@@ -10,7 +10,7 @@ class GroupMembersViewArguments implements ChatUIKitViewArguments {
     this.listViewItemBuilder,
     this.onTap,
     this.onLongPress,
-    this.fakeSearchHideText,
+    this.searchBarHideText,
     this.listViewBackground,
     this.loadErrorMessage,
     this.enableAppBar = true,
@@ -27,7 +27,7 @@ class GroupMembersViewArguments implements ChatUIKitViewArguments {
   final void Function(BuildContext context, ContactItemModel model)? onTap;
   final void Function(BuildContext context, ContactItemModel model)?
       onLongPress;
-  final String? fakeSearchHideText;
+  final String? searchBarHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
   final bool enableMemberOperation;
@@ -44,7 +44,7 @@ class GroupMembersViewArguments implements ChatUIKitViewArguments {
     ChatUIKitContactItemBuilder? listViewItemBuilder,
     void Function(BuildContext context, ContactItemModel model)? onTap,
     void Function(BuildContext context, ContactItemModel model)? onLongPress,
-    String? fakeSearchHideText,
+    String? searchBarHideText,
     Widget? listViewBackground,
     String? loadErrorMessage,
     bool? enableMemberOperation,
@@ -59,7 +59,7 @@ class GroupMembersViewArguments implements ChatUIKitViewArguments {
       listViewItemBuilder: listViewItemBuilder ?? this.listViewItemBuilder,
       onTap: onTap ?? this.onTap,
       onLongPress: onLongPress ?? this.onLongPress,
-      fakeSearchHideText: fakeSearchHideText ?? this.fakeSearchHideText,
+      searchBarHideText: searchBarHideText ?? this.searchBarHideText,
       listViewBackground: listViewBackground ?? this.listViewBackground,
       loadErrorMessage: loadErrorMessage ?? this.loadErrorMessage,
       enableMemberOperation:

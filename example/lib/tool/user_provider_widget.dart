@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class UserProviderWidget extends StatefulWidget {
   const UserProviderWidget({required this.child, super.key});
+
   final Widget child;
 
   @override
@@ -14,12 +15,6 @@ class UserProviderWidget extends StatefulWidget {
 class _UserProviderWidgetState extends State<UserProviderWidget>
     with GroupObserver {
   late SharedPreferences sharedPreferences;
-  @override
-  void initState() {
-    super.initState();
-    ChatUIKit.instance.addObserver(this);
-    ChatUIKitProvider.instance.profilesHandler = _profilesHandler;
-  }
 
   @override
   void dispose() {
@@ -28,8 +23,36 @@ class _UserProviderWidgetState extends State<UserProviderWidget>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return widget.child;
+  void initState() {
+    super.initState();
+    ChatUIKit.instance.addObserver(this);
+    ChatUIKitProvider.instance.profilesHandler = _profilesHandler;
+    addDataToChatUIKit();
+  }
+
+  @override
+  void onGroupCreatedByMyself(Group group) {
+    ChatUIKitProvider.instance.addProfiles(
+      [ChatUIKitProfile.group(id: group.groupId, name: group.name)],
+    );
+  }
+
+  @override
+  void onGroupInfoChangedByMeSelf(Group group) {
+    ChatUIKitProvider.instance.addProfiles(
+      [ChatUIKitProfile.group(id: group.groupId, name: group.name)],
+    );
+  }
+
+  void addDataToChatUIKit() async {
+    List<Group> groups = await ChatUIKit.instance.getJoinedGroups();
+    List<ChatUIKitProfile> profiles = [];
+    for (var group in groups) {
+      profiles.add(
+        ChatUIKitProfile.group(id: group.groupId, name: group.name),
+      );
+    }
+    ChatUIKitProvider.instance.addProfiles(profiles);
   }
 
   List<ChatUIKitProfile>? _profilesHandler(
@@ -52,16 +75,7 @@ class _UserProviderWidgetState extends State<UserProviderWidget>
   }
 
   @override
-  void onGroupInfoChangedByMeSelf(Group group) {
-    ChatUIKitProvider.instance.addProfiles(
-      [ChatUIKitProfile.group(id: group.groupId, name: group.name)],
-    );
-  }
-
-  @override
-  void onGroupCreatedByMyself(Group group) {
-    ChatUIKitProvider.instance.addProfiles(
-      [ChatUIKitProfile.group(id: group.groupId, name: group.name)],
-    );
+  Widget build(BuildContext context) {
+    return widget.child;
   }
 }

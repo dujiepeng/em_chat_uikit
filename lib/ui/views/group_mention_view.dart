@@ -6,7 +6,7 @@ class GroupMentionView extends StatefulWidget {
   GroupMentionView.arguments(GroupMentionViewArguments arguments, {super.key})
       : listViewItemBuilder = arguments.listViewItemBuilder,
         onSearchTap = arguments.onSearchTap,
-        fakeSearchHideText = arguments.fakeSearchHideText,
+        searchBarHideText = arguments.searchBarHideText,
         listViewBackground = arguments.listViewBackground,
         onTap = arguments.onTap,
         onLongPress = arguments.onLongPress,
@@ -20,7 +20,7 @@ class GroupMentionView extends StatefulWidget {
     required this.groupId,
     this.listViewItemBuilder,
     this.onSearchTap,
-    this.fakeSearchHideText,
+    this.searchBarHideText,
     this.listViewBackground,
     this.onTap,
     this.onLongPress,
@@ -40,7 +40,7 @@ class GroupMentionView extends StatefulWidget {
   final void Function(BuildContext context, ContactItemModel model)? onTap;
   final void Function(BuildContext context, ContactItemModel model)?
       onLongPress;
-  final String? fakeSearchHideText;
+  final String? searchBarHideText;
   final Widget? listViewBackground;
   final bool enableAppBar;
   final String? attributes;
@@ -115,7 +115,7 @@ class _GroupMentionViewState extends State<GroupMentionView> {
                     child: ChatUIKitContactListViewItem(model),
                   );
                 },
-            searchHideText: widget.fakeSearchHideText,
+            searchHideText: widget.searchBarHideText,
             background: widget.listViewBackground,
             onSearchTap: widget.onSearchTap ?? onSearchTap,
           );

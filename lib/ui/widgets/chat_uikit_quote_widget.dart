@@ -593,12 +593,15 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
       Widget content = Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.person_sharp,
-            color: theme.color.isDark
-                ? theme.color.neutralColor95
-                : theme.color.neutralColor3,
-            size: 16,
+          SizedBox(
+            width: 16,
+            height: 16,
+            child: ChatUIKitImageLoader.card(
+                width: 32,
+                height: 32,
+                color: theme.color.isDark
+                    ? theme.color.neutralColor6
+                    : theme.color.neutralColor7),
           ),
           const SizedBox(width: 4),
           Flexible(

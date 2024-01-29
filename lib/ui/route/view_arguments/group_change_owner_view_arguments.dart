@@ -6,7 +6,7 @@ class GroupChangeOwnerViewArguments implements ChatUIKitViewArguments {
     required this.groupId,
     this.listViewItemBuilder,
     this.onSearchTap,
-    this.fakeSearchHideText,
+    this.searchBarHideText,
     this.listViewBackground,
     this.onItemTap,
     this.onItemLongPress,
@@ -27,7 +27,7 @@ class GroupChangeOwnerViewArguments implements ChatUIKitViewArguments {
   final void Function(BuildContext context, ContactItemModel model)? onItemTap;
   final void Function(BuildContext context, ContactItemModel model)?
       onItemLongPress;
-  final String? fakeSearchHideText;
+  final String? searchBarHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
   final bool enableAppBar;
@@ -44,7 +44,7 @@ class GroupChangeOwnerViewArguments implements ChatUIKitViewArguments {
     void Function(BuildContext context, ContactItemModel model)? onItemTap,
     void Function(BuildContext context, ContactItemModel model)?
         onItemLongPress,
-    String? fakeSearchHideText,
+    String? searchBarHideText,
     Widget? listViewBackground,
     String? loadErrorMessage,
     bool? enableAppBar,
@@ -58,7 +58,7 @@ class GroupChangeOwnerViewArguments implements ChatUIKitViewArguments {
       listViewItemBuilder: listViewItemBuilder ?? this.listViewItemBuilder,
       onItemTap: onItemTap ?? this.onItemTap,
       onItemLongPress: onItemLongPress ?? this.onItemLongPress,
-      fakeSearchHideText: fakeSearchHideText ?? this.fakeSearchHideText,
+      searchBarHideText: searchBarHideText ?? this.searchBarHideText,
       listViewBackground: listViewBackground ?? this.listViewBackground,
       loadErrorMessage: loadErrorMessage ?? this.loadErrorMessage,
       enableAppBar: enableAppBar ?? this.enableAppBar,

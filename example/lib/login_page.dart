@@ -48,7 +48,6 @@ class _LoginPageState extends State<LoginPage> {
 
     dynamic ret = await showChatUIKitDialog(
       context: context,
-      borderType: ChatUIKitRectangleType.circular,
       hintsText: [
         'UserId',
         'Password',

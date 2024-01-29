@@ -5,7 +5,7 @@ class CreateGroupViewArguments implements ChatUIKitViewArguments {
   CreateGroupViewArguments({
     this.listViewItemBuilder,
     this.onSearchTap,
-    this.fakeSearchHideText,
+    this.searchBarHideText,
     this.listViewBackground,
     this.onItemTap,
     this.onItemLongPress,
@@ -24,7 +24,7 @@ class CreateGroupViewArguments implements ChatUIKitViewArguments {
   final ChatUIKitContactItemBuilder? listViewItemBuilder;
   final void Function(ContactItemModel model)? onItemTap;
   final void Function(ContactItemModel model)? onItemLongPress;
-  final String? fakeSearchHideText;
+  final String? searchBarHideText;
   final Widget? listViewBackground;
   final bool enableAppBar;
   final WillCreateHandler? willCreateHandler;
@@ -39,7 +39,7 @@ class CreateGroupViewArguments implements ChatUIKitViewArguments {
     ChatUIKitContactItemBuilder? listViewItemBuilder,
     void Function(ContactItemModel model)? onItemTap,
     void Function(ContactItemModel model)? onItemLongPress,
-    String? fakeSearchHideText,
+    String? searchBarHideText,
     Widget? listViewBackground,
     bool? enableAppBar,
     WillCreateHandler? willCreateHandler,
@@ -53,7 +53,7 @@ class CreateGroupViewArguments implements ChatUIKitViewArguments {
       listViewItemBuilder: listViewItemBuilder ?? this.listViewItemBuilder,
       onItemTap: onItemTap ?? this.onItemTap,
       onItemLongPress: onItemLongPress ?? this.onItemLongPress,
-      fakeSearchHideText: fakeSearchHideText ?? this.fakeSearchHideText,
+      searchBarHideText: searchBarHideText ?? this.searchBarHideText,
       listViewBackground: listViewBackground ?? this.listViewBackground,
       enableAppBar: enableAppBar ?? this.enableAppBar,
       willCreateHandler: willCreateHandler ?? this.willCreateHandler,

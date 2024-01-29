@@ -215,25 +215,27 @@ class ChatUIKitRoute {
     }
   }
 
-  static Future<T?> pushNamed<T extends Object?>(
+  static Future<T?> pushOrPushNamed<T extends Object?>(
     BuildContext context,
     String pushNamed,
     ChatUIKitViewArguments arguments,
   ) {
-    return Navigator.of(context).pushNamed(
-      pushNamed,
-      arguments: arguments,
-    );
-  }
-
-  static Future<T?> push<T extends Object?>(
-      BuildContext context, Widget widget) {
-    return Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return widget;
-        },
-      ),
-    );
+    if (hasInit) {
+      return Navigator.of(context).pushNamed(
+        pushNamed,
+        arguments: arguments,
+      );
+    } else {
+      return Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            return ChatUIKitRouteNames.getWidthFromName(
+              pushNamed,
+              arguments,
+            );
+          },
+        ),
+      );
+    }
   }
 }

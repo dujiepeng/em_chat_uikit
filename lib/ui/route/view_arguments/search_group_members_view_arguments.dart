@@ -8,7 +8,7 @@ class SearchGroupMembersViewArguments implements ChatUIKitViewArguments {
     this.onTap,
     this.itemBuilder,
     this.appBar,
-    this.enableAppBar = true,
+    this.enableAppBar = false,
     this.attributes,
   });
 

@@ -7,7 +7,7 @@ class GroupAddMembersView extends StatefulWidget {
       {super.key})
       : listViewItemBuilder = arguments.listViewItemBuilder,
         onSearchTap = arguments.onSearchTap,
-        fakeSearchHideText = arguments.fakeSearchHideText,
+        searchBarHideText = arguments.searchBarHideText,
         listViewBackground = arguments.listViewBackground,
         onTap = arguments.onTap,
         onLongPress = arguments.onLongPress,
@@ -22,7 +22,7 @@ class GroupAddMembersView extends StatefulWidget {
     required this.groupId,
     this.listViewItemBuilder,
     this.onSearchTap,
-    this.fakeSearchHideText,
+    this.searchBarHideText,
     this.listViewBackground,
     this.onTap,
     this.onLongPress,
@@ -43,7 +43,7 @@ class GroupAddMembersView extends StatefulWidget {
   final void Function(BuildContext context, ContactItemModel model)? onTap;
   final void Function(BuildContext context, ContactItemModel model)?
       onLongPress;
-  final String? fakeSearchHideText;
+  final String? searchBarHideText;
   final Widget? listViewBackground;
   final bool enableAppBar;
   final String? attributes;
@@ -159,19 +159,20 @@ class _GroupAddMembersViewState extends State<GroupAddMembersView> {
                                   : value.contains(model.profile)
                                       ? Icon(
                                           Icons.check_box,
-                                          size: 21,
+                                          size: 28,
                                           color: theme.color.isDark
                                               ? theme.color.primaryColor6
                                               : theme.color.primaryColor5,
                                         )
                                       : Icon(
                                           Icons.check_box_outline_blank,
-                                          size: 21,
+                                          size: 28,
                                           color: theme.color.isDark
                                               ? theme.color.neutralColor4
                                               : theme.color.neutralColor7,
                                         ),
-                              ChatUIKitContactListViewItem(model),
+                              Expanded(
+                                  child: ChatUIKitContactListViewItem(model))
                             ],
                           ),
                           if (widget.inGroupMembers
@@ -190,7 +191,7 @@ class _GroupAddMembersViewState extends State<GroupAddMembersView> {
                     ),
                   );
                 },
-            searchHideText: widget.fakeSearchHideText,
+            searchHideText: widget.searchBarHideText,
             background: widget.listViewBackground,
             onSearchTap: widget.onSearchTap ?? onSearchTap,
           );

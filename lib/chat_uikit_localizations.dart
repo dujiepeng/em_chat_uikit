@@ -176,10 +176,14 @@ mixin ChatUIKitLocal {
   static const changInfoViewSave = 'change_info_view_save';
   static const changInfoViewInputHint = 'change_info_view_input_hint';
 
+  static const messagesViewGroupDestroyInfo =
+      'messages_view_group_destroy_info';
   static const messagesViewRecallInfo = 'messages_view_recall_info';
   static const messagesViewRecallInfoYou = 'messages_view_recall_info_you';
   static const messagesViewAlertGroupInfoTitle =
       'messages_view_alert_group_info_title';
+  static const messagesViewAlertGroupInfoTitleYou =
+      'messages_view_alert_group_info_title_you';
   static const messagesViewEditMessageTitle =
       'messages_view_edit_message_title';
   static const messagesViewMoreActionsTitleAlbum =
@@ -373,17 +377,18 @@ mixin ChatUIKitLocal {
     groupMembersViewTitle: '群成员',
     groupMembersSearch: '搜索群成员',
     groupChangeOwnerViewTitle: '选择新群主',
-    groupChangeOwnerViewAlertTitle: '群人将群主身份转让给成员？',
+    groupChangeOwnerViewAlertTitle: '确认将群主身份转让给成员？',
     groupChangeOwnerViewAlertSubTitle: '转让后，对方将变为群主。',
     groupChangeOwnerViewAlertButtonConfirm: '确认',
     groupChangeOwnerViewAlertButtonCancel: '取消',
     groupsViewTitle: '群组',
     changInfoViewSave: '保存',
     changInfoViewInputHint: '请输入',
+    messagesViewGroupDestroyInfo: '本群组已被解散',
     messagesViewRecallInfo: '撤回了一条消息',
     messagesViewRecallInfoYou: '你',
     messagesViewAlertGroupInfoTitle: '创建群组',
-    messagesViewEditMessageTitle: '编辑中',
+    messagesViewAlertGroupInfoTitleYou: '你',
     messagesViewMoreActionsTitleAlbum: '相册',
     messagesViewMoreActionsTitleCamera: '拍照',
     messagesViewMoreActionsTitleFile: '文件',
@@ -551,9 +556,11 @@ mixin ChatUIKitLocal {
     groupsViewTitle: 'Groups',
     changInfoViewSave: 'Save',
     changInfoViewInputHint: 'input',
+    messagesViewGroupDestroyInfo: 'The group has been disbanded.',
     messagesViewRecallInfo: ' recalled a message',
     messagesViewRecallInfoYou: 'You',
-    messagesViewAlertGroupInfoTitle: 'create a group',
+    messagesViewAlertGroupInfoTitle: 'created a group',
+    messagesViewAlertGroupInfoTitleYou: 'You',
     messagesViewEditMessageTitle: 'Editing',
     messagesViewMoreActionsTitleAlbum: 'Album',
     messagesViewMoreActionsTitleCamera: 'Camera',

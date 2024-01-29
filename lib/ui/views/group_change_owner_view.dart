@@ -8,7 +8,7 @@ class GroupChangeOwnerView extends StatefulWidget {
       : groupId = arguments.groupId,
         listViewItemBuilder = arguments.listViewItemBuilder,
         onSearchTap = arguments.onSearchTap,
-        fakeSearchHideText = arguments.fakeSearchHideText,
+        searchBarHideText = arguments.searchBarHideText,
         listViewBackground = arguments.listViewBackground,
         onItemTap = arguments.onItemTap,
         onItemLongPress = arguments.onItemLongPress,
@@ -22,7 +22,7 @@ class GroupChangeOwnerView extends StatefulWidget {
     required this.groupId,
     this.listViewItemBuilder,
     this.onSearchTap,
-    this.fakeSearchHideText,
+    this.searchBarHideText,
     this.listViewBackground,
     this.onItemTap,
     this.onItemLongPress,
@@ -44,7 +44,7 @@ class GroupChangeOwnerView extends StatefulWidget {
   final void Function(BuildContext context, ContactItemModel model)? onItemTap;
   final void Function(BuildContext context, ContactItemModel model)?
       onItemLongPress;
-  final String? fakeSearchHideText;
+  final String? searchBarHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
   final bool enableAppBar;
@@ -123,7 +123,7 @@ class _GroupChangeOwnerViewState extends State<GroupChangeOwnerView> {
           }();
           return content;
         },
-        searchHideText: widget.fakeSearchHideText,
+        searchHideText: widget.searchBarHideText,
         background: widget.listViewBackground,
         onTap: showConfirmDialog,
       ),

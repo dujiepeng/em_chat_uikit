@@ -26,7 +26,11 @@ class ContactListViewController with ChatUIKitListViewControllerBase {
         loadingType.value = ChatUIKitListViewType.normal;
       }
     } catch (e) {
-      loadingType.value = ChatUIKitListViewType.error;
+      if (items.isEmpty) {
+        loadingType.value = ChatUIKitListViewType.error;
+      } else {
+        loadingType.value = ChatUIKitListViewType.normal;
+      }
     }
   }
 
@@ -51,6 +55,16 @@ class ContactListViewController with ChatUIKitListViewControllerBase {
       list.add(info);
     }
     return list;
+  }
+
+  void addUser(String userId) {
+    if (list
+        .cast<ContactItemModel>()
+        .any((element) => element.profile.id == userId)) {
+      return;
+    }
+    List<ContactItemModel> tmp = mappers([userId]);
+    list.addAll(tmp);
   }
 
   @override

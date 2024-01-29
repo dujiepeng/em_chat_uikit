@@ -72,7 +72,6 @@ class _ChangeAvatarPageState extends State<ChangeAvatarPage> {
                       child: Image.asset(
                         'assets/images/avatar_selected.png',
                         fit: BoxFit.fill,
-                        package: ChatUIKitImageLoader.packageName,
                       ),
                     ),
                   )

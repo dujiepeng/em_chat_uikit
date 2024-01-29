@@ -141,22 +141,10 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
       ChatUIKitListViewMoreItem(
         title: ChatUIKitLocal.contactsViewNewRequests.getString(context),
         onTap: () {
-          if (ChatUIKitRoute.hasInit) {
-            ChatUIKitRoute.pushNamed(
+          ChatUIKitRoute.pushOrPushNamed(
               context,
               ChatUIKitRouteNames.newRequestsView,
-              NewRequestsViewArguments(
-                attributes: widget.attributes,
-              ),
-            );
-          } else {
-            ChatUIKitRoute.push(
-              context,
-              NewRequestsView(
-                attributes: widget.attributes,
-              ),
-            );
-          }
+              NewRequestsViewArguments(attributes: widget.attributes));
         },
         trailing: Padding(
           padding: const EdgeInsets.only(right: 5),
@@ -166,101 +154,88 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
       ChatUIKitListViewMoreItem(
           title: ChatUIKitLocal.contactsViewGroups.getString(context),
           onTap: () {
-            Future(() {
-              if (ChatUIKitRoute.hasInit) {
-                return ChatUIKitRoute.pushNamed(
-                  context,
-                  ChatUIKitRouteNames.groupsView,
-                  GroupsViewArguments(attributes: widget.attributes),
-                );
-              } else {
-                return ChatUIKitRoute.push(
-                  context,
-                  GroupsView(
-                    attributes: widget.attributes,
-                  ),
-                );
-              }
-            }).then((value) {
-              ChatUIKit.instance.onConversationsUpdate();
-            });
+            ChatUIKitRoute.pushOrPushNamed(
+                context,
+                ChatUIKitRouteNames.groupsView,
+                GroupsViewArguments(attributes: widget.attributes));
           }),
     ];
   }
 
-  void onSearchTap(List<ContactItemModel> data) {
+  void onSearchTap(List<ContactItemModel> data) async {
     List<NeedSearch> list = [];
     for (var item in data) {
       list.add(item);
     }
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return SearchUsersView(
-          onTap: (ctx, profile) {
-            Navigator.of(ctx).pop();
-          },
-          searchHideText: ChatUIKitLocal.contactsViewSearch.getString(context),
-          searchData: list,
-        );
-      },
-    );
-  }
 
-  void tapContactInfo(BuildContext context, ContactItemModel model) {
-    Future(() {
-      if (ChatUIKitRoute.hasInit) {
-        return ChatUIKitRoute.pushNamed(
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.searchUsersView,
+      SearchUsersViewArguments(
+        onTap: (ctx, profile) {
+          Navigator.of(ctx).pop(profile);
+        },
+        searchHideText:
+            ChatUIKitLocal.conversationsViewSearchHint.getString(context),
+        searchData: list,
+      ),
+    ).then((value) {
+      if (value != null && value is ChatUIKitProfile) {
+        ChatUIKitRoute.pushOrPushNamed(
           context,
           ChatUIKitRouteNames.contactDetailsView,
-          ContactDetailsViewArguments(profile: model.profile, actions: [
+          ContactDetailsViewArguments(profile: value, actions: [
             ChatUIKitActionModel(
               title: ChatUIKitLocal.contactDetailViewSend.getString(context),
               icon: 'assets/images/chat.png',
               packageName: ChatUIKitImageLoader.packageName,
               onTap: (context) {
-                ChatUIKitRoute.pushNamed(
+                ChatUIKitRoute.pushOrPushNamed(
                   context,
                   ChatUIKitRouteNames.messagesView,
                   MessagesViewArguments(
-                    profile: model.profile,
+                    profile: value,
                     attributes: widget.attributes,
                   ),
                 );
               },
             ),
           ]),
-        );
-      } else {
-        return ChatUIKitRoute.push(
-          context,
-          ContactDetailsView(profile: model.profile, actions: [
-            ChatUIKitActionModel(
-              title: ChatUIKitLocal.contactDetailViewSend.getString(context),
-              icon: 'assets/images/chat.png',
-              packageName: ChatUIKitImageLoader.packageName,
-              onTap: (context) {
-                ChatUIKitRoute.push(
-                  context,
-                  MessagesView(
-                    profile: model.profile,
-                    attributes: widget.attributes,
-                  ),
-                );
-              },
-            ),
-          ]),
-        );
+        ).then((value) {
+          ChatUIKit.instance.onConversationsUpdate();
+        });
       }
-    }).then((value) {
+    });
+  }
+
+  void tapContactInfo(BuildContext context, ContactItemModel model) {
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.contactDetailsView,
+      ContactDetailsViewArguments(profile: model.profile, actions: [
+        ChatUIKitActionModel(
+          title: ChatUIKitLocal.contactDetailViewSend.getString(context),
+          icon: 'assets/images/chat.png',
+          packageName: ChatUIKitImageLoader.packageName,
+          onTap: (context) {
+            ChatUIKitRoute.pushOrPushNamed(
+              context,
+              ChatUIKitRouteNames.messagesView,
+              MessagesViewArguments(
+                profile: model.profile,
+                attributes: widget.attributes,
+              ),
+            );
+          },
+        ),
+      ]),
+    ).then((value) {
       ChatUIKit.instance.onConversationsUpdate();
     });
   }
 
   void addContact() async {
     String? userId = await showChatUIKitDialog(
-      borderType: ChatUIKitRectangleType.filletCorner,
       title: ChatUIKitLocal.contactsAddContactAlertTitle.getString(context),
       content:
           ChatUIKitLocal.contactsAddContactAlertSubTitle.getString(context),
@@ -304,7 +279,6 @@ class _ContactsViewState extends State<ContactsView> with ContactObserver {
   @override
   void onContactAdded(String userId) {
     if (mounted) {
-      setState(() {});
       controller.reload();
     }
   }

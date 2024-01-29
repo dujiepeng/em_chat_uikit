@@ -20,7 +20,7 @@ class SearchGroupMembersView extends StatefulWidget {
     this.itemBuilder,
     this.onTap,
     this.appBar,
-    this.enableAppBar = true,
+    this.enableAppBar = false,
     this.attributes,
     super.key,
   });

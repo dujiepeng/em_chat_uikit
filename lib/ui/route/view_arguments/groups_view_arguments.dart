@@ -9,7 +9,7 @@ class GroupsViewArguments implements ChatUIKitViewArguments {
     this.listViewItemBuilder,
     this.onTap,
     this.onLongPress,
-    this.fakeSearchHideText,
+    this.searchBarHideText,
     this.listViewBackground,
     this.loadErrorMessage,
     this.enableAppBar = true,
@@ -21,7 +21,7 @@ class GroupsViewArguments implements ChatUIKitViewArguments {
   final ChatUIKitGroupItemBuilder? listViewItemBuilder;
   final void Function(BuildContext context, GroupItemModel model)? onTap;
   final void Function(BuildContext context, GroupItemModel model)? onLongPress;
-  final String? fakeSearchHideText;
+  final String? searchBarHideText;
   final Widget? listViewBackground;
   final String? loadErrorMessage;
   final bool enableAppBar;
@@ -36,7 +36,7 @@ class GroupsViewArguments implements ChatUIKitViewArguments {
     ChatUIKitGroupItemBuilder? listViewItemBuilder,
     void Function(BuildContext context, GroupItemModel model)? onTap,
     void Function(BuildContext context, GroupItemModel model)? onLongPress,
-    String? fakeSearchHideText,
+    String? searchBarHideText,
     Widget? listViewBackground,
     String? loadErrorMessage,
     bool? enableAppBar,
@@ -49,7 +49,7 @@ class GroupsViewArguments implements ChatUIKitViewArguments {
       listViewItemBuilder: listViewItemBuilder ?? this.listViewItemBuilder,
       onTap: onTap ?? this.onTap,
       onLongPress: onLongPress ?? this.onLongPress,
-      fakeSearchHideText: fakeSearchHideText ?? this.fakeSearchHideText,
+      searchBarHideText: searchBarHideText ?? this.searchBarHideText,
       listViewBackground: listViewBackground ?? this.listViewBackground,
       loadErrorMessage: loadErrorMessage ?? this.loadErrorMessage,
       enableAppBar: enableAppBar ?? this.enableAppBar,
