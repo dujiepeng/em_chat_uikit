@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
@@ -114,17 +112,17 @@ class _MessageListViewState extends State<MessageListView> {
       physics: const AlwaysScrollableScrollPhysics(),
       controller: scrollController,
       reverse: true,
+      shrinkWrap: true,
       slivers: [
-        ChatMessageSliver(
+        SliverList(
           delegate: SliverChildBuilderDelegate(
             findChildIndexCallback: (key) {
-              if (Platform.isAndroid) return null;
               if (key is ValueKey<int>) {
                 final ValueKey<int> valueKey = key;
                 int index = controller.msgList.indexWhere(
-                  (msg) => msg.localTime == valueKey.value,
+                  (msg) => msg.serverTime == valueKey.value,
                 );
-
+                debugPrint("$index ${valueKey.value}");
                 return index > -1 ? index : null;
               } else {
                 return null;
@@ -132,7 +130,7 @@ class _MessageListViewState extends State<MessageListView> {
             },
             (context, index) {
               return SizedBox(
-                key: ValueKey(controller.msgList[index].localTime),
+                key: ValueKey(controller.msgList[index].serverTime),
                 child: _item(controller.msgList[index]),
               );
             },
@@ -190,7 +188,6 @@ class _MessageListViewState extends State<MessageListView> {
         message,
       );
       content ??= ChatUIKitMessageListViewAlertItem(
-        key: ValueKey(message.localTime),
         infos: [
           MessageAlertAction(
             text: ChatUIKitTimeFormatter.instance.formatterHandler?.call(
@@ -215,7 +212,6 @@ class _MessageListViewState extends State<MessageListView> {
 
     Widget? content = widget.itemBuilder?.call(context, message);
     content ??= ChatUIKitMessageListViewMessageItem(
-      key: ValueKey(message.localTime),
       forceLeft: widget.forceLeft,
       bubbleContentBuilder: widget.bubbleContentBuilder,
       bubbleBuilder: widget.bubbleBuilder,
@@ -263,7 +259,6 @@ class _MessageListViewState extends State<MessageListView> {
     );
 
     content = Align(
-      key: ValueKey(message.localTime),
       alignment: widget.forceLeft == true
           ? Alignment.centerLeft
           : message.direction == MessageDirection.SEND
@@ -277,7 +272,6 @@ class _MessageListViewState extends State<MessageListView> {
 
   Widget quoteWidget(QuoteModel model) {
     return ChatUIKitQuoteWidget(
-      key: ValueKey(model.msgId),
       model: model,
       bubbleStyle: widget.bubbleStyle,
     );
