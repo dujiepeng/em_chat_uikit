@@ -204,8 +204,8 @@ class _GroupAddMembersViewState extends State<GroupAddMembersView> {
           onTap: (ctx, profile) {
             Navigator.of(ctx).pop(profile);
           },
-          selected: widget.inGroupMembers,
-          selectedCanChange: false,
+          cantChangeSelected: widget.inGroupMembers,
+          canChangeSelected: selectedProfiles,
           searchHideText:
               ChatUIKitLocal.createGroupViewSearchContact.getString(context),
           searchData: list,

@@ -180,8 +180,7 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
           onTap: (ctx, profile) {
             Navigator.of(ctx).pop(profile);
           },
-          selected: selectedProfiles,
-          selectedCanChange: true,
+          canChangeSelected: selectedProfiles,
           searchHideText:
               ChatUIKitLocal.createGroupViewSearchContact.getString(context),
           searchData: list,

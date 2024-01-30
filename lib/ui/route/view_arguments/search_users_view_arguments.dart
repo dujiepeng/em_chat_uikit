@@ -8,8 +8,8 @@ class SearchUsersViewArguments implements ChatUIKitViewArguments {
     this.onTap,
     this.itemBuilder,
     this.enableMulti = false,
-    this.selected,
-    this.selectedCanChange = false,
+    this.cantChangeSelected,
+    this.canChangeSelected,
     this.selectedTitle,
     this.attributes,
   });
@@ -20,8 +20,8 @@ class SearchUsersViewArguments implements ChatUIKitViewArguments {
   final Widget Function(BuildContext context, ChatUIKitProfile profile,
       String? searchKeyword)? itemBuilder;
   final bool enableMulti;
-  final List<ChatUIKitProfile>? selected;
-  final bool selectedCanChange;
+  final List<ChatUIKitProfile>? cantChangeSelected;
+  final List<ChatUIKitProfile>? canChangeSelected;
   final String? selectedTitle;
   @override
   String? attributes;
@@ -34,8 +34,8 @@ class SearchUsersViewArguments implements ChatUIKitViewArguments {
             String? searchKeyword)?
         itemBuilder,
     bool? enableMulti,
-    List<ChatUIKitProfile>? selected,
-    bool? selectedCanChange,
+    List<ChatUIKitProfile>? cantChangeSelected,
+    List<ChatUIKitProfile>? canChangeSelected,
     String? selectedTitle,
     String? attributes,
   }) {
@@ -45,8 +45,8 @@ class SearchUsersViewArguments implements ChatUIKitViewArguments {
       onTap: onTap ?? this.onTap,
       itemBuilder: itemBuilder ?? this.itemBuilder,
       enableMulti: enableMulti ?? this.enableMulti,
-      selected: selected ?? this.selected,
-      selectedCanChange: selectedCanChange ?? this.selectedCanChange,
+      cantChangeSelected: cantChangeSelected ?? this.cantChangeSelected,
+      canChangeSelected: canChangeSelected ?? this.canChangeSelected,
       selectedTitle: selectedTitle ?? this.selectedTitle,
       attributes: attributes ?? this.attributes,
     );

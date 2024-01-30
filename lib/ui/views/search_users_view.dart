@@ -11,8 +11,8 @@ class SearchUsersView extends StatefulWidget {
         itemBuilder = arguments.itemBuilder,
         onTap = arguments.onTap,
         enableMulti = arguments.enableMulti,
-        selected = arguments.selected,
-        selectedCanChange = arguments.selectedCanChange,
+        cantChangeSelected = arguments.cantChangeSelected,
+        canChangeSelected = arguments.canChangeSelected,
         selectedTitle = arguments.selectedTitle,
         attributes = arguments.attributes;
 
@@ -22,8 +22,8 @@ class SearchUsersView extends StatefulWidget {
     this.itemBuilder,
     this.onTap,
     this.enableMulti = false,
-    this.selected,
-    this.selectedCanChange = false,
+    this.cantChangeSelected,
+    this.canChangeSelected,
     this.selectedTitle,
     this.attributes,
     super.key,
@@ -36,8 +36,8 @@ class SearchUsersView extends StatefulWidget {
   final Widget Function(BuildContext context, ChatUIKitProfile profile,
       String? searchKeyword)? itemBuilder;
 
-  final List<ChatUIKitProfile>? selected;
-  final bool selectedCanChange;
+  final List<ChatUIKitProfile>? cantChangeSelected;
+  final List<ChatUIKitProfile>? canChangeSelected;
   final String? selectedTitle;
   final String? attributes;
 
@@ -51,8 +51,8 @@ class _SearchUsersViewState extends State<SearchUsersView> {
   @override
   void initState() {
     super.initState();
-    if (widget.selected?.isNotEmpty == true && widget.selectedCanChange) {
-      selectedProfiles.value = widget.selected!;
+    if (widget.canChangeSelected?.isNotEmpty == true) {
+      selectedProfiles.value = widget.canChangeSelected!;
     }
   }
 
@@ -87,12 +87,12 @@ class _SearchUsersViewState extends State<SearchUsersView> {
                           children: [
                             Row(
                               children: [
-                                widget.selected != null &&
-                                        widget.selected!.any((element) =>
-                                                element.id ==
-                                                model.profile.id) ==
-                                            true &&
-                                        widget.selectedCanChange == false
+                                widget.cantChangeSelected != null &&
+                                        widget.cantChangeSelected!.any(
+                                                (element) =>
+                                                    element.id ==
+                                                    model.profile.id) ==
+                                            true
                                     ? Icon(
                                         Icons.check_box,
                                         size: 28,
@@ -120,10 +120,9 @@ class _SearchUsersViewState extends State<SearchUsersView> {
                                 ),
                               ],
                             ),
-                            if (widget.selected?.any((element) =>
-                                        element.id == model.profile.id) ==
-                                    true &&
-                                widget.selectedCanChange == false)
+                            if (widget.cantChangeSelected?.any((element) =>
+                                    element.id == model.profile.id) ==
+                                true)
                               Opacity(
                                 opacity: 0.6,
                                 child: Container(
@@ -210,11 +209,10 @@ class _SearchUsersViewState extends State<SearchUsersView> {
   }
 
   void tapContactInfo(ChatUIKitProfile profile) {
-    if (widget.selected
-                ?.where((element) => element.id == profile.id)
-                .isNotEmpty ==
-            true &&
-        widget.selectedCanChange == false) {
+    if (widget.cantChangeSelected
+            ?.where((element) => element.id == profile.id)
+            .isNotEmpty ==
+        true) {
       return;
     }
     List<ChatUIKitProfile> list = selectedProfiles.value;
