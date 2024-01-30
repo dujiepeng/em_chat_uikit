@@ -73,21 +73,23 @@ class _MyAppState extends State<MyApp> {
       ),
       home: const WelcomePage(),
       onGenerateRoute: (settings) {
-        return MaterialPageRoute(
-          builder: (context) {
-            if (settings.name == '/home') {
-              return const HomePage();
-            } else if (settings.name == '/login') {
-              return const LoginPage();
-            } else if (settings.name == '/personal_info') {
-              return const PersonalInfoPage();
-            } else if (settings.name == '/change_avatar') {
-              return const ChangeAvatarPage();
-            } else {
-              return const WelcomePage();
-            }
-          },
-        );
+        RouteSettings newSettings = ChatRouteFilter.chatRouteSettings(settings);
+        return ChatUIKitRoute().generateRoute(newSettings) ??
+            MaterialPageRoute(
+              builder: (context) {
+                if (settings.name == '/home') {
+                  return const HomePage();
+                } else if (settings.name == '/login') {
+                  return const LoginPage();
+                } else if (settings.name == '/personal_info') {
+                  return const PersonalInfoPage();
+                } else if (settings.name == '/change_avatar') {
+                  return const ChangeAvatarPage();
+                } else {
+                  return const WelcomePage();
+                }
+              },
+            );
       },
     );
   }
