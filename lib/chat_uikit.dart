@@ -4,7 +4,7 @@ export 'package:flutter_localization/flutter_localization.dart';
 export 'package:file_picker/file_picker.dart';
 export 'package:image_picker/image_picker.dart';
 export 'package:path_provider/path_provider.dart';
-// export 'package:record/record.dart';
+export 'package:scroll_to_index/scroll_to_index.dart';
 
 export 'package:shared_preferences/shared_preferences.dart';
 export 'package:video_player/video_player.dart';

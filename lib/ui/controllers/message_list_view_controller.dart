@@ -22,6 +22,7 @@ class MessageListViewController extends ChangeNotifier
   bool isEmpty = false;
   String? lastMessageId;
   bool hasNew = false;
+  bool isFetching = false;
   MessageLastActionType lastActionType = MessageLastActionType.none;
   final Message? Function(Message)? willSendHandler;
 
@@ -63,10 +64,12 @@ class MessageListViewController extends ChangeNotifier
     super.dispose();
   }
 
-  Future<bool> fetchItemList() async {
+  void fetchItemList() async {
     if (isEmpty) {
-      return false;
+      return;
     }
+    if (isFetching) return;
+    isFetching = true;
     List<Message> list = await ChatUIKit.instance.getMessages(
       conversationId: profile.id,
       type: conversationType,
@@ -94,7 +97,7 @@ class MessageListViewController extends ChangeNotifier
       lastActionType = MessageLastActionType.load;
       notifyListeners();
     }
-    return list.isNotEmpty;
+    isFetching = false;
   }
 
   @override
@@ -483,15 +486,18 @@ class MessageListViewController extends ChangeNotifier
     notifyListeners();
   }
 
-  Future<void> clearMentionIfNeed() async {
+  void clearMentionIfNeed() {
     if (profile.type == ChatUIKitProfileType.group) {
-      Conversation? conv = await ChatUIKit.instance.getConversation(
+      ChatUIKit.instance
+          .getConversation(
         conversationId: profile.id,
         type: ConversationType.GroupChat,
-      );
-      if (conv != null) {
-        conv.removeMention();
-      }
+      )
+          .then((conv) {
+        if (conv != null) {
+          conv.removeMention();
+        }
+      });
     }
   }
 
@@ -522,17 +528,13 @@ class MessageListViewController extends ChangeNotifier
     }
   }
 
-  Future<void> sendMessageReadAck(Message message) async {
+  void sendMessageReadAck(Message message) {
     if (message.chatType == ChatType.Chat &&
         message.direction == MessageDirection.RECEIVE &&
         message.hasReadAck == false) {
-      try {
-        await ChatUIKit.instance.sendMessageReadAck(message: message);
+      ChatUIKit.instance.sendMessageReadAck(message: message).then((value) {
         message.hasReadAck = true;
-        // 因为已读状态是对方看的，所以这个时候不需要刷新ui
-        // notifyListeners();
-        // ignore: empty_catches
-      } catch (e) {}
+      }).catchError((error) {});
     }
   }
 

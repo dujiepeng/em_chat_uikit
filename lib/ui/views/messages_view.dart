@@ -844,12 +844,34 @@ class _MessagesViewState extends State<MessagesView>
   }
 
   void clearAllType() {
-    stopVoice();
-    focusNode.unfocus();
-    showEmoji = false;
-    editMessage = null;
-    replyMessage = null;
-    setState(() {});
+    bool needUpdate = false;
+    if (_player.state == PlayerState.playing) {
+      stopVoice();
+      needUpdate = true;
+    }
+
+    if (focusNode.hasFocus) {
+      focusNode.unfocus();
+      needUpdate = true;
+    }
+
+    if (showEmoji) {
+      showEmoji = false;
+      needUpdate = true;
+    }
+
+    if (editMessage != null) {
+      editMessage = null;
+      needUpdate = true;
+    }
+
+    if (replyMessage != null) {
+      replyMessage = null;
+      needUpdate = true;
+    }
+    if (needUpdate) {
+      setState(() {});
+    }
   }
 
   void onItemLongPress(Message message) {

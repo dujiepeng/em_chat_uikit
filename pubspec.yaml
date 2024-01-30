@@ -13,10 +13,7 @@ dependencies:
     sdk: flutter
 
   im_flutter_sdk: ^4.2.0
-  # im_flutter_sdk:
-  #   path: ../../../im_flutter_sdk
 
-  # record: ^5.0.4
   flutter_sound_record: ^3.3.2
 
   shared_preferences: ^2.2.2
@@ -36,6 +33,8 @@ dependencies:
   video_player: ^2.7.2
 
   flutter_localization: ^0.2.0
+
+  scroll_to_index: ^3.0.1
 
 dev_dependencies:
   flutter_test:

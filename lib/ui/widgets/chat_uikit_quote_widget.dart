@@ -33,7 +33,7 @@ class _ChatUIKitQuoteWidgetState extends State<ChatUIKitQuoteWidget> {
       messageId: model.msgId,
     );
     fetched = true;
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override

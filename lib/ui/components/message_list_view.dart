@@ -57,14 +57,18 @@ class MessageListView extends StatefulWidget {
 
 class _MessageListViewState extends State<MessageListView> {
   late final MessageListViewController controller;
-  late final ScrollController scrollController;
-
-  bool isFetching = false;
+  late final AutoScrollController _scrollController;
+  ChatUIKitTheme? theme;
+  Size? size;
 
   @override
   void initState() {
     super.initState();
-    scrollController = ScrollController();
+    _scrollController = AutoScrollController(
+        // viewportBoundaryGetter: () =>
+        //     Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+        // axis: Axis.vertical,
+        );
     controller =
         widget.controller ?? MessageListViewController(profile: widget.profile);
     controller.addListener(() {
@@ -73,12 +77,12 @@ class _MessageListViewState extends State<MessageListView> {
       }
 
       if ((controller.lastActionType == MessageLastActionType.receive &&
-              scrollController.offset == 0) ||
+              _scrollController.offset == 0) ||
           controller.lastActionType == MessageLastActionType.send) {
         setState(() {});
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          if (scrollController.positions.isNotEmpty) {
-            scrollController.animateTo(
+          if (_scrollController.positions.isNotEmpty) {
+            _scrollController.animateTo(
               0,
               duration: const Duration(milliseconds: 100),
               curve: Curves.linear,
@@ -95,46 +99,48 @@ class _MessageListViewState extends State<MessageListView> {
   @override
   void dispose() {
     controller.dispose();
-    scrollController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
-  void fetchMessages() async {
-    if (isFetching || controller.isEmpty) return;
-    isFetching = true;
-    await controller.fetchItemList();
-    isFetching = false;
+  void fetchMessages() {
+    if (controller.isEmpty) return;
+    controller.fetchItemList();
   }
 
   @override
   Widget build(BuildContext context) {
+    theme ??= ChatUIKitTheme.of(context);
+    size ??= MediaQuery.of(context).size;
     Widget content = CustomScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      controller: scrollController,
+      controller: _scrollController,
       reverse: true,
-      shrinkWrap: true,
+      shrinkWrap: controller.msgList.length > 30 ? false : true,
+      cacheExtent: 1500,
       slivers: [
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            findChildIndexCallback: (key) {
-              if (key is ValueKey<int>) {
-                final ValueKey<int> valueKey = key;
-                int index = controller.msgList.indexWhere(
-                  (msg) => msg.serverTime == valueKey.value,
+        SliverPadding(
+          padding: EdgeInsets.zero,
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              findChildIndexCallback: (key) {
+                if (key is ValueKey<String>) {
+                  final ValueKey<String> valueKey = key;
+                  int index = controller.msgList.indexWhere(
+                    (msg) => msg.msgId == valueKey.value,
+                  );
+                  return index > -1 ? index : null;
+                } else {
+                  return null;
+                }
+              },
+              (context, index) {
+                return SizedBox(
+                  key: ValueKey(controller.msgList[index].msgId),
+                  child: _item(controller.msgList[index], index),
                 );
-                debugPrint("$index ${valueKey.value}");
-                return index > -1 ? index : null;
-              } else {
-                return null;
-              }
-            },
-            (context, index) {
-              return SizedBox(
-                key: ValueKey(controller.msgList[index].serverTime),
-                child: _item(controller.msgList[index]),
-              );
-            },
-            childCount: controller.msgList.length,
+              },
+              childCount: controller.msgList.length,
+            ),
           ),
         ),
       ],
@@ -148,12 +154,12 @@ class _MessageListViewState extends State<MessageListView> {
     content = NotificationListener(
       onNotification: (notification) {
         if (notification is ScrollUpdateNotification) {
-          if (controller.hasNew && scrollController.offset < 20) {
+          if (controller.hasNew && _scrollController.offset < 20) {
             controller.hasNew = false;
             setState(() {});
           }
-          if (scrollController.position.maxScrollExtent -
-                  scrollController.offset <
+          if (_scrollController.position.maxScrollExtent -
+                  _scrollController.offset <
               1500) {
             fetchMessages();
           }
@@ -177,10 +183,18 @@ class _MessageListViewState extends State<MessageListView> {
       },
     );
 
+    content = Scaffold(
+      key: ValueKey(controller.profile.id),
+      body: content,
+      backgroundColor: theme!.color.isDark
+          ? theme!.color.neutralColor1
+          : theme!.color.neutralColor98,
+    );
+
     return content;
   }
 
-  Widget _item(Message message) {
+  Widget _item(Message message, int index) {
     controller.sendMessageReadAck(message);
     if (message.isTimeMessageAlert) {
       Widget? content = widget.alertItemBuilder?.call(
@@ -248,13 +262,12 @@ class _MessageListViewState extends State<MessageListView> {
     );
 
     double zoom = 0.8;
-    if (MediaQuery.of(context).size.width >
-        MediaQuery.of(context).size.height) {
+    if (size!.width > size!.height) {
       zoom = 0.5;
     }
 
     content = SizedBox(
-      width: MediaQuery.of(context).size.width * zoom,
+      width: size!.width * zoom,
       child: content,
     );
 
@@ -267,13 +280,51 @@ class _MessageListViewState extends State<MessageListView> {
       child: content,
     );
 
+    content = AutoScrollTag(
+      key: ValueKey(message.msgId),
+      controller: _scrollController,
+      index: index,
+      highlightColor: theme!.color.isDark
+          ? theme!.color.neutralColor2
+          : theme!.color.neutralColor95,
+      child: content,
+    );
+
     return content;
   }
 
   Widget quoteWidget(QuoteModel model) {
-    return ChatUIKitQuoteWidget(
-      model: model,
-      bubbleStyle: widget.bubbleStyle,
+    return InkWell(
+      onTap: () {
+        jumpToQuoteModel(model);
+      },
+      child: ChatUIKitQuoteWidget(
+        model: model,
+        bubbleStyle: widget.bubbleStyle,
+      ),
     );
+  }
+
+  void jumpToQuoteModel(QuoteModel model) async {
+    int index = controller.msgList
+        .indexWhere((element) => element.msgId == model.msgId);
+
+    if (index != -1) {
+      _scrollController.scrollToIndex(
+        index,
+        preferPosition: AutoScrollPosition.end,
+        duration: const Duration(milliseconds: 100),
+      );
+      await _scrollController.scrollToIndex(
+        index,
+        preferPosition: AutoScrollPosition.end,
+        duration: const Duration(milliseconds: 100),
+      );
+
+      await _scrollController.highlight(
+        index,
+        highlightDuration: const Duration(milliseconds: 100),
+      );
+    }
   }
 }
