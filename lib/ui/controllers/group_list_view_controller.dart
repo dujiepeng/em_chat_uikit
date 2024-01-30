@@ -10,7 +10,7 @@ class GroupListViewController with ChatUIKitListViewControllerBase {
   int pageNum = 0;
 
   @override
-  Future<void> fetchItemList() async {
+  Future<void> fetchItemList({bool force = false}) async {
     loadingType.value = ChatUIKitListViewType.loading;
     pageNum = 0;
     try {

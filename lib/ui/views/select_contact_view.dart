@@ -113,19 +113,18 @@ class _SelectContactViewState extends State<SelectContactView> {
     for (var item in data) {
       list.add(item);
     }
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return SearchUsersView(
-          onTap: (ctx, profile) {
-            Navigator.of(ctx).pop(profile);
-          },
-          searchHideText:
-              ChatUIKitLocal.selectContactViewSearchHint.getString(context),
-          searchData: list,
-        );
-      },
+
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
+      ChatUIKitRouteNames.searchUsersView,
+      SearchUsersViewArguments(
+        onTap: (ctx, profile) {
+          Navigator.of(ctx).pop(profile);
+        },
+        searchHideText:
+            ChatUIKitLocal.selectContactViewSearchHint.getString(context),
+        searchData: list,
+      ),
     ).then((value) {
       if (value != null) {
         Navigator.of(context).pop(value);

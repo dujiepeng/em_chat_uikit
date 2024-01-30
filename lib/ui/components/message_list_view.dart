@@ -320,7 +320,7 @@ class _MessageListViewState extends State<MessageListView> {
       _scrollController.scrollToIndex(
         index,
         preferPosition: AutoScrollPosition.end,
-        duration: const Duration(milliseconds: 100),
+        duration: const Duration(milliseconds: 10),
       );
       await _scrollController.scrollToIndex(
         index,
@@ -330,7 +330,7 @@ class _MessageListViewState extends State<MessageListView> {
 
       await _scrollController.highlight(
         index,
-        highlightDuration: const Duration(milliseconds: 100),
+        highlightDuration: const Duration(milliseconds: 500),
       );
     }
   }

@@ -7,11 +7,11 @@ class ContactListViewController with ChatUIKitListViewControllerBase {
   String? cursor;
 
   @override
-  Future<void> fetchItemList() async {
+  Future<void> fetchItemList({bool force = false}) async {
     loadingType.value = ChatUIKitListViewType.loading;
     List<String> items = await ChatUIKit.instance.getAllContacts();
     try {
-      if (items.isEmpty && !ChatUIKitContext.instance.isContactLoadFinished()) {
+      if ((items.isEmpty && !ChatUIKitContext.instance.isContactLoadFinished()) || force == true) {
         items = await _fetchContacts();
       }
       for (var element in items) {

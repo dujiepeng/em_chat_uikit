@@ -7,7 +7,7 @@ class NewRequestListViewController with ChatUIKitListViewControllerBase {
   String? cursor;
 
   @override
-  Future<void> fetchItemList() async {
+  Future<void> fetchItemList({bool force = false}) async {
     loadingType.value = ChatUIKitListViewType.refresh;
     List items = ChatUIKitContext.instance.requestList();
     List<NewRequestItemModel> tmp = mappers(items);

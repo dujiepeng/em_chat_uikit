@@ -9,7 +9,7 @@ abstract mixin class ChatUIKitListViewControllerBase {
 
   bool hasMore = true;
 
-  Future<void> fetchItemList() async {
+  Future<void> fetchItemList({bool force = false}) async {
     return;
   }
 

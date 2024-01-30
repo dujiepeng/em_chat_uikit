@@ -12,7 +12,7 @@ class GroupMemberListViewController with ChatUIKitListViewControllerBase {
   String? cursor;
 
   @override
-  Future<void> fetchItemList() async {
+  Future<void> fetchItemList({bool force = false}) async {
     try {
       loadingType.value = ChatUIKitListViewType.loading;
       cursor = null;

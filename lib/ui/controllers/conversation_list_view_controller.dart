@@ -16,12 +16,13 @@ class ConversationListViewController extends ChatUIKitListViewControllerBase {
   String? cursor;
 
   @override
-  Future<void> fetchItemList() async {
+  Future<void> fetchItemList({bool force = false}) async {
     loadingType.value = ChatUIKitListViewType.loading;
     List<Conversation> items = await ChatUIKit.instance.getAllConversations();
     try {
-      if (items.isEmpty &&
-          !ChatUIKitContext.instance.isConversationLoadFinished()) {
+      if ((items.isEmpty &&
+              !ChatUIKitContext.instance.isConversationLoadFinished()) ||
+          force == true) {
         await fetchConversations();
         items = await ChatUIKit.instance.getAllConversations();
       }
