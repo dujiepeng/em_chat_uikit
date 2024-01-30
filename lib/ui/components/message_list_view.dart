@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:em_chat_uikit/chat_uikit.dart';
 
 import 'package:flutter/material.dart';
@@ -113,9 +115,12 @@ class _MessageListViewState extends State<MessageListView> {
     theme ??= ChatUIKitTheme.of(context);
     size ??= MediaQuery.of(context).size;
     Widget content = CustomScrollView(
+      physics: controller.msgList.length > 15
+          ? const AlwaysScrollableScrollPhysics()
+          : const BouncingScrollPhysics(),
       controller: _scrollController,
       reverse: true,
-      shrinkWrap: controller.msgList.length > 30 ? false : true,
+      shrinkWrap: controller.msgList.length > 15 ? false : true,
       cacheExtent: 1500,
       slivers: [
         SliverPadding(
@@ -241,7 +246,9 @@ class _MessageListViewState extends State<MessageListView> {
       },
       showNickname: widget.showNickname,
       onAvatarTap: () {
-        widget.onAvatarTap?.call(context, message);
+        if (widget.onAvatarTap != null) {
+          widget.onAvatarTap?.call(context, message);
+        }
       },
       onAvatarLongPressed: () {
         widget.onAvatarLongPressed?.call(context, message);

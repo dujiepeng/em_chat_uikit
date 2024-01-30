@@ -1,5 +1,5 @@
+// ignore_for_file: deprecated_member_use
 import 'package:em_chat_uikit/chat_uikit.dart';
-import 'package:em_chat_uikit/ui/models/alphabetical_item_model.dart';
 import 'package:flutter/material.dart';
 
 class ChatUIKitAlphabeticalListViewItem extends StatelessWidget {

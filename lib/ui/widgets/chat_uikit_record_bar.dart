@@ -1,6 +1,6 @@
+// ignore_for_file: deprecated_member_use
 import 'dart:async';
 import 'dart:io';
-
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit/ui/widgets/chat_uikit_water_ripple.dart';
 import 'package:flutter/material.dart';

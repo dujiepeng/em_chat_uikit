@@ -1,8 +1,7 @@
+// ignore_for_file: deprecated_member_use
 import 'dart:io';
-
 import 'package:em_chat_uikit/chat_uikit.dart';
 import 'package:em_chat_uikit/ui/custom/chat_uikit_emoji_data.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../universal/defines.dart';

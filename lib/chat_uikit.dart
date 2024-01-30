@@ -44,6 +44,7 @@ export 'ui/widgets/list_view_items/chat_uikit_group_list_view_item.dart';
 export 'ui/widgets/list_view_items/chat_uikit_list_view_more_item.dart';
 export 'ui/widgets/list_view_items/chat_uikit_new_request_list_view_item.dart';
 export 'ui/widgets/list_view_items/chat_uikit_search_list_view_item.dart';
+export 'ui/widgets/list_view_items/chat_uikit_alphabetical_list_view_item.dart';
 export 'ui/widgets/list_view_items/message_list_view_items/chat_uikit_message_list_view_alert_item.dart';
 export 'ui/widgets/list_view_items/message_list_view_items/chat_uikit_message_list_view_bubble.dart';
 export 'ui/widgets/list_view_items/message_list_view_items/chat_uikit_message_list_view_message_item.dart';
@@ -88,6 +89,7 @@ export 'ui/models/contact_item_model.dart';
 export 'ui/models/group_item_model.dart';
 export 'ui/models/new_request_item_model.dart';
 export 'ui/models/quote_mode.dart';
+export 'ui/models/alphabetical_item_model.dart';
 
 export 'ui/components/conversation_list_view.dart';
 export 'ui/components/contact_list_view.dart';

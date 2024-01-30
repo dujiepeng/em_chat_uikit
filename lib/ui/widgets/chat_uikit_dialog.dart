@@ -1,5 +1,5 @@
+// ignore_for_file: deprecated_member_use
 import 'dart:math';
-
 import 'package:chat_uikit_theme/chat_uikit_theme.dart';
 import 'package:em_chat_uikit/chat_uikit_settings.dart';
 import 'package:flutter/material.dart';
