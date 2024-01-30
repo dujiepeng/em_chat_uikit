@@ -82,10 +82,10 @@ class _PersonalInfoPageState extends State<PersonalInfoPage>
   }
 
   void pushChangeNicknamePage() {
-    Navigator.of(context)
-        .pushNamed(
+    ChatUIKitRoute.pushOrPushNamed(
+      context,
       ChatUIKitRouteNames.changeInfoView,
-      arguments: ChangeInfoViewArguments(
+      ChangeInfoViewArguments(
         title: '修改昵称',
         inputTextCallback: () {
           return Future(
@@ -97,8 +97,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage>
           );
         },
       ),
-    )
-        .then(
+    ).then(
       (value) {
         if (value is String) {
           UserData? data = ChatUIKitProvider.instance.currentUserData;
