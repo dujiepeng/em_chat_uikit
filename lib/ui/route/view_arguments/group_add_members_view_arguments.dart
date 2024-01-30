@@ -18,7 +18,7 @@ class GroupAddMembersViewArguments implements ChatUIKitViewArguments {
   });
 
   final String groupId;
-  final List<String>? inGroupMembers;
+  final List<ChatUIKitProfile>? inGroupMembers;
   final ContactListViewController? controller;
   final ChatUIKitAppBar? appBar;
   final void Function(List<ContactItemModel> data)? onSearchTap;
@@ -36,7 +36,7 @@ class GroupAddMembersViewArguments implements ChatUIKitViewArguments {
 
   GroupAddMembersViewArguments copyWith({
     String? groupId,
-    List<String>? inGroupMembers,
+    List<ChatUIKitProfile>? inGroupMembers,
     ContactListViewController? controller,
     ChatUIKitAppBar? appBar,
     void Function(List<ContactItemModel> data)? onSearchTap,

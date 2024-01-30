@@ -49,30 +49,31 @@ class _SSearchGroupMembersViewState extends State<SearchGroupMembersView> {
       autoFocus: true,
       builder: (context, searchKeyword, list) {
         return ChatUIKitListView(
-            enableSearchBar: false,
-            itemBuilder: (context, model) {
-              if (model is NeedSearch) {
-                if (widget.itemBuilder != null) {
-                  return widget.itemBuilder!
-                      .call(context, model.profile, searchKeyword);
-                }
-
-                return InkWell(
-                  onTap: () {
-                    widget.onTap?.call(context, model.profile);
-                  },
-                  child: ChatUIKitSearchListViewItem(
-                    profile: model.profile,
-                    highlightWord: searchKeyword,
-                  ),
-                );
+          list: list,
+          type: list.isEmpty
+              ? ChatUIKitListViewType.empty
+              : ChatUIKitListViewType.normal,
+          enableSearchBar: false,
+          itemBuilder: (context, model) {
+            if (model is NeedSearch) {
+              if (widget.itemBuilder != null) {
+                return widget.itemBuilder!
+                    .call(context, model.profile, searchKeyword);
               }
-              return const SizedBox();
-            },
-            list: list,
-            type: list.isEmpty
-                ? ChatUIKitListViewType.empty
-                : ChatUIKitListViewType.normal);
+
+              return InkWell(
+                onTap: () {
+                  widget.onTap?.call(context, model.profile);
+                },
+                child: ChatUIKitSearchListViewItem(
+                  profile: model.profile,
+                  highlightWord: searchKeyword,
+                ),
+              );
+            }
+            return const SizedBox();
+          },
+        );
       },
     );
 

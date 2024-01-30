@@ -51,8 +51,7 @@ class GroupDeleteMembersView extends StatefulWidget {
 }
 
 class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
-  final ValueNotifier<List<ChatUIKitProfile>> selectedProfiles =
-      ValueNotifier<List<ChatUIKitProfile>>([]);
+  List<ChatUIKitProfile> selectedProfiles = [];
   late final GroupMemberListViewController controller;
   @override
   void initState() {
@@ -97,82 +96,72 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
                 ),
                 trailing: InkWell(
                   onTap: () {
-                    if (selectedProfiles.value.isEmpty) {
+                    if (selectedProfiles.isEmpty) {
                       return;
                     }
                     ensureDelete();
                   },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(24, 5, 24, 5),
-                    child: ValueListenableBuilder(
-                      valueListenable: selectedProfiles,
-                      builder: (context, value, child) {
-                        return Text(
-                          value.isEmpty
-                              ? ChatUIKitLocal.groupDeleteMembersViewDelete
-                                  .getString(context)
-                              : '${ChatUIKitLocal.groupDeleteMembersViewDelete.getString(context)}(${value.length})',
-                          textScaleFactor: 1.0,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: theme.color.isDark
-                                ? value.isEmpty
-                                    ? theme.color.neutralColor5
-                                    : theme.color.errorColor6
-                                : value.isEmpty
-                                    ? theme.color.neutralColor7
-                                    : theme.color.errorColor5,
-                            fontWeight: theme.font.labelMedium.fontWeight,
-                            fontSize: theme.font.labelMedium.fontSize,
-                          ),
-                        );
-                      },
+                    child: Text(
+                      selectedProfiles.isEmpty
+                          ? ChatUIKitLocal.groupDeleteMembersViewDelete
+                              .getString(context)
+                          : '${ChatUIKitLocal.groupDeleteMembersViewDelete.getString(context)}(${selectedProfiles.length})',
+                      textScaleFactor: 1.0,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: theme.color.isDark
+                            ? selectedProfiles.isEmpty
+                                ? theme.color.neutralColor5
+                                : theme.color.errorColor6
+                            : selectedProfiles.isEmpty
+                                ? theme.color.neutralColor7
+                                : theme.color.errorColor5,
+                        fontWeight: theme.font.labelMedium.fontWeight,
+                        fontSize: theme.font.labelMedium.fontSize,
+                      ),
                     ),
                   ),
                 ),
               ),
-      body: ValueListenableBuilder(
-        valueListenable: selectedProfiles,
-        builder: (context, value, child) {
-          return GroupMemberListView(
-            groupId: widget.groupId,
-            controller: controller,
-            itemBuilder: widget.listViewItemBuilder ??
-                (context, model) {
-                  return InkWell(
-                    onTap: () {
-                      tapContactInfo(model.profile);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 19.5, right: 15.5),
-                      child: Row(
-                        children: [
-                          value.contains(model.profile)
-                              ? Icon(
-                                  Icons.check_box,
-                                  size: 28,
-                                  color: theme.color.isDark
-                                      ? theme.color.primaryColor6
-                                      : theme.color.primaryColor5,
-                                )
-                              : Icon(
-                                  Icons.check_box_outline_blank,
-                                  size: 28,
-                                  color: theme.color.isDark
-                                      ? theme.color.neutralColor4
-                                      : theme.color.neutralColor7,
-                                ),
-                          Expanded(child: ChatUIKitContactListViewItem(model))
-                        ],
-                      ),
-                    ),
-                  );
+      body: GroupMemberListView(
+        groupId: widget.groupId,
+        controller: controller,
+        itemBuilder: widget.listViewItemBuilder ??
+            (context, model) {
+              return InkWell(
+                onTap: () {
+                  tapContactInfo(model.profile);
                 },
-            searchHideText: widget.searchBarHideText,
-            background: widget.listViewBackground,
-            onSearchTap: widget.onSearchTap ?? onSearchTap,
-          );
-        },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 19.5, right: 15.5),
+                  child: Row(
+                    children: [
+                      selectedProfiles.contains(model.profile)
+                          ? Icon(
+                              Icons.check_box,
+                              size: 28,
+                              color: theme.color.isDark
+                                  ? theme.color.primaryColor6
+                                  : theme.color.primaryColor5,
+                            )
+                          : Icon(
+                              Icons.check_box_outline_blank,
+                              size: 28,
+                              color: theme.color.isDark
+                                  ? theme.color.neutralColor4
+                                  : theme.color.neutralColor7,
+                            ),
+                      Expanded(child: ChatUIKitContactListViewItem(model))
+                    ],
+                  ),
+                ),
+              );
+            },
+        searchHideText: widget.searchBarHideText,
+        background: widget.listViewBackground,
+        onSearchTap: widget.onSearchTap ?? onSearchTap,
       ),
     );
 
@@ -184,68 +173,38 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
     for (var item in data) {
       list.add(item);
     }
-    final theme = ChatUIKitTheme.of(context);
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return ValueListenableBuilder(
-          valueListenable: selectedProfiles,
-          builder: (context, value, child) {
-            return SearchUsersView(
-              itemBuilder: (context, profile, searchKeyword) {
-                return InkWell(
-                  onTap: () {
-                    tapContactInfo(profile);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 19.5, right: 15.5),
-                    child: Row(
-                      children: [
-                        value.contains(profile)
-                            ? Icon(
-                                Icons.check_box,
-                                size: 21,
-                                color: theme.color.isDark
-                                    ? theme.color.primaryColor6
-                                    : theme.color.primaryColor5,
-                              )
-                            : Icon(
-                                Icons.check_box_outline_blank,
-                                size: 21,
-                                color: theme.color.isDark
-                                    ? theme.color.neutralColor4
-                                    : theme.color.neutralColor7,
-                              ),
-                        Expanded(
-                          child: ChatUIKitSearchListViewItem(
-                            profile: profile,
-                            highlightWord: searchKeyword,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
-              searchHideText: ChatUIKitLocal.groupDeleteMembersViewSearchMember
-                  .getString(context),
-              searchData: list,
-            );
+    ChatUIKitRoute.pushOrPushNamed(
+        context,
+        ChatUIKitRouteNames.searchUsersView,
+        SearchUsersViewArguments(
+          onTap: (ctx, profile) {
+            Navigator.of(ctx).pop(profile);
           },
-        );
+          selected: selectedProfiles,
+          selectedCanChange: true,
+          searchHideText:
+              ChatUIKitLocal.createGroupViewSearchContact.getString(context),
+          searchData: list,
+          enableMulti: true,
+        )).then(
+      (value) {
+        if (value is List<ChatUIKitProfile>) {
+          selectedProfiles = [...value];
+          setState(() {});
+        }
       },
-    ).then((value) {});
+    );
   }
 
   void tapContactInfo(ChatUIKitProfile profile) {
-    List<ChatUIKitProfile> list = selectedProfiles.value;
+    List<ChatUIKitProfile> list = selectedProfiles;
     if (list.contains(profile)) {
       list.remove(profile);
     } else {
       list.add(profile);
     }
-    selectedProfiles.value = [...list];
+    selectedProfiles = [...list];
+    setState(() {});
   }
 
   void ensureDelete() async {
@@ -265,7 +224,7 @@ class _GroupDeleteMembersViewState extends State<GroupDeleteMembersView> {
       ],
     ).then((value) {
       if (value == true) {
-        Navigator.of(context).pop(selectedProfiles.value);
+        Navigator.of(context).pop(selectedProfiles);
       }
     });
   }

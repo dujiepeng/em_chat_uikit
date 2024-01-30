@@ -63,8 +63,7 @@ class CreateGroupView extends StatefulWidget {
 
 class _CreateGroupViewState extends State<CreateGroupView> {
   late final ContactListViewController controller;
-  final ValueNotifier<List<ChatUIKitProfile>> selectedProfiles =
-      ValueNotifier<List<ChatUIKitProfile>>([]);
+  List<ChatUIKitProfile> selectedProfiles = [];
 
   @override
   void initState() {
@@ -104,77 +103,67 @@ class _CreateGroupViewState extends State<CreateGroupView> {
                 ),
                 trailing: InkWell(
                   onTap: () {
-                    if (selectedProfiles.value.isEmpty) {
+                    if (selectedProfiles.isEmpty) {
                       return;
                     }
                     createGroup();
                   },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(24, 5, 24, 5),
-                    child: ValueListenableBuilder(
-                      valueListenable: selectedProfiles,
-                      builder: (context, value, child) {
-                        return Text(
-                          value.isEmpty
-                              ? ChatUIKitLocal.createGroupViewCreate
-                                  .getString(context)
-                              : '${ChatUIKitLocal.createGroupViewCreate.getString(context)}(${value.length})',
-                          textScaleFactor: 1.0,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: theme.color.isDark
-                                ? theme.color.primaryColor6
-                                : theme.color.primaryColor5,
-                            fontWeight: theme.font.labelMedium.fontWeight,
-                            fontSize: theme.font.labelMedium.fontSize,
-                          ),
-                        );
-                      },
+                    child: Text(
+                      selectedProfiles.isEmpty
+                          ? ChatUIKitLocal.createGroupViewCreate
+                              .getString(context)
+                          : '${ChatUIKitLocal.createGroupViewCreate.getString(context)}(${selectedProfiles.length})',
+                      textScaleFactor: 1.0,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: theme.color.isDark
+                            ? theme.color.primaryColor6
+                            : theme.color.primaryColor5,
+                        fontWeight: theme.font.labelMedium.fontWeight,
+                        fontSize: theme.font.labelMedium.fontSize,
+                      ),
                     ),
                   ),
                 ),
               ),
-      body: ValueListenableBuilder(
-        valueListenable: selectedProfiles,
-        builder: (context, value, child) {
-          return ContactListView(
-            controller: controller,
-            itemBuilder: widget.listViewItemBuilder ??
-                (context, model) {
-                  return InkWell(
-                    onTap: () {
-                      tapContactInfo(model.profile);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 19.5, right: 15.5),
-                      child: Row(
-                        children: [
-                          value.contains(model.profile)
-                              ? Icon(
-                                  Icons.check_box,
-                                  size: 21,
-                                  color: theme.color.isDark
-                                      ? theme.color.primaryColor6
-                                      : theme.color.primaryColor5,
-                                )
-                              : Icon(
-                                  Icons.check_box_outline_blank,
-                                  size: 21,
-                                  color: theme.color.isDark
-                                      ? theme.color.neutralColor4
-                                      : theme.color.neutralColor7,
-                                ),
-                          Expanded(child: ChatUIKitContactListViewItem(model))
-                        ],
-                      ),
-                    ),
-                  );
+      body: ContactListView(
+        controller: controller,
+        itemBuilder: widget.listViewItemBuilder ??
+            (context, model) {
+              return InkWell(
+                onTap: () {
+                  tapContactInfo(model.profile);
                 },
-            searchHideText: widget.searchBarHideText,
-            background: widget.listViewBackground,
-            onSearchTap: widget.onSearchTap ?? onSearchTap,
-          );
-        },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 19.5, right: 15.5),
+                  child: Row(
+                    children: [
+                      selectedProfiles.contains(model.profile)
+                          ? Icon(
+                              Icons.check_box,
+                              size: 28,
+                              color: theme.color.isDark
+                                  ? theme.color.primaryColor6
+                                  : theme.color.primaryColor5,
+                            )
+                          : Icon(
+                              Icons.check_box_outline_blank,
+                              size: 28,
+                              color: theme.color.isDark
+                                  ? theme.color.neutralColor4
+                                  : theme.color.neutralColor7,
+                            ),
+                      Expanded(child: ChatUIKitContactListViewItem(model))
+                    ],
+                  ),
+                ),
+              );
+            },
+        searchHideText: widget.searchBarHideText,
+        background: widget.listViewBackground,
+        onSearchTap: widget.onSearchTap ?? onSearchTap,
       ),
     );
 
@@ -186,66 +175,39 @@ class _CreateGroupViewState extends State<CreateGroupView> {
     for (var item in data) {
       list.add(item);
     }
-    final theme = ChatUIKitTheme.of(context);
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return ValueListenableBuilder(
-          valueListenable: selectedProfiles,
-          builder: (context, value, child) {
-            return SearchUsersView(
-              itemBuilder: (context, profile, searchKeyword) {
-                return InkWell(
-                  onTap: () {
-                    tapContactInfo(profile);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 19.5, right: 15.5),
-                    child: Row(
-                      children: [
-                        value.contains(profile)
-                            ? Icon(
-                                Icons.check_box,
-                                size: 21,
-                                color: theme.color.isDark
-                                    ? theme.color.primaryColor6
-                                    : theme.color.primaryColor5,
-                              )
-                            : Icon(
-                                Icons.check_box_outline_blank,
-                                size: 21,
-                                color: theme.color.isDark
-                                    ? theme.color.neutralColor4
-                                    : theme.color.neutralColor7,
-                              ),
-                        ChatUIKitSearchListViewItem(
-                          profile: profile,
-                          highlightWord: searchKeyword,
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-              searchHideText: ChatUIKitLocal.createGroupViewSearchContact
-                  .getString(context),
-              searchData: list,
-            );
+
+    ChatUIKitRoute.pushOrPushNamed(
+        context,
+        ChatUIKitRouteNames.searchUsersView,
+        SearchUsersViewArguments(
+          onTap: (ctx, profile) {
+            Navigator.of(ctx).pop(profile);
           },
-        );
+          selected: selectedProfiles,
+          selectedCanChange: true,
+          searchHideText:
+              ChatUIKitLocal.createGroupViewSearchContact.getString(context),
+          searchData: list,
+          enableMulti: true,
+        )).then(
+      (value) {
+        if (value is List<ChatUIKitProfile>) {
+          selectedProfiles = [...value];
+          setState(() {});
+        }
       },
-    ).then((value) {});
+    );
   }
 
   void tapContactInfo(ChatUIKitProfile profile) {
-    List<ChatUIKitProfile> list = selectedProfiles.value;
+    List<ChatUIKitProfile> list = selectedProfiles;
     if (list.contains(profile)) {
       list.remove(profile);
     } else {
       list.add(profile);
     }
-    selectedProfiles.value = [...list];
+    selectedProfiles = [...list];
+    setState(() {});
   }
 
   void createGroup() async {
@@ -254,18 +216,18 @@ class _CreateGroupViewState extends State<CreateGroupView> {
       info = await widget.willCreateHandler!(
         context,
         widget.createGroupInfo,
-        selectedProfiles.value,
+        selectedProfiles,
       );
       if (info == null) {
         return;
       }
     }
-    List<String> userIds = selectedProfiles.value.map((e) => e.id).toList();
+    List<String> userIds = selectedProfiles.map((e) => e.id).toList();
     ChatUIKit.instance
         .createGroup(
       groupName: info?.groupName ??
           widget.createGroupInfo?.groupName ??
-          selectedProfiles.value.map((e) => e.showName).join(','),
+          selectedProfiles.map((e) => e.showName).join(','),
       desc: info?.groupDesc ?? widget.createGroupInfo?.groupDesc,
       options: GroupOptions(
         maxCount: 1000,

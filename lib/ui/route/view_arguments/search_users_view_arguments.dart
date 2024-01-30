@@ -7,12 +7,9 @@ class SearchUsersViewArguments implements ChatUIKitViewArguments {
     required this.searchHideText,
     this.onTap,
     this.itemBuilder,
-    this.appBar,
-    this.enableAppBar = false,
     this.enableMulti = false,
     this.selected,
-    this.title,
-    this.showBackButton = true,
+    this.selectedCanChange = false,
     this.selectedTitle,
     this.attributes,
   });
@@ -22,12 +19,9 @@ class SearchUsersViewArguments implements ChatUIKitViewArguments {
   final void Function(BuildContext context, ChatUIKitProfile profile)? onTap;
   final Widget Function(BuildContext context, ChatUIKitProfile profile,
       String? searchKeyword)? itemBuilder;
-  final ChatUIKitAppBar? appBar;
-  final bool enableAppBar;
   final bool enableMulti;
-  final List<String>? selected;
-  final String? title;
-  final bool showBackButton;
+  final List<ChatUIKitProfile>? selected;
+  final bool selectedCanChange;
   final String? selectedTitle;
   @override
   String? attributes;
@@ -39,8 +33,10 @@ class SearchUsersViewArguments implements ChatUIKitViewArguments {
     Widget Function(BuildContext context, ChatUIKitProfile profile,
             String? searchKeyword)?
         itemBuilder,
-    ChatUIKitAppBar? appBar,
-    bool? enableAppBar,
+    bool? enableMulti,
+    List<ChatUIKitProfile>? selected,
+    bool? selectedCanChange,
+    String? selectedTitle,
     String? attributes,
   }) {
     return SearchUsersViewArguments(
@@ -48,8 +44,10 @@ class SearchUsersViewArguments implements ChatUIKitViewArguments {
       searchHideText: searchHideText ?? this.searchHideText,
       onTap: onTap ?? this.onTap,
       itemBuilder: itemBuilder ?? this.itemBuilder,
-      appBar: appBar ?? this.appBar,
-      enableAppBar: enableAppBar ?? this.enableAppBar,
+      enableMulti: enableMulti ?? this.enableMulti,
+      selected: selected ?? this.selected,
+      selectedCanChange: selectedCanChange ?? this.selectedCanChange,
+      selectedTitle: selectedTitle ?? this.selectedTitle,
       attributes: attributes ?? this.attributes,
     );
   }

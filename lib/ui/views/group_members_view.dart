@@ -277,12 +277,12 @@ class _GroupMembersViewState extends State<GroupMembersView>
   }
 
   void pushToAddMember() async {
-    List<String> members = [];
+    List<ChatUIKitProfile> members = [];
 
     List list = controller.list;
     for (var element in list) {
       if (element is ContactItemModel) {
-        members.add(element.profile.id);
+        members.add(element.profile);
       }
     }
 

@@ -9,13 +9,10 @@ class SearchUsersView extends StatefulWidget {
   })  : searchData = arguments.searchData,
         searchHideText = arguments.searchHideText,
         itemBuilder = arguments.itemBuilder,
-        enableAppBar = arguments.enableAppBar,
-        appBar = arguments.appBar,
         onTap = arguments.onTap,
         enableMulti = arguments.enableMulti,
         selected = arguments.selected,
-        title = arguments.title,
-        showBackButton = arguments.showBackButton,
+        selectedCanChange = arguments.selectedCanChange,
         selectedTitle = arguments.selectedTitle,
         attributes = arguments.attributes;
 
@@ -24,12 +21,9 @@ class SearchUsersView extends StatefulWidget {
     required this.searchHideText,
     this.itemBuilder,
     this.onTap,
-    this.enableAppBar = false,
     this.enableMulti = false,
-    this.appBar,
     this.selected,
-    this.title,
-    this.showBackButton = true,
+    this.selectedCanChange = false,
     this.selectedTitle,
     this.attributes,
     super.key,
@@ -41,11 +35,9 @@ class SearchUsersView extends StatefulWidget {
   final void Function(BuildContext context, ChatUIKitProfile profile)? onTap;
   final Widget Function(BuildContext context, ChatUIKitProfile profile,
       String? searchKeyword)? itemBuilder;
-  final ChatUIKitAppBar? appBar;
-  final bool enableAppBar;
-  final List<String>? selected;
-  final String? title;
-  final bool showBackButton;
+
+  final List<ChatUIKitProfile>? selected;
+  final bool selectedCanChange;
   final String? selectedTitle;
   final String? attributes;
 
@@ -55,6 +47,14 @@ class SearchUsersView extends StatefulWidget {
 
 class _SearchUsersViewState extends State<SearchUsersView> {
   ValueNotifier<List<ChatUIKitProfile>> selectedProfiles = ValueNotifier([]);
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.selected?.isNotEmpty == true && widget.selectedCanChange) {
+      selectedProfiles.value = widget.selected!;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,82 +70,92 @@ class _SearchUsersViewState extends State<SearchUsersView> {
             autoFocus: true,
             builder: (context, searchKeyword, list) {
               return ChatUIKitListView(
-                  enableSearchBar: false,
-                  itemBuilder: (context, model) {
-                    if (model is NeedSearch) {
-                      return InkWell(
-                        onTap: () {
-                          tapContactInfo(model.profile);
-                        },
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.only(left: 19.5, right: 15.5),
-                          child: Stack(
-                            children: [
-                              Row(
-                                children: [
-                                  widget.selected?.contains(model.profile.id) ==
-                                          true
-                                      ? Icon(
-                                          Icons.check_box,
-                                          size: 21,
-                                          color: theme.color.isDark
-                                              ? theme.color.primaryColor6
-                                              : theme.color.primaryColor5,
-                                        )
-                                      : value.contains(model.profile)
-                                          ? Icon(
-                                              Icons.check_box,
-                                              size: 21,
-                                              color: theme.color.isDark
-                                                  ? theme.color.primaryColor6
-                                                  : theme.color.primaryColor5,
-                                            )
-                                          : Icon(
-                                              Icons.check_box_outline_blank,
-                                              size: 21,
-                                              color: theme.color.isDark
-                                                  ? theme.color.neutralColor4
-                                                  : theme.color.neutralColor7,
-                                            ),
-                                  ChatUIKitSearchListViewItem(
-                                      profile: model.profile),
-                                ],
-                              ),
-                              if (widget.selected?.contains(model.profile.id) ==
-                                  true)
-                                Opacity(
-                                  opacity: 0.6,
-                                  child: Container(
-                                    color: theme.color.isDark
-                                        ? theme.color.neutralColor1
-                                        : theme.color.neutralColor98,
-                                  ),
+                list: list,
+                type: list.isEmpty
+                    ? ChatUIKitListViewType.empty
+                    : ChatUIKitListViewType.normal,
+                enableSearchBar: false,
+                itemBuilder: (context, model) {
+                  if (model is NeedSearch) {
+                    return InkWell(
+                      onTap: () {
+                        tapContactInfo(model.profile);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 19.5, right: 15.5),
+                        child: Stack(
+                          children: [
+                            Row(
+                              children: [
+                                widget.selected != null &&
+                                        widget.selected!.any((element) =>
+                                                element.id ==
+                                                model.profile.id) ==
+                                            true &&
+                                        widget.selectedCanChange == false
+                                    ? Icon(
+                                        Icons.check_box,
+                                        size: 28,
+                                        color: theme.color.isDark
+                                            ? theme.color.primaryColor6
+                                            : theme.color.primaryColor5,
+                                      )
+                                    : value.contains(model.profile)
+                                        ? Icon(
+                                            Icons.check_box,
+                                            size: 28,
+                                            color: theme.color.isDark
+                                                ? theme.color.primaryColor6
+                                                : theme.color.primaryColor5,
+                                          )
+                                        : Icon(
+                                            Icons.check_box_outline_blank,
+                                            size: 28,
+                                            color: theme.color.isDark
+                                                ? theme.color.neutralColor4
+                                                : theme.color.neutralColor7,
+                                          ),
+                                ChatUIKitSearchListViewItem(
+                                  profile: model.profile,
                                 ),
-                            ],
-                          ),
+                              ],
+                            ),
+                            if (widget.selected?.any((element) =>
+                                        element.id == model.profile.id) ==
+                                    true &&
+                                widget.selectedCanChange == false)
+                              Opacity(
+                                opacity: 0.6,
+                                child: Container(
+                                  color: theme.color.isDark
+                                      ? theme.color.neutralColor1
+                                      : theme.color.neutralColor98,
+                                ),
+                              ),
+                          ],
                         ),
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  },
-                  list: list,
-                  type: list.isEmpty
-                      ? ChatUIKitListViewType.empty
-                      : ChatUIKitListViewType.normal);
+                      ),
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+              );
             },
           );
         },
       );
-    }
-
-    content = ChatUIKitSearchWidget(
-      searchHideText: widget.searchHideText,
-      list: widget.searchData,
-      autoFocus: true,
-      builder: (context, searchKeyword, list) {
-        return ChatUIKitListView(
+    } else {
+      content = ChatUIKitSearchWidget(
+        searchHideText: widget.searchHideText,
+        list: widget.searchData,
+        autoFocus: true,
+        builder: (context, searchKeyword, list) {
+          return ChatUIKitListView(
+            list: list,
+            type: list.isEmpty
+                ? ChatUIKitListViewType.empty
+                : ChatUIKitListViewType.normal,
             enableSearchBar: false,
             itemBuilder: (context, model) {
               if (model is NeedSearch) {
@@ -166,19 +176,23 @@ class _SearchUsersViewState extends State<SearchUsersView> {
               }
               return const SizedBox();
             },
-            list: list,
-            type: list.isEmpty
-                ? ChatUIKitListViewType.empty
-                : ChatUIKitListViewType.normal);
-      },
-    );
+          );
+        },
+      );
+    }
 
     content = NotificationListener(
       child: content,
       onNotification: (notification) {
         if (notification is SearchNotification) {
           if (!notification.isSearch) {
-            Navigator.of(context).pop();
+            if (widget.enableMulti) {
+              List<ChatUIKitProfile> list = [];
+              list.addAll(selectedProfiles.value);
+              Navigator.of(context).pop(list);
+            } else {
+              Navigator.of(context).pop();
+            }
           }
         }
         return false;
@@ -189,45 +203,6 @@ class _SearchUsersViewState extends State<SearchUsersView> {
       backgroundColor: theme.color.isDark
           ? theme.color.neutralColor1
           : theme.color.neutralColor98,
-      appBar: !widget.enableAppBar
-          ? null
-          : widget.appBar ??
-              ChatUIKitAppBar(
-                showBackButton: widget.showBackButton,
-                title: widget.title,
-                trailing: widget.enableMulti
-                    ? InkWell(
-                        onTap: () {
-                          if (selectedProfiles.value.isEmpty) {
-                            return;
-                          }
-                          Navigator.of(context).pop(selectedProfiles.value);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(24, 5, 24, 5),
-                          child: ValueListenableBuilder(
-                            valueListenable: selectedProfiles,
-                            builder: (context, value, child) {
-                              return Text(
-                                value.isEmpty
-                                    ? widget.selectedTitle ?? ''
-                                    : '${widget.selectedTitle ?? ''}(${value.length})',
-                                textScaleFactor: 1.0,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: theme.color.isDark
-                                      ? theme.color.primaryColor6
-                                      : theme.color.primaryColor5,
-                                  fontWeight: theme.font.labelMedium.fontWeight,
-                                  fontSize: theme.font.labelMedium.fontSize,
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      )
-                    : const SizedBox(),
-              ),
       body: SafeArea(child: content),
     );
 
@@ -235,6 +210,13 @@ class _SearchUsersViewState extends State<SearchUsersView> {
   }
 
   void tapContactInfo(ChatUIKitProfile profile) {
+    if (widget.selected
+                ?.where((element) => element.id == profile.id)
+                .isNotEmpty ==
+            true &&
+        widget.selectedCanChange == false) {
+      return;
+    }
     List<ChatUIKitProfile> list = selectedProfiles.value;
     if (list.contains(profile)) {
       list.remove(profile);
